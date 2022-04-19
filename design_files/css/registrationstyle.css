@@ -1,0 +1,257 @@
+@font-face {
+    font-family: "Poppins-Regular";
+    src: url("../fonts/poppins/Poppins-Regular.ttf"); }
+  @font-face {
+    font-family: "Poppins-SemiBold";
+    src: url("../fonts/poppins/Poppins-SemiBold.ttf"); }
+  * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+  
+  
+  body {
+    margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: #fff;
+  }
+  .amazing{
+  
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .invalid-feedback{
+    margin-top: -300px;
+  }
+  
+  .aamazing{
+    display: block;
+    width: 250px;
+    height: 50px;
+    line-height: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    background: #333;
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 3px solid #333;
+    transition: all .35s;
+  }
+  
+  .icon{
+    width: 50px;
+    height: 50px;
+    border: 3px solid transparent;
+    position: absolute;
+    transform: rotate(45deg);
+    right: 0;
+    top: 0;
+    z-index: -1;
+    transition: all .35s;
+  }
+  
+  .icon svg{
+    width: 30px;
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+    transform: rotate(-45deg);
+    fill: #2ecc71;
+    transition: all .35s;
+  }
+  
+  .aamazing:hover{
+    width: 200px;
+    border: 3px solid #2ecc71;
+    background: transparent;
+    color: #2ecc71;
+  }
+  
+  .aamazing:hover + .icon{
+    border: 3px solid #2ecc71;
+    right: -25%;
+  }
+  .parent1{
+    height: 56px;
+    position: relative;
+  }
+  .parent{
+    position: relative;
+  }
+  h1 {
+    text-align: center;
+  }
+  
+  .row h3 {
+    text-transform: uppercase;
+    font-size: 25px;
+    font-family: "Poppins-SemiBold";
+    text-align: center;
+    margin-bottom: 28px; }
+  
+   form {
+    width: 80%;
+    padding-top: 36px;
+    padding-left: 45px;
+    padding-right: 45px;
+    border: 1px solid #333;
+    padding-bottom: 36px;
+    
+   }
+  .bd-example {
+    padding: 3.5rem;
+    margin-right: 0;
+    margin-left: 0;
+    border-width: 1px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    position: relative;
+  }
+  .btn-addKid {
+    border: none;
+    width: 70px;
+    height: 40px;
+    margin-top: 0px;
+    cursor: pointer;
+  
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #333;
+    font-size: 15px;
+    color: #fff;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s; }
+    .btn-addKid i {
+      margin-left: 10px;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0); }
+    .btn-addKid:hover i, button:focus i, button:active i {
+      -webkit-animation-name: hvr-icon-wobble-horizontal;
+      animation-name: hvr-icon-wobble-horizontal;
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-timing-function: ease-in-out;
+      animation-timing-function: ease-in-out;
+      -webkit-animation-iteration-count: 1;
+      animation-iteration-count: 1; }
+      
+      .btn-register {
+        border: none;
+        width: 304px;
+        height: 70px;
+        margin: auto;
+        margin-top: 0px;
+        cursor: pointer;
+        text-align:end;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        background: #333;
+        font-size: 25px;
+        color: #fff;
+        vertical-align: middle;
+        
+        transition-duration: 0.3s;
+        
+        transition: ease-out 0.3s;
+      
+      }
+      .btn-register:hover{
+        background: rgb(19, 148, 2);;
+      }
+      .btn-register i {
+        margin-left: 10px;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0); }
+      .btn-register i, button:focus i, button:active i {
+        -webkit-animation-name: hvr-icon-wobble-horizontal;
+        animation-name: hvr-icon-wobble-horizontal;
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-timing-function: ease-in-out;
+        animation-timing-function: ease-in-out;
+        -webkit-animation-iteration-count: 1;
+        animation-iteration-count: 1; }
+   
+
+          
+  .btn-kidsquant{
+    border: none;
+    width: 70px;
+    height: 40px;
+    margin-top: 0px;
+    margin-left: 50px;
+    cursor: pointer;
+  
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #333;
+    font-size: 15px;
+    color: #fff;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s; }
+    .btn-kidsquant i {
+      margin-left: 10px;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0); }
+    .btn-kidsquant i, button:focus i, button:active i {
+      -webkit-animation-name: hvr-icon-wobble-horizontal;
+      animation-name: hvr-icon-wobble-horizontal;
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-timing-function: ease-in-out;
+      animation-timing-function: ease-in-out;
+      -webkit-animation-iteration-count: 1;
+      animation-iteration-count: 1; }
+
+                
+  .btn-reset{
+    border: none;
+    width: 70px;
+    height: 40px;
+    margin-top: 0px;
+    margin-left: 50px;
+    cursor: pointer;
+  
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #333;
+    font-size: 15px;
+    color: #fff;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s; }
+    .btn-reset i {
+      margin-left: 10px;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0); }
+    .btn-reset i, button:focus i, button:active i {
+      -webkit-animation-name: hvr-icon-wobble-horizontal;
+      animation-name: hvr-icon-wobble-horizontal;
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-timing-function: ease-in-out;
+      animation-timing-function: ease-in-out;
+      -webkit-animation-iteration-count: 1;
+      animation-iteration-count: 1; }
+      
