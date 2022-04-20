@@ -7,9 +7,60 @@ $tableName="usertask";
     
 
       header("location: signin.php");
-        
+  
       // 
     }
+
+$message = ''; 
+
+if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
+{
+  if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK)
+  {
+    // get details of the uploaded file
+    $fileTmpPath = $_FILES['uploadedFile']['tmp_name'];
+    $fileName = $_FILES['uploadedFile']['name'];
+    $fileSize = $_FILES['uploadedFile']['size'];
+    $fileType = $_FILES['uploadedFile']['type'];
+    $fileNameCmps = explode(".", $fileName);
+    $fileExtension = strtolower(end($fileNameCmps));
+ 
+    // sanitize file-name
+    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+    echo("<script>console.log('FILE NAME: " .$newFileName . "');</script>");
+ 
+    // check if file has one of the following extensions
+    $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+ 
+    if (in_array($fileExtension, $allowedfileExtensions))
+    {
+      // directory in which the uploaded file will be moved
+      $uploadFileDir = './uploaded_files/';
+      $dest_path = $uploadFileDir . $newFileName;
+      echo("<script>console.log('FILE LOCATION: " .$dest_path . "');</script>");
+ 
+      if(move_uploaded_file($fileTmpPath, $dest_path)) 
+      {
+        $message ='File is successfully uploaded.';
+      }
+      else
+      {
+        $message = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';
+      }
+    }
+    else
+    {
+      $message = 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions);
+    }
+  }
+  else
+  {
+    $message = 'There is some error in the file upload. Please check the following error.<br>';
+    $message .= 'Error:' . $_FILES['uploadedFile']['error'];
+  }
+}
+
+$_SESSION['message'] = $message;
 
     if(isset($_GET['Finish'])){
       $date_string= date("Y-m-d");
@@ -37,7 +88,15 @@ $tableName="usertask";
     $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`) VALUES ('','$usertaskID',' $today','$taskName','$incharge',' $taskType','$month','$week','sample', $year);";
     mysqli_query($con, $sqlinsert);
 
+
     }
+
+
+
+
+
+
+    
     // $_SESSION['username'] = $username;
     // echo "User: " .$_SESSION['username']. "."  ;
     // echo "<script>console.log('$_SESSION['username']')</script>";
@@ -51,6 +110,7 @@ $tableName="usertask";
 
     $columns= ['usertaskID', 'taskName','taskCategory','taskType'];
     $fetchData = fetch_data($db, $tableName, $columns, $username);
+
 
     function fetch_data($db, $tableName, $columns, $username){
       if(empty($db)){
@@ -110,6 +170,9 @@ $tableName="usertask";
     <meta name="viewport" contant="width=device-width, initial-scale=1.0">
 
     <title>Main Page</title>
+
+     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
+     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
@@ -306,11 +369,11 @@ $tableName="usertask";
                                 $taskID = $data['usertaskID'];
                                 $taskType =  $data['taskType'];
 
-                      echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                      // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                       $month = date("F");
                       $year = date("Y");
                       $weeknumberrr = weekOfMonth($date_string);
-                      echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
+                      // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
 
                       if ($taskType == 'weekly'){
                         $weekMonth = weekOfMonth($date_string);
@@ -320,7 +383,7 @@ $tableName="usertask";
 
                                     $numrows = mysqli_num_rows($result);
                                     if ($numrows == 1){
-                                      echo '<span class="mode mode_on">DONE</span>';
+                                      echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
                                          }
                                     
                                     }
@@ -336,22 +399,16 @@ $tableName="usertask";
                                          }
                                     
                                     }
-
-                                  
-                                
-                                 
-                     
-                                
                                  ?></td>
                                  <td>
                                 <div class="row">
                                   <div class="col">
-                                      <input type="file" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" id="form4docs" title=" Select ">
+                                      <input type="file" name="uploadedFile<?php echo $data['usertaskID'] ?>" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" id="file<?php echo $data['usertaskID'] ?>" title=" Select ">
                                     
                                   </div>
                                   <div class="col">
                                       <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
-                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"  onclick = "clickFinished()"class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                     </div>
                                 </div>
                               </td>
@@ -392,6 +449,15 @@ $tableName="usertask";
                         </table>
                       </div>
                     </div>
+
+                    <form method="POST" action="index.php" enctype="multipart/form-data">
+    <div class="upload-wrapper">
+      <span class="file-name">Choose a file...</span>
+      <label for="file-upload">Browse<input type="file" id="file-upload" name="uploadedFile"></label>
+    </div>
+ 
+    <input type="submit" id = "uploadsample" name="uploadBtn" value="Upload" />
+  </form>
                 </div>
             </div>
         </div>
@@ -406,6 +472,14 @@ $tableName="usertask";
 </div>
   
       <script>
+
+
+function clickFinished(){
+    document.getElementById("uploadsample").click();
+}
+
+
+
         function getSelectValue()
 {
     var e = document.getElementById("inputGroupSelect01");

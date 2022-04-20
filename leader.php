@@ -88,6 +88,7 @@ $tableName="usertask";
 
     <title>Main Page</title>
     <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
 <!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
@@ -298,7 +299,7 @@ $tableName="usertask";
                                    
                                   if ($weekNumber == "week 1" ){
                                      $weeknumber = $weekNumber;
-                                     echo '<span class="mode mode_on"><a href=""> done</a></span>';
+                                     echo '<span class="mode mode_on"><a href="./uploaded_files/a6915091f2b37ab7af52bf893b31a414.pdf"> done</a></span>';
                       // echo("<script>console.log('ok');</script>");
 
                                   }
