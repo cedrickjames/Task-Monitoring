@@ -1,7 +1,12 @@
 <?php
 session_start();
   include ("./connection.php");
+  $db= $con;
+  $tableName="users";
+  if($_SESSION['userlevel'] == "PIC"){
+    header("location: index.php");
 
+  }
   if(isset($_POST['btnAddtask'])){
        
     // const numberOfAddedProducts=document.getElementById("countInput").value;
@@ -28,6 +33,18 @@ session_start();
             }
         // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
         }
+
+        $selectUserDept= "SELECT `department` FROM `users` WHERE `username` = '$enteredUserName';";
+        $resultUserDept = mysqli_query($con, $selectUserDept);
+        $resultUserDept1;
+        if (mysqli_num_rows($resultUserDept) > 0) {
+            // output data of each row
+            while($row = mysqli_fetch_assoc($resultUserDept)) {
+             
+              $resultUserDept1 = $row["department"];
+            }
+        // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
+        }
     for($b=$numberofAddedTask;$b>0;$b--){
         $taskname = htmlspecialchars($_POST["taskName".$num]);
         $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
@@ -38,9 +55,11 @@ session_start();
         echo '<script>console.log("TEST: '.$taskType.'")</script>';
         
 
-        $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskType`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskType');";
+        $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskType', '$resultUserDept1');";
                 mysqli_query($con, $sqlinsert);
           $num++;
+          header("location: leader.php");
+
 
     }
 //     if($b>=1){
@@ -55,6 +74,41 @@ session_start();
 // }
   }
  
+
+
+
+  
+  $columns= ['username'];
+  $fetchData = fetch_data($db, $tableName, $columns);
+
+
+  function fetch_data($db, $tableName, $columns){
+    if(empty($db)){
+     $msg= "Database connection error";
+    }elseif (empty($columns) || !is_array($columns)) {
+     $msg="columns Name must be defined in an indexed array";
+    }elseif(empty($tableName)){
+      $msg= "Table Name is empty";
+   }else{
+   $columnName = implode(", ", $columns);
+   $Department = $_SESSION['userDept'];
+   $query = "SELECT * FROM `users` WHERE `department` = '$Department'";
+  //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+   $result = $db->query($query);
+   if($result== true){ 
+    if ($result->num_rows > 0) {
+       $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+       $msg= $row;
+    } else {
+       $msg= "No Data Found"; 
+    }
+   }else{
+     $msg= mysqli_error($db);
+   }
+   }
+   return $msg;
+   }
+
 ?>
 
 
@@ -132,17 +186,41 @@ session_start();
                 <form id="account-settings" action="addTask.php" method = "POST" style="width: 1000px; padding: 10px;"  >
                     <!-- <h3>Register User</h3> -->
                    
-                     <h3 style="text-align: center; margin-bottom: 40px; ">Add task</h3>  
+                     <h3 style="text-align: center; margin-bottom: 40px; ">Add task</h3>
                      <div class="form-group row">
-                        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">User Name</label>
-                        <div class="col-sm-5">
+                         <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">User Name</label>
+                         <!-- <div class="col-sm-5">
                             <input type="text" name="username" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%; padding: 10px;" placeholder="" >
-                        </div>
-                      
-                     </div> 
-                   
+                                                  
+                        </div> -->
+                         <div class="col-sm-5">
+                             <select name="username" class=" form-control form-select form-select-sm"
+                                 style="padding-left:10px;">
+                                 <option value="" disabled selected>Select User Name</option>
+                                 <!-- <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option> -->
+                                 <?php
+                                  if(is_array($fetchData)){      
+                                
+                                  foreach($fetchData as $data){
+                                  ?>
+                                 <option value="<?php echo $data['username']??''; ?>"><?php echo $data['username']??''; ?></option>
+                                 <?php
+                            }}else{ ?>
+                            
+                              <option colspan="8">
+                          <?php echo $fetchData; ?>
+                        </option>
+                          
+                          <?php
+    }?>
+                                </select>
+                         </div>
+
+                     </div>
+                                       
             <div class="overflow-x">
-                <div  class="overflow-y" style="overflow-y: scroll; overflow-x: hidden; display: block; height: 170px" id="addtask">
+                <div  class="overflow-y" style="overflow-y: scroll; overflow-x: hidden; display: block; height: 220px" id="addtask">
                     <div class="form-group row">
                         <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Add Task</label>
                             <div class="col-sm-3">
@@ -151,8 +229,11 @@ session_start();
                             <div class="col-sm-2">
                                 <select  name="taskType1" id="taskType1" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Type</option>
+                                    <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
                                     <option value="monthly">Monthly</option>
+                              
+
                                 </select>
                             </div>
                             <div class="col-sm-3">

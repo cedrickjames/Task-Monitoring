@@ -40,7 +40,7 @@ $tableName="usertask";
      }else{
      $columnName = implode(", ", $columns);
      $Department = $_SESSION['userDept'];
-     $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
+     $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department' AND `taskType` = 'daily'  ORDER BY taskCategory ASC;";
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
@@ -121,11 +121,11 @@ $tableName="usertask";
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                  <a class="nav-link" href="daily.php">Daily</a>
+              <li class="nav-item active">
+                  <a class="nav-link" href="#">Daily</a>
                 </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="#">Home</a>
+                <li class="nav-item">
+                  <a class="nav-link" href="leader.php">Home</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#">About</a>
@@ -266,23 +266,24 @@ $tableName="usertask";
                     </div>
                     <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table">
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="min-width:50px;">Category</th>
                                     <th style="width:20%;" >Task Name</th>
                                     <th style="width:20%;"  >In charge</th>
-                                    <th style="width:10%;"  >Type</th>
-                                    <th style="width:10%;" >W1</th>
-                                    <th style="width:10%;" >W2</th>
-                                    <th style="width:10%;" >W3</th>
-                                    <th style="width:10%;" >W4</th>
-                                    <th style="width:10%;" >W5</th>
+                                    <th style="width:10%;" >Mon</th>
+                                    <th style="width:10%;" >Tue</th>
+                                    <th style="width:10%;" >Wed</th>
+                                    <th style="width:10%;" >Thu</th>
+                                    <th style="width:10%;" >Fri</th>
+                                    <th style="width:10%;" >Sat</th>
+
 
                                 </tr>
                             </thead>
                             <tbody id="TaskTable">
-                            <?php
+                              <?php
                             $color1 = "#f9f9f9;";
                             $color2 = "white";
                             $color = "";
@@ -304,7 +305,9 @@ $tableName="usertask";
                                 <td><?php echo $data['taskCategory']??''; ?></td>
                                 <td><?php echo $data['taskName']??''; ?></td>
                                 <td><?php echo $data['username']??''; ?></td>
-                                <td><?php echo $data['taskType']??''; ?></td>
+                                <td></td>
+
+                               
                                 <td><?php
                                 $taskID = $data['usertaskID'];
 
@@ -332,10 +335,10 @@ $tableName="usertask";
                                   }
                                 
                                  ?></td>
-                                <td><?php $taskID = $data['usertaskID']; $month = date("F");  $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 2" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</a></span>';;}?></td>
-                                <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 3" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</a></span>';;}?></td>
+                                <td><?php $taskID = $data['usertaskID']; $month = date("F");  $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 2" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</span>';;}?></td>
+                                <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 3" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</span>';;}?></td>
                                 <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month'AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];   $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 4" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"> <a href="'.$fileloc.'" style = "color: white">'.$time.'</a></span>';;}?></td>
-                                <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month'AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 5" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</a></span>';;}?></td>
+                                <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month'AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 5" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</span>';;}?></td>
 
 
                                
@@ -343,12 +346,12 @@ $tableName="usertask";
                               
                              </tr>
                              <?php
-                        $sn++; }}else{ ?>
+                         $sn++;  }}else{ ?>
                             <tr>
                               <td colspan="8">
                           <?php echo $fetchData; ?>
                         </td>
-                         </tr>
+                          <tr>
                           <?php
     }?>
                               

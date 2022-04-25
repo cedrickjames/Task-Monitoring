@@ -10,9 +10,14 @@ $tableName="usertask";
   
       // 
     }
+    date_default_timezone_set("Asia/Singapore");
+$timenow = date("  h:i a");       
+echo("<script>console.log('Time Now: " .$timenow. "');</script>");
 
+   
 $message = ''; 
-
+$newFileName = '';
+$varAlert = '';
 if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 {
   if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK)
@@ -26,9 +31,10 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
     $fileExtension = strtolower(end($fileNameCmps));
  
     // sanitize file-name
-    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-    echo("<script>console.log('FILE NAME: " .$newFileName . "');</script>");
- 
+  
+  $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+    echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
+   
     // check if file has one of the following extensions
     $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
  
@@ -38,10 +44,15 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
       $uploadFileDir = './uploaded_files/';
       $dest_path = $uploadFileDir . $newFileName;
       echo("<script>console.log('FILE LOCATION: " .$dest_path . "');</script>");
+     
+      $_SESSION['newFileLoc'] = $dest_path;
  
       if(move_uploaded_file($fileTmpPath, $dest_path)) 
       {
+        $varAlert = "success";
+
         $message ='File is successfully uploaded.';
+        $_SESSION['newFileLoc'] = "";
       }
       else
       {
@@ -63,6 +74,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 $_SESSION['message'] = $message;
 
     if(isset($_GET['Finish'])){
+
       $date_string= date("Y-m-d");
     echo("<script>console.log('Week: " . weekOfMonth($date_string) . "');</script>");
     $taskID = $_GET['Finish'];
@@ -84,14 +96,42 @@ $_SESSION['message'] = $message;
               $month = date("F");
               $year = date("Y");
               $week = 'week '.weekOfMonth($date_string);
+              if($_SESSION['newFileLoc'] !=""){
+                $fileloc = $_SESSION['newFileLoc'] ;
 
-    $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`) VALUES ('','$usertaskID',' $today','$taskName','$incharge',' $taskType','$month','$week','sample', $year);";
-    mysqli_query($con, $sqlinsert);
+              }
+              else{
+                $fileloc ="" ;
+
+              }
+              if ($fileloc!=""){
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge',' $taskType','$month','$week','$fileloc', '$year');";
+                mysqli_query($con, $sqlinsert);
+                header("location:index.php");
+              }
+              else{
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge',' $taskType','$month','$week','', '$year');";
+                mysqli_query($con, $sqlinsert);
+                header("location:index.php");
+
+              }
+  
 
 
     }
 
+    if(isset($_GET['Cancel'])){
 
+      
+      $taskID = $_GET['Cancel'];
+      $month = date("F");
+      $year = date("Y");
+      $sqldelete = "DELETE FROM `finishedtask` WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year'";
+      mysqli_query($con, $sqldelete);
+      header("location:index.php");
+
+
+    }
 
 
 
@@ -217,12 +257,16 @@ $_SESSION['message'] = $message;
                     Option
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown"  style="right: 0; left: auto;">
-                  <a class="dropdown-item" id="btn-addAdmin" href="./signup.php" >Register User</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php" >Add Task</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a>
-                  <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
+                   <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
+                        <?php
+                        if($_SESSION['admin'] == "TRUE"){?>
 
+                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalAdmin'>Add Admin</a>
+                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalRemoveAdmin'>Remove Admin</a> 
+                   
+                      <?php } ?>
 
                     
                    
@@ -233,6 +277,9 @@ $_SESSION['message'] = $message;
             </div>
           </nav>
         </div>
+        <div class="alert alert-success" id = "successAlert" style="display: none"role="alert">
+  Upload Successfully!
+</div>
         <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -322,7 +369,23 @@ $_SESSION['message'] = $message;
                         <div class="col-sm-3 createSegment"> 
                          <h3>Task</h3> 
                         </div>
+                        
+
                         <div class="col-sm-6 add_flex">
+                        <div class="col"  >
+                        <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding-left: 10px">
+                                   
+                                    <div class="form-check form-check-inline" style="margin-left: 10px">
+                                        <input class="form-check-input" type="checkbox" name="checkDone" id="checkDone" value="DONE" onclick="done();">
+                                            <label class="form-check-label" for="checkPIC">
+                                             Done
+                                            </label>
+                                    </div>
+                                  
+                             </div>
+                        </fieldset>
+                    </div>
                             <div class="form-group searchInput">
                                 <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
                                     <option  disabled selected hidden>Search by</option>
@@ -339,7 +402,7 @@ $_SESSION['message'] = $message;
                     </div>
                     <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table">
+                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="min-width:50px;">No.</th>
@@ -382,10 +445,14 @@ $_SESSION['message'] = $message;
                                     $result = mysqli_query($con, $selectUserTask);
 
                                     $numrows = mysqli_num_rows($result);
+
+                                    $don = "0";
+
                                     if ($numrows == 1){
                                       echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                      $don = "1";
+                                      // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
                                          }
-                                    
                                     }
                                     else{
                                       $weekMonth = weekOfMonth($date_string);
@@ -394,23 +461,41 @@ $_SESSION['message'] = $message;
                                     $result = mysqli_query($con, $selectUserTask);
 
                                     $numrows = mysqli_num_rows($result);
+                                    $don = "0";
+
                                     if ($numrows == 1){
                                       echo '<span class="mode mode_on">DONE</span>';
+                                      $don = "1";
+                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
                                     
                                     }
-                                 ?></td>
+                                ?> </td>
                                  <td>
+                                 <form method="POST" action="index.php" enctype="multipart/form-data" >
                                 <div class="row">
                                   <div class="col">
-                                      <input type="file" name="uploadedFile<?php echo $data['usertaskID'] ?>" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" id="file<?php echo $data['usertaskID'] ?>" title=" Select ">
+
+                                      <input type="file" name="uploadedFile" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
                                     
                                   </div>
-                                  <div class="col">
+                                  <div class="col" style="width: 400px">
                                       <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
-                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"  onclick = "clickFinished()"class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                      <!-- upload -->
+                                      <input type="submit" id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
+                                      
+                                  
+                                      
+                                      <!-- Finish -->
+                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-primary" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                      <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-danger" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                    
+
+                                      
                                     </div>
+                                    
                                 </div>
+                                </form>
                               </td>
 
                                 <!-- <td><?php echo $data['taskCategory']??''; ?></td> -->
@@ -422,42 +507,25 @@ $_SESSION['message'] = $message;
                               <td colspan="8">
                           <?php echo $fetchData; ?>
                         </td>
-                          <tr>
+                            </tr>
                           <?php
     }?>
-                            <!-- Sample Content -->
-                            <!-- <tr>
-                              <th>1</th>
-                              <td>GPSS - Server (Backup & Functionality)</td>
-                              <td>Weekly</td>
-                              <td><span class="mode mode_on">Done</span></td>
-                              <td>
-                                <div class="row">
-                                  <div class="col">
-                                      <input type="file" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" id="form4docs" title=" Select ">
-                                    
-                                  </div>
-                                  <div class="col"> -->
-                                      <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
-                                      <!-- <a href="#" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
-                                    </div>
-                                </div>
-                              </td>
-                            </tr> -->
+
                               
                             </tbody>
                         </table>
                       </div>
                     </div>
 
-                    <form method="POST" action="index.php" enctype="multipart/form-data">
+                    <!-- <form method="POST" action="index.php" enctype="multipart/form-data">
     <div class="upload-wrapper">
       <span class="file-name">Choose a file...</span>
       <label for="file-upload">Browse<input type="file" id="file-upload" name="uploadedFile"></label>
     </div>
  
     <input type="submit" id = "uploadsample" name="uploadBtn" value="Upload" />
-  </form>
+    
+  </form> -->
                 </div>
             </div>
         </div>
@@ -471,16 +539,53 @@ $_SESSION['message'] = $message;
         
 </div>
   
-      <script>
+<script>
 
-
-function clickFinished(){
-    document.getElementById("uploadsample").click();
+var jsonData = <?php echo json_encode("$varAlert"); ?>;
+console.log(jsonData);
+if(jsonData == "success"){
+  document.getElementById("successAlert").style.display="block";
 }
+ function done(){
+  var checkBox = document.getElementById("checkDone");
+  if (checkBox.checked == true){
+  let filterValue="DONE";
+            var table = document.getElementById('TaskTable');
+            let tr = table.querySelectorAll('tr');
+            
+            for(let index=0; index < tr.length;index++){
+                let val = tr[index].getElementsByTagName('td')[4];
+                if(val.innerHTML.indexOf(filterValue)> -1){
+                    tr[index].style.display='';
+        
+                }
+                else{
+                    tr[index].style.display='none';
+                }
+            }
+          }
+          else{
+            let filterValue="";
+            var table = document.getElementById('TaskTable');
+            let tr = table.querySelectorAll('tr');
+            
+            for(let index=0; index < tr.length;index++){
+                let val = tr[index].getElementsByTagName('td')[4];
+                if(val.innerHTML.indexOf(filterValue)> -1){
+                    tr[index].style.display='';
+        
+                }
+                else{
+                    tr[index].style.display='none';
+                }
+            }
 
+          }
+ }
 
+// document.getElementById("successAlert").style.display="block";
 
-        function getSelectValue()
+ function getSelectValue()
 {
     var e = document.getElementById("inputGroupSelect01");
   

@@ -9,7 +9,10 @@ session_start();
         $conPassword = $_POST['conpass']; 
         $FNAME = $_POST['fname'];      
         $MNAME = $_POST['mname'];      
-        $LNAME = $_POST['lname'];      
+        $LNAME = $_POST['lname']; 
+        $dept = $_POST['Department']; 
+
+             
 
     // $userLevel =  echo("<script>userLevel()</script>");
     $radio_value=$_POST['radioPosition'];
@@ -22,9 +25,9 @@ session_start();
 // }
         if ($numrows == 0){
             if($password==$conPassword){
-                $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`) VALUES (null, '$username','$password','$conPassword', '$radio_value', '$FNAME', '$MNAME', '$LNAME')";
+                $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', '$radio_value', '$FNAME', '$MNAME', '$LNAME', '$dept')";
                 mysqli_query($con, $sqlinsert);
-                header("location: index.php");
+                header("location: signin.php");
             
             }
             else{
@@ -63,7 +66,7 @@ session_start();
           <img src="design_files/images/login.jpg">
       </div>
 
-                <form action="signup.php" method = "POST">
+                <form action="signup.php" method = "POST" style="padding-top:0px" autocomplete="off" >
                     <h3>Register</h3> 
                     <div class="form-group row">
                         <div class="col-sm-6">
@@ -74,6 +77,26 @@ session_start();
                         </div>
                         <div class="col-sm-10">
                             <input type="text"  name="lname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="Last Name">
+                        </div>
+                        <div class="col-sm-10">
+                        <select  name="Department" id="Department" class=" form-control form-select form-select-sm" style="padding-left:10px;">
+                                    <option value="" disabled selected>Select Department</option>
+                                    <option value="MIS/FEM">MIS/FEM</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Accounting">Accounting</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Parts Inspection">Parts Inspection</option>
+                                    <option value="Parts Production">Parts Production</option>
+                                    <option value="PPIC">PPIC</option>
+                                    <option value="PPIC-Warehouse">PPIC-Warehouse</option>
+                                    <option value="Production 1">Production 1</option>
+                                    <option value="Production 2">Production 2</option>
+                                    <option value="Production Support">Production Support</option>
+                                    <option value="Purchasing">Purchasing</option>
+                                    <option value="Quality Assurance">Quality Assurance</option>
+                                    <option value="Quality Control">Quality Control</option>
+                                    <option value="System Kaizen">System Kaizen</option>
+                                </select>    
                         </div>
                     </div>
                     <div class="col-sm-12"  >
@@ -91,21 +114,16 @@ session_start();
                                              PIC
                                             </label>
                                     </div>
-                                    <div class="form-check form-check-inline" style="margin-right: 0px;">
-                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="Admin" onclick="position();">
-                                            <label class="form-check-label" for="radioPIC">
-                                             Admin
-                                            </label>
-                                    </div>
+                                  
                              </div>
                         </fieldset>
                     </div>
                 <div class="form-wrapper">
-                    <input name="email" id="email"  placeholder="username" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
+                    <input autocomplete="false" name="email" id="email"  placeholder="username" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
                     <i class="zmdi zmdi zmdi-email" style="padding-right: 5px"></i>
                 </div>  
                 <div class="form-wrapper">
-                    <input name="password" id="password" type="password" placeholder="Password" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
+                    <input autocomplete="false" name="password" id="password" type="password" placeholder="Password" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
                     <i class="zmdi zmdi zmdi-lock" style="padding-right: 5px"></i>
                 </div>   
                 <div class="form-wrapper">
@@ -117,11 +135,11 @@ session_start();
 
                 
                 </div>
-                <div class="w-full text-center" style="margin-top: 30%; font-size:15px;">
+                <!-- <div class="w-full text-center" style="margin-top: 0%; font-size:15px;">
                 <a href="signin.php" class="text-dark">
                     Already have an account? Signin
                 </a>
-                </div>
+                </div> -->
                     </form>
 </div>
 </div>

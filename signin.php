@@ -1,7 +1,13 @@
 <?php
 session_start();
   include ("./connection.php");
-  
+  if(isset( $_SESSION['connected'])){
+    
+
+    header("location: leader.php");
+
+    // 
+  }
     if(isset($_POST['sbtlogin'])){
         
         $username = $_POST['username'];
@@ -11,8 +17,29 @@ session_start();
         $result = mysqli_query($con, $sql1);
         $numrows = mysqli_num_rows($result);
 
+        $selectadmin = "Select * FROM admin WHERE name='$username'";
+        $resultadmin = mysqli_query($con, $selectadmin);
+        $numrowsadmin = mysqli_num_rows($resultadmin);
 
-        if ($numrows == 0){
+        $selectUserDept= "SELECT `department` FROM `users` WHERE username = '$username' LIMIT 1";
+        $resultDept = mysqli_query($con, $selectUserDept);
+        
+        while($userRow = mysqli_fetch_assoc($resultDept)){
+    
+          $userDept = $userRow['department'];
+    $_SESSION['userDept'] =  $userDept; 
+
+          
+      }
+
+if($numrowsadmin > 0){
+    $_SESSION['admin'] = 'TRUE'; 
+    
+}
+else{
+    $_SESSION['admin'] = 'False'; 
+}
+        if ($numrows == 0 ){
             echo '<script>alert("This account does not exist!")</script>';
         }
         else{
@@ -28,7 +55,21 @@ session_start();
                 $_SESSION['l_name'] = $userRow['l_name'];
 
             }
-            header("location: index.php");
+            if($numrowsadmin > 0){
+                header("location: admin.php");
+
+            }
+            else{
+                if($_SESSION['userlevel'] == "Leader"){
+                    header("location: leader.php");
+                       
+                    }
+                    else if ($_SESSION['userlevel']  == "PIC"){
+                    header("location: index.php");
+        
+                    }
+            }
+            
 
         }
    

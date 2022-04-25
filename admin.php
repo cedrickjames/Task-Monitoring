@@ -10,10 +10,7 @@ $tableName="usertask";
         
       // 
     }
-    if($_SESSION['userlevel'] == "PIC"){
-      header("location: index.php");
 
-    }
     // $_SESSION['username'] = $username;
     // echo "User: " .$_SESSION['username']. "."  ;
     // echo "<script>console.log('$_SESSION['username']')</script>";
@@ -40,7 +37,7 @@ $tableName="usertask";
      }else{
      $columnName = implode(", ", $columns);
      $Department = $_SESSION['userDept'];
-     $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
+     $query = "SELECT * FROM `usertask` ORDER BY taskCategory ASC;";
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
