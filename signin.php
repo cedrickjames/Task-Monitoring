@@ -8,79 +8,13 @@ session_start();
 
     // 
   }
-    if(isset($_POST['sbtlogin'])){
-        
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-
-        $sql1 = "Select * FROM users WHERE username='$username' AND userpass='$password'";
-        $result = mysqli_query($con, $sql1);
-        $numrows = mysqli_num_rows($result);
-
-        $selectadmin = "Select * FROM admin WHERE name='$username'";
-        $resultadmin = mysqli_query($con, $selectadmin);
-        $numrowsadmin = mysqli_num_rows($resultadmin);
-
-        $selectUserDept= "SELECT `department` FROM `users` WHERE username = '$username' LIMIT 1";
-        $resultDept = mysqli_query($con, $selectUserDept);
-        
-        while($userRow = mysqli_fetch_assoc($resultDept)){
-    
-          $userDept = $userRow['department'];
-    $_SESSION['userDept'] =  $userDept; 
-
-          
-      }
-
-if($numrowsadmin > 0){
-    $_SESSION['admin'] = 'TRUE'; 
-    
-}
-else{
-    $_SESSION['admin'] = 'False'; 
-}
-        if ($numrows == 0 ){
-            echo '<script>alert("This account does not exist!")</script>';
-        }
-        else{
-            $_SESSION['connected'] = 'TRUE';  
-            $_SESSION['username'] = $username;
-            
-            // $userlevel = "SELECT userlevel FROM users WHERE username='$username'";
-        // $userlevelresult = mysqli_query($con, $userlevel);
-            // $_SESSION['userlevel'] = $userlevelresult;
-            while($userRow = mysqli_fetch_assoc($result)){
-                $_SESSION['userlevel'] = $userRow['userlevel'];
-                $_SESSION['f_name'] = $userRow['f_name'];
-                $_SESSION['l_name'] = $userRow['l_name'];
-
-            }
-            if($numrowsadmin > 0){
-                header("location: admin.php");
-
-            }
-            else{
-                if($_SESSION['userlevel'] == "Leader"){
-                    header("location: leader.php");
-                       
-                    }
-                    else if ($_SESSION['userlevel']  == "PIC"){
-                    header("location: index.php");
-        
-                    }
-            }
-            
-
-        }
-   
-    }
 ?>
 
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MIS Monitoring</title>
+        <title>Task Monitoring</title>
         
     <link rel="stylesheet" href="./css/bootstrap.min.css">
 
@@ -88,9 +22,92 @@ else{
                 
                 <!-- STYLE CSS -->
         <link rel="stylesheet" href="design_files/css/style.css">
-         
+        <script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
+
+
     </head>
     <body>
+
+    <?php 
+
+if(isset($_POST['sbtlogin'])){
+    
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $sql1 = "Select * FROM users WHERE username='$username' AND userpass='$password'";
+    $result = mysqli_query($con, $sql1);
+    $numrows = mysqli_num_rows($result);
+
+    $selectadmin = "Select * FROM admin WHERE name='$username'";
+    $resultadmin = mysqli_query($con, $selectadmin);
+    $numrowsadmin = mysqli_num_rows($resultadmin);
+
+    $selectUserDept= "SELECT `department` FROM `users` WHERE username = '$username' LIMIT 1";
+    $resultDept = mysqli_query($con, $selectUserDept);
+    
+    while($userRow = mysqli_fetch_assoc($resultDept)){
+
+      $userDept = $userRow['department'];
+$_SESSION['userDept'] =  $userDept; 
+
+      
+  }
+
+if($numrowsadmin > 0){
+$_SESSION['admin'] = 'TRUE'; 
+
+}
+else{
+$_SESSION['admin'] = 'False'; 
+}
+    if ($numrows == 0 ){
+        $_SESSION['loginError'] = true;
+        $userName = $_POST['username']
+        ?><script>
+            Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'This user does not exist!',
+        //   footer: '<a href="">Why do I have this issue?</a>'
+        })
+         </script><?php 
+    }
+    else{
+        $_SESSION['connected'] = 'TRUE';  
+        $_SESSION['username'] = $username;
+        
+        // $userlevel = "SELECT userlevel FROM users WHERE username='$username'";
+    // $userlevelresult = mysqli_query($con, $userlevel);
+        // $_SESSION['userlevel'] = $userlevelresult;
+        while($userRow = mysqli_fetch_assoc($result)){
+            $_SESSION['userlevel'] = $userRow['userlevel'];
+            $_SESSION['f_name'] = $userRow['f_name'];
+            $_SESSION['l_name'] = $userRow['l_name'];
+            $_SESSION['department'] = $userRow['department'];
+
+
+        }
+        if($numrowsadmin > 0){
+            header("location: admin.php");
+
+        }
+        else{
+            if($_SESSION['userlevel'] == "Leader"){
+                header("location: leader.php");
+                   
+                }
+                else if ($_SESSION['userlevel']  == "PIC"){
+                header("location: index.php");
+    
+                }
+        }
+        
+
+    }
+
+}?>
        <div class="wrapper" style="background-image:url('design_files/images/registerback.jpg')">
   <div class="inner">
       <div class="image-holder">
@@ -127,6 +144,7 @@ else{
 </div>
 
 <script>
+
 
 const email=document.getElementById("username");
 const pass=document.getElementById("password");

@@ -14,14 +14,31 @@ $tableName="usertask";
       header("location: index.php");
 
     }
+
+    $month = date("F");
+    $year = date("Y");
+    $today = date("F j, Y"); 
+    $date_string = date('Y-m-d');
+    if(isset($_POST['submitdate'])){
+   $datePicker = $_POST['datepicker'];
+
+    $month = date('F', strtotime($datePicker));
+    $year = date('Y', strtotime($datePicker));
+    $today = date('F j, Y', strtotime($datePicker));
+
+    $datePickerget = $datePicker;
+    $date_string= date('Y-m-d', strtotime($datePickerget));
+
+
+    }
     // $_SESSION['username'] = $username;
     // echo "User: " .$_SESSION['username']. "."  ;
     // echo "<script>console.log('$_SESSION['username']')</script>";
     echo("<script>console.log('USER: " .$_SESSION['username'] . "');</script>");
     echo("<script>console.log('USER: " .$_SESSION['userlevel'] . "');</script>");
     // echo("<script>console.log('as,fjhaekjlh');</script>");
-    $today = date("F j, Y"); 
-    $date_string= date("Y-m-d");
+    // $today = date("F j, Y"); 
+    // $date_string= date("Y-m-d");
  echo("<script>console.log('Week: " .weekOfMonth('2022-04-10') . "');</script>");
  
     $username =  $_SESSION['username'];
@@ -113,7 +130,7 @@ $tableName="usertask";
     <body>
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;MIS Monitoring App</a>
+            <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
              data-target="#navbarSupportedContent">
               <span class="navbar-toggler-icon"></span>
@@ -140,10 +157,10 @@ $tableName="usertask";
                     <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
                     <?php if($_SESSION['admin'] == "TRUE"){?>
 
-                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
                       data-target='#modalAdmin'>Add Admin</a>
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalRemoveAdmin'>Remove Admin</a> 
+                      data-target='#modalRemoveAdmin'>Remove Admin</a>  -->
                    
                       <?php } ?>
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
@@ -245,9 +262,19 @@ $tableName="usertask";
             <div class="col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
-                        <div class="col-sm-3 createSegment"> 
+                        <div class="col-sm-1 createSegment"> 
                          <h3>Task</h3> 
                         </div>
+                        <div class="col-sm-5">
+                          <div class="form-group row d-flex justify-content-center" >
+                          <form action="daily.php" method = "POST" >
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
+            <input type="date" id="datepicker" name="datepicker" onchange="filterMonth();">
+            <input type="submit" name="submitdate">
+            </form>
+           
+        </div></div>
+                        
                         <div class="col-sm-6 add_flex">
                             <div class="form-group searchInput">
                                 <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
@@ -304,56 +331,297 @@ $tableName="usertask";
                                 
                                 <td><?php echo $data['taskCategory']??''; ?></td>
                                 <td><?php echo $data['taskName']??''; ?></td>
-                                <td><?php echo $data['username']??''; ?></td>
-                                <td></td>
+                                <td><?php  echo $data['username']??''; ?></td>
+                                <td><?php
+                                $taskID = $data['usertaskID'];
+                                echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                // //$month = date("F");
+                                // $year = date("Y");
+                                $numberofWeek = weekOfMonth($date_string);
+                                $weeknow = "week $numberofWeek";
+                                    // echo $weeknow;
+                                $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                $result = mysqli_query($con, $selectUserTask);
+                                $datenow = '';
+                                while($userRow = mysqli_fetch_assoc($result)){
+                                
+                                $weekNumber = $userRow['week'];
+                                $fileloc =  $userRow['attachments'];
+                                $time = $userRow['timestamp'];
+                                $dateoftask = $userRow['Date'];
+                                $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+
+                                $timestamp = strtotime($dateofTassk);
+                                $datenow = date('l', $timestamp);
+                                      // echo $dateoftask;
+                                      // $trimedDate = str_replace(",","",$dateoftask);
+                                      // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
+                                      if ($datenow == "Monday" ){
+                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                     // echo("<script>console.log('ok');</script>");
+   
+                                     }
+                                }
+                                  // echo trim($dateoftask, 'April');
+                                  // echo("<script>console.log('testing:".$weekNumber."');</script>");
+                                  // $datess = 'April 26 2022';
+                                  // echo date('Y-m-d', strtotime($datess));
+                                  // echo $datenow;
+                                
+                                
+                                 ?></td>
 
                                
                                 <td><?php
-                                $taskID = $data['usertaskID'];
+                                      $taskID = $data['usertaskID'];
 
-                      echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                      $month = date("F");
-                      $year = date("Y");
+                                      echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                      //$month = date("F");
+                                      //$year = date("Y");
+                                                    $numberofWeek = weekOfMonth($date_string);
+                                                    $weeknow = "week $numberofWeek";
+                                                    // echo $weeknow;
+                                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
+                                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                                    $result = mysqli_query($con, $selectUserTask);
+                                                    $datenow = '';
+                                                    while($userRow = mysqli_fetch_assoc($result)){
+                                                
+                                                      $weekNumber = $userRow['week'];
+                                                      $fileloc =  $userRow['attachments'];
+                                                      $time = $userRow['timestamp'];
+                                                      $dateoftask = $userRow['Date'];
+                                                      $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
 
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                    $result = mysqli_query($con, $selectUserTask);
-                                    $weekNumber = '';
-                                    while($userRow = mysqli_fetch_assoc($result)){
+                                                          $timestamp = strtotime($dateofTassk);
+                                                          $datenow = date('l', $timestamp);
+                                                      // echo $dateoftask;
+                                                      // $trimedDate = str_replace(",","",$dateoftask);
+                                                      // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
+                                                      if ($datenow == "Tuesday" ){
+                                                    
+                                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                        
+    
+                                          // echo("<script>console.log('ok');</script>");
+    
+                                            }
+                                                  }
+                                                  // echo trim($dateoftask, 'April');
+                                                      // echo("<script>console.log('testing:".$weekNumber."');</script>");
+
+                                                      // $datess = 'April 26 2022';
+                                                      // echo date('Y-m-d', strtotime($datess));
+                                                    
+                                                          // echo $datenow;
+
+                                            
                                 
-                                      $weekNumber = $userRow['week'];
-                                      $fileloc =  $userRow['attachments'];
-                                      $time = $userRow['timestamp'];
-                                  }
-                      echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                   
-                                  if ($weekNumber == "week 1" ){
-                                     $weeknumber = $weekNumber;
-                                     echo '<span class="mode mode_on"><a href="'.$fileloc.'"> '.$time.'</a></span>';
-                      // echo("<script>console.log('ok');</script>");
+                                 ?>
+                                 </td>
+                                <td><?php
+                                  $taskID = $data['usertaskID'];
 
-                                  }
-                                
+                                  echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                  //$month = date("F");
+                                  //$year = date("Y");
+                                                $numberofWeek = weekOfMonth($date_string);
+                                                $weeknow = "week $numberofWeek";
+                                                // echo $weeknow;
+                                                $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
+                                                // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                                $result = mysqli_query($con, $selectUserTask);
+                                                $datenow = '';
+                                                while($userRow = mysqli_fetch_assoc($result)){
+                                            
+                                                  $weekNumber = $userRow['week'];
+                                                  $fileloc =  $userRow['attachments'];
+                                                  $time = $userRow['timestamp'];
+                                                  $dateoftask = $userRow['Date'];
+                                                  $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+
+                                                      $timestamp = strtotime($dateofTassk);
+                                                      $datenow = date('l', $timestamp);
+                                                  // echo $dateoftask;
+                                                  // $trimedDate = str_replace(",","",$dateoftask);
+                                                  // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
+                                                  if ($datenow == "Wednesday" ){
+                                                
+                                                    echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                    
+    
+                                      // echo("<script>console.log('ok');</script>");
+    
+                                        }
+                                              }
+                                              // echo trim($dateoftask, 'April');
+                                                  // echo("<script>console.log('testing:".$weekNumber."');</script>");
+
+                                                  // $datess = 'April 26 2022';
+                                                  // echo date('Y-m-d', strtotime($datess));
+                                                
+                                                      // echo $datenow;
+
+                                          
+                            
                                  ?></td>
-                                <td><?php $taskID = $data['usertaskID']; $month = date("F");  $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 2" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</span>';;}?></td>
-                                <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 3" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</span>';;}?></td>
-                                <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month'AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];   $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 4" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"> <a href="'.$fileloc.'" style = "color: white">'.$time.'</a></span>';;}?></td>
-                                <td><?php $taskID = $data['usertaskID']; $month = date("F"); $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month'AND `year` = '$year';";$result = mysqli_query($con, $selectUserTask);$weekNumber = '';while($userRow = mysqli_fetch_assoc($result)){ $weekNumber = $userRow['week'];  $fileloc =  $userRow['attachments']; }if ($weekNumber == "week 5" ){$weeknumber = $weekNumber; echo '<span class="mode mode_on"><a href="'.$fileloc.'" style = "color: white">'.$time.'</span>';;}?></td>
+                                <td><?php
+                                      $taskID = $data['usertaskID'];
 
+                                      echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                      //$month = date("F");
+                                      //$year = date("Y");
+                                                    $numberofWeek = weekOfMonth($date_string);
+                                                    $weeknow = "week $numberofWeek";
+                                                    // echo $weeknow;
+                                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
+                                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                                    $result = mysqli_query($con, $selectUserTask);
+                                                    $datenow = '';
+                                                    while($userRow = mysqli_fetch_assoc($result)){
+                                                
+                                                      $weekNumber = $userRow['week'];
+                                                      $fileloc =  $userRow['attachments'];
+                                                      $time = $userRow['timestamp'];
+                                                      $dateoftask = $userRow['Date'];
+                                                      $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+
+                                                          $timestamp = strtotime($dateofTassk);
+                                                          $datenow = date('l', $timestamp);
+                                                      // echo $dateoftask;
+                                                      // $trimedDate = str_replace(",","",$dateoftask);
+                                                      // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
+                                                      if ($datenow == "Thursday" ){
+                                                    
+                                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                        
+    
+                                          // echo("<script>console.log('ok');</script>");
+    
+                                            }
+                                                  }
+                                                  // echo trim($dateoftask, 'April');
+                                                      // echo("<script>console.log('testing:".$weekNumber."');</script>");
+
+                                                      // $datess = 'April 26 2022';
+                                                      // echo date('Y-m-d', strtotime($datess));
+                                                    
+                                                          // echo $datenow;
+
+                                         
+                                
+                                 ?>
+                                 </td>
+                                <td><?php
+                                    $taskID = $data['usertaskID'];
+
+                                    echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                    //$month = date("F");
+                                    //$year = date("Y");
+                                                  $numberofWeek = weekOfMonth($date_string);
+                                                  $weeknow = "week $numberofWeek";
+                                                  // echo $weeknow;
+                                                  $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
+                                                  // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                                  $result = mysqli_query($con, $selectUserTask);
+                                                  $datenow = '';
+                                                  while($userRow = mysqli_fetch_assoc($result)){
+                                              
+                                                    $weekNumber = $userRow['week'];
+                                                    $fileloc =  $userRow['attachments'];
+                                                    $time = $userRow['timestamp'];
+                                                    $dateoftask = $userRow['Date'];
+                                                    $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+
+                                                        $timestamp = strtotime($dateofTassk);
+                                                        $datenow = date('l', $timestamp);
+                                                    // echo $dateoftask;
+                                                    // $trimedDate = str_replace(",","",$dateoftask);
+                                                    // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
+                                                    if ($datenow == "Friday" ){
+                                                  
+                                                      echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                      
+    
+                                        // echo("<script>console.log('ok');</script>");
+    
+                                          }
+                                                }
+                                                // echo trim($dateoftask, 'April');
+                                                    // echo("<script>console.log('testing:".$weekNumber."');</script>");
+
+                                                    // $datess = 'April 26 2022';
+                                                    // echo date('Y-m-d', strtotime($datess));
+                                                  
+                                                        // echo $datenow;
+
+                                           
+                              
+                                  ?>
+                                  </td>
+                                <td><?php
+                                      $taskID = $data['usertaskID'];
+
+                                      echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                      //$month = date("F");
+                                      //$year = date("Y");
+                                                    $numberofWeek = weekOfMonth($date_string);
+                                                    $weeknow = "week $numberofWeek";
+                                                    // echo $weeknow;
+                                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
+                                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                                    $result = mysqli_query($con, $selectUserTask);
+                                                    $datenow = '';
+                                                    while($userRow = mysqli_fetch_assoc($result)){
+                                                
+                                                      $weekNumber = $userRow['week'];
+                                                      $fileloc =  $userRow['attachments'];
+                                                      $time = $userRow['timestamp'];
+                                                      $dateoftask = $userRow['Date'];
+                                                      $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+
+                                                          $timestamp = strtotime($dateofTassk);
+                                                          $datenow = date('l', $timestamp);
+                                                      // echo $dateoftask;
+                                                      // $trimedDate = str_replace(",","",$dateoftask);
+                                                      // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
+                                                      if ($datenow == "Saturday" ){
+                                                    
+                                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                        
+    
+                                          // echo("<script>console.log('ok');</script>");
+    
+                                            }
+                                                  }
+                                                  // echo trim($dateoftask, 'April');
+                                                      // echo("<script>console.log('testing:".$weekNumber."');</script>");
+
+                                                      // $datess = 'April 26 2022';
+                                                      // echo date('Y-m-d', strtotime($datess));
+                                                    
+                                                          // echo $datenow;
+
+                                            
+                                
+                                  ?>
+                                  </td>
+                                
 
                                
                               
                               
-                             </tr>
-                             <?php
-                         $sn++;  }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchData; ?>
-                        </td>
-                          <tr>
-                          <?php
-    }?>
+                                  </tr>
+                                  <?php
+                                  $sn++;  }}else{ ?>
+                                  <tr>
+                                    <td colspan="8">
+                                    <?php echo $fetchData; ?>
+                                   </td>
+                                        <tr>
+                                        <?php
+                                          }?>
                               
                             </tbody>
                         </table>
@@ -373,6 +641,11 @@ $tableName="usertask";
 </div>
   
       <script>
+
+let today = new Date().toISOString().substr(0, 10);
+
+document.querySelector("#datepicker").valueAsDate = new Date();
+
         function getSelectValue()
 {
     var e = document.getElementById("inputGroupSelect01");

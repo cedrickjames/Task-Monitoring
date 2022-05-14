@@ -1,6 +1,7 @@
 <?php
   session_start();
   include ("./connection.php");
+  date_default_timezone_set("Asia/Singapore");
   $db= $con;
 $tableName="usertask";
     if(!isset( $_SESSION['connected'])){
@@ -10,8 +11,13 @@ $tableName="usertask";
   
       // 
     }
-    date_default_timezone_set("Asia/Singapore");
-$timenow = date("  h:i a");       
+    $timestamp = strtotime(date('Y-m-d'));
+    //  echo date('l', $timestamp);
+
+     $datess = 'April 26, 2022';
+// echo date('Y-m-d', strtotime($datess));
+
+$timenow = date("h:i a");       
 echo("<script>console.log('Time Now: " .$timenow. "');</script>");
 
    
@@ -20,9 +26,10 @@ $newFileName = '';
 $varAlert = '';
 if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 {
-  if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK)
-  {
+  $IDCONTAINER = $_POST['idContainer'];
+  if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK){
     // get details of the uploaded file
+    
     $fileTmpPath = $_FILES['uploadedFile']['tmp_name'];
     $fileName = $_FILES['uploadedFile']['name'];
     $fileSize = $_FILES['uploadedFile']['size'];
@@ -50,9 +57,9 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
       if(move_uploaded_file($fileTmpPath, $dest_path)) 
       {
         $varAlert = "success";
-
+        $PassContainer = $IDCONTAINER;
         $message ='File is successfully uploaded.';
-        $_SESSION['newFileLoc'] = "";
+        $_SESSION['newFileLoc'] = $dest_path;
       }
       else
       {
@@ -75,49 +82,45 @@ $_SESSION['message'] = $message;
 
     if(isset($_GET['Finish'])){
 
-      $date_string= date("Y-m-d");
-    echo("<script>console.log('Week: " . weekOfMonth($date_string) . "');</script>");
-    $taskID = $_GET['Finish'];
-    echo("<script>console.log('USer Task Id: " .$taskID . "');</script>");
+      if (!file_exists($_FILES['uploadedFile']['tmp_name']) || !is_uploaded_file($_FILES['uploadedFile']['tmp_name'])) {
 
-    // $sqlinsert = "INSERT INTO `finishedtask`(`userid`, `username`, `taskName`, `taskCategory`, `taskType`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskType');";
-    $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
-                $result = mysqli_query($con, $selectUserTask);
-                
-                while($userRow = mysqli_fetch_assoc($result)){
-            
-                  $usertaskID = $userRow['usertaskID'];
-                  $taskType = $userRow['taskType'];
-                  $taskCategory = $userRow['taskCategory'];
-                  $taskName = $userRow['taskName'];
-                  $incharge = $userRow['username'];
-              }
-              $today = date("F j, Y");
-              $month = date("F");
-              $year = date("Y");
-              $week = 'week '.weekOfMonth($date_string);
-              if($_SESSION['newFileLoc'] !=""){
-                $fileloc = $_SESSION['newFileLoc'] ;
-
-              }
-              else{
-                $fileloc ="" ;
-
-              }
-              if ($fileloc!=""){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge',' $taskType','$month','$week','$fileloc', '$year');";
-                mysqli_query($con, $sqlinsert);
-                header("location:index.php");
-              }
-              else{
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge',' $taskType','$month','$week','', '$year');";
-                mysqli_query($con, $sqlinsert);
-                header("location:index.php");
-
-              }
-  
+        $date_string= date("Y-m-d");
+        echo("<script>console.log('Week: " . weekOfMonth($date_string) . "');</script>");
+        $taskID = $_GET['Finish'];
+        echo("<script>console.log('USer Task Id: " .$taskID . "');</script>");
 
 
+      
+        // $sqlinsert = "INSERT INTO `finishedtask`(`userid`, `username`, `taskName`, `taskCategory`, `taskType`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskType');";
+        $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+        $result = mysqli_query($con, $selectUserTask);
+        
+        while($userRow = mysqli_fetch_assoc($result)){
+          $usertaskID = $userRow['usertaskID'];
+          $taskType = $userRow['taskType'];
+          $taskCategory = $userRow['taskCategory'];
+          $taskName = $userRow['taskName'];
+          $incharge = $userRow['username'];
+          $department = $userRow['Department'];
+        }
+        $today = date("F j, Y");
+        $month = date("F");
+        $year = date("Y");
+        $week = 'week '.weekOfMonth($date_string);
+        if($_SESSION['newFileLoc'] ==""){
+          $fileloc ="" ;
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department');";
+          mysqli_query($con, $sqlinsert);
+          header("location:index.php");
+          unset($_SESSION['newFileLoc']);
+        }else{
+          $fileloc = $_SESSION['newFileLoc'] ;
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department');";
+          mysqli_query($con, $sqlinsert);
+          header("location:index.php");
+          unset($_SESSION['newFileLoc']);
+        }
+      }
     }
 
     if(isset($_GET['Cancel'])){
@@ -128,7 +131,7 @@ $_SESSION['message'] = $message;
       $year = date("Y");
       $sqldelete = "DELETE FROM `finishedtask` WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year'";
       mysqli_query($con, $sqldelete);
-      header("location:index.php");
+      // header("location:index.php");
 
 
     }
@@ -216,20 +219,22 @@ $_SESSION['message'] = $message;
     <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+
 <!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"> -->
     <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
     <link rel="stylesheet" href="">
     
   <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
 <link rel="stylesheet" href="design_files/css/MainPageStyle.css">
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
 
 
 <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
+<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
 
 <!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
 
@@ -237,7 +242,7 @@ $_SESSION['message'] = $message;
     <body>
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;MIS Monitoring App</a>
+            <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
              data-target="#navbarSupportedContent">
               <span class="navbar-toggler-icon"></span>
@@ -261,10 +266,10 @@ $_SESSION['message'] = $message;
                         <?php
                         if($_SESSION['admin'] == "TRUE"){?>
 
-                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
                       data-target='#modalAdmin'>Add Admin</a>
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalRemoveAdmin'>Remove Admin</a> 
+                      data-target='#modalRemoveAdmin'>Remove Admin</a>  -->
                    
                       <?php } ?>
 
@@ -278,7 +283,7 @@ $_SESSION['message'] = $message;
           </nav>
         </div>
         <div class="alert alert-success" id = "successAlert" style="display: none"role="alert">
-  Upload Successfully!
+ <h3 id="successAlertWord"> </h3>
 </div>
         <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -352,18 +357,23 @@ $_SESSION['message'] = $message;
           <div class="wrapper">
          
           <div class="row" style= "margin-right: 0px " >
-          <div class="col">
+          <div class="col-4">
             <h3 style=" margin: 20px">  <i style="font-size: 30px;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
-             <span  class="float-right"> <?php echo $_SESSION['userlevel'] ?> </span>  
+             
             </h3>
           </div>
-          <div class="col">
+          <div class="col-4" style="padding-top: 20px">
+          <h3  class="text-center"> <?php echo $_SESSION['userlevel'] ?> </h3>  
+          </div>
+          <div class="col-4">
             <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
           </div>
 
+
           <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;">
-        <div class="row">
-            <div class="col-md-12 main-datatable"> 
+          
+        <div class=" ms-1 shadow row">
+            <div class=" shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-3 createSegment"> 
@@ -402,7 +412,7 @@ $_SESSION['message'] = $message;
                     </div>
                     <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                        <table class="table table-striped table-hover  " style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="min-width:50px;">No.</th>
@@ -440,6 +450,7 @@ $_SESSION['message'] = $message;
 
                       if ($taskType == 'weekly'){
                         $weekMonth = weekOfMonth($date_string);
+                       
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week $weekMonth';";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
@@ -454,7 +465,7 @@ $_SESSION['message'] = $message;
                                       // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
                                          }
                                     }
-                                    else{
+                                    else if($taskType == 'monthly'){
                                       $weekMonth = weekOfMonth($date_string);
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' ;";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
@@ -470,25 +481,141 @@ $_SESSION['message'] = $message;
                                          }
                                     
                                     }
+                                    else if($taskType == 'daily'){
+                                      $weekMonth = weekOfMonth($date_string);
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today';";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    $result = mysqli_query($con, $selectUserTask);
+
+                                    $numrows = mysqli_num_rows($result);
+                                    $don = "0";
+
+                                    if ($numrows == 1){
+                                      echo '<span class="mode mode_on">DONE</span>';
+                                      $don = "1";
+                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                         }
+                                    }
                                 ?> </td>
                                  <td>
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
                                 <div class="row">
                                   <div class="col">
+                                    <?php $upFile = 'uploadedFile' . $data['usertaskID']; $varUpload = $data['usertaskID'];  $upBtn = 'uploadsample' . $data['usertaskID'];?>
 
-                                      <input type="file" name="uploadedFile" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                      <input type="file" 
+                                    <?php
+                                $taskID = $data['usertaskID'];
+                                $taskType =  $data['taskType'];
+
+                      // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                      $month = date("F");
+                      $year = date("Y");
+                      $weeknumberrr = weekOfMonth($date_string);
+                      // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
+
+                      if ($taskType == 'weekly'){
+                        $weekMonth = weekOfMonth($date_string);
+                       
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week $weekMonth';";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    $result = mysqli_query($con, $selectUserTask);
+
+                                    $numrows = mysqli_num_rows($result);
+
+                                    $don = "0";
+
+                                    if ($numrows == 1){
+                                      echo 'disabled';
+                                      $don = "1";
+                                      // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
+                                         }
+                                    }
+                                    else if($taskType == 'monthly'){
+                                      $weekMonth = weekOfMonth($date_string);
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' ;";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    $result = mysqli_query($con, $selectUserTask);
+
+                                    $numrows = mysqli_num_rows($result);
+                                    $don = "0";
+
+                                    if ($numrows == 1){
+                                      echo 'disabled';
+
+                                      $don = "1";
+                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                         }
                                     
+                                    }
+                                    else if($taskType == 'daily'){
+                                      $weekMonth = weekOfMonth($date_string);
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today';";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    $result = mysqli_query($con, $selectUserTask);
+
+                                    $numrows = mysqli_num_rows($result);
+                                    $don = "0";
+
+                                    if ($numrows == 1){
+                                      echo 'disabled';
+
+                                      $don = "1";
+                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                         }
+                                    
+                                    }
+                                ?> 
+                                    data-uploadId="<?php echo $data['usertaskID'] ?>" name="uploadedFile" id="<?php echo $upFile; ?>" class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                    <input name="idContainer" value="<?php  echo $data['taskName'];?>" style="display: none">
                                   </div>
                                   <div class="col" style="width: 400px">
                                       <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
                                       <!-- upload -->
-                                      <input type="submit" id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
                                       
+                                      <input type="submit" id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
+                                      <script>
+
+                                        // // document.getElementById("uploadsample30").disabled = true;
+                                        var jsonDataUpload = <?php echo json_encode($varUpload); ?>;
+                                        var uploadinput = document.getElementById(<?php echo json_encode($upFile); ?>);
+                                    
+                                        var fileId = <?php echo json_encode($upBtn); ?>;
+                                        // alert(fileId);
+                                          // document.getElementById(fileInputId).removeAttribute("disabled");
+
+                                        if(uploadinput.value == ''){
+                                          document.getElementById(<?php echo json_encode($upBtn); ?>).disabled = true;
+                                        }else{
+                                          document.getElementById(<?php echo json_encode($upBtn); ?>).disabled = false;
+                                        }
+
+                                        $('input[type="file"]').change(function() {
+                                          var fileInputId = this.id;
+                                          var dataId = $(this).attr("data-uploadId");
+                                          var nId = 'uploadsample'+dataId;
+                                          // alert(nId);
+                                          document.getElementById(nId).disabled = false;
+                                          // var nId = '#'+dataId;
+                                          // alert(nId);
+                                          // $(nId).prop('disabled', false);
+                                          // alert(fileInputId);
+                                        });
+
+                                        // // console.log(uploadinput.value)
+                                        // $(<?php //echo json_encode($upFile); ?>).change(function () {
+                                        //   if ($(<?php //echo json_encode($upFile); ?>).val() == '') {
+                                        //     $(<?php //echo json_encode($upBtn); ?>).attr('disabled', true)
+                                        //   } else {
+                                        //     $(<?php //echo json_encode($upBtn); ?>).attr('disabled', false);
+                                        //   }
+                                        // })
+                                        </script>
                                   
                                       
                                       <!-- Finish -->
-                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-primary" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
-                                      <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-danger" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                      <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
                                     
 
                                       
@@ -543,8 +670,18 @@ $_SESSION['message'] = $message;
 
 var jsonData = <?php echo json_encode("$varAlert"); ?>;
 console.log(jsonData);
+var jsonDataID = <?php echo json_encode("$PassContainer"); ?>;
+
 if(jsonData == "success"){
+  // document.getElementById("successAlertWord").value=jsonDataID;
+successAlertWord.innerText = "Attachment for "+jsonDataID+" uploaded succesfully.";
+
+
   document.getElementById("successAlert").style.display="block";
+  // var emerut = document.getElementById("successAlert").value;
+
+
+
 }
  function done(){
   var checkBox = document.getElementById("checkDone");

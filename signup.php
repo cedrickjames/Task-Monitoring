@@ -45,7 +45,7 @@ session_start();
 <!DOCTYPE html>
 <html>
     <head>
-        <title>MIS Monitoring</title>
+        <title>Task Monitoring</title>
         
         <link rel="stylesheet" href="./css/bootstrap.min.css">
 
@@ -81,8 +81,8 @@ session_start();
                         <div class="col-sm-10">
                         <select  name="Department" id="Department" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Select Department</option>
-                                    <option value="MIS/FEM">MIS/FEM</option>
-                                    <option value="Admin">Admin</option>
+                                    <option value="MIS">MIS</option>
+                                    <option value="FEM">FEM</option>
                                     <option value="Accounting">Accounting</option>
                                     <option value="Japanese">Japanese</option>
                                     <option value="Parts Inspection">Parts Inspection</option>

@@ -7,72 +7,8 @@ session_start();
     header("location: index.php");
 
   }
-  if(isset($_POST['btnAddtask'])){
-       
-    // const numberOfAddedProducts=document.getElementById("countInput").value;
-    $numberofAddedTask = $_POST['countInput'];
-    $enteredUserName = $_POST['username'];
-    echo '<script>console.log("Number of Added Task: '.$numberofAddedTask.'")</script>';
-   
-    $num = 1;
-    $taskname = htmlspecialchars($_POST["taskName".$num]);
-    $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
-    $taskType = htmlspecialchars($_POST["taskType".$num]);
 
-
-    // echo '<script>window.alert("TEST: '.$taskname.'")</script>';
-    // $b = 0;
-    $selectUserID = "SELECT `userid` FROM `users` WHERE `username` = '$enteredUserName';";
-        $resultUserId = mysqli_query($con, $selectUserID);
-        $resultUserId1;
-        if (mysqli_num_rows($resultUserId) > 0) {
-            // output data of each row
-            while($row = mysqli_fetch_assoc($resultUserId)) {
-             
-              $resultUserId1 = $row["userid"];
-            }
-        // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
-        }
-
-        $selectUserDept= "SELECT `department` FROM `users` WHERE `username` = '$enteredUserName';";
-        $resultUserDept = mysqli_query($con, $selectUserDept);
-        $resultUserDept1;
-        if (mysqli_num_rows($resultUserDept) > 0) {
-            // output data of each row
-            while($row = mysqli_fetch_assoc($resultUserDept)) {
-             
-              $resultUserDept1 = $row["department"];
-            }
-        // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
-        }
-    for($b=$numberofAddedTask;$b>0;$b--){
-        $taskname = htmlspecialchars($_POST["taskName".$num]);
-        $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
-        $taskType = htmlspecialchars($_POST["taskType".$num]);
-    
-        echo '<script>console.log("TEST: '.$taskname.'")</script>';
-        echo '<script>console.log("TEST: '.$taskCategory.'")</script>';
-        echo '<script>console.log("TEST: '.$taskType.'")</script>';
-        
-
-        $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskType', '$resultUserDept1');";
-                mysqli_query($con, $sqlinsert);
-          $num++;
-          header("location: leader.php");
-
-
-    }
-//     if($b>=1){
-//         // $taskname = $_POST['taskName'.$num.];
-//  $num = 1;
  
-
-//     // $username = $_POST['username'];
-//     // $password = $_POST['password'];
-// // echo '<script>alert("OK")</script>';
-
-// }
-  }
  
 
 
@@ -92,7 +28,7 @@ session_start();
    }else{
    $columnName = implode(", ", $columns);
    $Department = $_SESSION['userDept'];
-   $query = "SELECT * FROM `users` WHERE `department` = '$Department'";
+   $query = "SELECT * FROM `users` WHERE `department` = '$Department' AND `userlevel` = 'PIC'";
   //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
    $result = $db->query($query);
    if($result== true){ 
@@ -135,14 +71,123 @@ session_start();
 
 <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
-
+<script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
  
     </head>
 
     <body>
+
+    <?php 
+    
+    if(isset($_POST['btnAddtask'])){
+       
+      // const numberOfAddedProducts=document.getElementById("countInput").value;
+      $numberofAddedTask = $_POST['countInput'];
+      $enteredUserName = $_POST['username'];
+      echo '<script>console.log("Number of Added Task: '.$numberofAddedTask.'")</script>';
+      
+      $num = 1;
+      $taskname = htmlspecialchars($_POST["taskName".$num]);
+      $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
+      $taskType = htmlspecialchars($_POST["taskType".$num]);
+  
+  
+      // echo '<script>window.alert("TEST: '.$taskname.'")</script>';
+      // $b = 0;
+      $selectUserID = "SELECT `userid` FROM `users` WHERE `username` = '$enteredUserName';";
+          $resultUserId = mysqli_query($con, $selectUserID);
+          $resultUserId1;
+          if (mysqli_num_rows($resultUserId) > 0) {
+              // output data of each row
+              while($row = mysqli_fetch_assoc($resultUserId)) {
+               
+                $resultUserId1 = $row["userid"];
+              }
+          // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
+          }
+  
+          $selectUserDept= "SELECT `department` FROM `users` WHERE `username` = '$enteredUserName';";
+          $resultUserDept = mysqli_query($con, $selectUserDept);
+          $resultUserDept1;
+          if (mysqli_num_rows($resultUserDept) > 0) {
+              // output data of each row
+              while($row = mysqli_fetch_assoc($resultUserDept)) {
+               
+                $resultUserDept1 = $row["department"];
+              }
+          // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
+          }
+      for($b=$numberofAddedTask;$b>0;$b--){
+          $taskname = htmlspecialchars($_POST["taskName".$num]);
+          $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
+          $taskType = htmlspecialchars($_POST["taskType".$num]);
+      
+          echo '<script>console.log("TEST: '.$taskname.'")</script>';
+          echo '<script>console.log("TEST: '.$taskCategory.'")</script>';
+          echo '<script>console.log("TEST: '.$taskType.'")</script>';
+          
+  
+          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskType', '$resultUserDept1');";
+                  mysqli_query($con, $sqlinsert);
+            $num++;
+           
+            if( $_SESSION['admin']=="TRUE"){
+              ?><script>
+              Swal.fire({
+            icon: 'success',
+            title: 'Successfull',
+            text: 'You have successfully added task/s!',
+          //   footer: '<a href="">Why do I have this issue?</a>'
+          }).then(function() {
+    window.location = "admin.php";
+});
+           </script><?php 
+              // header("location: admin.php");
+  
+            }
+            else{
+              ?><script>
+              Swal.fire({
+            icon: 'success',
+            title: 'Successfull',
+            text: 'You have successfully added task/s!',
+          //   footer: '<a href="">Why do I have this issue?</a>'
+          }).then(function() {
+    window.location = "leader.php";
+});
+           </script><?php 
+             
+  
+            }
+  
+  
+      }
+  //     if($b>=1){
+  //         // $taskname = $_POST['taskName'.$num.];
+  //  $num = 1;
+   
+  
+  //     // $username = $_POST['username'];
+  //     // $password = $_POST['password'];
+  // // echo '<script>alert("OK")</script>';
+  
+  // }
+    }
+    ?>
     <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.php"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;MIS Monitoring</a>
+            <a class="navbar-brand" href="
+            
+            <?php 
+            if($_SESSION['admin'] == "False")
+            {
+               echo "leader.php";
+            } 
+            else{
+               echo "admin.php";
+              } 
+             ?>"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
              data-target="#navbarSupportedContent">
               <span class="navbar-toggler-icon"></span>
