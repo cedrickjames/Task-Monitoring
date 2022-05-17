@@ -436,10 +436,10 @@ $dateNow = date('Y-m-d');
           </div>
         </div>
 
-        <div class="parent">
-          <div class="wrapper">
+        <div class="parent" style= "max-height: 100%; height: 100%">
+          <div class="wrapper" style= " max-height: 100%; height: 100% ">
          
-          <div class="row" style= "margin-right: 0px " >
+          <div class="row" style= "margin-right: 0px; max-height: 100%; height: 100% " >
           <div class="col">
             <h3 style=" margin: 20px">  <i style="font-size: 30px;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
              
@@ -453,9 +453,10 @@ $dateNow = date('Y-m-d');
             <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
           </div>
 
-<div class="container p-30" >
-
-  <ul class="nav nav-pills mb-3 " style="margin-left: 16px" id="myTab" role="tablist">
+<div class="container p-30 d-flex justify-content-center"  style="height: 100%; background-color: none; " >
+<div class="justify-content-center " style="width: 90%; background-color: none; padding-left: 100px;">
+<div class="d-flex justify-content-start col-sm-6" style="background-color: none; padding-left: 35px"> 
+<ul class="nav nav-pills mb-3 d-flex justify-content-start" id="myTab" role="tablist" style="height: fit-content">
   <li class="nav-item">
     <a class="nav-link active" id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Task</a>
   </li>
@@ -469,11 +470,12 @@ $dateNow = date('Y-m-d');
     <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Section's Progress</a>
   </li>
 </ul>
-<div class="tab-content" id="myTabContent">
-<div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="task-tab">
-          <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content; padding-top: 0;margin-right: 0px; margin-left:0px">
-          
-        <div class="ms-1 shadow row">
+</div>
+<div class="tab-content" id="myTabContent" style="height: 100%; ">
+<div class="tab-pane fade show active" id="task" style="height: 90%;" role="tabpanel" aria-labelledby="task-tab">
+  
+          <div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: 100%; padding-top: 0; margin:0px; max-width: 90%;">
+        <div class="ms-1 shadow row" >
             <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
@@ -541,7 +543,7 @@ $dateNow = date('Y-m-d');
                         </div> 
                     </div>
                     <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
+                      <div class="overflow-y" style="overflow-y: scroll; height:500px;"> 
                         <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
@@ -964,16 +966,16 @@ $dateNow = date('Y-m-d');
       </div>
       </div>
 
-      <div class="tab-pane fade " id="PIC" role="tabpanel" aria-labelledby="pic-tab">
-      <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;padding-top: 0">
-        <div class="row">
-            <div class="col-md-12 main-datatable"> 
+      <div class="tab-pane fade " style="height: 90%;" id="PIC" role="tabpanel" aria-labelledby="pic-tab">
+      <div class="container p-30" id="TableListOfMembers";style="position: relative;  height: 100%; padding-top: 0; margin:0px; max-width: 90%;">
+        <div class="ms-1 shadow row">
+           <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-1 createSegment"> 
                          <h3>PIC Progress</h3> 
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-4"  style="padding: 0;">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="admin.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
@@ -1027,7 +1029,7 @@ $dateNow = date('Y-m-d');
                                       }
 
                             ?>
-                                <tr>
+                               
                                 <tr>
                                 <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
                                   <td>
@@ -1113,10 +1115,10 @@ $dateNow = date('Y-m-d');
             <div class="col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
-                        <div class="col-sm-1 createSegment"> 
+                        <div class="col-sm-3 createSegment"> 
                          <h3>Section's Progress</h3> 
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-4">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="admin.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
@@ -1126,7 +1128,7 @@ $dateNow = date('Y-m-d');
            
         </div></div>
                         
-                        <div class="col-sm-6 add_flex">
+                        <div class="col-sm-5 add_flex">
                             <div class="form-group searchInput">
                                 
                                 <!-- <label for="email">Search:</label> -->
@@ -1244,6 +1246,7 @@ $dateNow = date('Y-m-d');
         </div>
       </div>
     </div>
+      </div>
       </div>
     </div>
       </div>

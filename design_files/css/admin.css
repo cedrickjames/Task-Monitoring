@@ -8,3 +8,7 @@ a {
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
 }
+.nav-link {
+    color: #212529;
+    
+}
