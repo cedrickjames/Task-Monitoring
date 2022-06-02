@@ -36,7 +36,9 @@ if(isset($_POST['sbtlogin'])){
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $sql1 = "Select * FROM users WHERE username='$username' AND userpass='$password'";
+    // $sql1 = "Select * FROM users WHERE username='$username' AND userpass='$password'";
+    $sql1 = "Select * FROM users WHERE username='$username'";
+
     $result = mysqli_query($con, $sql1);
     $numrows = mysqli_num_rows($result);
 
@@ -62,6 +64,9 @@ $_SESSION['admin'] = 'TRUE';
 else{
 $_SESSION['admin'] = 'False'; 
 }
+
+
+
     if ($numrows == 0 ){
         $_SESSION['loginError'] = true;
         $userName = $_POST['username']
@@ -75,6 +80,21 @@ $_SESSION['admin'] = 'False';
          </script><?php 
     }
     else{
+
+        $sqlpass = "Select * FROM users WHERE username = '$username' AND `userpass` = '$password';";
+        $resultpass = mysqli_query($con, $sqlpass);
+        $numrowspass = mysqli_num_rows($resultpass);
+if($numrowspass == 0){
+    ?><script>
+    Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Wrong password',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+}
+else{
         $_SESSION['connected'] = 'TRUE';  
         $_SESSION['username'] = $username;
         
@@ -103,7 +123,7 @@ $_SESSION['admin'] = 'False';
     
                 }
         }
-        
+    }
 
     }
 
@@ -111,7 +131,7 @@ $_SESSION['admin'] = 'False';
        <div class="wrapper" style="background-image:url('design_files/images/registerback.jpg')">
   <div class="inner">
       <div class="image-holder">
-          <img src="design_files/images/registration-form-1.jpg">
+          <img src="design_files/images/Task Monitoring.png">
       </div>
    <form action="signin.php" method = "POST">
        <h3>Login</h3>

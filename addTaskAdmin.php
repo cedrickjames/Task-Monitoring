@@ -6,7 +6,7 @@ session_start();
   if($_SESSION['userlevel'] == "PIC"){
     header("location: index.php");
   }
- 
+
 
  
  
@@ -28,7 +28,7 @@ session_start();
    }else{
    $columnName = implode(", ", $columns);
    $Department = $_SESSION['userDept'];
-   $query = "SELECT * FROM `users` WHERE `department` = '$Department' AND `userlevel` = 'PIC'";
+   $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC'";
   //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
    $result = $db->query($query);
    if($result== true){ 
@@ -208,9 +208,6 @@ session_start();
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown"  style="right: 0; left: auto;">
                   <a class="dropdown-item" id="btn-addAdmin" href="./register.php" >Register User</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php" >Add Task</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a>
                   <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
 
 

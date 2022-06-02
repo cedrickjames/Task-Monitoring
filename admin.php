@@ -1,6 +1,41 @@
+
 <?php
   session_start();
   include ("./connection.php");
+  ?>
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
+
+    <title>Main Page</title>
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+
+ <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
+
+  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
+<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+<link rel="stylesheet" href="design_files/css/admin.css">
+
+<link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+
+<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
+<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
+<script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
+<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
+
+</head>
+    <body style="background: linear-gradient(to right, rgb(247, 248, 248), rgb(172, 187, 120));">
+    <?php
+
   $db= $con;
 $tableName="usertask";
     if(!isset( $_SESSION['connected'])){
@@ -24,24 +59,83 @@ $dateNow = date('Y-m-d');
     $year = date("Y");
     $today = date("F j, Y"); 
     $date_string = date('Y-m-d');
-    if(isset($_POST['submitdate'])){
-   $datePicker = $_POST['datepicker'];
-    // echo date('F', strtotime($datePicker));
-    // echo date('Y', strtotime($datePicker));
-    $month = date('F', strtotime($datePicker));
-    $year = date('Y', strtotime($datePicker));
-    $today = date('F j, Y', strtotime($datePicker));
-    // echo $month;
-    // echo $year;
-    $datePickerget = $datePicker;
-    $date_string= date('Y-m-d', strtotime($datePickerget));
 
 
-  $dateToPass = date('Y-m-d', strtotime($datePicker));
-  $taskfocus = "true";
+    if(isset($_POST['AddAdmin'])){
+     
+      $username = $_POST['email'];
+      $password = $_POST['password'];
+      $conPassword = $_POST['conpass']; 
+      $FNAME = $_POST['fname'];      
+      $MNAME = $_POST['mname'];      
+      $LNAME = $_POST['lname']; 
+      $dept = $_POST['Department']; 
 
-    //     echo date('Y-m-d', strtotime($datePicker));
-    // echo date('Y', strtotime($datePicker));
+           
+
+  // $userLevel =  echo("<script>userLevel()</script>");
+  $radio_value=$_POST['radioPosition'];
+      
+      $sql1 = "Select * FROM users WHERE username='$username'";
+      $result = mysqli_query($con, $sql1);
+      $numrows = mysqli_num_rows($result);
+// if(mysqli_fetch_assoc($result)){
+//     $_SESSION[]
+// }
+      if ($numrows == 0){
+          if($password==$conPassword){
+              $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', '$radio_value', '$FNAME', '$MNAME', '$LNAME', '$dept')";
+              mysqli_query($con, $sqlinsert);
+
+              $fnameAdmin="";
+              $adminUserId="";
+              $sqlSelectUserInfo = "Select * FROM users WHERE username = '$username'";
+              $resultUserInfo = mysqli_query($con, $sqlSelectUserInfo);
+              while($userRow = mysqli_fetch_assoc($resultUserInfo)){
+        
+                $fnameAdmin= $userRow['f_name'];
+                $adminUserId= $userRow['userid'];
+            }
+        
+              $sqlinsert = "INSERT INTO `admin`(`adminid`, `userid`, `name`) VALUES ('','$adminUserId','$fnameAdmin')";
+              mysqli_query($con, $sqlinsert);
+              ?><script>
+             Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Admin Registered',
+  showConfirmButton: false,
+  timer: 1500
+})
+          //   footer: '<a href="">Why do I have this issue?</a>'
+           </script><?php 
+    
+          
+          }
+          else{
+            ?><script>
+            Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Password does not match!',
+        //   footer: '<a href="">Why do I have this issue?</a>'
+        })
+         </script><?php 
+          }
+        
+          
+
+      }
+      else{
+          ?><script>
+          Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'This user is already exist!',
+      //   footer: '<a href="">Why do I have this issue?</a>'
+      })
+       </script><?php 
+      }
 
     }
 
@@ -244,37 +338,6 @@ $dateNow = date('Y-m-d');
 }
 
 ?>
-
-<!DOCTYPE html>
-<html>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
-
-    <title>Main Page</title>
-    <!-- MATERIAL DESIGN ICONIC FONT -->
-
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
-<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
-
-  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<link rel="stylesheet" href="design_files/css/MainPageStyle.css">
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
-<link rel="stylesheet" href="design_files/css/admin.css">
-
-
-<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
-<script type="text/javascript" src="./node_modules/chart.js/dist/chart.js"></script>
-<script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
-<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
-<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
-
-</head>
-    <body>
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
@@ -301,13 +364,16 @@ $dateNow = date('Y-m-d');
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
                     <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
+                    <a class="dropdown-item" id="btn-addAdmin" href="./addTaskAdmin.php">Add Task</a>
+
+
+
                     <?php if($_SESSION['admin'] == "TRUE"){?>
 
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalAdmin'>Add Admin</a> -->
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalRemoveAdmin'>Remove Admin</a>  -->
+                <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalAdmin'>Add Admin</a> 
+                   <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalRemoveAdmin'>Remove Admin</a>  
                    
                       <?php } ?>
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
@@ -366,7 +432,7 @@ $dateNow = date('Y-m-d');
                 </button>
               </div>
               <div class="modal-body">
-                <form id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
+                <form action="admin.php" method = "POST" id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
                   <div class="form-group">
                     <ul id="adminList2">
                       <!-- <li>CEdrick</li>
@@ -375,26 +441,91 @@ $dateNow = date('Y-m-d');
   
                     </ul>
                   </div>      
-                  <div class="form-group">
-                   
-                    <label  for="message-text" class="col-form-label">Enter email</label>
-                    <input  type="text"class="form-control"   id="inputAdmin" >
-                  </div>
-                </form>
+                  <div class="form-group row">
+                        <div class="col-sm-6">
+                            <input type="text" name="fname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%; padding: 10px;" placeholder="First Name" >
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="text"  name="mname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="M.I.">
+                        </div>
+                        <div class="col-sm-10" style="margin-top: 10px;">
+                            <input type="text"  name="lname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="Last Name">
+                        </div>
+                        <div class="col-sm-10"  style="margin-top: 10px;">
+                        <select  name="Department" id="Department" class=" form-control form-select form-select-sm" style="padding-left:10px;">
+                                    <option value="" disabled selected>Select Department</option>
+                                    <option value="MIS">MIS</option>
+                                    <option value="FEM">FEM</option>
+                                    <option value="Accounting">Accounting</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Parts Inspection">Parts Inspection</option>
+                                    <option value="Parts Production">Parts Production</option>
+                                    <option value="PPIC">PPIC</option>
+                                    <option value="PPIC-Warehouse">PPIC-Warehouse</option>
+                                    <option value="Production 1">Production 1</option>
+                                    <option value="Production 2">Production 2</option>
+                                    <option value="Production Support">Production Support</option>
+                                    <option value="Purchasing">Purchasing</option>
+                                    <option value="Quality Assurance">Quality Assurance</option>
+                                    <option value="Quality Control">Quality Control</option>
+                                    <option value="System Kaizen">System Kaizen</option>
+                                </select>    
+                        </div>
+                    </div>
+                    <div class="col-sm-12"  >
+                        <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 12pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding-left: 10px">
+                                    <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
+                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="Leader" checked onclick="position();">
+                                            <label class="form-check-label" for="radioLeader">
+                                             Leader
+                                            </label>
+                                     </div>
+                                    <div class="form-check form-check-inline" style="margin-left: 10px">
+                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="PIC" onclick="position();">
+                                            <label class="form-check-label" for="radioPIC">
+                                             PIC
+                                            </label>
+                                    </div>
+                                  
+                             </div>
+                        </fieldset>
+                    </div>
+                <div class="form-wrapper" >
+                    <input  name="email" id="email"  placeholder="username" class="form-control" readonly="readonly" 
+  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
+  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"
+onkeyup="checkinputs()">
+                    
+                </div>  
+                <div class="form-wrapper" style="margin-top: 10px;">
+                    <input name="password" id="password" type="password" placeholder="Password" class="form-control" style="padding: 5px"readonly="readonly" 
+  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
+  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"onkeyup="checkinputs()">
+              
+                </div>   
+                <div class="form-wrapper" style="margin-top: 10px;">
+                    <input name="conpass" id="confirmPassword" type="password" placeholder="Confirm Password" class="form-control" style="padding: 5px" readonly="readonly" 
+  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
+  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"onkeyup="checkinputs()">
+  
+                </div> 
+                  
+                
               </div>
-              <div class="modal-footer">
+              <div class="modal-footer" style="margin-top: 10px;">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick =" addAdmin();" class="btn btn-primary" data-dismiss="modal">Add</button>
+                <button type="submit" id="AddAdmin" name="AddAdmin" class="btn btn-info" >Add</button>
             
                </div>
             </div>
           </div>
         </div>
-
-        <div class="parent">
-          <div class="wrapper">
+        </form>
+        <div class="parent" style= "max-height: 100%; height: 100%">
+          <div class="wrapper" style= "max-height: 100%; height: 100%">
          
-          <div class="row" style= "margin-right: 0px " >
+          <div class="row" style= "margin-right: 0px; max-height: 100%; height: 100% ">
           <div class="col">
             <h3 style=" margin: 20px">  <i style="font-size: 30px;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
              <span  class="float-right"> <?php echo $_SESSION['userlevel'] ?> </span>  
@@ -404,8 +535,10 @@ $dateNow = date('Y-m-d');
             <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
           </div>
 
-<div class="container p-30">
-  <ul class="nav nav-pills mb-3 " style="margin-left: 16px" id="myTab" role="tablist">
+<div class="container" style="height: 100%; background-color: none; " >
+<div class="justify-content-center " style="width: 90%; background-color: none; height: fit-content; padding-left: 100px; padding-bottom: 0px; margin: auto">
+<div class="d-flex justify-content-start col-sm-6" style="background-color: none; padding-left: 5px"> 
+<ul class="nav nav-pills mb-3 d-flex justify-content-start" id="myTab" role="tablist" style="height: fit-content">
   <li class="nav-item">
     <a class="nav-link active" id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Task</a>
   </li>
@@ -419,11 +552,13 @@ $dateNow = date('Y-m-d');
     <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Section's Progress</a>
   </li>
 </ul>
-<div class="tab-content" id="myTabContent">
-<div class="tab-pane fade show active" id="task" role="tabpanel" aria-labelledby="task-tab">
-      <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content; padding-top: 0">
-        <div class="row">
-            <div class="col-md-12 main-datatable"> 
+                    </div>
+                    <div class="tab-content" id="myTabContent" style="height: 100%; ">
+<div class="tab-pane fade show active" id="task" style="height: 90%; background-color: none" role="tabpanel" aria-labelledby="task-tab">
+
+<div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: 100%; padding-top: 0px; margin:0px; max-width: 90%;  background-color: none">
+<div class="ms-1 shadow row" >
+            <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-1 createSegment"> 
@@ -488,19 +623,21 @@ $dateNow = date('Y-m-d');
                         </div> 
                     </div>
                     <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
+                    <div class="overflow-y" style="overflow-y: scroll; height:500px;"> 
                         <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="min-width:50px;">Category</th>
                                     <th style="width:10%;" >Task Name</th>
-                                    <th style="width:20%;"  >In charge</th>
+                                    <th style="width:10%;"  >In charge</th>
                                     <th style="width:10%;"  >Type</th>
                                     <th style="width:10%;" >W1</th>
                                     <th style="width:10%;" >W2</th>
                                     <th style="width:10%;" >W3</th>
                                     <th style="width:10%;" >W4</th>
-                                    <th style="width:15%;" >W5</th>
+                                    <th style="width:10%;" >W5</th>
+                                    <th style="width:10%;" >W6</th>
+
 
                                 </tr>
                             </thead>
@@ -866,7 +1003,71 @@ $dateNow = date('Y-m-d');
                                 }                       
                                 
                                  ?></td>
+<td><?php
+                                $taskID = $data['usertaskID'];
+                                $taskType = $data['taskType'];
+                                if($taskType == "daily"){
+                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                  //$month = date("F");
+                                  //$year = date("Y");
+  
+                                  $selectUserTask5 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 6' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
 
+                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                      $result5 = mysqli_query($con, $selectUserTask5);
+                                      $weekNumber = '';
+                                      while($userRow = mysqli_fetch_assoc($result5)){
+                                  
+                                        $weekNumber = $userRow['week'];
+                                        $fileloc =  $userRow['attachments'];
+                                        $time = $userRow['timestamp'];
+                                        $finishedtaskID = $userRow['FinishedTaskID'];
+                                        $date = $userRow['Date'];
+                                        $dateN =  date('n-d', strtotime($date));
+                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
+                                     
+                                            }
+                                            if ($weekNumber == "week 6" ){
+  
+                                              $weeknumber = $weekNumber;
+                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  // //echo("<script>console.log('ok');</script>");
+        
+                                                 }
+                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
+                                }
+                                else{
+                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                  //$month = date("F");
+                                  //$year = date("Y");
+  
+                                      $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
+                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                      $result = mysqli_query($con, $selectUserTask);
+                                      $weekNumber = '';
+                                      while($userRow = mysqli_fetch_assoc($result)){
+                                  
+                                        $weekNumber = $userRow['week'];
+                                        $fileloc =  $userRow['attachments'];
+                                        $time = $userRow['timestamp'];
+                                        $finishedtaskID = $userRow['FinishedTaskID'];
+                                        $date = $userRow['Date'];
+
+                                        $dateN =  date('n-d', strtotime($date));
+                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
+                                     
+                                            }
+                                            if ($weekNumber == "week 6" ){
+  
+                                              $weeknumber = $weekNumber;
+                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  // //echo("<script>console.log('ok');</script>");
+        
+                                                 }
+                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
+                                }                       
+                                
+                                 ?></td>
                                
                               
                               
@@ -890,12 +1091,12 @@ $dateNow = date('Y-m-d');
         </div>
       </div>
     </div>
-    <div class="tab-pane fade" id="dashboard" role="tabpanel" aria-labelledby="profile-tab"> 
+    <div class="tab-pane fade" id="dashboard"style="height: 90%; background-color: none" role="tabpanel" aria-labelledby="profile-tab"> 
       <div class="chart_container" style="max-width: 350px">
                     <canvas id="myChart" ></canvas>
       </div>
     </div>
-    <div class="tab-pane fade " id="PIC" role="tabpanel" aria-labelledby="pic-tab">
+    <div class="tab-pane fade " id="PIC" style="height: 90%; background-color: none"role="tabpanel" aria-labelledby="pic-tab">
       <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;padding-top: 0">
         <div class="row">
             <div class="col-md-12 main-datatable"> 

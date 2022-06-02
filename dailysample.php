@@ -105,245 +105,265 @@ $tableName="usertask";
 <!DOCTYPE html>
 <html>
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <meta name="viewport" contant="width=device-width, initial-scale=1.0">
 
-    <title>Main Page</title>
-    <!-- MATERIAL DESIGN ICONIC FONT -->
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
+        <title>Main Page</title>
+        <!-- MATERIAL DESIGN ICONIC FONT -->
+        <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet"
+            href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+        <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
 
-  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
-<link rel="stylesheet" href="design_files/css/admin.css">
+        <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
+        <link rel="stylesheet" href="./css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+        <link rel="stylesheet" href="design_files/css/admin.css">
 
-<link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+        <link rel="stylesheet" href="design_files/css/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
 
-<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
-<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
+        <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
+        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
+        <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
 
-<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
+        <!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
 
-</head>
+    </head>
+
     <body style="background: #70e1f5;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 ">
-      <div>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-             data-target="#navbarSupportedContent">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                  <a class="nav-link" href="#">Daily</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="leader.php">Home</a>
-                </li>
-                <!-- <li class="nav-item">
+        <div>
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..."
+                        height="40">&nbsp;Task Monitoring App</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Daily</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="leader.php">Home</a>
+                        </li>
+                        <!-- <li class="nav-item">
                   <a class="nav-link" href="#">About</a>
                 </li> -->
-                
-                <li class="nav-item dropdown" >
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                    Option
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
-                    <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
-                    <?php if($_SESSION['admin'] == "TRUE"){?>
 
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown">
+                                Option
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
+                                <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
+                                <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
+                                <?php if($_SESSION['admin'] == "TRUE"){?>
+
+                                <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
                       data-target='#modalAdmin'>Add Admin</a>
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
                       data-target='#modalRemoveAdmin'>Remove Admin</a>  -->
-                   
-                      <?php } ?>
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
-                    <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
 
-                    
-                   
-                  </div>
-                </li>
-                
-              </ul>
-            </div>
-          </nav>
-        </div>
-        <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Remove Admin</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
-                  <div class="form-group">
-                    <ul id="adminList">
-                      <!-- <li>CEdrick</li>
-                      <li>CEdrick</li>
-                      <li>CEdrick</li> -->
-  
-                    </ul>
-                  </div>
-                  <div class="form-group">
-                    <label  for="message-text" class="col-form-label">Enter email</label>
-                      <input  type="text"class="form-control"   id="inputRemoveAdmin" >
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick =" RemoveAdmin();" class="btn btn-primary" data-dismiss="modal">Remove</button>
-            
-               </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Admin</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
-                  <div class="form-group">
-                    <ul id="adminList2">
-                      <!-- <li>CEdrick</li>
-                      <li>CEdrick</li>
-                      <li>CEdrick</li> -->
-  
-                    </ul>
-                  </div>      
-                  <div class="form-group">
-                   
-                    <label  for="message-text" class="col-form-label">Enter email</label>
-                    <input  type="text"class="form-control"   id="inputAdmin" >
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick =" addAdmin();" class="btn btn-primary" data-dismiss="modal">Add</button>
-            
-               </div>
-            </div>
-          </div>
-        </div>
+                                <?php } ?>
+                                <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
+                                <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
+                                <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
 
-        <div class="parent" style= "max-height: 100%; height: 100%; ">
-          <div class="wrapper" style= " max-height: 100%; height: 100% ;">
-         
-          <div class="row"style= "margin-right: 0px; max-height: 100%; height: 100%; background-color: none ">
-          <div class="col">
-            <h3 style=" margin: 20px">  <i style="font-size: 30px;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
-             <span  class="float-right"> <?php echo $_SESSION['userlevel'] ?> </span>  
-            </h3>
-          </div>
-          <div class="col">
-            <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
-          </div>
 
-          <div class="container p-30" id="TableListOfMembers"; style="position: relative; height: 100%;  padding-top: 0px; margin:0 auto; max-width: 90%;  background-color: none">
-        <div class="ms-1 shadow row">
-            <div class="shadow col-md-12 main-datatable"> 
-                <div class="card_body">
-                    <div class="row d-flex ">
-                        <div class="col-sm-1 createSegment"> 
-                         <h3>Task</h3> 
-                        </div>
-                        <div class="col-sm-4" style="padding: 0;">
-                          <div class="form-group row d-flex justify-content-center" >
-                          <form action="daily.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker" name="datepicker" onchange="filterMonth();">
-            <input type="submit" name="submitdate">
-            </form>
-           
-        </div></div>
-                        
-                        <div class="col-sm-6 add_flex">
-                            <div class="form-group searchInput">
-                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
-                                    <option  disabled selected hidden>Search by</option>
-                                    
-                                    <option value="1">Task Name</option>
-                                    <option value="3">Type</option>
-                                    <option value="2">In charge</option>
-                                    <option value="0">Category</option>
-                                    
-                                  </select>
-                                <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
+
                             </div>
-                        </div> 
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Remove Admin</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:500px;">  
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table">
-                            <thead  class="thead-dark">
-                                <tr>
-                                    <th style="min-width:50px;">Category</th>
-                                    <th style="width:20%;" >Task Name</th>
-                                    <th style="width:20%;"  >In charge</th>
-                                    <th style="width:10%;" >Mon</th>
-                                    <th style="width:10%;" >Tue</th>
-                                    <th style="width:10%;" >Wed</th>
-                                    <th style="width:10%;" >Thu</th>
-                                    <th style="width:10%;" >Fri</th>
-                                    <th style="width:10%;" >Sat</th>
+                    <div class="modal-body">
+                        <form id="passwordform" style="width: 100%; padding: 10px; border: 0;">
+                            <div class="form-group">
+                                <ul id="adminList">
+                                    <!-- <li>CEdrick</li>
+                      <li>CEdrick</li>
+                      <li>CEdrick</li> -->
+
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Enter email</label>
+                                <input type="text" class="form-control" id="inputRemoveAdmin">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" onclick=" RemoveAdmin();" class="btn btn-primary"
+                            data-dismiss="modal">Remove</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Add Admin</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="passwordform" style="width: 100%; padding: 10px; border: 0;">
+                            <div class="form-group">
+                                <ul id="adminList2">
+                                    <!-- <li>CEdrick</li>
+                      <li>CEdrick</li>
+                      <li>CEdrick</li> -->
+
+                                </ul>
+                            </div>
+                            <div class="form-group">
+
+                                <label for="message-text" class="col-form-label">Enter email</label>
+                                <input type="text" class="form-control" id="inputAdmin">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" onclick=" addAdmin();" class="btn btn-primary"
+                            data-dismiss="modal">Add</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="parent" style="max-height: 100%; height: 100%; ">
+            <div class="wrapper" style=" max-height: 100%; height: 100% ;">
+
+                <div class="row" style="margin-right: 0px; max-height: 100%; height: 100%; background-color: none ">
+                    <div class="col">
+                        <h3 style=" margin: 20px"> <i style="font-size: 30px;" class="fas fa-user"></i>
+                            <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
+                            <span class="float-right"> <?php echo $_SESSION['userlevel'] ?> </span>
+                        </h3>
+                    </div>
+                    <div class="col">
+                        <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week
+                            <?php echo weekOfMonth($date_string) ?></h3>
+                    </div>
+
+                   
+                            <div class="container p-30" id="TableListOfMembers" ;
+                                style="position: relative; height: 100%;  padding-top: 0px; margin:auto auto; max-width: 90%;  background-color: none">
+                                <div class="ms-1 shadow row">
+                                    <div class="shadow col-md-12 main-datatable">
+                                        <div class="card_body">
+                                            <div class="row d-flex ">
+                                                <div class="col-sm-1 createSegment">
+                                                    <h3>Task</h3>
+                                                </div>
+                                                <div class="col-sm-4" style="padding: 0;">
+                                                    <div class="form-group row d-flex justify-content-center">
+                                                        <form action="daily.php" method="POST">
+                                                            <label for="colFormLabelLg" class="col-form-label-lg"
+                                                                style="margin-right: 20px">Date</label>
+                                                            <input type="date" id="datepicker" name="datepicker"
+                                                                onchange="filterMonth();">
+                                                            <input type="submit" name="submitdate">
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6 add_flex">
+                                                    <div class="form-group searchInput">
+                                                        <select class="custom-select" id="inputGroupSelect01"
+                                                            onchange="getSelectValue();">
+                                                            <option disabled selected hidden>Search by</option>
+
+                                                            <option value="1">Task Name</option>
+                                                            <option value="3">Type</option>
+                                                            <option value="2">In charge</option>
+                                                            <option value="0">Category</option>
+
+                                                        </select>
+                                                        <!-- <label for="email">Search:</label> -->
+                                                        <input type="search" class="form-control" id="filterbox"
+                                                            placeholder=" ">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="overflow-x">
+                                                <div class="overflow-y" style="overflow-y: scroll; height:500px;">
+                                                    <table style="width:100%;" id="filtertable"
+                                                        class="table datacust-datatable Table">
+                                                        <thead class="thead-dark">
+                                                            <tr>
+                                                                <th style="min-width:50px;">Category</th>
+                                                                <th style="width:20%;">Task Name</th>
+                                                                <th style="width:20%;">In charge</th>
+                                                                <th style="width:10%;">Mon</th>
+                                                                <th style="width:10%;">Tue</th>
+                                                                <th style="width:10%;">Wed</th>
+                                                                <th style="width:10%;">Thu</th>
+                                                                <th style="width:10%;">Fri</th>
+                                                                <th style="width:10%;">Sat</th>
 
 
-                                </tr>
-                            </thead>
-                            <tbody id="TaskTable">
-                              <?php
-                            $color1 = "#f9f9f9;";
-                            $color2 = "white";
-                            $color = "";
-                                  if(is_array($fetchData)){      
-                                    $sn=1;
-                                  foreach($fetchData as $data){
-                                    if($sn % 2 == 0){
-                                      $color = $color1;
-                                    }
-                                    else{
-                                      $color = $color2;
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="TaskTable">
+                                                            <?php
+                                $color1 = "#f9f9f9;";
+                                $color2 = "white";
+                                $color = "";
+                                    if(is_array($fetchData)){      
+                                        $sn=1;
+                                    foreach($fetchData as $data){
+                                        if($sn % 2 == 0){
+                                        $color = $color1;
+                                        }
+                                        else{
+                                        $color = $color2;
 
-                                    }
-                      echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
+                                        }
+                                echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
-                            ?>
-                             <tr style="background-color: <?php echo $color?>">
-                                
-                                <td><?php echo $data['taskCategory']??''; ?></td>
-                                <td><?php echo $data['taskName']??''; ?></td>
-                                <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
-        $result = mysqli_query($con, $sql1);
-        $numrows = mysqli_num_rows($result);
-        while($userRow = mysqli_fetch_assoc($result)){
-         $firstname = $userRow['f_name'];
-      } echo  $firstname; ?></td>
-                                <td><?php
+                                ?>
+                                                            <tr style="background-color: <?php echo $color?>">
+
+                                                                <td><?php echo $data['taskCategory']??''; ?></td>
+                                                                <td><?php echo $data['taskName']??''; ?></td>
+                                                                <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
+                                                        $result = mysqli_query($con, $sql1);
+                                                        $numrows = mysqli_num_rows($result);
+                                                        while($userRow = mysqli_fetch_assoc($result)){
+                                                        $firstname = $userRow['f_name'];
+                                                    } echo  $firstname; ?></td>
+                                                                <td><?php
                                 $taskID = $data['usertaskID'];
                                 echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                 // //$month = date("F");
@@ -383,8 +403,8 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                 
                                  ?></td>
 
-                               
-                                <td><?php
+
+                                                                <td><?php
                                       $taskID = $data['usertaskID'];
 
                                       echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
@@ -430,8 +450,8 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                             
                                 
                                  ?>
-                                 </td>
-                                <td><?php
+                                                                </td>
+                                                                <td><?php
                                   $taskID = $data['usertaskID'];
 
                                   echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
@@ -477,7 +497,7 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                           
                             
                                  ?></td>
-                                <td><?php
+                                                                <td><?php
                                       $taskID = $data['usertaskID'];
 
                                       echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
@@ -523,8 +543,8 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                          
                                 
                                  ?>
-                                 </td>
-                                <td><?php
+                                                                </td>
+                                                                <td><?php
                                     $taskID = $data['usertaskID'];
 
                                     echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
@@ -570,8 +590,8 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                            
                               
                                   ?>
-                                  </td>
-                                <td><?php
+                                                                </td>
+                                                                <td><?php
                                       $taskID = $data['usertaskID'];
 
                                       echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
@@ -617,38 +637,38 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                             
                                 
                                   ?>
-                                  </td>
-                                
+                                                                </td>
 
-                               
-                              
-                              
-                                  </tr>
-                                  <?php
+
+
+
+
+                                                            </tr>
+                                                            <?php
                                   $sn++;  }}else{ ?>
-                                  <tr>
-                                    <td colspan="8">
-                                    <?php echo $fetchData; ?>
-                                   </td>
-                                        <tr>
-                                        <?php
+                                                            <tr>
+                                                                <td colspan="8">
+                                                                    <?php echo $fetchData; ?>
+                                                                </td>
+                                                            <tr>
+                                                                <?php
                                           }?>
-                              
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
                 </div>
             </div>
+
+            <!-- <h1> </h1> -->
+
         </div>
-      </div>
-      
-      </div>
-          </div> 
-      
-          <!-- <h1> </h1> -->
-        
-</div>
   
       <script>
 

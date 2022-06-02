@@ -20,7 +20,7 @@ $tableName="usertask";
 $timenow = date("h:i a");       
 echo("<script>console.log('Time Now: " .$timenow. "');</script>");
 
-   
+$PassContainer ="";
 $message = ''; 
 $newFileName = '';
 $varAlert = '';
@@ -53,7 +53,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
       echo("<script>console.log('FILE LOCATION: " .$dest_path . "');</script>");
      
       $_SESSION['newFileLoc'] = $dest_path;
- 
+      
       if(move_uploaded_file($fileTmpPath, $dest_path)) 
       {
         $varAlert = "success";
@@ -239,7 +239,10 @@ $_SESSION['message'] = $message;
 <!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
 
 </head>
-    <body>
+    <body style="background: #134E5E;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #71B280, #134E5E);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
@@ -353,29 +356,28 @@ $_SESSION['message'] = $message;
           </div>
         </div>
 
-        <div class="parent">
-          <div class="wrapper">
+        <div class="parent" style= "max-height: 100%; height: 100%; padding:0px; ">
+          <div class="wrapper" style= " max-height: 100%; height: 100% ;padding:0px; ">
          
-          <div class="row" style= "margin-right: 0px " >
+          <div class="row"style= "margin-right: 0px; max-height: 100%; height: 100%; background-color: none; padding:0px; ">
           <div class="col-4">
-            <h3 style=" margin: 20px">  <i style="font-size: 30px;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
+            <h3 style=" margin: 20px; color: white;">  <i style="font-size: 30px; color: white;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
              
             </h3>
           </div>
-          <div class="col-4" style="padding-top: 20px">
+          <div class="col-4" style="padding-top: 20px; color: white">
           <h3  class="text-center"> <?php echo $_SESSION['userlevel'] ?> </h3>  
           </div>
           <div class="col-4">
-            <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
+            <h3 style=" margin: 20px; color: white" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
           </div>
-
-
-          <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;">
+         
+          <div class="container p-30" id="TableListOfMembers"; style="position: relative; height: 100%;  padding-top: 0px; margin:0 auto; max-width: 90%;  background-color: none">
           
-        <div class=" ms-1 shadow row">
-            <div class=" shadow col-md-12 main-datatable"> 
-                <div class="card_body">
-                    <div class="row d-flex ">
+        <div class=" ms-1 shadow row" style="">
+            <div class=" shadow col-md-12 main-datatable" style=""> 
+                <div class="card_body"  style="">
+                    <div class="row d-flex " style="">
                         <div class="col-sm-3 createSegment"> 
                          <h3>Task</h3> 
                         </div>
@@ -411,7 +413,7 @@ $_SESSION['message'] = $message;
                         </div> 
                     </div>
                     <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
+                      <div class="overflow-y" style="overflow-y: scroll; height:600px;"> 
                         <table class="table table-striped table-hover  " style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
@@ -657,7 +659,7 @@ $_SESSION['message'] = $message;
             </div>
         </div>
       </div>
-
+    
 
       </div>
           </div> 

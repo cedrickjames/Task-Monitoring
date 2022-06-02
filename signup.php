@@ -37,6 +37,16 @@ session_start();
             
 
         }
+        else{
+            ?><script>
+            Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'This user is already exist!',
+        //   footer: '<a href="">Why do I have this issue?</a>'
+        })
+         </script><?php 
+        }
     }
 ?>
 
@@ -55,11 +65,63 @@ session_start();
                 
                 <!-- STYLE CSS -->
         <link rel="stylesheet" href="design_files/css/style.css">
+        <script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
          
 
     </head>
   
     <body>
+    <?php
+
+  
+    if(isset($_POST['sbtregister'])){
+        
+        $username = $_POST['email'];
+        $password = $_POST['password'];
+        $conPassword = $_POST['conpass']; 
+        $FNAME = $_POST['fname'];      
+        $MNAME = $_POST['mname'];      
+        $LNAME = $_POST['lname']; 
+        $dept = $_POST['Department']; 
+
+             
+
+    // $userLevel =  echo("<script>userLevel()</script>");
+    $radio_value=$_POST['radioPosition'];
+        
+        $sql1 = "Select * FROM users WHERE username='$username'";
+        $result = mysqli_query($con, $sql1);
+        $numrows = mysqli_num_rows($result);
+// if(mysqli_fetch_assoc($result)){
+//     $_SESSION[]
+// }
+        if ($numrows == 0){
+            if($password==$conPassword){
+                $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', '$radio_value', '$FNAME', '$MNAME', '$LNAME', '$dept')";
+                mysqli_query($con, $sqlinsert);
+                header("location: signin.php");
+            
+            }
+            else{
+                echo '<script>alert("Password does not match!")</script>';
+            }
+          
+            
+
+        }
+        else{
+            ?><script>
+            Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'This user is already exist!',
+        //   footer: '<a href="">Why do I have this issue?</a>'
+        })
+         </script><?php 
+        }
+    }
+?>
        <div class="wrapper" style="background-image:url('design_files/images/loginback.jpg')">
   <div class="inner">
       <div class="image-holder">
@@ -119,11 +181,11 @@ session_start();
                         </fieldset>
                     </div>
                 <div class="form-wrapper">
-                    <input autocomplete="false" name="email" id="email"  placeholder="username" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
+                    <input  name="email" id="email"  placeholder="username" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
                     <i class="zmdi zmdi zmdi-email" style="padding-right: 5px"></i>
                 </div>  
                 <div class="form-wrapper">
-                    <input autocomplete="false" name="password" id="password" type="password" placeholder="Password" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
+                    <input name="password" id="password" type="password" placeholder="Password" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
                     <i class="zmdi zmdi zmdi-lock" style="padding-right: 5px"></i>
                 </div>   
                 <div class="form-wrapper">

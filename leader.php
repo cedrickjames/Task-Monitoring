@@ -1,6 +1,54 @@
 <?php
   session_start();
   include ("./connection.php");
+  ?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
+
+    <title>Main Page</title>
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+
+    <!-- <link rel="stylesheet" href="design_files/css/gijgo.min.css"> -->
+
+
+<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
+
+  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
+<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!-- <link rel="stylesheet" href="design_files/css/MainPageStyle.css"> -->
+<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+<link rel="stylesheet" href="design_files/css/admin.css">
+
+<link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+
+
+<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
+<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
+
+<script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
+
+
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
+
+<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
+
+</head>
+    <body style="background: linear-gradient(to right, #FFFDE4, #b3dcff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
+    <?php
+
   $db= $con;
 $tableName="usertask";
     if(!isset( $_SESSION['connected'])){
@@ -85,13 +133,29 @@ $dateNow = date('Y-m-d');
 
       $sqlupdate = "UPDATE `usertask` SET `taskName`='$userTaskName',`taskCategory`='$userTaskCategory',`taskType`='$userTaskType' WHERE usertaskID = '$userTASKid'";
       mysqli_query($con, $sqlupdate);
-
+      ?><script>
+      Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: 'Update Done.',
+  //   footer: '<a href="">Why do I have this issue?</a>'
+  })
+   </script><?php 
 
     }
     if(isset($_POST['DeleteTaskbtn'])){
       $userTASKid = $_POST['containerOfTaskId'];
       $sqldelete = "DELETE FROM `usertask` WHERE usertaskID = '$userTASKid';";
       mysqli_query($con, $sqldelete);
+
+      ?><script>
+      Swal.fire({
+    icon: 'success',
+    title: 'Success!',
+    text: 'Deleted.',
+  //   footer: '<a href="">Why do I have this issue?</a>'
+  })
+   </script><?php 
 
     }
 
@@ -249,50 +313,6 @@ $dateNow = date('Y-m-d');
 }
 
 ?>
-
-<!DOCTYPE html>
-<html>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
-
-    <title>Main Page</title>
-    <!-- MATERIAL DESIGN ICONIC FONT -->
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
-
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-
-    <!-- <link rel="stylesheet" href="design_files/css/gijgo.min.css"> -->
-
-
-<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
-
-  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-<!-- <link rel="stylesheet" href="design_files/css/MainPageStyle.css"> -->
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
-<link rel="stylesheet" href="design_files/css/admin.css">
-
-<link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-
-
-<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
-
-
-
-
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
-
-<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
-
-</head>
-    <body>
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
@@ -320,14 +340,14 @@ $dateNow = date('Y-m-d');
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
                     <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
                     <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
-                    <?php if($_SESSION['admin'] == "TRUE"){?>
+                    <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
 
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
                       data-target='#modalAdmin'>Add Admin</a>
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
                       data-target='#modalRemoveAdmin'>Remove Admin</a> 
                    
-                      <?php } ?>
+                      <?php } ?> -->
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
                     <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
@@ -450,19 +470,19 @@ $dateNow = date('Y-m-d');
             </h3>
           </div>
           <div class="col">
-            <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
+            <h3 style=" margin: 20px; " class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
           </div>
 
-<div class="container p-30 d-flex justify-content-center"  style="height: 100%; background-color: none; " >
-<div class="justify-content-center " style="width: 90%; background-color: none; padding-left: 100px;">
-<div class="d-flex justify-content-start col-sm-6" style="background-color: none; padding-left: 35px"> 
+<div class="container"  style="height: 100%; background-color: none; " >
+<div class="justify-content-center " style="width: 90%; background-color: none; padding-left: 100px; margin: auto">
+<div class="d-flex justify-content-start col-sm-6" style="background-color: none; padding-left: 5px ; "> 
 <ul class="nav nav-pills mb-3 d-flex justify-content-start" id="myTab" role="tablist" style="height: fit-content">
   <li class="nav-item">
     <a class="nav-link active" id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Task</a>
   </li>
   <!-- <li class="nav-item">
     <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
-  </li> -->
+  </li> --> 
   <li class="nav-item">
     <a class="nav-link" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">PIC Progress</a>
   </li>
@@ -472,9 +492,9 @@ $dateNow = date('Y-m-d');
 </ul>
 </div>
 <div class="tab-content" id="myTabContent" style="height: 100%; ">
-<div class="tab-pane fade show active" id="task" style="height: 90%;" role="tabpanel" aria-labelledby="task-tab">
+<div class="tab-pane fade show active" id="task" style="height: 90%; background-color: none" role="tabpanel" aria-labelledby="task-tab">
   
-          <div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: 100%; padding-top: 0; margin:0px; max-width: 90%;">
+          <div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: 100%; padding-top: 0px; margin:0px; max-width: 90%;  background-color: none">
         <div class="ms-1 shadow row" >
             <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
@@ -550,13 +570,15 @@ $dateNow = date('Y-m-d');
                                     <th style="min-width:15px;">No.</th>
                                     <th style="min-width:50px;">Category</th>
                                     <th style="width:20%;" >Task Name</th>
-                                    <th style="width:20%;"  >In charge</th>
+                                    <th style="width:10%;"  >In charge</th>
                                     <th style="width:10%;"  >Type</th>
                                     <th style="width:10%;" >W1</th>
                                     <th style="width:10%;" >W2</th>
                                     <th style="width:10%;" >W3</th>
                                     <th style="width:10%;" >W4</th>
                                     <th style="width:10%;" >W5</th>
+                                    <th style="width:10%;" >W6</th>
+                                    
 
                                 </tr>
                             </thead>
@@ -936,6 +958,72 @@ $dateNow = date('Y-m-d');
                                 
                                  ?></td>
 
+<td><?php
+                                $taskID = $data['usertaskID'];
+                                $taskType = $data['taskType'];
+                                if($taskType == "daily"){
+                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                  //$month = date("F");
+                                  //$year = date("Y");
+  
+                                  $selectUserTask5 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 6' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
+
+                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                      $result5 = mysqli_query($con, $selectUserTask5);
+                                      $weekNumber = '';
+                                      while($userRow = mysqli_fetch_assoc($result5)){
+                                  
+                                        $weekNumber = $userRow['week'];
+                                        $fileloc =  $userRow['attachments'];
+                                        $time = $userRow['timestamp'];
+                                        $finishedtaskID = $userRow['FinishedTaskID'];
+                                        $date = $userRow['Date'];
+                                        $dateN =  date('n-d', strtotime($date));
+                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
+                                     
+                                            }
+                                            if ($weekNumber == "week 6" ){
+  
+                                              $weeknumber = $weekNumber;
+                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  // //echo("<script>console.log('ok');</script>");
+        
+                                                 }
+                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
+                                }
+                                else{
+                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                  //$month = date("F");
+                                  //$year = date("Y");
+  
+                                      $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
+                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                      $result = mysqli_query($con, $selectUserTask);
+                                      $weekNumber = '';
+                                      while($userRow = mysqli_fetch_assoc($result)){
+                                  
+                                        $weekNumber = $userRow['week'];
+                                        $fileloc =  $userRow['attachments'];
+                                        $time = $userRow['timestamp'];
+                                        $finishedtaskID = $userRow['FinishedTaskID'];
+                                        $date = $userRow['Date'];
+
+                                        $dateN =  date('n-d', strtotime($date));
+                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
+                                     
+                                            }
+                                            if ($weekNumber == "week 6" ){
+  
+                                              $weeknumber = $weekNumber;
+                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  // //echo("<script>console.log('ok');</script>");
+        
+                                                 }
+                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
+                                }                       
+                                
+                                 ?></td>
+
 
 
 
@@ -966,16 +1054,16 @@ $dateNow = date('Y-m-d');
       </div>
       </div>
 
-      <div class="tab-pane fade " style="height: 90%;" id="PIC" role="tabpanel" aria-labelledby="pic-tab">
-      <div class="container p-30" id="TableListOfMembers";style="position: relative;  height: 100%; padding-top: 0; margin:0px; max-width: 90%;">
+      <div class="tab-pane fade " style="height: 90%; padding: 0px; background-color: none" id="PIC" role="tabpanel" aria-labelledby="pic-tab">
+      <div class="container p-30 " id="TableListOfMembers" style="position: relative;  height: 100%; padding-top: 0px; margin:0px; margin max-width: 910%; background-color: none">
         <div class="ms-1 shadow row">
            <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
-                        <div class="col-sm-1 createSegment"> 
+                        <div class="col-sm-2 createSegment"> 
                          <h3>PIC Progress</h3> 
                         </div>
-                        <div class="col-sm-4"  style="padding: 0;">
+                        <div class="col-sm-4"  style="padding: 0px;">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="admin.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
@@ -985,8 +1073,8 @@ $dateNow = date('Y-m-d');
            
         </div></div>
                         
-                        <div class="col-sm-6 add_flex">
-                            <div class="form-group searchInput">
+                        <div class="col-sm-6 add_flex" style="padding: 0">
+                            <div class="form-group searchInput" style="padding: 0">
                                 <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
                                     <option  disabled selected hidden>Search by</option>
                                     
@@ -1002,8 +1090,8 @@ $dateNow = date('Y-m-d');
                         </div> 
                     </div>
                     <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                      <div class="overflow-y" style="overflow-y: scroll; height:500px;"> 
+                        <table  style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="width:30%;">PIC</th>
