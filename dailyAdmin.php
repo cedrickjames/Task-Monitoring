@@ -113,21 +113,27 @@ $tableName="usertask";
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
 <!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
 
   <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
 <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<link rel="stylesheet" href="design_files/css/MainPageStyle.css">
 <link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+<link rel="stylesheet" href="design_files/css/admin.css">
 
+<link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
 
 <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
+<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
 
 <!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
 
 </head>
-    <body>
+    <body style="background: #70e1f5;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
@@ -244,10 +250,10 @@ $tableName="usertask";
           </div>
         </div>
 
-        <div class="parent">
-          <div class="wrapper">
+        <div class="parent" style= "max-height: 100%; height: 100%; ">
+          <div class="wrapper" style= " max-height: 100%; height: 100% ;">
          
-          <div class="row" style= "margin-right: 0px " >
+          <div class="row"style= "margin-right: 0px; max-height: 100%; height: 100%; background-color: none ">
           <div class="col">
             <h3 style=" margin: 20px">  <i style="font-size: 30px;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
              <span  class="float-right"> <?php echo $_SESSION['userlevel'] ?> </span>  
@@ -257,15 +263,15 @@ $tableName="usertask";
             <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
           </div>
 
-          <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;">
-        <div class="row">
-            <div class="col-md-12 main-datatable"> 
+          <div class="container p-30" id="TableListOfMembers"; style="position: relative; height: 100%;  padding-top: 0px; margin:0 auto; max-width: 90%;  background-color: none">
+          <div class="ms-1 shadow row">
+          <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-1 createSegment"> 
                          <h3>Task</h3> 
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-4" style="padding: 0;">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="daily.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
@@ -292,7 +298,7 @@ $tableName="usertask";
                         </div> 
                     </div>
                     <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:400px;"> 
+                    <div class="overflow-y" style="overflow-y: scroll; height:500px;"> 
                         <table style="width:100%;" id="filtertable" class="table datacust-datatable Table">
                             <thead  class="thead-dark">
                                 <tr>

@@ -6,7 +6,7 @@ session_start();
   if($_SESSION['userlevel'] == "PIC"){
     header("location: index.php");
   }
- 
+
 
  
  
@@ -28,7 +28,7 @@ session_start();
    }else{
    $columnName = implode(", ", $columns);
    $Department = $_SESSION['userDept'];
-   $query = "SELECT * FROM `users` WHERE  `userlevel` = 'PIC'";
+   $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC'";
   //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
    $result = $db->query($query);
    if($result== true){ 
@@ -73,19 +73,28 @@ session_start();
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
 <script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
+
  
     </head>
 
     <body>
 
     <?php 
+    // function js2php_proc() {
+    //   $str = json_decode($_POST['str'], true); 
+    //   echo json_encode($str);
+    // }
+    // js2php_proc()
+//     if(isset($_POST['submitnow'])){
+// // echo $_POST['str'];
+
+//     }
     
     if(isset($_POST['btnAddtask'])){
-      echo $_POST['strnow'];
+      // echo $_POST['strnow'];
       // const numberOfAddedProducts=document.getElementById("countInput").value;
       $numberofAddedTask = $_POST['countInput'];
       $enteredUserName = $_POST['username'];
-      $arrraayyy = $_POST['strnow'];
       echo '<script>console.log("Number of Added Task: '.$numberofAddedTask.'")</script>';
       
       $num = 1;
@@ -93,7 +102,6 @@ session_start();
       $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
       $taskType = htmlspecialchars($_POST["taskType".$num]);
       $taskArea = htmlspecialchars($_POST["taskArea".$num]);
-
   
   
       // echo '<script>window.alert("TEST: '.$taskname.'")</script>';
@@ -126,16 +134,13 @@ session_start();
           $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
           $taskType = htmlspecialchars($_POST["taskType".$num]);
           $taskArea = htmlspecialchars($_POST["taskArea".$num]);
-
       
           echo '<script>console.log("TEST: '.$taskname.'")</script>';
           echo '<script>console.log("TEST: '.$taskCategory.'")</script>';
           echo '<script>console.log("TEST: '.$taskType.'")</script>';
-          echo '<script>console.log("array: '.$arrraayyy.'")</script>';
-
           
   
-          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1');";
+          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`,  `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1');";
                   mysqli_query($con, $sqlinsert);
             $num++;
            
@@ -180,7 +185,6 @@ session_start();
   // // echo '<script>alert("OK")</script>';
   
   // }
-  //LINTEK
     }
     ?>
     <div>
@@ -215,19 +219,8 @@ session_start();
                     Option
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown"  style="right: 0; left: auto;">
-                  <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
-                    <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
-
-                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalAdmin'>Add Admin</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalRemoveAdmin'>Remove Admin</a> 
-                   
-                      <?php } ?> -->
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
-                    <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
+                  <a class="dropdown-item" id="btn-addAdmin" href="./register.php" >Register User</a>
+                  <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
 
 
                     
@@ -244,7 +237,7 @@ session_start();
             <div class="inner" style="width: 1000px; height: 500px; max-width: 1000px; border-radius: 60px">
                
                 
-                <form id="account-settings" action="addTaskAdmin.php" method = "POST" style="width: 1000px; padding: 10px;"  >
+                <form id="addTaskForm" action="addTaskAdmin.php" method = "POST" style="width: 1000px; padding: 10px;"  >
                     <!-- <h3>Register User</h3> -->
                    
                      <h3 style="text-align: center; margin-bottom: 40px; ">Add task</h3>
@@ -339,17 +332,42 @@ session_start();
                             </div>
                             <input class="col-sm-1 col-form-label"  style="text-align: center; font-size: 13px; display: none; width: 80px; height: 30px" type="number" name="countInput" id="countInput" value=1>
                     </div>
-
-
-                    
-                
+                    <!-- <div class="form-group row">
+                        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm"> </label>
+                            <div class="col-sm-3">
+                                <input type="email" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%; padding: 10px;" placeholder="Task Name" >
+                            </div>
+                            <div class="col-sm-2">
+                                <select  name="" id="course" class=" form-control form-select form-select-sm" style="padding-left:10px;">
+                                    <option value="" disabled selected>Type</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select  name="" id="course" class=" form-control form-select form-select-sm" style="padding-left:10px;">
+                                    <option value="" disabled selected>Category</option>
+                                    <option value="weekly">Network</option>
+                                    <option value="monthly">Server</option>
+                                    <option value="monthly">VM</option>
+                                    <option value="monthly">Storage</option>
+                                    <option value="monthly">Others</option>  
+                                </select>
+                            </div>
+                             <div class="col-sm-1">
+                                <input type="submit" value="+" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="addNewInputForProducts()"  ></button>
+                            </div> 
+                    </div> -->
                     
                    
 
                 </div>
             </div>
-                    
-                  
+            <!-- <input type="text" id="str" name="str" />  -->
+            <!-- <input type="submit" id="btn" name="submitnow" value="Submit" style="display: block"/> -->
+          
+
+            <span id="result"></span> 	
                 <div class="form-group container-login100-form-btn" >
                     <button id="btn-register"  class="btn-signin" type="button" name="btnRegister" value="Register" style="margin: auto; width: 200px; margin-top: 10px" onclick=" checkTextBox('','','','','')">
                     Add Task</button>  
@@ -357,21 +375,26 @@ session_start();
      
                     <!-- <input id="btn-signup" class="btn-signin" name="sbtregister" type="submit" value="Register" disabled style="margin: auto;" > -->
 
-                </div> 
-                <input type="text" id="str" name="strnow" /> 
-            <input type="button" id="btn" name="submitnow" value="Submit" style="display: block"/>    
+                </div>   
+                <!-- <input type="text" id="str" name="strnow" /> 
+            <input type="button" id="btn" name="submitnow" value="Submit" style="display: block"/>   -->
                 </form>
+                <!-- <form id="addTaskFormsd" action="addTaskAdmin.php" method = "POST" style="width: 1000px; padding: 10px; display: none"  > -->
+                
+  <!-- </form> -->
             </div>  
         </div>
        
 <script>
 
  const DivProdContainer = document.getElementById("addtask")
-//  var formheight = 70;
-// var numForID=2;
+ var formheight = 70;
+var numForID=2;
 // const formAddProducts = document.getElementById("AddProductsForm")
 var formheight = 70;
 var numForID=2;
+
+
 
 const divIdArray = [1];
 
@@ -383,56 +406,59 @@ var finalArrayLenght = 1;
         newDiv.classList.add("col-sm-12");
         newDiv.style.padding = '0px';
         // var taskInput='<div class="form-group row"><div class="col-lg-4"><input  class="form-control"   id="inputItem'+numForID+'" required ><div class="invalid-feedback"style=" margin-bottom: 20px; margin-left: 30px">Please fill out this field.</div></div><div class="col-lg-4"><input  class="form-control" id="inputDesc'+numForID+'"  ></div><div class="col-lg-3"><input  class="form-control"  id="inputPrice'+numForID+'"  ></div></div>'
-        var taskInput='<div class="form-group row"  id="NewTaskDiv'+numForID+'"style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px"> </label><div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;height: 38px" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option> <option value="weekly">Weekly</option> <option value="monthly">Monthly</option><option value="annual">Annual</option> </select></div> <div class="col-sm-3"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <option value="Network">Network</option><option value="Server">Server</option><option value="VM">VM</option><option value="Storage">Storage</option><option value="Building Facilities Inspection">Building Facilities Inspection</option><option value="Equipment">Equipment</option><option value="Billing">Billing</option><option value="Routine Inspection">Routine Inspection</option><option value="Annual Maintenance">Annual Maintenance</option><option value="Certification">Certification</option><option value="Peza Compliance">Peza Compliance</option><option value="Annual Maintenance">Annual Maintenance</option><option value="Others">Others</option></select></div><div class="col-sm-2"><select  name="taskArea'+numForID+'" id="taskArea'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"><option value="" disabled selected>Area</option><option value="GPI 1">GPI 1</option><option value="GPI 2">GPI 2</option><option value="GPI 3">GPI 3</option><option value="GPI 4">GPI 4</option><option value="GPI 5">GPI 5</option><option value="GPI 6">GPI 6</option><option value="GPI 7">GPI 7</option><option value="GPI 8">GPI 8</option><option value="GPI 9">GPI 9</option></select></div><div class="col-sm-1"><button type="button" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="RemoveInputForProducts('+numForID+')">-</button></div>';
+        var taskInput='<div class="form-group row" id="NewTaskDiv'+numForID+'"style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px"> </label><div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;height: 38px" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option> <option value="weekly">Weekly</option> <option value="monthly">Monthly</option> <option value="annual">Annual</option></select></div> <div class="col-sm-3"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <option value="Network">Network</option><option value="Server">Server</option><option value="VM">VM</option><option value="Storage">Storage</option><option value="Building Facilities Inspection">Building Facilities Inspection</option><option value="Equipment">Equipment</option><option value="Billing">Billing</option><option value="Routine Inspection">Routine Inspection</option><option value="Annual Maintenance">Annual Maintenance</option><option value="Certification">Certification</option><option value="Peza Compliance">Peza Compliance</option><option value="Annual Maintenance">Annual Maintenance</option><option value="Others">Others</option></select></div><div class="col-sm-2"><select  name="taskArea1" id="taskArea1" class=" form-control form-select form-select-sm" style="padding-left:10px;"><option value="" disabled selected>Area</option><option value="GPI 1">GPI 1</option><option value="GPI 2">GPI 2</option><option value="GPI 3">GPI 3</option><option value="GPI 4">GPI 4</option><option value="GPI 5">GPI 5</option><option value="GPI 6">GPI 6</option><option value="GPI 7">GPI 7</option><option value="GPI 8">GPI 8</option><option value="GPI 9">GPI 9</option></select></div><div class="col-sm-1"><button type="button" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="RemoveInputForProducts('+numForID+')">-</button></div>';
+
         newDiv.innerHTML=taskInput;
         DivProdContainer.appendChild(newDiv);
 
         divIdArray.push(numForID);
         console.log(divIdArray);
-        console.log(divIdArray.length);
-        finalArrayLenght++;
-        document.getElementById("btn").click();
-
-
-
-
         // var formheightInt= 320+formheight;
         
         // formAddProducts.style.height=formheightInt+"px";
         // formheight+=70;
 
+   
+        // document.getElementById("btn").click();
+
+    console.log(divIdArray.length);
+    
+    finalArrayLenght++;
         numForID++;
+
+        // document.getElementById("btn").click();
 
     }
     function RemoveInputForProducts(divID){
-      // numForID--;
+      
+      //  console.log("numID: " +numForID)
       document.getElementById("countInput").stepDown(1);
-
       var newdivID = "NewTaskDiv"+numForID.toString()+"";
       console.log(newdivID);
       const elem = document.getElementById("NewTaskDiv"+divID); 
       elem.remove();
       divID--;
       // delete divIdArray[divID];
-   
-   
-   
-   divIdArray.splice(divIdArray.indexOf(divID+1), 1);
+      divIdArray.splice(divIdArray.indexOf(divID+1), 1);
       console.log(divIdArray);
       finalArrayLenght--;
       console.log(finalArrayLenght);
-    document.getElementById("btn").click();
+
+    //  document.getElementById("btn").click();
+
 
     
-     
     }
+
     $(document).ready(function(){
 			$("#btn").click( function() {
-				$.post( $("#addTaskForm").attr("action"),
-					 $('#str').val(JSON.stringify(divIdArray)),  
-			         //$("#myForm :input").serializeArray(), 
-			         function(info){ $("#result").html(info); 
-				});
+				// $.post( $("#addTaskForm").attr("action"),
+				// 	 $('#str').val(JSON.stringify(divIdArray)),  
+			  //        //$("#myForm :input").serializeArray(), 
+			  //        function(info){ $("#result").html(info); 
+				// });
+        document.getElementById("str").value=divIdArray;
+
 			});
 			 
 			$("#addTaskForm").submit( function() {
@@ -440,7 +466,31 @@ var finalArrayLenght = 1;
 			});
 			
 		});
+			 
+    // Code for passing the array
+    // var jsarray = new Array();
+		// jsarray[0] = "Saab";
+		// jsarray[1] = "Volvo";
+		// jsarray[2] = "BMW";		 
+	
+		// $(document).ready(function(){
+		// 	$("#btn").click( function() {
+		// 		$.post( $("#addTaskForm").attr("action"),
+		// 			 $('#str').val(JSON.stringify(jsarray)),  
+		// 	         //$("#myForm :input").serializeArray(), 
+		// 	         function(info){ $("#result").html(info); 
+		// 		});
+		// 	});
+			 
+		// 	$("#addTaskForm").submit( function() {
+		// 		return false;	
+		// 	});
+			
+		// });
+    // end of code for passing the array
+
     function checkTextBox(count,id1,id2,id3,store){
+      // document.getElementById("btn").click();
     const numberOfAddedTask=document.getElementById("countInput").value;
     var c;
     var numb=1;

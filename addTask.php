@@ -91,6 +91,8 @@ session_start();
       $taskname = htmlspecialchars($_POST["taskName".$num]);
       $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
       $taskType = htmlspecialchars($_POST["taskType".$num]);
+      $taskArea = htmlspecialchars($_POST["taskArea".$num]);
+
   
   
       // echo '<script>window.alert("TEST: '.$taskname.'")</script>';
@@ -122,13 +124,15 @@ session_start();
           $taskname = htmlspecialchars($_POST["taskName".$num]);
           $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
           $taskType = htmlspecialchars($_POST["taskType".$num]);
+          $taskArea = htmlspecialchars($_POST["taskArea".$num]);
+
       
           echo '<script>console.log("TEST: '.$taskname.'")</script>';
           echo '<script>console.log("TEST: '.$taskCategory.'")</script>';
           echo '<script>console.log("TEST: '.$taskType.'")</script>';
           
   
-          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskType', '$resultUserDept1');";
+          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1');";
                   mysqli_query($con, $sqlinsert);
             $num++;
            
@@ -208,11 +212,19 @@ session_start();
                     Option
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown"  style="right: 0; left: auto;">
-                  <a class="dropdown-item" id="btn-addAdmin" href="./register.php" >Register User</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php" >Add Task</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a>
-                  <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a>
-                  <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
+                  <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
+                    <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
+                    <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
+
+                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalAdmin'>Add Admin</a>
+                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalRemoveAdmin'>Remove Admin</a> 
+                   
+                      <?php } ?> -->
+                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
+                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
+                    <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
 
 
                     
@@ -226,7 +238,7 @@ session_start();
         </div>
         <div class="wrapper" style="background: linear-gradient(to right, rgb(22, 34, 42), rgb(58, 96, 115));">
             
-            <div class="inner" style="width: 900px; height: 500px; max-width: 1000px; border-radius: 60px">
+            <div class="inner" style="width: 1000px; height: 500px; max-width: 1000px; border-radius: 60px">
                
                 
                 <form id="account-settings" action="addTask.php" method = "POST" style="width: 1000px; padding: 10px;"  >
@@ -268,9 +280,9 @@ session_start();
             <div class="overflow-x">
                 <div  class="overflow-y" style="overflow-y: scroll; overflow-x: hidden; display: block; height: 220px" id="addtask">
                     <div class="form-group row">
-                        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Add Task</label>
+                        <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px">Add Task</label>
                             <div class="col-sm-3">
-                                <input type="text" name="taskName1" class="form-control form-control-sm" id="taskName1" style="width:100%; padding: 10px;" placeholder="Task Name" >
+                                <input type="text" name="taskName1" class="form-control form-control-sm" id="taskName1" style="width:100%; padding: 10px; height: 38px" placeholder="Task Name" >
                             </div>
                             <div class="col-sm-2">
                                 <select  name="taskType1" id="taskType1" class=" form-control form-select form-select-sm" style="padding-left:10px;">
@@ -278,6 +290,8 @@ session_start();
                                     <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
                                     <option value="monthly">Monthly</option>
+                                    <option value="annual">Annual</option>
+
                               
 
                                 </select>
@@ -289,7 +303,31 @@ session_start();
                                     <option value="Server">Server</option>
                                     <option value="VM">VM</option>
                                     <option value="Storage">Storage</option>
+                                    <option value="Building Facilities Inspection">Building Facilities Inspection</option>
+                                    <option value="Equipment">Equipment</option>
+                                    <option value="Billing">Billing</option>
+                                    <option value="Routine Inspection">Routine Inspection</option>
+                                    <option value="Annual Maintenance">Annual Maintenance</option>
+                                    <option value="Certification">Certification</option>
+                                    <option value="Peza Compliance">Peza Compliance</option>
+                                    <option value="Annual Maintenance">Annual Maintenance</option>
                                     <option value="Others">Others</option>  
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select  name="taskArea1" id="taskArea1" class=" form-control form-select form-select-sm" style="padding-left:10px;">
+                                    <option value="" disabled selected>Area</option>
+                                    <option value="GPI 1">GPI 1</option>
+                                    <option value="GPI 2">GPI 2</option>
+                                    <option value="GPI 3">GPI 3</option>
+                                    <option value="GPI 4">GPI 4</option>
+                                    <option value="GPI 5">GPI 5</option>
+                                    <option value="GPI 6">GPI 6</option>
+                                    <option value="GPI 7">GPI 7</option>
+                                    <option value="GPI 8">GPI 8</option>
+                                    <option value="GPI 9">GPI 9</option>
+
+                                   
                                 </select>
                             </div>
                             <div class="col-sm-1">
@@ -298,32 +336,10 @@ session_start();
                             </div>
                             <input class="col-sm-1 col-form-label"  style="text-align: center; font-size: 13px; display: none; width: 80px; height: 30px" type="number" name="countInput" id="countInput" value=1>
                     </div>
-                    <!-- <div class="form-group row">
-                        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm"> </label>
-                            <div class="col-sm-3">
-                                <input type="email" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%; padding: 10px;" placeholder="Task Name" >
-                            </div>
-                            <div class="col-sm-2">
-                                <select  name="" id="course" class=" form-control form-select form-select-sm" style="padding-left:10px;">
-                                    <option value="" disabled selected>Type</option>
-                                    <option value="weekly">Weekly</option>
-                                    <option value="monthly">Monthly</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-3">
-                                <select  name="" id="course" class=" form-control form-select form-select-sm" style="padding-left:10px;">
-                                    <option value="" disabled selected>Category</option>
-                                    <option value="weekly">Network</option>
-                                    <option value="monthly">Server</option>
-                                    <option value="monthly">VM</option>
-                                    <option value="monthly">Storage</option>
-                                    <option value="monthly">Others</option>  
-                                </select>
-                            </div>
-                             <div class="col-sm-1">
-                                <input type="submit" value="+" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="addNewInputForProducts()"  ></button>
-                            </div> 
-                    </div> -->
+
+
+                    
+                
                     
                    
 
@@ -346,8 +362,8 @@ session_start();
 <script>
 
  const DivProdContainer = document.getElementById("addtask")
- var formheight = 70;
-var numForID=2;
+//  var formheight = 70;
+// var numForID=2;
 // const formAddProducts = document.getElementById("AddProductsForm")
 var formheight = 70;
 var numForID=2;
@@ -356,9 +372,9 @@ var numForID=2;
         document.getElementById("countInput").stepUp(1);
         const newDiv=document.createElement("div");
         newDiv.classList.add("col-sm-12");
+        newDiv.style.padding = '0px';
         // var taskInput='<div class="form-group row"><div class="col-lg-4"><input  class="form-control"   id="inputItem'+numForID+'" required ><div class="invalid-feedback"style=" margin-bottom: 20px; margin-left: 30px">Please fill out this field.</div></div><div class="col-lg-4"><input  class="form-control" id="inputDesc'+numForID+'"  ></div><div class="col-lg-3"><input  class="form-control"  id="inputPrice'+numForID+'"  ></div></div>'
-        var taskInput='<div class="form-group row" style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm"> </label><div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option> <option value="weekly">Weekly</option> <option value="monthly">Monthly</option> </select></div> <div class="col-sm-3"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <option value="Network">Network</option><option value="Server">Server</option><option value="VM">VM</option><option value="Storage">Storage</option><option value="Others">Others</option></select></div></div>';
-
+        var taskInput='<div class="form-group row"  id="NewTaskDiv'+numForID+'"style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px"> </label><div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;height: 38px" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option> <option value="weekly">Weekly</option> <option value="monthly">Monthly</option><option value="annual">Annual</option> </select></div> <div class="col-sm-3"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <option value="Network">Network</option><option value="Server">Server</option><option value="VM">VM</option><option value="Storage">Storage</option><option value="Building Facilities Inspection">Building Facilities Inspection</option><option value="Equipment">Equipment</option><option value="Billing">Billing</option><option value="Routine Inspection">Routine Inspection</option><option value="Annual Maintenance">Annual Maintenance</option><option value="Certification">Certification</option><option value="Peza Compliance">Peza Compliance</option><option value="Annual Maintenance">Annual Maintenance</option><option value="Others">Others</option></select></div><div class="col-sm-2"><select  name="taskArea1" id="taskArea1" class=" form-control form-select form-select-sm" style="padding-left:10px;"><option value="" disabled selected>Area</option><option value="GPI 1">GPI 1</option><option value="GPI 2">GPI 2</option><option value="GPI 3">GPI 3</option><option value="GPI 4">GPI 4</option><option value="GPI 5">GPI 5</option><option value="GPI 6">GPI 6</option><option value="GPI 7">GPI 7</option><option value="GPI 8">GPI 8</option><option value="GPI 9">GPI 9</option></select></div><div class="col-sm-1"><button type="button" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="RemoveInputForProducts('+numForID+')">-</button></div>';
         newDiv.innerHTML=taskInput;
         DivProdContainer.appendChild(newDiv);
 
@@ -370,7 +386,32 @@ var numForID=2;
         numForID++;
 
     }
+    function RemoveInputForProducts(divID){
+      // numForID--;
+      document.getElementById("countInput").stepDown(1);
 
+      var newdivID = "NewTaskDiv"+numForID.toString()+"";
+      console.log(newdivID);
+      const elem = document.getElementById("NewTaskDiv"+divID); 
+      elem.remove();
+
+    
+     
+    }
+    $(document).ready(function(){
+			$("#btn").click( function() {
+				$.post( $("#addTaskForm").attr("action"),
+					 $('#str').val(JSON.stringify(divIdArray)),  
+			         //$("#myForm :input").serializeArray(), 
+			         function(info){ $("#result").html(info); 
+				});
+			});
+			 
+			$("#addTaskForm").submit( function() {
+				return false;	
+			});
+			
+		});
     function checkTextBox(count,id1,id2,id3,store){
     const numberOfAddedTask=document.getElementById("countInput").value;
     var c;

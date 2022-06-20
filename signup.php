@@ -145,19 +145,7 @@ session_start();
                                     <option value="" disabled selected>Select Department</option>
                                     <option value="MIS">MIS</option>
                                     <option value="FEM">FEM</option>
-                                    <option value="Accounting">Accounting</option>
-                                    <option value="Japanese">Japanese</option>
-                                    <option value="Parts Inspection">Parts Inspection</option>
-                                    <option value="Parts Production">Parts Production</option>
-                                    <option value="PPIC">PPIC</option>
-                                    <option value="PPIC-Warehouse">PPIC-Warehouse</option>
-                                    <option value="Production 1">Production 1</option>
-                                    <option value="Production 2">Production 2</option>
-                                    <option value="Production Support">Production Support</option>
-                                    <option value="Purchasing">Purchasing</option>
-                                    <option value="Quality Assurance">Quality Assurance</option>
-                                    <option value="Quality Control">Quality Control</option>
-                                    <option value="System Kaizen">System Kaizen</option>
+                                    
                                 </select>    
                         </div>
                     </div>
