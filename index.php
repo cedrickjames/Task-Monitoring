@@ -213,6 +213,7 @@ $_SESSION['message'] = $message;
     <meta name="viewport" contant="width=device-width, initial-scale=1.0">
 
     <title>Main Page</title>
+    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
 
      <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
      <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">

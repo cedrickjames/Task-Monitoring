@@ -56,6 +56,7 @@ session_start();
 <html>
     <head>
         <title>Task Monitoring</title>
+        <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
         
         <link rel="stylesheet" href="./css/bootstrap.min.css">
 

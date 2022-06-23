@@ -10,6 +10,8 @@
     <meta name="viewport" contant="width=device-width, initial-scale=1.0">
 
     <title>Main Page</title>
+    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
+
     <!-- MATERIAL DESIGN ICONIC FONT -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
@@ -190,7 +192,7 @@ $dateNow = date('Y-m-d');
     $username =  $_SESSION['username'];
     //echo("<script>console.log('USER: " .$username . "');</script>");
 
-    $columns= ['usertaskID', 'taskName','taskCategory','taskType'];
+    $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
     $fetchData = fetch_data($db, $tableName, $columns, $username);
 
     function fetch_data($db, $tableName, $columns, $username){
@@ -568,6 +570,7 @@ $dateNow = date('Y-m-d');
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="min-width:15px;">No.</th>
+                                    <th style="min-width:15px;">Area</th>
                                     <th style="min-width:50px;">Category</th>
                                     <th style="width:20%;" >Task Name</th>
                                     <th style="width:10%;"  >In charge</th>
@@ -601,6 +604,8 @@ $dateNow = date('Y-m-d');
                                     $taskCategory = $data['taskCategory'];
                                     $taskType = $data['taskType'];
                                     $userTaskID = $data['usertaskID'];
+                                    $taskArea = $data['taskArea'];
+
 
 
                                     echo("<script>console.log('taskname : " . $taskname. "');</script>");
@@ -616,6 +621,7 @@ $dateNow = date('Y-m-d');
                              <td>
                                
                                <?php echo $sn; ?></td>
+                               <td><?php echo $data['taskArea']; ?></td>
                                 <td><?php echo $data['taskCategory']; ?></td>
                                 <td><?php echo $data['taskName']; ?></td>
                                 <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";

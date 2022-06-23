@@ -11,6 +11,7 @@
 
     <title>Main Page</title>
     <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
 
  <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
@@ -214,7 +215,7 @@ $dateNow = date('Y-m-d');
     $username =  $_SESSION['username'];
     echo("<script>console.log('USER: " .$username . "');</script>");
 
-    $columns= ['usertaskID', 'taskName','taskCategory','taskType'];
+    $columns= ['usertaskID', 'taskName','taskCategory','taskType', 'taskArea'];
     $fetchData = fetch_data($db, $tableName, $columns, $username);
 
     function fetch_data($db, $tableName, $columns, $username){
@@ -628,6 +629,7 @@ onkeyup="checkinputs()">
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="min-width:50px;">Category</th>
+                                    <th style="min-width:50px;">Area</th>
                                     <th style="width:10%;" >Task Name</th>
                                     <th style="width:10%;"  >In charge</th>
                                     <th style="width:10%;"  >Type</th>
@@ -638,7 +640,7 @@ onkeyup="checkinputs()">
                                     <th style="width:10%;" >W5</th>
                                     <th style="width:10%;" >W6</th>
 
-
+                                    
                                 </tr>
                             </thead>
                             <tbody id="TaskTable">
@@ -663,8 +665,9 @@ onkeyup="checkinputs()">
 
                             ?>
                              <tr style="background-color: <?php echo $color?>">
-                                
+                             
                                 <td><?php echo $data['taskCategory']??''; ?></td>
+                                <td><?php echo $data['taskArea']??''; ?></td>
                                 <td><?php echo $data['taskName']??''; ?></td>
                                 <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
         $result = mysqli_query($con, $sql1);

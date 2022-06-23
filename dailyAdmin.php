@@ -110,6 +110,8 @@ $tableName="usertask";
 
     <title>Main Page</title>
     <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
+
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
