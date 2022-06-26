@@ -215,29 +215,17 @@ $_SESSION['message'] = $message;
     <title>Main Page</title>
     <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
 
-     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> -->
      <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-
-<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"> -->
     <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-    <link rel="stylesheet" href="">
-    
-  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-<!-- <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous"> -->
-<link rel="stylesheet" href="design_files/css/MainPageStyle.css">
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
+       <link rel="stylesheet" href="design_files/css/MainPageStyle.css">
+    <link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
 
-
-<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
-
-<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
+    <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
+    <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
 
 </head>
     <body style="background: #134E5E;  /* fallback for old browsers */

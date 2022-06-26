@@ -126,7 +126,7 @@ session_start();
        <div class="wrapper" style="background-image:url('design_files/images/loginback.jpg')">
   <div class="inner">
       <div class="image-holder">
-          <img src="design_files/images/login.jpg">
+          <img src="design_files/images/Task Monitoring (4).png" style="height: 100%">
       </div>
 
                 <form action="signup.php" method = "POST" style="padding-top:0px" autocomplete="off" >
