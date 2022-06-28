@@ -393,6 +393,38 @@ mysqli_query($con, $sqlRemoveAdmin2);
 
 
 
+ $tableNameCat = 'category';
+     $columnsCat= ['categoryId', 'CategoryName'];
+     $fetchDataCat = fetch_dataCat($db, $tableNameCat, $columnsCat, $username);
+ 
+     function fetch_dataCat($db, $tableNameCat, $columnsCat, $username){
+       if(empty($db)){
+        $msg= "Database connection error";
+       }elseif (empty($columnsCat) || !is_array($columnsCat)) {
+        $msg="columns Name must be defined in an indexed array";
+       }elseif(empty($tableNameCat)){
+         $msg= "Table Name is empty";
+      }else{
+     
+
+      $query = "SELECT * FROM `category`;";
+     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+      $result = $db->query($query);
+      if($result== true){ 
+       if ($result->num_rows > 0) {
+          $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+          $msg= $row;
+       } else {
+          $msg= "No Data Found"; 
+       }
+      }else{
+        $msg= mysqli_error($db);
+      }
+      }
+      return $msg;
+      }
+
 
      $columnsUser= ['usertaskID', 'taskName','taskCategory','taskType'];
      $fetchDataUT = fetchDataUT($db, $tableName, $columnsUser, $username);
@@ -604,11 +636,21 @@ mysqli_query($con, $sqlRemoveAdmin2);
                   <div class="col-sm-8">
                   <select  <?php if($editTaskVar == "0"){ echo "disabled"; } ?>  name="taskCategory1" id="taskCategorymodal" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Please Select</option>
-                                    <option value="Network">Network</option>
-                                    <option value="Server">Server</option>
-                                    <option value="VM">VM</option>
-                                    <option value="Storage">Storage</option>
-                                    <option value="Others">Others</option>  
+                                    <?php
+                                  if(is_array($fetchDataCat)){      
+                                
+                                  foreach($fetchDataCat as $data){
+                                  ?>
+                                 <option value="<?php echo $data['CategoryName']??''; ?>"><?php echo $data['CategoryName']??''; ?></option>
+                                 <?php
+                            }}else{ ?>
+                            
+                              <option colspan="8">
+                          <?php echo $fetchDataCat; ?>
+                        </option>
+                          
+                          <?php
+    }?>
                                 </select>
                   </div>
                 </div>

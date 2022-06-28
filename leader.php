@@ -267,6 +267,38 @@ $dateNow = date('Y-m-d');
      return $msg;
      }
 
+     //echo("<script>console.log('USER: " .$username . "');</script>");
+     $tableNameCat = 'category';
+     $columnsCat= ['categoryId', 'CategoryName'];
+     $fetchDataCat = fetch_dataCat($db, $tableNameCat, $columnsCat, $username);
+ 
+     function fetch_dataCat($db, $tableNameCat, $columnsCat, $username){
+       if(empty($db)){
+        $msg= "Database connection error";
+       }elseif (empty($columnsCat) || !is_array($columnsCat)) {
+        $msg="columns Name must be defined in an indexed array";
+       }elseif(empty($tableNameCat)){
+         $msg= "Table Name is empty";
+      }else{
+     
+
+      $query = "SELECT * FROM `category`;";
+     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+      $result = $db->query($query);
+      if($result== true){ 
+       if ($result->num_rows > 0) {
+          $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+          $msg= $row;
+       } else {
+          $msg= "No Data Found"; 
+       }
+      }else{
+        $msg= mysqli_error($db);
+      }
+      }
+      return $msg;
+      }
 
 
      $columnsUser= ['usertaskID', 'taskName','taskCategory','taskType'];
@@ -384,8 +416,10 @@ $dateNow = date('Y-m-d');
                     Option
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
-                    <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
+                    <a class="dropdown-item"  href="./signup.php">Register User</a>
+                    <a class="dropdown-item"  href="./addTask.php">Add Task</a>
+                    <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
+                      data-target='#modalAdminCategory'>Add Category</a> 
                     <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
 
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
@@ -435,6 +469,69 @@ $dateNow = date('Y-m-d');
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" onclick =" RemoveAdmin();" class="btn btn-primary" data-dismiss="modal">Remove</button>
+            
+               </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="modalAdminCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               
+                   
+                <form id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
+                     
+                  <div class="form-group">
+                   
+                    <label  for="message-text" class="col-form-label">Enter category</label>
+                    <input  type="text"class="form-control"   id="inputAdmin" >
+                  </div>
+                  <div class="overflow-x">
+                      <div class="overflow-y" style="overflow-y: scroll; height:480px;"> 
+                        <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                            <thead  class="thead-dark" >
+                                <tr>
+                                <th style="min-width:15px;">Categories</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CategoryTable">
+                       <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                  if(is_array($fetchDataCat)){      
+                                 
+                                  foreach($fetchDataCat as $data){
+                                    ?>
+                                    <tr>
+                                      <td><?php echo $data['CategoryName']; ?></td>
+                                  </tr>
+ <?php
+                         }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchData; ?>
+                        </td>
+                         </tr>
+                          <?php
+                          echo "PETMALU";
+    }                     ?>                   
+                            </tbody>
+                    </table>
+                    </div>
+                    </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick =" addAdmin();" class="btn btn-primary" data-dismiss="modal">Add</button>
             
                </div>
             </div>
@@ -509,11 +606,21 @@ $dateNow = date('Y-m-d');
                   <div class="col-sm-8">
                   <select  <?php if($editTaskVar == "0"){ echo "disabled"; } ?>  name="taskCategory1" id="taskCategorymodal" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Please Select</option>
-                                    <option value="Network">Network</option>
-                                    <option value="Server">Server</option>
-                                    <option value="VM">VM</option>
-                                    <option value="Storage">Storage</option>
-                                    <option value="Others">Others</option>  
+                                    <?php
+                                  if(is_array($fetchDataCat)){      
+                                
+                                  foreach($fetchDataCat as $data){
+                                  ?>
+                                 <option value="<?php echo $data['CategoryName']??''; ?>"><?php echo $data['CategoryName']??''; ?></option>
+                                 <?php
+                            }}else{ ?>
+                            
+                              <option colspan="8">
+                          <?php echo $fetchDataCat; ?>
+                        </option>
+                          
+                          <?php
+    }?>
                                 </select>
                     </div>
                   </div>
