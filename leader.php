@@ -453,7 +453,7 @@ $dateNow = date('Y-m-d');
         <form action="leader.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
         <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none">
         <div class="form-group row">
-            <label for="staticEmail" class="col-sm-4 col-form-label">PIC</label>
+            <label for="staticEmail" class="col-sm-4 col-form-label">Members</label>
             <div class="col-sm-8">
             <select  <?php if($editTaskVar == "0"){ echo "disabled"; } ?> name="username" id="usernameSelectmodal" class=" form-control form-select form-select-sm"
                                  style="padding-left:10px;">
@@ -577,7 +577,7 @@ $dateNow = date('Y-m-d');
     <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
   </li> --> 
   <li class="nav-item">
-    <a class="nav-link" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">PIC Progress</a>
+    <a class="nav-link" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Section's Progress</a>
@@ -1159,7 +1159,7 @@ $dateNow = date('Y-m-d');
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-2 createSegment"> 
-                         <h3>PIC Progress</h3> 
+                         <h3>Members Progress</h3> 
                         </div>
                         <div class="col-sm-4"  style="padding: 0px;">
                           <div class="form-group row d-flex justify-content-center" >
@@ -1176,21 +1176,27 @@ $dateNow = date('Y-m-d');
                             <div class="form-check" style="padding: 0px">
                                    
                                     <div class="form-check form-check-inline" style="margin-left: 10px; ">
-                                        <input class="form-check-input"  type="radio" name="checkDone" id="checkDone" onclick="FilterSched();">
+                                        <input class="form-check-input"  type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
                                              Monthly
                                             </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="checkDone" id="checkDone" onclick="FilterSched();">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
                                              Daily
                                             </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="checkDone" id="checkDone" checked onclick="FilterSched();">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
                                              Weekly
+                                            </label>
+                                     </div>
+                                     <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" checked onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             All
                                             </label>
                                      </div>
                                      
@@ -1205,13 +1211,14 @@ $dateNow = date('Y-m-d');
                         <table  style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
-                                    <th style="width:30%;">PIC</th>
+                                    <th style="width:30%;">Members</th>
                                     <th style="width:70%;" >Progress</th>
                                    
 
                                 </tr>
                             </thead>
-                            <tbody id="">
+                            
+                            <tbody id="tblAll" style="display: null">
                             <?php
                               $color1 = "#f9f9f9;";
                               $color2 = "white";
@@ -1272,7 +1279,18 @@ $dateNow = date('Y-m-d');
                                         //   //echo("<script>console.log('qoutient1234: " .$percent . "');</script>");
                                         // }
                                         // else{
-                                          $percent = (($numOfFinished + $numOfFinisheddaily) /  ($numOfTask + $numOfTaskdaily))* 100;
+                                          
+                                          
+                                          $divident1 = $numOfFinished + $numOfFinisheddaily;
+                                          $divident2 = $numOfTask + $numOfTaskdaily;
+                                                  if($divident1 != 0 || $divident2 != 0){
+                                                    $percent = ($divident1 /  $divident2)* 100;
+                                                  }
+                                                    else{
+                                                      $percent = 0;
+                                                    }                                   
+                                                    
+
                                           //echo("<script>console.log('qoutient242: " .$percent . "');</script>");
                                         // }
                                         // $percent = ($numOfFinished /  $numOfTask)* 100;
@@ -1288,6 +1306,235 @@ $dateNow = date('Y-m-d');
                                       </div>
                                     </div>
                                   </td>
+                                
+
+                                  </tr>
+                             <?php
+                           }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchDataUT; ?>
+                        </td>
+                            </tr>
+                          <?php
+    }?>
+                            </tbody>
+
+                            <tbody id="tblMonthly" style="display: none">
+                            <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                    if(is_array($fetchDataUT)){      
+                                      $sn=1;
+                                    foreach($fetchDataUT as $data){
+                                      if($sn % 2 == 0){
+                                        $color = $color1;
+                                      }
+                                      else{
+                                        $color = $color2;
+
+                                      }
+
+                            ?>
+                               
+                                <tr>
+                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
+                                <td>
+                
+                                        <div class="progress">
+                                        <?php
+                                            $usernameM = $data['username'];
+                                            
+                                            $DepartmentM = $_SESSION['userDept'];
+                                            $selectUserTaskM = "SELECT * FROM usertask WHERE username = '$usernameM' AND Department = '$DepartmentM' AND `taskType` = 'monthly';";
+
+                                            $resultM = mysqli_query($con, $selectUserTaskM);
+                                            $numOfTaskM = mysqli_num_rows($resultM);
+
+
+
+
+                                            
+                                              $weekMonth = weekOfMonth($date_string1);
+                                            $selectTaskemeM = "SELECT * FROM finishedtask WHERE in_charge = '$usernameM' AND Department = '$DepartmentM' AND `month` = '$month1' AND `year` = '$year1' AND `sched_Type` = 'monthly';";
+
+
+                                            $result2M = mysqli_query($con, $selectTaskemeM);
+                                            $numOfFinishedM = mysqli_num_rows($result2M);
+
+
+                                             
+
+                                            
+                                        if($numOfFinishedM !=0 || $numOfTaskM !=0){
+                                          $percentM = ($numOfFinishedM /  $numOfTaskM)* 100;
+                                        }
+                                        else{
+                                          $percentM = 0;
+                                        }
+
+                                            ?>
+                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                            style="width:<?php echo round($percentM).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php echo round($percentM).'%'; ?> 
+                                          
+                                          </div>
+                                        </div>
+                                        </td>
+                                
+
+                                  </tr>
+                             <?php
+                           }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchDataUT; ?>
+                        </td>
+                            </tr>
+                          <?php
+    }?>
+                            </tbody>
+
+                            
+                           
+                            <tbody id="tblWeekly" style="display: none">
+                            <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                    if(is_array($fetchDataUT)){      
+                                      $sn=1;
+                                    foreach($fetchDataUT as $data){
+                                      if($sn % 2 == 0){
+                                        $color = $color1;
+                                      }
+                                      else{
+                                        $color = $color2;
+
+                                      }
+
+                            ?>
+                               
+                                <tr>
+                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
+                                <td>
+                
+                                        <div class="progress">
+                                        <?php
+                                            $usernameW = $data['username'];
+                                            
+                                            $DepartmentW = $_SESSION['userDept'];
+                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW' AND Department = '$DepartmentW' AND `taskType` = 'weekly';";
+
+                                            $resultW = mysqli_query($con, $selectUserTaskW);
+                                            $numOfTaskW = mysqli_num_rows($resultW);
+
+
+
+
+                                            
+                                              $weekMonth = weekOfMonth($date_string1);
+                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND Department = '$DepartmentW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonth' AND `sched_Type` = 'weekly';";
+
+
+                                            $result2W = mysqli_query($con, $selectTaskemeW);
+                                            $numOfFinishedW = mysqli_num_rows($result2W);
+
+
+                                             
+
+                                              if($numOfFinishedW !=0 || $numOfTaskW !=0){
+                                                $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
+                                              }
+                                              else{
+                                                $percentW = 0;
+                                              }
+                                            
+
+                                            ?>
+                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php echo round($percentW).'%'; ?> 
+                                          
+                                          </div>
+                                        </div>
+                                        </td>
+                                
+
+                                  </tr>
+                             <?php
+                           }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchDataUT; ?>
+                        </td>
+                            </tr>
+                          <?php
+    }?>
+                            </tbody>
+                            <tbody id="tblDaily" style="display: none">
+                            <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                    if(is_array($fetchDataUT)){      
+                                      $sn=1;
+                                    foreach($fetchDataUT as $data){
+                                      if($sn % 2 == 0){
+                                        $color = $color1;
+                                      }
+                                      else{
+                                        $color = $color2;
+
+                                      }
+
+                            ?>
+                               
+                                <tr>
+                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
+                                <td>
+                
+                                        <div class="progress">
+                                        <?php
+                                            $usernameW = $data['username'];
+                                            
+                                            $DepartmentW = $_SESSION['userDept'];
+                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW' AND Department = '$DepartmentW' AND `taskType` = 'daily';";
+
+                                            $resultW = mysqli_query($con, $selectUserTaskW);
+                                            $numOfTaskW = mysqli_num_rows($resultW);
+
+
+
+
+                                            
+                                              $weekMonthD = weekOfMonth($date_string1);
+                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND Department = '$DepartmentW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonthD' AND `sched_Type` = 'daily';";
+
+
+                                            $result2W = mysqli_query($con, $selectTaskemeW);
+                                            $numOfFinishedW = mysqli_num_rows($result2W);
+
+                                        if($numOfFinishedW !=0 || $numOfTaskW !=0){
+                                          $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
+                                        }
+                                        else{
+                                          $percentW = 0;
+                                        }
+                                            
+
+                                            
+
+                                            ?>
+                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php echo round($percentW).'%'; ?> 
+                                          
+                                          </div>
+                                        </div>
+                                        </td>
+                                
 
                                   </tr>
                              <?php
@@ -1761,6 +2008,77 @@ if(username.value != "" && usertask.value != "" && taskcategory.value != "" && t
 else{
   window.alert("Form is incomplete. Please fill out all fields");
 }
+
+}
+
+
+
+
+
+function FilterProgress(){
+
+var types=document.getElementsByName('ProgFilter');
+
+if(types[0].checked){
+
+
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdWeekly = document.getElementById("tblWeekly");
+  var tdDaily = document.getElementById("tblDaily");
+  var tdAll= document.getElementById("tblAll");
+
+
+
+  tdMonthly.style.display = null;
+  tdWeekly.style.display = 'none';
+  tdDaily.style.display = 'none';
+  tdAll.style.display = 'none';
+
+
+
+  
+}
+else if (types[1].checked){
+  
+  var tdAll= document.getElementById("tblAll");
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdWeekly = document.getElementById("tblWeekly");
+  var tdDaily = document.getElementById("tblDaily");
+
+  tdWeekly.style.display = 'none';
+  tdDaily.style.display = null;
+  tdMonthly.style.display = 'none';
+  tdAll.style.display = 'none';
+
+}
+else if (types[2].checked){
+  
+  var tdAll= document.getElementById("tblAll");
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdWeekly = document.getElementById("tblWeekly");
+  var tdDaily = document.getElementById("tblDaily");
+
+  tdDaily.style.display = 'none';
+  tdWeekly.style.display = null;
+  tdMonthly.style.display = 'none';
+  tdAll.style.display = 'none';
+
+}
+else if (types[3].checked){
+
+  var tdAll= document.getElementById("tblAll");
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdDaily = document.getElementById("tblDaily");
+  var tdWeekly = document.getElementById("tblWeekly");
+
+  tdAll.style.display = null;
+  tdWeekly.style.display = 'none';
+  tdMonthly.style.display = 'none';
+  tdDaily.style.display = 'none';
+
+
+}
+
 
 }
         </script>

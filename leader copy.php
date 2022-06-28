@@ -1,6 +1,11 @@
 <?php
   session_start();
   include ("./connection.php");
+
+  
+  
+
+
   ?>
 
 <!DOCTYPE html>
@@ -42,6 +47,9 @@
 
   $db= $con;
 $tableName="usertask";
+$tableName2="users";
+
+
     if(!isset( $_SESSION['connected'])){
     
     
@@ -56,6 +64,37 @@ $tableName="usertask";
     function php_func(){
       echo " Have a great day";
   }
+
+    $columnss= ['username'];
+  $fetchData2 = fetch_data2($db, $tableName2, $columnss);
+
+
+  function fetch_data2($db, $tableName2, $columnss){
+    if(empty($db)){
+     $msg= "Database connection error";
+    }elseif (empty($columnss) || !is_array($columnss)) {
+     $msg="columns Name must be defined in an indexed array";
+    }elseif(empty($tableName2)){
+      $msg= "Table Name is empty";
+   }else{
+   $columnName = implode(", ", $columnss);
+   $Department = $_SESSION['userDept'];
+   $query = "SELECT * FROM `users` WHERE `department` = '$Department' AND `userlevel` = 'PIC'";
+  //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+   $result = $db->query($query);
+   if($result== true){ 
+    if ($result->num_rows > 0) {
+       $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+       $msg= $row;
+    } else {
+       $msg= "No Data Found"; 
+    }
+   }else{
+     $msg= mysqli_error($db);
+   }
+   }
+   return $msg;
+   }
   // php_func();
     $editTaskVar = "0";
 
@@ -116,14 +155,29 @@ $dateNow = date('Y-m-d');
 
     }
     if(isset($_POST['UpdateTaskbtn'])){
+      $userName3 = $_POST['username'];
+
+        // $b = 0;
+        $selectUserID = "SELECT `userid` FROM `users` WHERE `username` = '$userName3';";
+        $resultUserId = mysqli_query($con, $selectUserID);
+        $resultUserId1;
+        if (mysqli_num_rows($resultUserId) > 0) {
+            // output data of each row
+            while($row = mysqli_fetch_assoc($resultUserId)) {
+             
+              $resultUserId1 = $row["userid"];
+            }
+        // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
+        }
+
       $userTASKid = $_POST['containerOfTaskId'];
       $userTaskName = $_POST['tasknamemodal'];
       $userTaskArea = $_POST['taskArea1'];
       $userTaskCategory = $_POST['taskCategory1'];
       $userTaskType = $_POST['taskType1'];
+      
 
-
-      $sqlupdate = "UPDATE `usertask` SET `taskName`='$userTaskName',`taskCategory`='$userTaskCategory',`taskArea`='$userTaskArea',`taskType`='$userTaskType' WHERE usertaskID = '$userTASKid'";
+      $sqlupdate = "UPDATE `usertask` SET `userid`='$resultUserId1',`username`='$userName3', `taskName`='$userTaskName',`taskCategory`='$userTaskCategory',`taskArea`='$userTaskArea',`taskType`='$userTaskType' WHERE usertaskID = '$userTASKid'";
       mysqli_query($con, $sqlupdate);
       ?><script>
       Swal.fire({
@@ -398,6 +452,32 @@ $dateNow = date('Y-m-d');
               <div class="modal-body">
         <form action="leader.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
         <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none">
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">PIC</label>
+            <div class="col-sm-8">
+            <select  <?php if($editTaskVar == "0"){ echo "disabled"; } ?> name="username" id="usernameSelectmodal" class=" form-control form-select form-select-sm"
+                                 style="padding-left:10px;">
+                                 <option value="" disabled selected>Select User Name</option>
+                                 <!-- <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option> -->
+                                 <?php
+                                  if(is_array($fetchData2)){      
+                                
+                                  foreach($fetchData2 as $data){
+                                  ?>
+                                 <option value="<?php echo $data['username']??''; ?>"><?php echo $data['username']??''; ?></option>
+                                 <?php
+                            }}else{ ?>
+                            
+                              <option colspan="8">
+                          <?php echo $fetchData2; ?>
+                        </option>
+                          
+                          <?php
+    }?>
+                                </select>
+                    </div>
+                    </div>
           <div class="form-group row">
             <label for="staticEmail" class="col-sm-4 col-form-label">Task Name</label>
             <div class="col-sm-8">
@@ -409,6 +489,7 @@ $dateNow = date('Y-m-d');
             <div class="col-sm-8">
           <select <?php if($editTaskVar == "0"){ echo "disabled"; } ?>  name="taskArea1" id="taskAreamodal" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Area</option>
+                                    <option value="All">All</option>
                                     <option value="GPI 1">GPI 1</option>
                                     <option value="GPI 2">GPI 2</option>
                                     <option value="GPI 3">GPI 3</option>
@@ -455,7 +536,8 @@ $dateNow = date('Y-m-d');
   <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button"  id ="EditTaskBTN" onclick="EditTask()" class="btn btn-success">Edit</button>
-                <button type="submit" id="UpdateTaskbtn" name="UpdateTaskbtn" class="btn btn-info" disabled   >Update</button>
+                <button type="submit" id="UpdateTaskbtnSubmit" name="UpdateTaskbtn" style="display: none">Update</button>
+                <button type="button" id="UpdateTaskbtn"  onclick="checkTextBox()" class="btn btn-info" disabled >Update</button>
                 <button type="submit" name="DeleteTaskbtn" class="btn btn-danger" >Delete</button>
 
             
@@ -614,6 +696,7 @@ $dateNow = date('Y-m-d');
                                     $taskType = $data['taskType'];
                                     $userTaskID = $data['usertaskID'];
                                     $taskArea = $data['taskArea'];
+                                    $taskUser = $data['username'];
 
 
 
@@ -625,7 +708,7 @@ $dateNow = date('Y-m-d');
                              
                              <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr onclick= "clickpassdata('<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdmin'>
+                             <tr onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdmin'>
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
                              <td>
                                
@@ -1080,7 +1163,7 @@ $dateNow = date('Y-m-d');
                         </div>
                         <div class="col-sm-4"  style="padding: 0px;">
                           <div class="form-group row d-flex justify-content-center" >
-                          <form action="admin.php" method = "POST" >
+                          <form action="leader.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
             <input type="date" id="datepicker1" name="datepicker1" onchange="filterMonth();">
             <input type="submit" name="submitdate1"  value = "Submit">
@@ -1088,9 +1171,34 @@ $dateNow = date('Y-m-d');
            
         </div></div>
                         
-                        <div class="col-sm-6 add_flex" style="padding: 0">
-                            
-                        </div> 
+        <div class="col-sm-6" style="padding: 0" >
+                        <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding: 0px">
+                                   
+                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
+                                        <input class="form-check-input"  type="radio" name="checkDone" id="checkDone" onclick="FilterSched();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Monthly
+                                            </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="checkDone" id="checkDone" onclick="FilterSched();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Daily
+                                            </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="checkDone" id="checkDone" checked onclick="FilterSched();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Weekly
+                                            </label>
+                                     </div>
+                                     
+                                   
+                                  
+                             </div>
+                        </fieldset>
+                    </div>
                     </div>
                     <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
@@ -1203,7 +1311,7 @@ $dateNow = date('Y-m-d');
     <div class="tab-pane fade" id="Dept" role="tabpanel" aria-labelledby="dept-tab">
       <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
       <div class="ms-1 shadow row" >
-            <div class="shadow col-md-12 main-datatable"> 
+      <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-3 createSegment"> 
@@ -1211,7 +1319,7 @@ $dateNow = date('Y-m-d');
                         </div>
                         <div class="col-sm-4">
                           <div class="form-group row d-flex justify-content-center" >
-                          <form action="admin.php" method = "POST" >
+                          <form action="leader.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
             <input type="date" id="datepicker2" name="datepicker2" onchange="filterMonth();">
             <input type="submit" name="submitdate2"  value = "Submit">
@@ -1349,7 +1457,8 @@ $dateNow = date('Y-m-d');
   
       <script>
         var userTaskId = "";
-function clickpassdata(usertaskArea,userTaskID, taskname, taskCategory, taskType){
+function clickpassdata(userName,usertaskArea,userTaskID, taskname, taskCategory, taskType){
+document.getElementById("usernameSelectmodal").value = userName;
 document.getElementById("tasknamemodal").value = taskname;
 document.getElementById("taskCategorymodal").value = taskCategory;
 document.getElementById("taskTypemodal").value = taskType;
@@ -1376,6 +1485,8 @@ document.getElementById("taskTypemodal").disabled = false;
 document.getElementById("UpdateTaskbtn").disabled = false;
 document.getElementById("EditTaskBTN").disabled = true;
 document.getElementById("taskAreamodal").disabled = false;
+document.getElementById("usernameSelectmodal").disabled = false;
+
 
 
 
@@ -1633,6 +1744,25 @@ filterInput.addEventListener('keyup',function(){
 
 }
 getSelectValue();
+
+
+function checkTextBox(){
+
+const username = document.getElementById("usernameSelectmodal");
+const usertask = document.getElementById("tasknamemodal");
+const taskcategory = document.getElementById("taskCategorymodal");
+const tasktype = document.getElementById("taskTypemodal");
+const taskArea = document.getElementById("taskAreamodal");
+
+if(username.value != "" && usertask.value != "" && taskcategory.value != "" && tasktype.value != "" && taskArea.value != "" ){
+  document.getElementById("UpdateTaskbtnSubmit").click();
+
+}
+else{
+  window.alert("Form is incomplete. Please fill out all fields");
+}
+
+}
         </script>
     </body>
 </html>

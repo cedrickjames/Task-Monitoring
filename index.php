@@ -77,9 +77,33 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
     $message .= 'Error:' . $_FILES['uploadedFile']['error'];
   }
 }
-
+$dateToPass = "";
+$date_string= date("Y-m-d");
 $_SESSION['message'] = $message;
+$today = date("F j, Y");
+$month = date("F");
+$year = date("Y");
+$week = 'week '.weekOfMonth($date_string);
+$dateNow = date('Y-m-d');
 
+
+$taskfocus = "false";
+
+if(isset($_POST['submitdate'])){
+  $datePicker = $_POST['datepicker'];
+
+   $month = date('F', strtotime($datePicker));
+   $year = date('Y', strtotime($datePicker));
+   $today = date('F j, Y', strtotime($datePicker));
+
+   $datePickerget = $datePicker;
+   $date_string= date('Y-m-d', strtotime($datePickerget));
+$week = 'week '.weekOfMonth($date_string);
+   
+ $dateToPass = date('Y-m-d', strtotime($datePicker));
+ $taskfocus = "true";
+
+   }
     if(isset($_GET['Finish'])){
 
       if (!file_exists($_FILES['uploadedFile']['tmp_name']) || !is_uploaded_file($_FILES['uploadedFile']['tmp_name'])) {
@@ -103,10 +127,10 @@ $_SESSION['message'] = $message;
           $incharge = $userRow['username'];
           $department = $userRow['Department'];
         }
-        $today = date("F j, Y");
-        $month = date("F");
-        $year = date("Y");
-        $week = 'week '.weekOfMonth($date_string);
+        // $today = date("F j, Y");
+        // $month = date("F");
+        // $year = date("Y");
+        // $week = 'week '.weekOfMonth($date_string);
         if($_SESSION['newFileLoc'] ==""){
           $fileloc ="" ;
           $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department');";
@@ -127,8 +151,8 @@ $_SESSION['message'] = $message;
 
       
       $taskID = $_GET['Cancel'];
-      $month = date("F");
-      $year = date("Y");
+      // $month = date("F");
+      // $year = date("Y");
       $sqldelete = "DELETE FROM `finishedtask` WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year'";
       mysqli_query($con, $sqldelete);
       // header("location:index.php");
@@ -146,8 +170,8 @@ $_SESSION['message'] = $message;
     echo("<script>console.log('USER: " .$_SESSION['username'] . "');</script>");
     echo("<script>console.log('USER: " .$_SESSION['userlevel'] . "');</script>");
     // echo("<script>console.log('as,fjhaekjlh');</script>");
-    $today = date("F j, Y"); 
-    $date_string= date("Y-m-d");
+    // $today = date("F j, Y"); 
+    // $date_string= date("Y-m-d");
     $username =  $_SESSION['username'];
     echo("<script>console.log('USER: " .$username . "');</script>");
 
@@ -355,7 +379,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
             </h3>
           </div>
           <div class="col-4" style="padding-top: 20px; color: white">
-          <h3  class="text-center"> <?php echo $_SESSION['userlevel'] ?> </h3>  
+          <h3  class="text-center"> <?php if( $_SESSION['userlevel'] == "PIC") echo 'Member' ?> </h3>  
           </div>
           <div class="col-4">
             <h3 style=" margin: 20px; color: white" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
@@ -367,10 +391,20 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
             <div class=" shadow col-md-12 main-datatable" style=""> 
                 <div class="card_body"  style="">
                     <div class="row d-flex " style="">
-                        <div class="col-sm-3 createSegment"> 
+                        <div class="col-sm-1 createSegment"> 
                          <h3>Task</h3> 
                         </div>
-                        
+
+
+                        <div class="col-sm-4"  style="padding: 0;">
+                          <div class="form-group row d-flex justify-content-center" >
+                          <form action="index.php" method = "POST" >
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
+            <input type="date" id="datepicker" name="datepicker" onchange="filterMonth();">
+            <input type="submit" name="submitdate"  value = "Submit">
+            </form>
+           
+        </div></div>
 
                         <div class="col-sm-6 add_flex">
                         <div class="col"  >
@@ -434,8 +468,8 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                 $taskType =  $data['taskType'];
 
                       // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                      $month = date("F");
-                      $year = date("Y");
+                      // $month = date("F");
+                      // $year = date("Y");
                       $weeknumberrr = weekOfMonth($date_string);
                       // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
 
@@ -500,7 +534,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                 $taskType =  $data['taskType'];
 
                       // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                      $month = date("F");
+                      // $month = date("F");
                       $year = date("Y");
                       $weeknumberrr = weekOfMonth($date_string);
                       // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
@@ -814,6 +848,22 @@ filterInput.addEventListener('keyup',function(){
 }
 }
 getSelectValue();
+
+
+var dateNow = <?php echo json_encode("$dateNow"); ?>;
+
+document.getElementById("datepicker").value = dateNow;
+
+var jsonDataTask = <?php echo json_encode("$taskfocus"); ?>;
+var dates = <?php echo json_encode("$dateToPass"); ?>;
+
+if(jsonDataTask == "true"){
+      document.getElementById("datepicker").value = dates;
+
+
+
+
+    }
         </script>
     </body>
 </html>

@@ -48,6 +48,43 @@ $tableName2="users";
       // 
     }
     
+
+
+
+    $tableNameRemove="admin"; 
+  $columnsRemove= ['username'];
+  $fetchDataRemove = fetch_dataRemove($db, $tableNameRemove, $columnsRemove );
+
+  function fetch_dataRemove($db, $tableNameRemove, $columnsRemove){
+    if(empty($db)){
+     $msgRemove= "Database connection error";
+    }elseif (empty($columnsRemove) || !is_array($columnsRemove)) {
+     $msgRemove="columns Name must be defined in an indexed array";
+    }elseif(empty($tableNameRemove)){
+      $msgRemove= "Table Name is empty";
+   }else{
+   $columnNameRemove = implode(", ", $columnsRemove);
+   $DepartmentRemove = $_SESSION['userDept'];
+   $queryRemove = "SELECT * FROM `users` WHERE `userlevel` = 'Admin'";
+  //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+   $resultRemove = $db->query($queryRemove);
+   if($resultRemove== true){ 
+    if ($resultRemove->num_rows > 0) {
+       $row= mysqli_fetch_all($resultRemove, MYSQLI_ASSOC);
+       $msgRemove= $row;
+    } else {
+       $msgRemove= "No Data Found"; 
+    }
+   }else{
+     $msgRemove= mysqli_error($db);
+   }
+   }
+   return $msgRemove;
+   }
+
+
+
+
     $columnss= ['username'];
   $fetchData2 = fetch_data2($db, $tableName2, $columnss);
 
@@ -62,7 +99,7 @@ $tableName2="users";
    }else{
    $columnName = implode(", ", $columnss);
    $Department = $_SESSION['userDept'];
-   $query = "SELECT * FROM `users` WHERE `department` = '$Department' AND `userlevel` = 'PIC'";
+   $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC'";
   //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
    $result = $db->query($query);
    if($result== true){ 
@@ -96,6 +133,15 @@ $dateNow = date('Y-m-d');
     $date_string = date('Y-m-d');
 
 
+    if(isset($_POST['removeAdminBtn'])){
+$adminUserId = $_POST['usernameAdmin'];
+
+$sqlRemoveAdmin = "DELETE FROM `users` WHERE userid = '$adminUserId'";
+mysqli_query($con, $sqlRemoveAdmin);
+$sqlRemoveAdmin2 = "DELETE FROM `admin` WHERE userid = '$adminUserId'";
+mysqli_query($con, $sqlRemoveAdmin2);
+    }
+
     if(isset($_POST['AddAdmin'])){
      
       $username = $_POST['email'];
@@ -104,12 +150,12 @@ $dateNow = date('Y-m-d');
       $FNAME = $_POST['fname'];      
       $MNAME = $_POST['mname'];      
       $LNAME = $_POST['lname']; 
-      $dept = $_POST['Department']; 
+      // $dept = $_POST['Department']; 
 
            
 
   // $userLevel =  echo("<script>userLevel()</script>");
-  $radio_value=$_POST['radioPosition'];
+  // $radio_value=$_POST['radioPosition'];
       
       $sql1 = "Select * FROM users WHERE username='$username'";
       $result = mysqli_query($con, $sql1);
@@ -119,7 +165,7 @@ $dateNow = date('Y-m-d');
 // }
       if ($numrows == 0){
           if($password==$conPassword){
-              $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', '$radio_value', '$FNAME', '$MNAME', '$LNAME', '$dept')";
+              $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', 'Admin', '$FNAME', '$MNAME', '$LNAME', 'Admin')";
               mysqli_query($con, $sqlinsert);
 
               $fnameAdmin="";
@@ -326,7 +372,7 @@ $dateNow = date('Y-m-d');
         $msg= "Table Name is empty";
      }else{
      $columnName = implode(", ", $columns);
-     $Department = $_SESSION['userDept'];
+    //  $Department = $_SESSION['userDept'];
      $query = "SELECT * FROM `usertask` ORDER BY taskCategory ASC;";
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
@@ -489,7 +535,7 @@ $dateNow = date('Y-m-d');
             </div>
           </nav>
         </div>
-        <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="modalAdminEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -608,7 +654,7 @@ $dateNow = date('Y-m-d');
                 </button>
               </div>
               <div class="modal-body">
-                <form id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
+                <form action="admin.php" method = "POST"  id="removeAdminform" style="width: 100%; padding: 10px; border: 0;" >
                   <div class="form-group">
                     <ul id="adminList">
                       <!-- <li>CEdrick</li>
@@ -618,16 +664,38 @@ $dateNow = date('Y-m-d');
                     </ul>
                   </div>
                   <div class="form-group">
-                    <label  for="message-text" class="col-form-label">Enter email</label>
-                      <input  type="text"class="form-control"   id="inputRemoveAdmin" >
+                    <label  for="message-text" class="col-form-label">Choose admin</label>
+                   
+                      <select name="usernameAdmin" id="usernameSelect" class=" form-control form-select form-select-sm"
+                                 style="padding-left:10px;">
+                                 <option value="" disabled selected>Select User Name</option>
+                                 <!-- <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option> -->
+                                 <?php
+                                  if(is_array($fetchDataRemove)){      
+                                
+                                  foreach($fetchDataRemove as $data){
+                                  ?>
+                                 <option value="<?php echo $data['userid']??''; ?>"><?php echo $data['f_name']??''; ?></option>
+                                 <?php
+                            }}else{ ?>
+                            
+                              <option colspan="8">
+                          <?php echo $fetchDataRemove; ?>
+                        </option>
+                          
+                          <?php
+    }?>
+                                </select>
                   </div>
-                </form>
+                
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick =" RemoveAdmin();" class="btn btn-primary" data-dismiss="modal">Remove</button>
+                <button type="submit" name="removeAdminBtn" class="btn btn-primary">Remove</button>
             
                </div>
+               </form>
             </div>
           </div>
         </div>
@@ -655,12 +723,12 @@ $dateNow = date('Y-m-d');
                             <input type="text" name="fname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%; padding: 10px;" placeholder="First Name" >
                         </div>
                         <div class="col-sm-5">
-                            <input type="text"  name="mname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="M.I.">
+                            <input type="text"  name="mname" class="form-control form-control-sm" id="colFormLabelSm2" style="width:100%;  padding: 10px;" placeholder="M.I.">
                         </div>
                         <div class="col-sm-10" style="margin-top: 10px;">
-                            <input type="text"  name="lname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="Last Name">
+                            <input type="text"  name="lname" class="form-control form-control-sm" id="colFormLabelSm3" style="width:100%;  padding: 10px;" placeholder="Last Name">
                         </div>
-                        <div class="col-sm-10"  style="margin-top: 10px;">
+                        <!-- <div class="col-sm-10"  style="margin-top: 10px;">
                         <select  name="Department" id="Department" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Select Department</option>
                                     <option value="MIS">MIS</option>
@@ -679,9 +747,9 @@ $dateNow = date('Y-m-d');
                                     <option value="Quality Control">Quality Control</option>
                                     <option value="System Kaizen">System Kaizen</option>
                                 </select>    
-                        </div>
+                        </div> -->
                     </div>
-                    <div class="col-sm-12"  >
+                    <!-- <div class="col-sm-12"  >
                         <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 12pt; margin-bottom: 0px;">
                             <div class="form-check" style="padding-left: 10px">
                                     <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
@@ -699,7 +767,7 @@ $dateNow = date('Y-m-d');
                                   
                              </div>
                         </fieldset>
-                    </div>
+                    </div> -->
                 <div class="form-wrapper" >
                     <input  name="email" id="email"  placeholder="username" class="form-control" readonly="readonly" 
   onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
@@ -754,7 +822,7 @@ onkeyup="checkinputs()">
     <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
   </li> -->
   <li class="nav-item">
-    <a class="nav-link" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">PIC Progress</a>
+    <a class="nav-link" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Section's Progress</a>
@@ -781,6 +849,7 @@ onkeyup="checkinputs()">
             </form>
            
         </div></div>
+        
                         <div class="col-sm-7 add_flex"  style="padding: 0">
                         <div class="col-sm-6" style="padding: 0" >
                         <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
@@ -878,7 +947,7 @@ onkeyup="checkinputs()">
                       echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
                             ?>
-                             <tr onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdmin'>
+                             <tr onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdminEdit'>
                              
                                 <td><?php echo $data['taskCategory']??''; ?></td>
                                 <td><?php echo $data['taskArea']??''; ?></td>
@@ -1320,7 +1389,7 @@ onkeyup="checkinputs()">
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-1 createSegment"> 
-                         <h3>PIC Progress</h3> 
+                         <h3>Members Progress</h3> 
                         </div>
                         <div class="col-sm-5">
                           <div class="form-group row d-flex justify-content-center" >
@@ -1331,34 +1400,53 @@ onkeyup="checkinputs()">
             </form>
            
         </div></div>
-                        <div class="col-sm-6 add_flex">
-                            <div class="form-group searchInput">
-                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
-                                    <option  disabled selected hidden>Search by</option>
-                                    
-                                    <option value="1">Task Name</option>
-                                    <option value="3">Type</option>
-                                    <option value="2">In charge</option>
-                                    <option value="0">Category</option>
-                                    
-                                  </select>
-                                <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
-                            </div>
-                        </div> 
+        <div class="col-sm-6" style="padding: 0" >
+                        <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding: 0px">
+                                   
+                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
+                                        <input class="form-check-input"  type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Monthly
+                                            </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Daily
+                                            </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Weekly
+                                            </label>
+                                     </div>
+                                     <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" checked onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             All
+                                            </label>
+                                     </div>
+                                     
+                                   
+                                  
+                             </div>
+                        </fieldset>
+                    </div>
                     </div>
                     <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
                         <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
-                                    <th style="width:30%;">PIC</th>
+                                    <th style="width:30%;">Members</th>
                                     <th style="width:70%;" >Progress</th>
                                    
 
                                 </tr>
                             </thead>
-                            <tbody id="">
+                            <tbody id="tblAll" style="display: null">
                             <?php
                               $color1 = "#f9f9f9;";
                               $color2 = "white";
@@ -1419,7 +1507,16 @@ onkeyup="checkinputs()">
                                         //   echo("<script>console.log('qoutient1234: " .$percent . "');</script>");
                                         // }
                                         // else{
-                                          $percent = (($numOfFinished + $numOfFinisheddaily) /  ($numOfTask + $numOfTaskdaily))* 100;
+
+                                          $divident1 = $numOfFinished + $numOfFinisheddaily;
+                                          $divident2 = $numOfTask + $numOfTaskdaily;
+                                                  if($divident1 != 0 || $divident2 != 0){
+                                                    $percent = ($divident1 /  $divident2)* 100;
+                                                  }
+                                                    else{
+                                                      $percent = 0;
+                                                    }  
+                                          // $percent = (($numOfFinished + $numOfFinisheddaily) /  ($numOfTask + $numOfTaskdaily))* 100;
                                           echo("<script>console.log('qoutient242: " .$percent . "');</script>");
                                         // }
                                         // $percent = ($numOfFinished /  $numOfTask)* 100;
@@ -1435,6 +1532,237 @@ onkeyup="checkinputs()">
                                       </div>
                                     </div>
                                   </td>
+
+                                  </tr>
+                             <?php
+                           }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchDataUT; ?>
+                        </td>
+                            </tr>
+                          <?php
+    }?>
+                            </tbody>
+
+
+
+
+                            <tbody id="tblMonthly" style="display: none">
+                            <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                    if(is_array($fetchDataUT)){      
+                                      $sn=1;
+                                    foreach($fetchDataUT as $data){
+                                      if($sn % 2 == 0){
+                                        $color = $color1;
+                                      }
+                                      else{
+                                        $color = $color2;
+
+                                      }
+
+                            ?>
+                               
+                                <tr>
+                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
+                                <td>
+                
+                                        <div class="progress">
+                                        <?php
+                                            $usernameM = $data['username'];
+                                            
+                                            $DepartmentM = $_SESSION['userDept'];
+                                            $selectUserTaskM = "SELECT * FROM usertask WHERE username = '$usernameM'   AND `taskType` = 'monthly';";
+
+                                            $resultM = mysqli_query($con, $selectUserTaskM);
+                                            $numOfTaskM = mysqli_num_rows($resultM);
+
+
+
+
+                                            
+                                              $weekMonth = weekOfMonth($date_string1);
+                                            $selectTaskemeM = "SELECT * FROM finishedtask WHERE in_charge = '$usernameM' AND `month` = '$month1' AND `year` = '$year1' AND `sched_Type` = 'monthly';";
+
+
+                                            $result2M = mysqli_query($con, $selectTaskemeM);
+                                            $numOfFinishedM = mysqli_num_rows($result2M);
+
+
+                                             
+
+                                            
+                                        if($numOfFinishedM !=0 || $numOfTaskM !=0){
+                                          $percentM = ($numOfFinishedM /  $numOfTaskM)* 100;
+                                        }
+                                        else{
+                                          $percentM = 0;
+                                        }
+
+                                            ?>
+                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                            style="width:<?php echo round($percentM).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php echo round($percentM).'%'; ?> 
+                                          
+                                          </div>
+                                        </div>
+                                        </td>
+                                
+
+                                  </tr>
+                             <?php
+                           }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchDataUT; ?>
+                        </td>
+                            </tr>
+                          <?php
+    }?>
+                            </tbody>
+
+                            
+                           
+                            <tbody id="tblWeekly" style="display: none">
+                            <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                    if(is_array($fetchDataUT)){      
+                                      $sn=1;
+                                    foreach($fetchDataUT as $data){
+                                      if($sn % 2 == 0){
+                                        $color = $color1;
+                                      }
+                                      else{
+                                        $color = $color2;
+
+                                      }
+
+                            ?>
+                               
+                                <tr>
+                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
+                                <td>
+                
+                                        <div class="progress">
+                                        <?php
+                                            $usernameW = $data['username'];
+                                            
+                                            $DepartmentW = $_SESSION['userDept'];
+                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW' AND `taskType` = 'weekly';";
+
+                                            $resultW = mysqli_query($con, $selectUserTaskW);
+                                            $numOfTaskW = mysqli_num_rows($resultW);
+
+
+
+
+                                            
+                                              $weekMonth = weekOfMonth($date_string1);
+                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonth' AND `sched_Type` = 'weekly';";
+
+
+                                            $result2W = mysqli_query($con, $selectTaskemeW);
+                                            $numOfFinishedW = mysqli_num_rows($result2W);
+
+
+                                             
+
+                                              if($numOfFinishedW !=0 || $numOfTaskW !=0){
+                                                $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
+                                              }
+                                              else{
+                                                $percentW = 0;
+                                              }
+                                            
+
+                                            ?>
+                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php echo round($percentW).'%'; ?> 
+                                          
+                                          </div>
+                                        </div>
+                                        </td>
+                                
+
+                                  </tr>
+                             <?php
+                           }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchDataUT; ?>
+                        </td>
+                            </tr>
+                          <?php
+    }?>
+                            </tbody>
+                            <tbody id="tblDaily" style="display: none">
+                            <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                    if(is_array($fetchDataUT)){      
+                                      $sn=1;
+                                    foreach($fetchDataUT as $data){
+                                      if($sn % 2 == 0){
+                                        $color = $color1;
+                                      }
+                                      else{
+                                        $color = $color2;
+
+                                      }
+
+                            ?>
+                               
+                                <tr>
+                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
+                                <td>
+                
+                                        <div class="progress">
+                                        <?php
+                                            $usernameW = $data['username'];
+                                            
+                                            $DepartmentW = $_SESSION['userDept'];
+                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW'  AND `taskType` = 'daily';";
+
+                                            $resultW = mysqli_query($con, $selectUserTaskW);
+                                            $numOfTaskW = mysqli_num_rows($resultW);
+
+
+
+
+                                            
+                                              $weekMonthD = weekOfMonth($date_string1);
+                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonthD' AND `sched_Type` = 'daily';";
+
+
+                                            $result2W = mysqli_query($con, $selectTaskemeW);
+                                            $numOfFinishedW = mysqli_num_rows($result2W);
+
+                                        if($numOfFinishedW !=0 || $numOfTaskW !=0){
+                                          $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
+                                        }
+                                        else{
+                                          $percentW = 0;
+                                        }
+                                            
+
+                                            
+
+                                            ?>
+                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                            <?php echo round($percentW).'%'; ?> 
+                                          
+                                          </div>
+                                        </div>
+                                        </td>
+                                
 
                                   </tr>
                              <?php
@@ -1608,14 +1936,14 @@ onkeyup="checkinputs()">
   
       <script>
         var userTaskId = "";
-function clickpassdata(userName,usertaskArea,userTaskID, taskname, taskCategory, taskType){
-document.getElementById("usernameSelectmodal").value = userName;
+function clickpassdata(userNames,usertaskArea,userTaskId, taskname, taskCategory, taskType){
+document.getElementById("usernameSelectmodal").value = userNames;
 document.getElementById("tasknamemodal").value = taskname;
 document.getElementById("taskCategorymodal").value = taskCategory;
 document.getElementById("taskTypemodal").value = taskType;
 document.getElementById("containerOfTaskId").value = userTaskID;
 document.getElementById("taskAreamodal").value = usertaskArea;
-userTaskId = userTaskID;
+userTaskId = userTaskId;
 }
 function PassTaskData(){
 
@@ -1939,6 +2267,74 @@ if(username.value != "" && usertask.value != "" && taskcategory.value != "" && t
 else{
   window.alert("Form is incomplete. Please fill out all fields");
 }
+
+}
+
+
+function FilterProgress(){
+
+var types=document.getElementsByName('ProgFilter');
+
+if(types[0].checked){
+
+
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdWeekly = document.getElementById("tblWeekly");
+  var tdDaily = document.getElementById("tblDaily");
+  var tdAll= document.getElementById("tblAll");
+
+
+
+  tdMonthly.style.display = null;
+  tdWeekly.style.display = 'none';
+  tdDaily.style.display = 'none';
+  tdAll.style.display = 'none';
+
+
+
+  
+}
+else if (types[1].checked){
+  
+  var tdAll= document.getElementById("tblAll");
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdWeekly = document.getElementById("tblWeekly");
+  var tdDaily = document.getElementById("tblDaily");
+
+  tdWeekly.style.display = 'none';
+  tdDaily.style.display = null;
+  tdMonthly.style.display = 'none';
+  tdAll.style.display = 'none';
+
+}
+else if (types[2].checked){
+  
+  var tdAll= document.getElementById("tblAll");
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdWeekly = document.getElementById("tblWeekly");
+  var tdDaily = document.getElementById("tblDaily");
+
+  tdDaily.style.display = 'none';
+  tdWeekly.style.display = null;
+  tdMonthly.style.display = 'none';
+  tdAll.style.display = 'none';
+
+}
+else if (types[3].checked){
+
+  var tdAll= document.getElementById("tblAll");
+  var tdMonthly = document.getElementById("tblMonthly");
+  var tdDaily = document.getElementById("tblDaily");
+  var tdWeekly = document.getElementById("tblWeekly");
+
+  tdAll.style.display = null;
+  tdWeekly.style.display = 'none';
+  tdMonthly.style.display = 'none';
+  tdDaily.style.display = 'none';
+
+
+}
+
 
 }
         </script>

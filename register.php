@@ -96,7 +96,7 @@ session_start();
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="PIC" onclick="position();">
                                             <label class="form-check-label" for="radioPIC">
-                                             PIC
+                                             Members
                                             </label>
                                     </div>
                              </div>

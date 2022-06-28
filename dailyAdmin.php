@@ -1,6 +1,45 @@
 <?php
   session_start();
   include ("./connection.php");
+  ?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
+
+    <title>Main Page</title>
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
+
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
+
+  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
+<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+<link rel="stylesheet" href="design_files/css/admin.css">
+
+<link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+
+<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
+<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
+
+<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
+
+</head>
+    <body style="background: #70e1f5;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
+
+<?php
+
   $db= $con;
 $tableName="usertask";
     if(!isset( $_SESSION['connected'])){
@@ -31,6 +70,86 @@ $tableName="usertask";
 
 
     }
+
+    if(isset($_POST['AddAdmin'])){
+     
+      $username = $_POST['email'];
+      $password = $_POST['password'];
+      $conPassword = $_POST['conpass']; 
+      $FNAME = $_POST['fname'];      
+      $MNAME = $_POST['mname'];      
+      $LNAME = $_POST['lname']; 
+      // $dept = $_POST['Department']; 
+
+           
+
+  // $userLevel =  echo("<script>userLevel()</script>");
+  // $radio_value=$_POST['radioPosition'];
+      
+      $sql1 = "Select * FROM users WHERE username='$username'";
+      $result = mysqli_query($con, $sql1);
+      $numrows = mysqli_num_rows($result);
+// if(mysqli_fetch_assoc($result)){
+//     $_SESSION[]
+// }
+      if ($numrows == 0){
+          if($password==$conPassword){
+              $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', 'Admin', '$FNAME', '$MNAME', '$LNAME', 'Admin')";
+              mysqli_query($con, $sqlinsert);
+
+              $fnameAdmin="";
+              $adminUserId="";
+              $sqlSelectUserInfo = "Select * FROM users WHERE username = '$username'";
+              $resultUserInfo = mysqli_query($con, $sqlSelectUserInfo);
+              while($userRow = mysqli_fetch_assoc($resultUserInfo)){
+        
+                $fnameAdmin= $userRow['username'];
+                $adminUserId= $userRow['userid'];
+            }
+        
+              $sqlinsert = "INSERT INTO `admin`(`adminid`, `userid`, `name`) VALUES ('','$adminUserId','$fnameAdmin')";
+              mysqli_query($con, $sqlinsert);
+              ?><script>
+             Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Admin Registered',
+  showConfirmButton: false,
+  timer: 1500
+})
+          //   footer: '<a href="">Why do I have this issue?</a>'
+           </script><?php 
+    
+          
+          }
+          else{
+            ?><script>
+            Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Password does not match!',
+        //   footer: '<a href="">Why do I have this issue?</a>'
+        })
+         </script><?php 
+          }
+        
+          
+
+      }
+      else{
+          ?><script>
+          Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'This user is already exist!',
+      //   footer: '<a href="">Why do I have this issue?</a>'
+      })
+       </script><?php 
+      }
+
+    }
+
+    
     // $_SESSION['username'] = $username;
     // echo "User: " .$_SESSION['username']. "."  ;
     // echo "<script>console.log('$_SESSION['username']')</script>";
@@ -101,41 +220,6 @@ $tableName="usertask";
 }
 
 ?>
-
-<!DOCTYPE html>
-<html>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
-
-    <title>Main Page</title>
-    <!-- MATERIAL DESIGN ICONIC FONT -->
-    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
-
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
-
-  <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-<link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
-<link rel="stylesheet" href="design_files/css/admin.css">
-
-<link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
-
-<script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
-<script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
-
-<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
-
-</head>
-    <body style="background: #70e1f5;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-">
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
@@ -217,7 +301,107 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
             </div>
           </div>
         </div>
+
         <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Admin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="admin.php" method = "POST" id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
+                  <div class="form-group">
+                    <ul id="adminList2">
+                      <!-- <li>CEdrick</li>
+                      <li>CEdrick</li>
+                      <li>CEdrick</li> -->
+  
+                    </ul>
+                  </div>      
+                  <div class="form-group row">
+                        <div class="col-sm-6">
+                            <input type="text" name="fname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%; padding: 10px;" placeholder="First Name" >
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="text"  name="mname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="M.I.">
+                        </div>
+                        <div class="col-sm-10" style="margin-top: 10px;">
+                            <input type="text"  name="lname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="Last Name">
+                        </div>
+                        <!-- <div class="col-sm-10"  style="margin-top: 10px;">
+                        <select  name="Department" id="Department" class=" form-control form-select form-select-sm" style="padding-left:10px;">
+                                    <option value="" disabled selected>Select Department</option>
+                                    <option value="MIS">MIS</option>
+                                    <option value="FEM">FEM</option>
+                                    <option value="Accounting">Accounting</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Parts Inspection">Parts Inspection</option>
+                                    <option value="Parts Production">Parts Production</option>
+                                    <option value="PPIC">PPIC</option>
+                                    <option value="PPIC-Warehouse">PPIC-Warehouse</option>
+                                    <option value="Production 1">Production 1</option>
+                                    <option value="Production 2">Production 2</option>
+                                    <option value="Production Support">Production Support</option>
+                                    <option value="Purchasing">Purchasing</option>
+                                    <option value="Quality Assurance">Quality Assurance</option>
+                                    <option value="Quality Control">Quality Control</option>
+                                    <option value="System Kaizen">System Kaizen</option>
+                                </select>    
+                        </div> -->
+                    </div>
+                    <!-- <div class="col-sm-12"  >
+                        <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 12pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding-left: 10px">
+                                    <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
+                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="Leader" checked onclick="position();">
+                                            <label class="form-check-label" for="radioLeader">
+                                             Leader
+                                            </label>
+                                     </div>
+                                    <div class="form-check form-check-inline" style="margin-left: 10px">
+                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="PIC" onclick="position();">
+                                            <label class="form-check-label" for="radioPIC">
+                                             PIC
+                                            </label>
+                                    </div>
+                                  
+                             </div>
+                        </fieldset>
+                    </div> -->
+                <div class="form-wrapper" >
+                    <input  name="email" id="email"  placeholder="username" class="form-control" readonly="readonly" 
+  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
+  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"
+onkeyup="checkinputs()">
+                    
+                </div>  
+                <div class="form-wrapper" style="margin-top: 10px;">
+                    <input name="password" id="password" type="password" placeholder="Password" class="form-control" style="padding: 5px"readonly="readonly" 
+  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
+  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"onkeyup="checkinputs()">
+              
+                </div>   
+                <div class="form-wrapper" style="margin-top: 10px;">
+                    <input name="conpass" id="confirmPassword" type="password" placeholder="Confirm Password" class="form-control" style="padding: 5px" readonly="readonly" 
+  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
+  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"onkeyup="checkinputs()">
+  
+                </div> 
+                  
+                
+              </div>
+              <div class="modal-footer" style="margin-top: 10px;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="AddAdmin" name="AddAdmin" class="btn btn-info" >Add</button>
+            
+               </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="modalAdmin1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
