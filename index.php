@@ -80,7 +80,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 $dateToPass = "";
 $date_string= date("Y-m-d");
 $_SESSION['message'] = $message;
-$today = date("F j, Y");
+$today = $_SESSION['today'];
 $month = date("F");
 $year = date("Y");
 $week = 'week '.weekOfMonth($date_string);
@@ -95,6 +95,7 @@ if(isset($_POST['submitdate'])){
    $month = date('F', strtotime($datePicker));
    $year = date('Y', strtotime($datePicker));
    $today = date('F j, Y', strtotime($datePicker));
+   $_SESSION['today'] = $today;
 
    $datePickerget = $datePicker;
    $date_string= date('Y-m-d', strtotime($datePickerget));
@@ -103,6 +104,10 @@ $week = 'week '.weekOfMonth($date_string);
  $dateToPass = date('Y-m-d', strtotime($datePicker));
  $taskfocus = "true";
 
+   }
+
+   if(isset($_GET['FinishSample'])){
+      echo  $today ;
    }
     if(isset($_GET['Finish'])){
 
@@ -137,13 +142,16 @@ $week = 'week '.weekOfMonth($date_string);
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
+          
         }else{
           $fileloc = $_SESSION['newFileLoc'] ;
           $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department');";
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
+          
         }
+  
       }
     }
 
@@ -400,7 +408,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="index.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker" name="datepicker" onchange="filterMonth();">
+            <input type="date" id="datepicker" name="datepicker"  onchange="filterMonth();">
             <input type="submit" name="submitdate"  value = "Submit">
             </form>
            
@@ -642,6 +650,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                       <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                       <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
                                     
+                                     
 
                                       
                                     </div>
@@ -850,9 +859,9 @@ filterInput.addEventListener('keyup',function(){
 getSelectValue();
 
 
-var dateNow = <?php echo json_encode("$dateNow"); ?>;
+var dateNow = <?php echo json_encode("$today"); ?>;
 
-document.getElementById("datepicker").value = dateNow;
+// document.getElementById("datepicker").value = dateNow;
 
 var jsonDataTask = <?php echo json_encode("$taskfocus"); ?>;
 var dates = <?php echo json_encode("$dateToPass"); ?>;
@@ -860,10 +869,8 @@ var dates = <?php echo json_encode("$dateToPass"); ?>;
 if(jsonDataTask == "true"){
       document.getElementById("datepicker").value = dates;
 
-
-
-
     }
+
         </script>
     </body>
 </html>

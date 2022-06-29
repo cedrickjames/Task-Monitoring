@@ -106,7 +106,7 @@ else{
             $_SESSION['f_name'] = $userRow['f_name'];
             $_SESSION['l_name'] = $userRow['l_name'];
             $_SESSION['department'] = $userRow['department'];
-
+// $_SESSION['today'] = date('F j, Y');
 
         }
         if($numrowsadmin > 0){
