@@ -253,38 +253,25 @@ print_r($array11);
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="<?php 
+            if($_SESSION['admin'] == "False")
+            {
+               echo "leader.php";
+            } 
+            else{
+               echo "admin.php";
+              } 
+             ?>">Home</a>
+                </li>
                 <li class="nav-item active">
-                  <a class="nav-link" href="#">Home</a>
+                  <a class="nav-link" href="#">Add Task</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#">About</a>
                 </li> -->
                 
-                <li class="nav-item dropdown" >
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                    Option
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown"  style="right: 0; left: auto;">
-                  <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a> -->
-                    <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
-
-                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalAdmin'>Add Admin</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalRemoveAdmin'>Remove Admin</a> 
-                   
-                      <?php } ?> -->
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
-                    <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
-
-
-                    
-                   
-                  </div>
-                </li>
-                
+         
               </ul>
             </div>
           </nav>
@@ -372,6 +359,7 @@ print_r($array11);
                             <div class="col-sm-2">
                                 <select  name="taskArea1" id="taskArea1" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Area</option>
+                                    <option value="All">All</option>
                                     <option value="GPI 1">GPI 1</option>
                                     <option value="GPI 2">GPI 2</option>
                                     <option value="GPI 3">GPI 3</option>
@@ -436,7 +424,7 @@ var finalArrayLenght = 1;
         newDiv.classList.add("col-sm-12");
         newDiv.style.padding = '0px';
         // var taskInput='<div class="form-group row"><div class="col-lg-4"><input  class="form-control"   id="inputItem'+numForID+'" required ><div class="invalid-feedback"style=" margin-bottom: 20px; margin-left: 30px">Please fill out this field.</div></div><div class="col-lg-4"><input  class="form-control" id="inputDesc'+numForID+'"  ></div><div class="col-lg-3"><input  class="form-control"  id="inputPrice'+numForID+'"  ></div></div>'
-        var taskInput='<div class="form-group row"  id="NewTaskDiv'+numForID+'"style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px"> </label><div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;height: 38px" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option> <option value="weekly">Weekly</option> <option value="monthly">Monthly</option><option value="annual">Annual</option> </select></div> <div class="col-sm-3"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <?php if(is_array($fetchDataCat)){ foreach($fetchDataCat as $data){?> <option value="<?php echo $data["CategoryName"] ?>"><?php echo $data["CategoryName"] ?></option> <?php }}else{ ?>  <option colspan="8"> <?php echo $fetchDataCat ?> </option> <?php  }?> </select></div><div class="col-sm-2"><select  name="taskArea'+numForID+'" id="taskArea'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"><option value="" disabled selected>Area</option><option value="GPI 1">GPI 1</option><option value="GPI 2">GPI 2</option><option value="GPI 3">GPI 3</option><option value="GPI 4">GPI 4</option><option value="GPI 5">GPI 5</option><option value="GPI 6">GPI 6</option><option value="GPI 7">GPI 7</option><option value="GPI 8">GPI 8</option><option value="GPI 9">GPI 9</option></select></div><div class="col-sm-1"><button type="button" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="RemoveInputForProducts('+numForID+')">-</button></div>';
+        var taskInput='<div class="form-group row"  id="NewTaskDiv'+numForID+'"style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px"> </label><div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;height: 38px" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option><option value="daily">Daily</option><option value="weekly">Weekly</option> <option value="monthly">Monthly</option><option value="annual">Annual</option> </select></div> <div class="col-sm-3"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <?php if(is_array($fetchDataCat)){ foreach($fetchDataCat as $data){?> <option value="<?php echo $data["CategoryName"] ?>"><?php echo $data["CategoryName"] ?></option> <?php }}else{ ?>  <option colspan="8"> <?php echo $fetchDataCat ?> </option> <?php  }?> </select></div><div class="col-sm-2"><select  name="taskArea'+numForID+'" id="taskArea'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"><option value="" disabled selected>Area</option> <option value="All">All</option><option value="GPI 1">GPI 1</option><option value="GPI 2">GPI 2</option><option value="GPI 3">GPI 3</option><option value="GPI 4">GPI 4</option><option value="GPI 5">GPI 5</option><option value="GPI 6">GPI 6</option><option value="GPI 7">GPI 7</option><option value="GPI 8">GPI 8</option><option value="GPI 9">GPI 9</option></select></div><div class="col-sm-1"><button type="button" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="RemoveInputForProducts('+numForID+')">-</button></div>';
         newDiv.innerHTML=taskInput;
         DivProdContainer.appendChild(newDiv);
 

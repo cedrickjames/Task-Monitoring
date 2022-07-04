@@ -390,6 +390,37 @@ $dateNow = date('Y-m-d');
     return $retWeek;
 }
 
+
+if(isset($_POST['AddCategory'])){
+     
+  $category = $_POST['inputCategory'];
+
+  if($category == ""){
+    ?><script>
+          Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You have to enter a category.',
+      //   footer: '<a href="">Why do I have this issue?</a>'
+      })
+       </script><?php 
+  }
+  else{
+    $sqlinsert = "INSERT INTO `category`(`categoryId`, `CategoryName`) VALUES ('','$category')";
+    mysqli_query($con, $sqlinsert);
+    ?><script>
+    Swal.fire({
+  icon: 'success',
+  title: 'Success',
+  text: 'You have successfully add category',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+         
+}
+
+
 ?>
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -486,12 +517,12 @@ $dateNow = date('Y-m-d');
               <div class="modal-body">
                
                    
-                <form id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
+                <form action="leader.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
                      
                   <div class="form-group">
                    
                     <label  for="message-text" class="col-form-label">Enter category</label>
-                    <input  type="text"class="form-control"   id="inputAdmin" >
+                    <input  type="text"class="form-control"  name="inputCategory" id="inputCategory" >
                   </div>
                   <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:480px;"> 
@@ -527,13 +558,14 @@ $dateNow = date('Y-m-d');
                     </table>
                     </div>
                     </div>
-                </form>
-              </div>
-              <div class="modal-footer">
+                    <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick =" addAdmin();" class="btn btn-primary" data-dismiss="modal">Add</button>
+                <button type="submit" name="AddCategory" class="btn btn-primary" >Add</button>
             
                </div>
+                </form>
+              </div>
+             
             </div>
           </div>
         </div>
@@ -861,12 +893,20 @@ $dateNow = date('Y-m-d');
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                         //  echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                         
+                                        $noOfDays = $userRow['noOfDaysLate'];
                                                }
                                                if ($weekNumber == "week 1" ){
      
                                                 $weeknumber = $weekNumber;
+
+                                                if($noOfDays >= 3){
+                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
+                                                else if ($noOfDays <= 1){
                                                   echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
                                                     // echo("<script>console.log('ok');</script>");
           
                                                    }
@@ -889,13 +929,23 @@ $dateNow = date('Y-m-d');
                                            $finishedtaskID = $userRow['FinishedTaskID'];
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
                                                }
                                                if ($weekNumber == "week 1" ){
      
                                                 $weeknumber = $weekNumber;
+
+                                                if($noOfDays >= 3){
+                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
+                                                else if ($noOfDays <= 1){
                                                   echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // //echo("<script>console.log('ok');</script>");
           
                                                    }
@@ -924,13 +974,23 @@ $dateNow = date('Y-m-d');
                                            $finishedtaskID = $userRow['FinishedTaskID'];
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                         
                                                }
                                                if ($weekNumber == "week 2" ){
      
                                                 $weeknumber = $weekNumber;
+
+                                                if($noOfDays >= 3){
+                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
+                                                else if ($noOfDays <= 1){
                                                   echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // echo("<script>console.log('ok');</script>");
           
                                                    }
@@ -953,13 +1013,23 @@ $dateNow = date('Y-m-d');
                                            $finishedtaskID = $userRow['FinishedTaskID'];
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                         
                                                }
                                                if ($weekNumber == "week 2" ){
      
                                                 $weeknumber = $weekNumber;
-                                                   echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                if($noOfDays >= 3){
+                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
+                                                else if ($noOfDays <= 1){
+                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                }
+                                                  //  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // echo("<script>console.log('ok');</script>");
           
                                                    }
@@ -987,11 +1057,22 @@ $dateNow = date('Y-m-d');
                                          $finishedtaskID = $userRow['FinishedTaskID'];
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
                                        //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        if ($weekNumber3 == "week 3" ){
    
                                               $weeknumber = $weekNumber3;
+
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1016,6 +1097,7 @@ $dateNow = date('Y-m-d');
                                          $finishedtaskID = $userRow['FinishedTaskID'];
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
                                        //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
                                              }
@@ -1023,7 +1105,18 @@ $dateNow = date('Y-m-d');
                                              if ($weekNumber == "week 3" ){
    
                                               $weeknumber = $weekNumber;
+
+                                              
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1053,13 +1146,22 @@ $dateNow = date('Y-m-d');
                                          $finishedtaskID = $userRow['FinishedTaskID'];
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
                                        //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
                                              }
                                              if ($weekNumber == "week 4" ){
    
                                               $weeknumber = $weekNumber;
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1082,13 +1184,22 @@ $dateNow = date('Y-m-d');
                                          $finishedtaskID = $userRow['FinishedTaskID'];
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
                                        //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
                                              }
                                              if ($weekNumber == "week 4" ){
    
                                               $weeknumber = $weekNumber;
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1118,13 +1229,23 @@ $dateNow = date('Y-m-d');
                                         $finishedtaskID = $userRow['FinishedTaskID'];
                                         $date = $userRow['Date'];
                                         $dateN =  date('n-d', strtotime($date));
+                                        $noOfDays = $userRow['noOfDaysLate'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
                                             }
                                             if ($weekNumber == "week 5" ){
   
                                               $weeknumber = $weekNumber;
+
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1148,13 +1269,22 @@ $dateNow = date('Y-m-d');
                                         $date = $userRow['Date'];
 
                                         $dateN =  date('n-d', strtotime($date));
+                                        $noOfDays = $userRow['noOfDaysLate'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
                                             }
                                             if ($weekNumber == "week 5" ){
   
                                               $weeknumber = $weekNumber;
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1184,13 +1314,22 @@ $dateNow = date('Y-m-d');
                                         $finishedtaskID = $userRow['FinishedTaskID'];
                                         $date = $userRow['Date'];
                                         $dateN =  date('n-d', strtotime($date));
+                                        $noOfDays = $userRow['noOfDaysLate'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
                                             }
                                             if ($weekNumber == "week 6" ){
   
                                               $weeknumber = $weekNumber;
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1214,13 +1353,22 @@ $dateNow = date('Y-m-d');
                                         $date = $userRow['Date'];
 
                                         $dateN =  date('n-d', strtotime($date));
+                                        $noOfDays = $userRow['noOfDaysLate'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
                                             }
                                             if ($weekNumber == "week 6" ){
   
                                               $weeknumber = $weekNumber;
+                                              if($noOfDays >= 3){
+                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                              else if ($noOfDays <= 1){
                                                 echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                              }
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
         
                                                  }
@@ -1247,7 +1395,7 @@ $dateNow = date('Y-m-d');
                         </td>
                          </tr>
                           <?php
-                          echo "PETMALU";
+                          echo "No data found";
     }                     ?>                   
                             </tbody>
                         </table>

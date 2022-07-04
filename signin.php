@@ -106,8 +106,10 @@ else{
             $_SESSION['f_name'] = $userRow['f_name'];
             $_SESSION['l_name'] = $userRow['l_name'];
             $_SESSION['department'] = $userRow['department'];
-// $_SESSION['today'] = date('F j, Y');
-
+            $_SESSION['today'] = date('F j, Y');
+            $_SESSION['month'] =  date('F') ;
+            $_SESSION['year'] = date('Y');
+            $_SESSION['date_string'] = date('Y-m-d');
         }
         if($numrowsadmin > 0){
             header("location: admin.php");

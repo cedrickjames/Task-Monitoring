@@ -320,6 +320,34 @@ mysqli_query($con, $sqlRemoveAdmin2);
     // echo date('Y', strtotime($datePicker));
 
     }
+    if(isset($_POST['AddCategory'])){
+     
+      $category1 = $_POST['inputCategory'];
+    
+      if($category1 == ""){
+        ?><script>
+              Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'You have to enter a category.',
+          //   footer: '<a href="">Why do I have this issue?</a>'
+          })
+           </script><?php 
+      }
+      else{
+        $sqlinsert = "INSERT INTO `category`(`categoryId`, `CategoryName`) VALUES ('','$category1')";
+        mysqli_query($con, $sqlinsert);
+        ?><script>
+        Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'You have successfully add category',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+      }
+             
+    }
 
 
     $month2 = date("F");
@@ -491,6 +519,8 @@ mysqli_query($con, $sqlRemoveAdmin2);
       
 
 
+ 
+
      function weekOfMonth($qDate) {
     $dt = strtotime($qDate);
     $day  = date('j',$dt);
@@ -543,7 +573,8 @@ mysqli_query($con, $sqlRemoveAdmin2);
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
                     <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
                     <a class="dropdown-item" id="btn-addAdmin" href="./addTaskAdmin.php">Add Task</a>
-
+                    <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
+                      data-target='#modalAdminCategory'>Add Category</a> 
 
 
                     <?php if($_SESSION['admin'] == "TRUE"){?>
@@ -567,6 +598,72 @@ mysqli_query($con, $sqlRemoveAdmin2);
             </div>
           </nav>
         </div>
+        <div class="modal fade" id="modalAdminCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               
+                   
+                <form action="admin.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
+                     
+                  <div class="form-group">
+                   
+                    <label  for="message-text" class="col-form-label">Enter category</label>
+                    <input  type="text"class="form-control" name="inputCategory" id="inputCategory"  >
+                  </div>
+                  <div class="overflow-x">
+                      <div class="overflow-y" style="overflow-y: scroll; height:480px;"> 
+                        <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                            <thead  class="thead-dark" >
+                                <tr>
+                                <th style="min-width:15px;">Categories</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CategoryTable">
+                       <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                  if(is_array($fetchDataCat)){      
+                                 
+                                  foreach($fetchDataCat as $data){
+                                    ?>
+                                    <tr>
+                                      <td><?php echo $data['CategoryName']; ?></td>
+                                  </tr>
+ <?php
+                         }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchData; ?>
+                        </td>
+                         </tr>
+                          <?php
+                          echo "PETMALU";
+    }                     ?>                   
+                            </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+               <button type="submit" name="AddCategory" class="btn btn-primary" >Add</button>
+            
+            
+               </div>
+                </form>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
         <div class="modal fade" id="modalAdminEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">

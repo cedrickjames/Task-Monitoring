@@ -3,6 +3,23 @@
   include ("./connection.php");
   date_default_timezone_set("Asia/Singapore");
   $db= $con;
+
+
+  $from=date_create(date('Y-m-d'));
+$to=date_create("2022-06-27");
+$diff=date_diff($to,$from);
+// print_r($diff);
+// echo $diff->format('%R%a');
+
+// $n1 = $diff->format('%R%a');
+// $n2 = 3;
+// echo "kasj";
+// echo $n1 + $n2;
+// if($n1>1){
+//   echo "hello";
+// }
+
+
 $tableName="usertask";
     if(!isset( $_SESSION['connected'])){
     
@@ -80,7 +97,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 $dateToPass = "";
 $date_string= date("Y-m-d");
 $_SESSION['message'] = $message;
-$today = $_SESSION['today'];
+$today=date('F j, Y');
 $month = date("F");
 $year = date("Y");
 $week = 'week '.weekOfMonth($date_string);
@@ -95,19 +112,22 @@ if(isset($_POST['submitdate'])){
    $month = date('F', strtotime($datePicker));
    $year = date('Y', strtotime($datePicker));
    $today = date('F j, Y', strtotime($datePicker));
+  //  echo  $today;
    $_SESSION['today'] = $today;
-
+  
+   $_SESSION['month'] = $month ;
+   $_SESSION['year'] = $year;
    $datePickerget = $datePicker;
    $date_string= date('Y-m-d', strtotime($datePickerget));
+   $_SESSION['date_string'] = $date_string;
 $week = 'week '.weekOfMonth($date_string);
-   
  $dateToPass = date('Y-m-d', strtotime($datePicker));
  $taskfocus = "true";
 
    }
 
    if(isset($_GET['FinishSample'])){
-      echo  $today ;
+      echo   $_SESSION['today'];
    }
     if(isset($_GET['Finish'])){
 
@@ -138,14 +158,23 @@ $week = 'week '.weekOfMonth($date_string);
         // $week = 'week '.weekOfMonth($date_string);
         if($_SESSION['newFileLoc'] ==""){
           $fileloc ="" ;
-          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department');";
+          $today = $_SESSION['today'];
+          $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+          $from=date_create(date('Y-m-d'));
+          $to=date_create(date('Y-m-d', strtotime($today)));
+          $diff=date_diff($to,$from);
+          // print_r($diff);
+          $finalDiff =  $diff->format('%R%a');
+
+
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff');";
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
           
         }else{
           $fileloc = $_SESSION['newFileLoc'] ;
-          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department');";
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff');";
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
@@ -158,10 +187,10 @@ $week = 'week '.weekOfMonth($date_string);
     if(isset($_GET['Cancel'])){
 
       
-      $taskID = $_GET['Cancel'];
+      $FtaskID = $_GET['Cancel'];
       // $month = date("F");
       // $year = date("Y");
-      $sqldelete = "DELETE FROM `finishedtask` WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year'";
+      $sqldelete = "DELETE FROM `finishedtask` WHERE FinishedTaskID = '$FtaskID'";
       mysqli_query($con, $sqldelete);
       // header("location:index.php");
 
@@ -309,6 +338,33 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
         <div class="alert alert-success" id = "successAlert" style="display: none"role="alert">
  <h3 id="successAlertWord"> </h3>
 </div>
+<div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">State your reason.</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+        
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Reason:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+          <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save reason</button>
+      </div>
+        </form>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
         <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -387,10 +443,12 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
             </h3>
           </div>
           <div class="col-4" style="padding-top: 20px; color: white">
-          <h3  class="text-center"> <?php if( $_SESSION['userlevel'] == "PIC") echo 'Member' ?> </h3>  
+          <!-- <h3  class="text-center"> <?php if( $_SESSION['userlevel'] == "PIC") echo 'Member' ?> </h3>   -->
+          <h3 class="text-center"> <?php echo  $_SESSION['today'] ?> Week <?php echo weekOfMonth($_SESSION['date_string']) ?></h3>
+
           </div>
           <div class="col-4">
-            <h3 style=" margin: 20px; color: white" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
+            <h3 style=" margin: 20px; color: white" class="float-right"> <?php if( $_SESSION['userlevel'] == "PIC") echo 'Member' ?> </h3>
           </div>
          
           <div class="container p-30" id="TableListOfMembers"; style="position: relative; height: 100%;  padding-top: 0px; margin:0 auto; max-width: 90%;  background-color: none">
@@ -408,7 +466,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="index.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker" name="datepicker"  onchange="filterMonth();">
+            <input type="date" id="datepicker" name="datepicker" data-value="[2020,0,1]" onchange="filterMonth();">
             <input type="submit" name="submitdate"  value = "Submit">
             </form>
            
@@ -462,7 +520,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                   $sn=1;
                                   foreach($fetchData as $data){
                             ?>
-                             <tr>
+                             <tr style="height:10px">
                                 <td><?php echo $sn; ?></td>
                                 <td><?php echo $data['taskName']??''; ?></td>
                                 <td><?php echo $data['taskType']??''; ?></td>
@@ -474,57 +532,87 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                               <td> <?php
                                 $taskID = $data['usertaskID'];
                                 $taskType =  $data['taskType'];
-
+                       
                       // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                       // $month = date("F");
                       // $year = date("Y");
-                      $weeknumberrr = weekOfMonth($date_string);
+                      $weeknumberrr = weekOfMonth($_SESSION['date_string']);
                       // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
 
                       if ($taskType == 'weekly'){
-                        $weekMonth = weekOfMonth($date_string);
-                       
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week $weekMonth';";
+                        $weekMonth = weekOfMonth($_SESSION['date_string']);
+                        $month1 = $_SESSION['month'];
+                        $year1 = $_SESSION['year'];
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' AND `week` = 'week $weekMonth';";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
 
                                     $numrows = mysqli_num_rows($result);
 
                                     $don = "0";
-
-                                    if ($numrows == 1){
-                                      echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                    while($userRow = mysqli_fetch_assoc($result)){
+                                      $noOfDays = $userRow['noOfDaysLate'];
+                                    
+                          
+                                  }
+                                    if ($numrows >= 1){
+                                      if($noOfDays > 2){
+                                        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                      }
+                                       else if($noOfDays<=2 && $noOfDays>=0){
+                                        echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                      }
+                                     
                                       $don = "1";
                                       // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
                                          }
                                     }
                                     else if($taskType == 'monthly'){
-                                      $weekMonth = weekOfMonth($date_string);
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' ;";
+                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
 
                                     $numrows = mysqli_num_rows($result);
                                     $don = "0";
-
-                                    if ($numrows == 1){
-                                      echo '<span class="mode mode_on">DONE</span>';
+                                    while($userRow = mysqli_fetch_assoc($result)){
+                                      $noOfDays = $userRow['noOfDaysLate'];
+                                    
+                          
+                                  }
+                                    if ($numrows >= 1){
+                                      if($noOfDays > 2){
+                                        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                      }
+                                      else if($noOfDays <=2 && $noOfDays>=0){
+                                        echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                      }
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
                                     
                                     }
                                     else if($taskType == 'daily'){
-                                      $weekMonth = weekOfMonth($date_string);
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today';";
+                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                      $today1 = $_SESSION['today'];
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today1';";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
 
                                     $numrows = mysqli_num_rows($result);
                                     $don = "0";
-
-                                    if ($numrows == 1){
-                                      echo '<span class="mode mode_on">DONE</span>';
+                                    while($userRow = mysqli_fetch_assoc($result)){
+                                      $noOfDays = $userRow['noOfDaysLate'];
+                                    
+                          
+                                  }
+                                    if ($numrows >= 1){
+                                      if($noOfDays > 2){
+                                        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                      }
+                                      else if($noOfDays <=2 &&$noOfDays >=0){
+                                        echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                      }
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
@@ -544,13 +632,15 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                       // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                       // $month = date("F");
                       $year = date("Y");
-                      $weeknumberrr = weekOfMonth($date_string);
+                      $weeknumberrr = weekOfMonth($_SESSION['date_string']);
                       // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
 
                       if ($taskType == 'weekly'){
-                        $weekMonth = weekOfMonth($date_string);
-                       
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week $weekMonth';";
+                        $weekMonth = weekOfMonth($_SESSION['date_string']);
+                       $month1 = $_SESSION['month'];
+                       $year1 = $_SESSION['year'];
+
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' AND `week` = 'week $weekMonth';";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
 
@@ -565,8 +655,8 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                          }
                                     }
                                     else if($taskType == 'monthly'){
-                                      $weekMonth = weekOfMonth($date_string);
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' ;";
+                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
 
@@ -582,8 +672,9 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                     
                                     }
                                     else if($taskType == 'daily'){
-                                      $weekMonth = weekOfMonth($date_string);
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today';";
+                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                      $today1 = $_SESSION['today'];
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today1';";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
 
@@ -647,9 +738,78 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                   
                                       
                                       <!-- Finish -->
-                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
-                                      <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
-                                    
+                                     <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                        <!-- <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
+                                      <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                      
+                                      <?php
+                                       $taskID = $data['usertaskID'];
+                                       $taskType =  $data['taskType'];       
+                                        if ($taskType == 'weekly'){
+                                          
+                                                         
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week $weekMonth';";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    $result = mysqli_query($con, $selectUserTask);
+
+                                    $numrows = mysqli_num_rows($result);
+
+                                    // $don = "0";
+                                    while($userRow = mysqli_fetch_assoc($result)){
+                                      $fTaskId = $userRow['FinishedTaskID'];
+                                  }
+                                  ?>
+                                 
+                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                      <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                      <?php
+                                        }
+
+
+                                        else if ($taskType == 'monthly'){
+                                                                      
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year'";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    $result = mysqli_query($con, $selectUserTask);
+
+                                    $numrows = mysqli_num_rows($result);
+
+                                    // $don = "0";
+                                    while($userRow = mysqli_fetch_assoc($result)){
+                                      $fTaskId = $userRow['FinishedTaskID'];
+                                  }
+                                  ?>
+                                 
+                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                      <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                      <?php
+                                        }
+
+                                        else if ($taskType == 'daily'){
+                                                                      
+                                          $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today';";
+                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                          $result = mysqli_query($con, $selectUserTask);
+      
+                                          $numrows = mysqli_num_rows($result);
+      
+                                          // $don = "0";
+                                          if($numrows >=1){
+                                            while($userRow = mysqli_fetch_assoc($result)){
+                                              $fTaskId = $userRow['FinishedTaskID'];
+                                          }
+                                          }
+                                          else if($numrows <=0){
+                                            $fTaskId = "0";
+                                          }
+                                          
+                                        ?>
+                                       
+                                            <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                            <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                            <?php
+                                              }
+                                       ?>
                                      
 
                                       

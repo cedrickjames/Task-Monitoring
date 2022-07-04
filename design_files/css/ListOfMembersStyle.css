@@ -308,6 +308,9 @@ body{
 .mode_done{
     background-color: #03a9f3;
 }
+.mode_late{
+    background-color: #f3032b;
+}
 @media only screen and (max-width:1200px){
     .overflow-x{
         overflow-x:scroll;
