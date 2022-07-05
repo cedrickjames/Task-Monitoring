@@ -110,6 +110,7 @@ else{
             $_SESSION['month'] =  date('F') ;
             $_SESSION['year'] = date('Y');
             $_SESSION['date_string'] = date('Y-m-d');
+            $_SESSION['reason'] = "";
         }
         if($numrowsadmin > 0){
             header("location: admin.php");

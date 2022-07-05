@@ -1,6 +1,37 @@
 <?php
   session_start();
   include ("./connection.php");
+  ?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
+
+    <title>Main Page</title>
+    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
+
+     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
+       <link rel="stylesheet" href="design_files/css/MainPageStyle.css">
+    <link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
+
+    <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
+    <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
+
+</head>
+    <body style="background: #134E5E;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #71B280, #134E5E);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+">
+
+<?php
+
   date_default_timezone_set("Asia/Singapore");
   $db= $con;
 
@@ -103,8 +134,9 @@ $year = date("Y");
 $week = 'week '.weekOfMonth($date_string);
 $dateNow = date('Y-m-d');
 
-
 $taskfocus = "false";
+$todaySession = $_SESSION['today'];
+$reasonSession = $_SESSION['reason'];
 
 if(isset($_POST['submitdate'])){
   $datePicker = $_POST['datepicker'];
@@ -114,6 +146,7 @@ if(isset($_POST['submitdate'])){
    $today = date('F j, Y', strtotime($datePicker));
   //  echo  $today;
    $_SESSION['today'] = $today;
+$todaySession = $_SESSION['today'];
   
    $_SESSION['month'] = $month ;
    $_SESSION['year'] = $year;
@@ -126,11 +159,33 @@ $week = 'week '.weekOfMonth($date_string);
 
    }
 
-   if(isset($_GET['FinishSample'])){
-      echo   $_SESSION['today'];
+   
+if(isset($_POST['reason'])){
+  $_SESSION['reason'] = $_POST['reasonInput'];
    }
-    if(isset($_GET['Finish'])){
 
+   if(isset($_GET['FinishSample'])){
+      echo   $reasonSession;
+echo "<script>
+console.log('$reasonSession');
+</script>";
+   }
+
+
+
+   if(isset($_POST['testing'])){
+    echo "<script>
+    $('#reasonModal').modal('show');
+    </script>";
+ }
+ echo "<script>
+ $('#reasonModal').modal('show');
+ </script>";
+    if(isset($_GET['Finish'])){
+$reason = $_POST['reason'];
+echo "<script>
+console.log($reason);
+</script>";
       if (!file_exists($_FILES['uploadedFile']['tmp_name']) || !is_uploaded_file($_FILES['uploadedFile']['tmp_name'])) {
 
         $date_string= date("Y-m-d");
@@ -165,16 +220,24 @@ $week = 'week '.weekOfMonth($date_string);
           $diff=date_diff($to,$from);
           // print_r($diff);
           $finalDiff =  $diff->format('%R%a');
+$myReason = $_SESSION['reason'];
 
-
-          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff');";
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason');";
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
           
         }else{
+          $today = $_SESSION['today'];
+
+          $from=date_create(date('Y-m-d'));
+          $to=date_create(date('Y-m-d', strtotime($today)));
+          $diff=date_diff($to,$from);
+          // print_r($diff);
+          $finalDiff =  $diff->format('%R%a');
           $fileloc = $_SESSION['newFileLoc'] ;
-          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff');";
+          $myReason = $_SESSION['reason'];
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason');";
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
@@ -266,33 +329,6 @@ $week = 'week '.weekOfMonth($date_string);
       return $retWeek;
   }
 ?>
-
-<!DOCTYPE html>
-<html>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
-
-    <title>Main Page</title>
-    <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
-
-     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <!-- MATERIAL DESIGN ICONIC FONT -->
-    <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
-       <link rel="stylesheet" href="design_files/css/MainPageStyle.css">
-    <link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
-
-    <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-    <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
-
-</head>
-    <body style="background: #134E5E;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #71B280, #134E5E);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-">
       <div>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
@@ -342,21 +378,20 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">State your reason.</h5>
+        <h5 class="modal-title" id="exampleModalLabel">State your reason why are you late.</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form>
-        
+      <form action="index.php" method = "POST" id="reasonForm" style="width: 100%; padding: 10px; border: 0;" >
           <div class="form-group">
             <label for="message-text" class="col-form-label">Reason:</label>
-            <textarea class="form-control" id="message-text"></textarea>
+            <textarea class="form-control" name="reasonInput" id="reason-text"></textarea>
           </div>
           <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save reason</button>
+        <button type="submit" name="reason" onclick = "hideCheck()"class="btn btn-primary">Save reason</button>
       </div>
         </form>
       </div>
@@ -432,7 +467,8 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
             </div>
           </div>
         </div>
-
+<form method="POST" action="index.php">
+                        </form>
         <div class="parent" style= "max-height: 100%; height: 100%; padding:0px; ">
           <div class="wrapper" style= " max-height: 100%; height: 100% ;padding:0px; ">
          
@@ -520,7 +556,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                   $sn=1;
                                   foreach($fetchData as $data){
                             ?>
-                             <tr style="height:10px">
+                             <tr style="height:50px">
                                 <td><?php echo $sn; ?></td>
                                 <td><?php echo $data['taskName']??''; ?></td>
                                 <td><?php echo $data['taskType']??''; ?></td>
@@ -620,6 +656,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                 ?> </td>
                                  <td>
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
+                                 
                                 <div class="row">
                                   <div class="col">
                                     <?php $upFile = 'uploadedFile' . $data['usertaskID']; $varUpload = $data['usertaskID'];  $upBtn = 'uploadsample' . $data['usertaskID'];?>
@@ -738,6 +775,8 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                   
                                       
                                       <!-- Finish -->
+                                     <a onclick="checkIfLate(<?php echo $data['usertaskID'] ?>)" id= "checked<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Check</a>
+
                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                         <!-- <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
                                       <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
@@ -804,7 +843,7 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
                                           }
                                           
                                         ?>
-                                       
+
                                             <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
                                             <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
                                             <?php
@@ -1030,7 +1069,42 @@ if(jsonDataTask == "true"){
       document.getElementById("datepicker").value = dates;
 
     }
+var sessionReason = <?php echo json_encode("$reasonSession");?>;
 
+function checkIfLate(id){
+
+    var date1= new Date();
+    // var date2= new Date('July 1, 2022');
+   
+var dateSession = <?php echo json_encode("$todaySession"); ?>;
+console.log(sessionReason);
+    var date2= new Date(dateSession);
+
+    var daysbetween= Math.abs(date2-date1);
+    var noOfdays = daysbetween/(1000 * 3600 * 24)
+    console.log(parseInt(noOfdays));
+    console.log(date2);
+
+    console.log(date1);
+var noOfDaysLate = parseInt(noOfdays);
+var reason = document.getElementById('reason-text').value;
+    if(noOfDaysLate >= 3){
+      $('#reasonModal').modal('show');
+// document.getElementById('checked'+id).style.display='none';
+
+    }
+    }
+    // hideCheck();
+  function hideCheck(){
+var reason = document.getElementById('reason-text').value;
+
+    if(sessionReason !=""){
+      document.getElementById('checked34').style.display='none';
+
+    }
+
+
+  }
         </script>
     </body>
 </html>
