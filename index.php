@@ -1,6 +1,7 @@
 <?php
   session_start();
   include ("./connection.php");
+
   ?>
 
 <!DOCTYPE html>
@@ -164,12 +165,7 @@ if(isset($_POST['reason'])){
   $_SESSION['reason'] = $_POST['reasonInput'];
    }
 
-   if(isset($_GET['FinishSample'])){
-      echo   $reasonSession;
-echo "<script>
-console.log('$reasonSession');
-</script>";
-   }
+ 
 
 
 
@@ -182,7 +178,7 @@ console.log('$reasonSession');
  $('#reasonModal').modal('show');
  </script>";
     if(isset($_GET['Finish'])){
-$reason = $_POST['reason'];
+$reason = $_SESSION['reason'];
 echo "<script>
 console.log($reason);
 </script>";
@@ -226,7 +222,7 @@ $myReason = $_SESSION['reason'];
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
-          
+          $_SESSION['reason'] = "";
         }else{
           $today = $_SESSION['today'];
 
@@ -241,6 +237,7 @@ $myReason = $_SESSION['reason'];
           mysqli_query($con, $sqlinsert);
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
+          $_SESSION['reason'] = "";
           
         }
   
@@ -255,6 +252,8 @@ $myReason = $_SESSION['reason'];
       // $year = date("Y");
       $sqldelete = "DELETE FROM `finishedtask` WHERE FinishedTaskID = '$FtaskID'";
       mysqli_query($con, $sqldelete);
+      $_SESSION['reason'] = "";
+
       // header("location:index.php");
 
 
@@ -373,31 +372,6 @@ $myReason = $_SESSION['reason'];
         </div>
         <div class="alert alert-success" id = "successAlert" style="display: none"role="alert">
  <h3 id="successAlertWord"> </h3>
-</div>
-<div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">State your reason why are you late.</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      <form action="index.php" method = "POST" id="reasonForm" style="width: 100%; padding: 10px; border: 0;" >
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Reason:</label>
-            <textarea class="form-control" name="reasonInput" id="reason-text"></textarea>
-          </div>
-          <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" name="reason" onclick = "hideCheck()"class="btn btn-primary">Save reason</button>
-      </div>
-        </form>
-      </div>
-     
-    </div>
-  </div>
 </div>
 
         <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -656,7 +630,63 @@ $myReason = $_SESSION['reason'];
                                 ?> </td>
                                  <td>
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
-                                 
+                                 <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">State your reason why are you late.</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                           
+                                             <form method="POST" action="index.php" >
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Reason:</label>
+                                                    <textarea class="form-control" name="reasonInput" id="reason-text"></textarea>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" name="reason"class="btn btn-primary">Save reason</button>
+                                              </div>
+                                  </form>
+                                              </div>
+                                            
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <?php
+
+                                                      if(isset($_GET['FinishSample'])){
+                                                        $today = $_SESSION['today'];
+                                                        $from=date_create(date('Y-m-d'));
+                                                        $to=date_create(date('Y-m-d', strtotime($today)));
+                                                        $diff=date_diff($to,$from);
+                                                        // print_r($diff);
+                                                        $reason =  $_SESSION['reason'];
+                                                        $finalDiff =  $diff->format('%R%a');
+                                                        if($finalDiff >=3 &&  $reason==""){
+                                                      echo "<script> $('#reasonModal').modal('show'); </script>";
+                                                      $_SESSION['TaskID'] = $_GET['FinishSample'];
+                                                        }
+                                                  
+                                                      }
+
+                                                   
+                                                      if(isset($_POST['reason'])){
+                                                        $_SESSION['reason'] = $_POST['reasonInput'];
+                                                        if($_SESSION['reason'] != ""){
+                                                          $taskID = $_SESSION['TaskID'];
+                                                          echo $taskID;
+                                                            echo "<script>  document.getElementById('finishedsample$taskID').style.display='none';
+                                                            document.getElementById('finished$taskID').click();      
+
+                                                            </script>";
+                                                        }
+                                                      }
+                                                 
+                                                      ?>
                                 <div class="row">
                                   <div class="col">
                                     <?php $upFile = 'uploadedFile' . $data['usertaskID']; $varUpload = $data['usertaskID'];  $upBtn = 'uploadsample' . $data['usertaskID'];?>
@@ -777,9 +807,9 @@ $myReason = $_SESSION['reason'];
                                       <!-- Finish -->
                                      <a onclick="checkIfLate(<?php echo $data['usertaskID'] ?>)" id= "checked<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Check</a>
 
-                                     <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                     <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" style="display: none" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                         <!-- <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
-                                      <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                      <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finishedsample<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                       
                                       <?php
                                        $taskID = $data['usertaskID'];
@@ -799,7 +829,7 @@ $myReason = $_SESSION['reason'];
                                   }
                                   ?>
                                  
-                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
                                       <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
                                       <?php
                                         }
@@ -819,7 +849,7 @@ $myReason = $_SESSION['reason'];
                                   }
                                   ?>
                                  
-                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
                                       <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
                                       <?php
                                         }
@@ -855,6 +885,7 @@ $myReason = $_SESSION['reason'];
                                     </div>
                                     
                                 </div>
+                            
                                 </form>
                               </td>
 
