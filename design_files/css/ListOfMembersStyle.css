@@ -296,20 +296,57 @@ body{
     font-size:11px;
     letter-spacing: 0.4px;
 }
+.⚠ {
+    position: relative; /* So we can position the content as absolute */
+
+    /* Using the borders to create a triangle  */
+    border-left: 0.70em solid transparent;
+    border-right: 0.70em solid transparent;
+    border-bottom: 1.45em solid yellow;
+
+    top: -1em;          /* Correction because of the CSS Triangle trick*/
+}
+    .⚠::before {
+        
+        content: "⚠";
+        
+        /* Position the character over the triangle */
+        top: 0.45em;
+        left: -0.45em;
+        position: absolute;
+
+        color: black;
+        font-size: 2em;
+        line-height: 1em;
+    }
+
+.mode-triangle{
+    /* font-weight: 400;
+    line-height: 13px;
+    padding:4px 10px;
+    border-radius: 1rem; */
+        width: 0; 
+        height: 0; 
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+        border-bottom: 25px solid black;
+      
+}
 .mode_on{
     background-color: #09922d;
 }
 .mode_off{
     background-color: #8b9096;
 }
-.mode_process{
-    background-color: #ff8000;
+.mode_near{
+    background-color: #ffe600;
+    color: rgb(31, 31, 31);
 }
 .mode_done{
-    background-color: #03a9f3;
+    background-color: #15475e;
 }
 .mode_late{
-    background-color: #f3032b;
+    background-color: #ff8000;
 }
 @media only screen and (max-width:1200px){
     .overflow-x{

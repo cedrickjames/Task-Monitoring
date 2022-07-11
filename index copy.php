@@ -1,43 +1,6 @@
 <?php
   session_start();
   include ("./connection.php");
-  // echo $_SESSION['TaskID'];
-// echo date("Y-m-d", strtotime("monday last week"));
-// echo date("F", strtotime("previous month"));
-// echo  $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
-
-$start = new DateTime('2022-07-08');
-$end = new DateTime('2022-07-11');
-// otherwise the  end date is excluded (bug?)
-$end->modify('+1 day');
-
-$interval = $end->diff($start);
-
-// total days
-$days = $interval->days;
-
-// create an iterateable period of date (P1D equates to 1 day)
-$period = new DatePeriod($start, new DateInterval('P1D'), $end);
-
-// best stored as array, so you can add more than one
-$holidays = array('2012-09-07');
-
-foreach($period as $dt) {
-    $curr = $dt->format('D');
-
-    // substract if Saturday or Sunday
-    if ($curr == 'Sat' || $curr == 'Sun') {
-        $days--;
-    }
-
-    // (optional) for the updated question
-    elseif (in_array($dt->format('Y-m-d'), $holidays)) {
-        $days--;
-    }
-}
-
-
-// echo $days-2; // return difference except weekends
 
   ?>
 
@@ -110,14 +73,8 @@ $PassContainer ="";
 $message = ''; 
 $newFileName = '';
 $varAlert = '';
-// if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
-// {
-//   echo "<script> console.log('uploadddddd'); </script>";
-//   echo "ajsdghasd";
-// }
 if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 {
-  echo "<script> console.log('uploadddddd'); </script>";
   $IDCONTAINER = $_POST['idContainer'];
   if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK){
     // get details of the uploaded file
@@ -217,15 +174,15 @@ if(isset($_POST['reason'])){
     $('#reasonModal').modal('show');
     </script>";
  }
-
-
-
-
+ echo "<script>
+ $('#reasonModal').modal('show');
+ </script>";
     if(isset($_GET['Finish'])){
 $reason = $_SESSION['reason'];
-echo "akjshdas";
-// echo $_FILES['uploadedFile']['tmp_name']
-      // if (!file_exists($_FILES['uploadedFile']['tmp_name']) || !is_uploaded_file($_FILES['uploadedFile']['tmp_name'])) {
+echo "<script>
+console.log($reason);
+</script>";
+      if (!file_exists($_FILES['uploadedFile']['tmp_name']) || !is_uploaded_file($_FILES['uploadedFile']['tmp_name'])) {
 
         $date_string= date("Y-m-d");
         echo("<script>console.log('Week: " . weekOfMonth($date_string) . "');</script>");
@@ -245,303 +202,48 @@ echo "akjshdas";
           $taskName = $userRow['taskName'];
           $incharge = $userRow['username'];
           $department = $userRow['Department'];
-          
         }
-echo $taskType;
-        if($taskType == "weekly"){
-          echo "orayt";
-
-          $mondaylw =  date("Y-m-d", strtotime("monday last week"));
-          $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
-              echo "merom";
-          $meronBaSiyaLastWeek = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `realDate` BETWEEN '$mondaylw' AND '$sundaylw';";
-          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-          $result = mysqli_query($con, $meronBaSiyaLastWeek);
-          $meron = mysqli_num_rows($result);
-          echo "<script> console.log('$meron') </script>";
-          if($meron >=1 ){
-            echo "meron";
-            if($_SESSION['newFileLoc'] ==""){
-              echo "merom";
-              $fileloc ="" ;
-    
-              $today = $_SESSION['today'];
-              $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
-              $from=date_create(date('Y-m-d'));
-              $to=date_create(date('Y-m-d', strtotime($today)));
-              $diff=date_diff($to,$from);
-              // print_r($diff);
-              // $finalDiff =  $diff->format('%R%a');
-              $finalDiff = "0";
-              $realDate = date('Y-m-d', strtotime($today));
-    
-    $myReason = $_SESSION['reason'];
-    
-    
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-              mysqli_query($con, $sqlinsert);
-              header("location:index.php");
-              unset($_SESSION['newFileLoc']);
-              $_SESSION['reason'] = "";
-              $_SESSION['noOfDaysLate']="";
-    
-            }else{
-              $today = $_SESSION['today'];
-    
-              $from=date_create(date('Y-m-d'));
-              $to=date_create(date('Y-m-d', strtotime($today)));
-              $diff=date_diff($to,$from);
-              // print_r($diff);
-              // $finalDiff =  $diff->format('%R%a');
-              $finalDiff = "0";
-              $fileloc = $_SESSION['newFileLoc'] ;
-              $myReason = $_SESSION['reason'];
-              $realDate = date('Y-m-d', strtotime($today));
-    
-              $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
-    
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-              mysqli_query($con, $sqlinsert);
-              header("location:index.php");
-              unset($_SESSION['newFileLoc']);
-              $_SESSION['reason'] = "";
-              $_SESSION['noOfDaysLate']="";
-              
-            }
-          }
-          else if($meron == 0) {
-            if($_SESSION['newFileLoc'] ==""){
-              $fileloc ="" ;
-    
-              $today = $_SESSION['today'];
-              $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
-              $from=date_create(date('Y-m-d'));
-              $to=date_create(date('Y-m-d', strtotime($today)));
-              $diff=date_diff($to,$from);
-              // print_r($diff);
-              // $finalDiff =  $diff->format('%R%a');
-              $finalDiff =4; //ibig sabihin late na
-              $realDate = date('Y-m-d', strtotime($today));
-    
-    $myReason = $_SESSION['reason'];
-    
-    
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-              mysqli_query($con, $sqlinsert);
-              header("location:index.php");
-              unset($_SESSION['newFileLoc']);
-              $_SESSION['reason'] = "";
-              $_SESSION['noOfDaysLate']="";
-    
-            }else{
-              $today = $_SESSION['today'];
-    
-              $from=date_create(date('Y-m-d'));
-              $to=date_create(date('Y-m-d', strtotime($today)));
-              $diff=date_diff($to,$from);
-              // print_r($diff);
-              // $finalDiff =  $diff->format('%R%a');
-              $finalDiff =4;
-              $fileloc = $_SESSION['newFileLoc'] ;
-              $myReason = $_SESSION['reason'];
-              $realDate = date('Y-m-d', strtotime($today));
-    
-              $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
-    
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-              mysqli_query($con, $sqlinsert);
-              header("location:index.php");
-              unset($_SESSION['newFileLoc']);
-              $_SESSION['reason'] = "";
-              $_SESSION['noOfDaysLate']="";
-              
-            }
-          }
-        }
-          
-          
         // $today = date("F j, Y");
         // $month = date("F");
         // $year = date("Y");
         // $week = 'week '.weekOfMonth($date_string);
-        else if($taskType == "daily"){
-          if($_SESSION['newFileLoc'] ==""){
-            $fileloc ="" ;
-  
-            $today = $_SESSION['today'];
-            $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff =$_SESSION['noOfDaysLate'];
-            $realDate = date('Y-m-d', strtotime($today));
-  
-  $myReason = $_SESSION['reason'];
-  
-  
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-  
-          }else{
-            $today = $_SESSION['today'];
-  
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff = $_SESSION['noOfDaysLate'];
-            $fileloc = $_SESSION['newFileLoc'] ;
-            $myReason = $_SESSION['reason'];
-            $realDate = date('Y-m-d', strtotime($today));
-  
-            $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-  
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            
-          }
-        }
+        if($_SESSION['newFileLoc'] ==""){
+          $fileloc ="" ;
+          $today = $_SESSION['today'];
+          $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+          $from=date_create(date('Y-m-d'));
+          $to=date_create(date('Y-m-d', strtotime($today)));
+          $diff=date_diff($to,$from);
+          // print_r($diff);
+          $finalDiff =  $diff->format('%R%a');
+$myReason = $_SESSION['reason'];
 
-       else if($taskType == "monthly"){
-        // echo "orayt";
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason');";
+          mysqli_query($con, $sqlinsert);
+          header("location:index.php");
+          unset($_SESSION['newFileLoc']);
+          $_SESSION['reason'] = "";
+        }else{
+          $today = $_SESSION['today'];
 
-        $lastMonth =  date("F", strtotime("previous month"));
-        
-            // echo "merom";
-        $meronBaSiyaLastMonth = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `month`= '$lastMonth';";
-        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-        $result = mysqli_query($con, $meronBaSiyaLastMonth);
-        $meron = mysqli_num_rows($result);
-        echo "<script> console.log('$meron') </script>";
-        if($meron >=1 ){
-          // echo "meron";
-          if($_SESSION['newFileLoc'] ==""){
-            // echo "merom";
-            $fileloc ="" ;
-  
-            $today = $_SESSION['today'];
-            $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff = "0";
-            $realDate = date('Y-m-d', strtotime($today));
-  
-  $myReason = $_SESSION['reason'];
-  
-  
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-  
-          }else{
-            $today = $_SESSION['today'];
-  
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff = "0";
-            $fileloc = $_SESSION['newFileLoc'] ;
-            $myReason = $_SESSION['reason'];
-            $realDate = date('Y-m-d', strtotime($today));
-  
-            $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-  
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            
-          }
+          $from=date_create(date('Y-m-d'));
+          $to=date_create(date('Y-m-d', strtotime($today)));
+          $diff=date_diff($to,$from);
+          // print_r($diff);
+          $finalDiff =  $diff->format('%R%a');
+          $fileloc = $_SESSION['newFileLoc'] ;
+          $myReason = $_SESSION['reason'];
+          $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason');";
+          mysqli_query($con, $sqlinsert);
+          header("location:index.php");
+          unset($_SESSION['newFileLoc']);
+          $_SESSION['reason'] = "";
+          
         }
-        else if($meron == 0) {
-          if($_SESSION['newFileLoc'] ==""){
-            $fileloc ="" ;
-  
-            $today = $_SESSION['today'];
-            $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff =4; //ibig sabihin late na
-            $realDate = date('Y-m-d', strtotime($today));
-  
-  $myReason = $_SESSION['reason'];
-  
-  
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-  
-          }else{
-            $today = $_SESSION['today'];
-  
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff =4;
-            $fileloc = $_SESSION['newFileLoc'] ;
-            $myReason = $_SESSION['reason'];
-            $realDate = date('Y-m-d', strtotime($today));
-  
-            $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-  
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            
-          }
-        }
-       }
   
       }
-    // }
-  
+    }
+
     if(isset($_GET['Cancel'])){
 
       
@@ -556,22 +258,7 @@ echo $taskType;
 
 
     }
-    if(isset($_GET['Update'])){
 
-      echo $_GET['Update'];
-      echo "<script> console.log('sdhgfjsdghfjkasgfkg') </script>";
-      $FtaskID = $_GET['Update'];
-      // $month = date("F");
-      // $year = date("Y");
-      $myReason = $_SESSION['reason'];
-      $sqldelete = "UPDATE `finishedtask` SET `reason`='$myReason' WHERE `FinishedTaskID`='$FtaskID';";
-      mysqli_query($con, $sqldelete);
-      $_SESSION['reason'] = "";
-
-      // header("location:index.php");
-
-
-    }
 
 
 
@@ -844,15 +531,15 @@ echo $taskType;
                                   foreach($fetchData as $data){
                             ?>
                              <tr style="height:50px">
-                                <td  style="width: 10px;"><?php echo $sn; ?></td>
+                                <td><?php echo $sn; ?></td>
                                 <td><?php echo $data['taskName']??''; ?></td>
-                                <td  style="width: 100px;"><?php echo $data['taskType']??''; ?></td>
-                                <td  style="width: 100px;"><?php echo $data['taskCategory']??''; ?></td>
+                                <td><?php echo $data['taskType']??''; ?></td>
+                                <td><?php echo $data['taskCategory']??''; ?></td>
                               <!-- <td>
                                 
                               <span class="mode mode_on">Done</span></td>
                               <td> -->
-                              <td style="width: 10px;"> <?php
+                              <td> <?php
                                 $taskID = $data['usertaskID'];
                                 $taskType =  $data['taskType'];
                        
@@ -875,6 +562,8 @@ echo $taskType;
                                     $don = "0";
                                     while($userRow = mysqli_fetch_assoc($result)){
                                       $noOfDays = $userRow['noOfDaysLate'];
+                                    
+                          
                                   }
                                     if ($numrows >= 1){
                                       if($noOfDays > 2){
@@ -887,27 +576,9 @@ echo $taskType;
                                       $don = "1";
                                       // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
                                          }
-                                         else{
-                                          $mondaylw =  date("Y-m-d", strtotime("monday last week"));
-                                          $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
-                                             
-                                          $meronBaSiyaLastWeek = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `realDate` BETWEEN '$mondaylw' AND '$sundaylw';";
-                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                          $result = mysqli_query($con, $meronBaSiyaLastWeek);
-                                          $meron = mysqli_num_rows($result);
-                                          if($meron >=1){
-                                            echo '<span id = "doneORnot" class="mode mode_done">On going</span>';
-                                          }
-                                          else{
-                                            echo '<span id = "doneORnot" class="mode mode_near">LATE</span>';
-                                          }
-                                         }
                                     }
                                     else if($taskType == 'monthly'){
                                       $weekMonth = weekOfMonth($_SESSION['date_string']);
-                        $month1 = $_SESSION['month'];
-                        $year1 = $_SESSION['year'];
-                                      
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
@@ -929,23 +600,6 @@ echo $taskType;
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
-                                         else{
-                                          $lastmonth =  date("F", strtotime("previous month"));
-  
-                                          $meronBaSiyaLastMonth = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$lastmonth' AND `year` = '$year1' ;";
-                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                          $resultm = mysqli_query($con, $meronBaSiyaLastMonth);
-      
-                                          $meronlastMonth = mysqli_num_rows($resultm);
-
-                                          if($meronlastMonth >=1){
-                                            echo '<span id = "doneORnot" class="mode mode_done">On going</span>';
-                                          }
-                                          else if($meronlastMonth <=0){
-                                        echo '<span id = "doneORnot" class="mode mode_near">LATE</span>';
-
-                                          }
-                                         }
                                     
                                     }
                                     else if($taskType == 'daily'){
@@ -962,8 +616,6 @@ echo $taskType;
                                     
                           
                                   }
-                                  
-
                                     if ($numrows >= 1){
                                       if($noOfDays > 2){
                                         echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
@@ -971,74 +623,12 @@ echo $taskType;
                                       else if($noOfDays <=2 &&$noOfDays >=0){
                                         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
                                       }
-                                      else if($noOfDays <1){
-                                        echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
-                                      }
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
-                                         else{
-                                          $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
-                                          $result = mysqli_query($con, $selectUserTask);
-                                          
-                                          while($userRow = mysqli_fetch_assoc($result)){
-                                            $today = $userRow['dateStarted'];
-                                          }
-    
-                                          // $from=date_create(date('Y-m-d'));
-                                          // $to=date_create(date('Y-m-d', strtotime($today)));
-                                          // $diff=date_diff($to,$from);
-                                          // // print_r($diff);
-                                          // $reason =  $_SESSION['reason'];
-                                          // $finalDiff =  $diff->format('%R%a');
-                                          // $finalDiff = $finalDiff-1;
-                                          
-$start = date_create(date('Y-m-d'));
-// echo "<script> console.log('$start') </script>";
-$end = date_create(date('Y-m-d', strtotime($today)));
-// otherwise the  end date is excluded (bug?)
-$end->modify('+1 day');
-
-$interval = $end->diff($start);
-
-// total days
-$finalDiff = $interval->days;
-
-// create an iterateable period of date (P1D equates to 1 day)
-$period = new DatePeriod($start, new DateInterval('P1D'), $end);
-
-// best stored as array, so you can add more than one
-$holidays = array('2012-09-07');
-
-foreach($period as $dt) {
-    $curr = $dt->format('D');
-
-    // substract if Saturday or Sunday
-    if ($curr == 'Sat' || $curr == 'Sun') {
-      $finalDiff--;
-    }
-
-    // (optional) for the updated question
-    elseif (in_array($dt->format('Y-m-d'), $holidays)) {
-      $finalDiff--;
-    }
-}
-
-$finalDiff=$finalDiff-2;
-// echo $finalDiff; // return difference except weekends
-                                          if($finalDiff >=2){
-                                            echo '<span id = "doneORnot" class="mode mode_near">Late</span>';
-                                              }
-                                              else if($finalDiff <2){
-                                            echo '<span id = "doneORnot" class="mode mode_done">On Going</span>';
-                                              }
-                                              else if($finalDiff ==1){
-                                                echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">On going</span>';
-                                                  }
-                                         }
                                     }
                                 ?> </td>
-                                 <td style="width: 100px">
+                                 <td>
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
                                  <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog" role="document">
@@ -1051,11 +641,7 @@ $finalDiff=$finalDiff-2;
                                               </div>
                                               <div class="modal-body">
                                            
-                                           
-                                             <div class="form-group" id="daysLateDiv">
-                                                    <label for="message-text" class="col-form-label" >No. of days late</label>
-                                                    <input class="form-control" name="daysLate" id="daysLate"></input>
-                                                  </div>
+                                             <form method="POST" action="index.php" >
                                                   <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Reason:</label>
                                                     <textarea class="form-control" name="reasonInput" id="reason-text"></textarea>
@@ -1064,34 +650,7 @@ $finalDiff=$finalDiff-2;
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" name="reason"class="btn btn-primary">Save reason</button>
                                               </div>
-                           
-                                              </div>
-                                            
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="modal fade" id="reasonModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                          <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                              <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Update your reason.</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                  <span aria-hidden="true">&times;</span>
-                                                </button>
-                                              </div>
-                                              <div class="modal-body">
-                                           
-                                           
-                                            
-                                                  <div class="form-group">
-                                                    <label for="message-text" class="col-form-label">Reason:</label>
-                                                    <textarea class="form-control" name="reasonInputUpdate" id="reason-text"></textarea>
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="submit" name="reasonUpdate"class="btn btn-primary">Save reason</button>
-                                              </div>
-                           
+                                  </form>
                                               </div>
                                             
                                             </div>
@@ -1099,12 +658,45 @@ $finalDiff=$finalDiff-2;
                                         </div>
                                         <?php
                                                               // echo $data['taskType'];
-                                                     
+                                                      if(isset($_GET['FinishSample'])){
+                                                        $today = $_SESSION['today'];
+                                                        $from=date_create(date('Y-m-d'));
+                                                        $to=date_create(date('Y-m-d', strtotime($today)));
+                                                        $diff=date_diff($to,$from);
+                                                        // print_r($diff);
+                                                        $reason =  $_SESSION['reason'];
+                                                        $finalDiff =  $diff->format('%R%a');
+                                                        if($finalDiff >=3 &&  $reason==""){
+                                                      echo "<script> $('#reasonModal').modal('show'); </script>";
+                                                      $_SESSION['TaskID'] = $_GET['FinishSample'];
+                                                        }
+                                                        else{
+                                                          $_SESSION['TaskID'] = $_GET['FinishSample'];
+                                                          $taskID = $_SESSION['TaskID'];
+                                                          echo "<script>  
+                                                            document.getElementById('finished$taskID').click();      
 
+                                                            </script>";
+                                                        }
+                                                  
+                                                      }
+
+                                                   
+                                                      if(isset($_POST['reason'])){
+                                                        $_SESSION['reason'] = $_POST['reasonInput'];
+                                                        if($_SESSION['reason'] != ""){
+                                                          $taskID = $_SESSION['TaskID'];
+                                                          echo $taskID;
+                                                            echo "<script>  document.getElementById('finishedsample$taskID').style.display='none';
+                                                            document.getElementById('finished$taskID').click();      
+
+                                                            </script>";
+                                                        }
+                                                      }
                                                  
                                                       ?>
                                 <div class="row">
-                                  <div class="col-3">
+                                  <div class="col">
                                     <?php $upFile = 'uploadedFile' . $data['usertaskID']; $varUpload = $data['usertaskID'];  $upBtn = 'uploadsample' . $data['usertaskID'];?>
 
                                       <input type="file" 
@@ -1176,7 +768,7 @@ $finalDiff=$finalDiff-2;
                                     data-uploadId="<?php echo $data['usertaskID'] ?>" name="uploadedFile" id="<?php echo $upFile; ?>" class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
                                     <input name="idContainer" value="<?php  echo $data['taskName'];?>" style="display: none">
                                   </div>
-                                  <div class="col-9" style="padding-left: 90px">
+                                  <div class="col" style="width: 400px">
                                       <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
                                       <!-- upload -->
                                       
@@ -1246,8 +838,7 @@ $finalDiff=$finalDiff-2;
                                       $noOfDays = $userRow['noOfDaysLate'];
                                   }
                                   if($noOfDays>=3){
-                                   ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                   ?> <a href="index.php?Update=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                     <?php
                                   }
                                
@@ -1276,9 +867,7 @@ $finalDiff=$finalDiff-2;
                                       $noOfDays = $userRow['noOfDaysLate'];
                                   }
                                   if($noOfDays>=3){
-                                    ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                    <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                  
+                                    ?> <a href="index.php?Update=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                      <?php
                                    }
                                 
@@ -1307,9 +896,7 @@ $finalDiff=$finalDiff-2;
                                           }
                                           // echo $noOfDays;
                                           if($noOfDays>=3){
-                                            ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                            <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                          
+                                            ?> <a href="index.php?Update=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                              <?php
                                            }
                                         ?>
@@ -1340,228 +927,7 @@ $finalDiff=$finalDiff-2;
                         </td>
                             </tr>
                           <?php
-    }
-
-    if(isset($_GET['UpdateModal'])){
-      $_SESSION['TaskID'] = $_GET['UpdateModal'];
-
-      echo "<script> 
-      $('#reasonModalUpdate').modal('show');
-      </script>";
-    }
-    
-    if(isset($_GET['FinishSample'])){
-      $taskID = $_GET['FinishSample'];
-      echo "<script> console.log('$taskID');</script>";
-      $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
-      $result = mysqli_query($con, $selectUserTask);
-      
-      while($userRow = mysqli_fetch_assoc($result)){
-        // $today = $userRow['dateStarted'];
-        $taskType = $userRow['taskType'];
-      }
-//       // $today = $_SESSION['today'];
-//       $from=date_create(date('Y-m-d'));
-//       $to=date_create(date('Y-m-d', strtotime($today)));
-//       $diff=date_diff($to,$from);
-//       // print_r($diff);
-//       $reason =  $_SESSION['reason'];
-//       $finalDiff =  $diff->format('%R%a');
-//       if($finalDiff >=3 &&  $reason==""){
-       
-//     echo "<script> $('#reasonModal').modal('show');
-// console.log($finalDiff);
-//     document.getElementById('daysLate').value=$finalDiff;
-//     </script>";
-//     $_SESSION['noOfDaysLate']=$finalDiff;
-//     $_SESSION['TaskID'] = $_GET['FinishSample'];
-//       }
-//       else{
-//     $_SESSION['noOfDaysLate']=$finalDiff;
-//         $_SESSION['TaskID'] = $_GET['FinishSample'];
-//         $taskID = $_SESSION['TaskID'];
-//         echo "<script>  
-//           document.getElementById('finished$taskID').click();      
-
-//           </script>";
-//       }
-
-
-// echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-// $month = date("F");
-// $year = date("Y");
-$weeknumberrr = weekOfMonth($_SESSION['date_string']);
-// echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
-
-if ($taskType == 'weekly'){
-
-
-          $mondaylw =  date("Y-m-d", strtotime("monday last week"));
-          $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
-             
-          $meronBaSiyaLastWeek = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `realDate` BETWEEN '$mondaylw' AND '$sundaylw';";
-          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-          $result = mysqli_query($con, $meronBaSiyaLastWeek);
-          $meron = mysqli_num_rows($result);
-          if($meron <=0){
-            $_SESSION['noOfDaysLate']=$finalDiff;
-            $_SESSION['TaskID'] = $_GET['FinishSample'];
-            echo "<script> 
-            document.getElementById('daysLateDiv').style.display = 'none';
-            $('#reasonModal').modal('show');
-// console.log($finalDiff);
-  //document.getElementById('daysLate').value=$finalDiff;
-  </script>";
-          }
-          else if($meron >=1){
-     $_SESSION['noOfDaysLate']=$finalDiff;
-         $_SESSION['TaskID'] = $_GET['FinishSample'];
-         $taskID = $_SESSION['TaskID'];
-         echo "<script>  
-           document.getElementById('finished$taskID').click();      
-                   </script>";
-
-          }
-          
-         
-    }
-    else if($taskType == 'monthly'){
-      $year1 = $_SESSION['year'];
-                    
-
-                    
-                        $lastmonth =  date("F", strtotime("previous month"));
-
-                        $meronBaSiyaLastMonth = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$lastmonth' AND `year` = '$year1' ;";
-                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                        $resultm = mysqli_query($con, $meronBaSiyaLastMonth);
-
-                        $meronlastMonth = mysqli_num_rows($resultm);
-
-                        if($meronlastMonth >=1){
-                          $_SESSION['noOfDaysLate']=$finalDiff;
-         $_SESSION['TaskID'] = $_GET['FinishSample'];
-         $taskID = $_SESSION['TaskID'];
-         echo "<script>  
-           document.getElementById('finished$taskID').click();      
-                   </script>";
-
-                        }
-                        else if($meronlastMonth <=0){
-                          $_SESSION['noOfDaysLate']=$finalDiff;
-                          $_SESSION['TaskID'] = $_GET['FinishSample'];
-                          echo "<script> 
-                          document.getElementById('daysLateDiv').style.display = 'none';
-                          $('#reasonModal').modal('show');
-              // console.log($finalDiff);
-                //document.getElementById('daysLate').value=$finalDiff;
-                </script>";
-
-                        }
-                       
-    
-    }
-    else if($taskType == 'daily'){
-
-  
-          $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
-          $result = mysqli_query($con, $selectUserTask);
-          
-          while($userRow = mysqli_fetch_assoc($result)){
-            $today = $userRow['dateStarted'];
-          }
-
-          // $from=date_create(date('Y-m-d'));
-          // $to=date_create(date('Y-m-d', strtotime($today)));
-          // $diff=date_diff($to,$from);
-          // // print_r($diff);
-          // $finalDiff =  $diff->format('%R%a');
-          // $finalDiff = $finalDiff-1;
-          $start = date_create(date('Y-m-d'));
-$end = date_create(date('Y-m-d', strtotime($today)));
-// otherwise the  end date is excluded (bug?)
-$end->modify('+1 day');
-
-$interval = $end->diff($start);
-
-// total days
-$finalDiff = $interval->days;
-
-// create an iterateable period of date (P1D equates to 1 day)
-$period = new DatePeriod($start, new DateInterval('P1D'), $end);
-
-// best stored as array, so you can add more than one
-$holidays = array('2012-09-07');
-
-foreach($period as $dt) {
-    $curr = $dt->format('D');
-
-    // substract if Saturday or Sunday
-    if ($curr == 'Sat' || $curr == 'Sun') {
-      $finalDiff--;
-    }
-
-    // (optional) for the updated question
-    elseif (in_array($dt->format('Y-m-d'), $holidays)) {
-      $finalDiff--;
-    }
-}
-
-$finalDiff=$finalDiff-2;
-          if($finalDiff >=2 ){
-            $_SESSION['noOfDaysLate']=$finalDiff;
-         $_SESSION['TaskID'] = $_GET['FinishSample'];
-         $taskID = $_SESSION['TaskID'];
-            echo "<script> 
-            $('#reasonModal').modal('show');
-// console.log($finalDiff);
-  document.getElementById('daysLate').value=$finalDiff;
-  </script>";
-              }
-              else {
-                $_SESSION['noOfDaysLate']=$finalDiff;
-         $_SESSION['TaskID'] = $_GET['FinishSample'];
-         $taskID = $_SESSION['TaskID'];
-         echo "<script>  
-         console.log('$taskID');
-           document.getElementById('finished$taskID').click();      
-                     </script>";
-                  }
-         
-    }
-
-    }
-    
-
-    
-                                                   
-    if(isset($_POST['reason'])){
-      $_SESSION['reason'] = $_POST['reasonInput'];
-      if($_SESSION['reason'] != ""){
-        $taskID = $_SESSION['TaskID'];
-        echo $taskID;
-          echo "<script>  document.getElementById('finishedsample$taskID').style.display='none';
-          document.getElementById('finished$taskID').click();      
-
-          </script>";
-      }
-    }
-    if(isset($_POST['reasonUpdate'])){
-      $_SESSION['reason'] = $_POST['reasonInputUpdate'];
-      if($_SESSION['reason'] != ""){
-        $taskID = $_SESSION['TaskID'];
-        echo $_SESSION['reason'];
-        echo $taskID;
-
-          echo "<script>  //document.getElementById('update$taskID').style.display='none';
-          document.getElementById('updates$taskID').click();      
-
-          </script>";
-      }
-    }
-
-
-    ?>
+    }?>
 
                               
                             </tbody>
