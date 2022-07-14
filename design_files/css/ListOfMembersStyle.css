@@ -339,8 +339,8 @@ body{
     background-color: #8b9096;
 }
 .mode_near{
-    background-color: #ffe600;
-    color: rgb(31, 31, 31);
+    background-color: #ff0000;
+    color: rgb(255, 255, 255);
 }
 .mode_done{
     background-color: #15475e;

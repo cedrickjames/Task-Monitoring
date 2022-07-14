@@ -10,7 +10,7 @@ $start = new DateTime('2022-07-08');
 $end = new DateTime('2022-07-11');
 // otherwise the  end date is excluded (bug?)
 $end->modify('+1 day');
-
+// echo date('F j, Y');
 $interval = $end->diff($start);
 
 // total days
@@ -61,6 +61,9 @@ foreach($period as $dt) {
 
     <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
     <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
+
+    <script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
 
 </head>
     <body style="background: #134E5E;  /* fallback for old browsers */
@@ -223,6 +226,7 @@ if(isset($_POST['reason'])){
 
     if(isset($_GET['Finish'])){
 $reason = $_SESSION['reason'];
+$action = $_SESSION['action'];
 echo "akjshdas";
 // echo $_FILES['uploadedFile']['tmp_name']
       // if (!file_exists($_FILES['uploadedFile']['tmp_name']) || !is_uploaded_file($_FILES['uploadedFile']['tmp_name'])) {
@@ -280,11 +284,13 @@ echo $taskType;
     
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate');";
               mysqli_query($con, $sqlinsert);
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
               $_SESSION['reason'] = "";
+              $_SESSION['action'] = "";
+
               $_SESSION['noOfDaysLate']="";
     
             }else{
@@ -303,12 +309,13 @@ echo $taskType;
               $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
     
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate');";
               mysqli_query($con, $sqlinsert);
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
               $_SESSION['reason'] = "";
               $_SESSION['noOfDaysLate']="";
+              $_SESSION['action'] = "";
               
             }
           }
@@ -331,12 +338,13 @@ echo $taskType;
     
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate');";
               mysqli_query($con, $sqlinsert);
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
               $_SESSION['reason'] = "";
               $_SESSION['noOfDaysLate']="";
+              $_SESSION['action'] = "";
     
             }else{
               $today = $_SESSION['today'];
@@ -354,12 +362,13 @@ echo $taskType;
               $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
     
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate');";
               mysqli_query($con, $sqlinsert);
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
               $_SESSION['reason'] = "";
               $_SESSION['noOfDaysLate']="";
+              $_SESSION['action'] = "";
               
             }
           }
@@ -389,12 +398,13 @@ echo $taskType;
   
   $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
             $_SESSION['reason'] = "";
             $_SESSION['noOfDaysLate']="";
+            $_SESSION['action'] = "";
   
           }else{
             $today = $_SESSION['today'];
@@ -412,12 +422,13 @@ echo $taskType;
             $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
   
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
             $_SESSION['reason'] = "";
             $_SESSION['noOfDaysLate']="";
+            $_SESSION['action'] = "";
             
           }
         }
@@ -454,12 +465,14 @@ echo $taskType;
   
   $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
             $_SESSION['reason'] = "";
             $_SESSION['noOfDaysLate']="";
+            $_SESSION['action'] = "";
+
   
           }else{
             $today = $_SESSION['today'];
@@ -477,12 +490,13 @@ echo $taskType;
             $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
   
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
             $_SESSION['reason'] = "";
             $_SESSION['noOfDaysLate']="";
+            $_SESSION['action'] = "";
             
           }
         }
@@ -505,12 +519,13 @@ echo $taskType;
   
   $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
             $_SESSION['reason'] = "";
             $_SESSION['noOfDaysLate']="";
+            $_SESSION['action'] = "";
   
           }else{
             $today = $_SESSION['today'];
@@ -528,12 +543,13 @@ echo $taskType;
             $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
   
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$realDate');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
             $_SESSION['reason'] = "";
             $_SESSION['noOfDaysLate']="";
+            $_SESSION['action'] = "";
             
           }
         }
@@ -551,6 +567,7 @@ echo $taskType;
       $sqldelete = "DELETE FROM `finishedtask` WHERE FinishedTaskID = '$FtaskID'";
       mysqli_query($con, $sqldelete);
       $_SESSION['reason'] = "";
+      $_SESSION['action'] = "";
 
       // header("location:index.php");
 
@@ -567,13 +584,30 @@ echo $taskType;
       $sqldelete = "UPDATE `finishedtask` SET `reason`='$myReason' WHERE `FinishedTaskID`='$FtaskID';";
       mysqli_query($con, $sqldelete);
       $_SESSION['reason'] = "";
+      $_SESSION['action'] = "";
 
       // header("location:index.php");
 
 
     }
 
+    if(isset($_GET['UpdateAction'])){
 
+      // echo $_GET['UpdateAction'];
+      echo "<script> console.log('sdhgfjsdghfjkasgfkg') </script>";
+      $FtaskID = $_GET['UpdateAction'];
+      // $month = date("F");
+      // $year = date("Y");
+      $myAction = $_SESSION['action'];
+      $sqlUpdate = "UPDATE `finishedtask` SET `action`='$myAction' WHERE `FinishedTaskID`='$FtaskID';";
+      mysqli_query($con, $sqlUpdate);
+      $_SESSION['reason'] = "";
+      $_SESSION['action'] = "";
+
+      // header("location:index.php");
+
+
+    }
 
     
     // $_SESSION['username'] = $username;
@@ -829,12 +863,12 @@ echo $taskType;
                         <table class="table table-striped table-hover  " style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
-                                    <th style="min-width:50px;">No.</th>
+                                    <th style="min-width:1%;">No.</th>
                                     <th style="width:30%;" >Task Name</th>
-                                    <th style="min-width:100px;" >Type</th>
-                                    <th style="min-width:100px;" >Category</th>
-                                    <th style="min-width:100px;">Status</th>
-                                    <th style="min-width:200px; text-align: center">Action</th>
+                                    <th style="min-width:1px;" >Type</th>
+                                    <th style="min-width:4%;" >Category</th>
+                                    <th style="min-width:10%;">Status</th>
+                                    <th style="min-width:30%; text-align: center">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="TaskTable">
@@ -844,15 +878,15 @@ echo $taskType;
                                   foreach($fetchData as $data){
                             ?>
                              <tr style="height:50px">
-                                <td  style="width: 10px;"><?php echo $sn; ?></td>
-                                <td><?php echo $data['taskName']??''; ?></td>
-                                <td  style="width: 100px;"><?php echo $data['taskType']??''; ?></td>
-                                <td  style="width: 100px;"><?php echo $data['taskCategory']??''; ?></td>
+                                <td  style="width: 1%;"><?php echo $sn; ?></td>
+                                <td style="width:30%;"><?php echo $data['taskName']??''; ?></td>
+                                <td  style="width: 5%;"><?php echo $data['taskType']??''; ?></td>
+                                <td  style="width: 5%;"><?php echo $data['taskCategory']??''; ?></td>
                               <!-- <td>
                                 
                               <span class="mode mode_on">Done</span></td>
                               <td> -->
-                              <td style="width: 10px;"> <?php
+                              <td style="width: 10%;"> <?php
                                 $taskID = $data['usertaskID'];
                                 $taskType =  $data['taskType'];
                        
@@ -899,7 +933,7 @@ echo $taskType;
                                             echo '<span id = "doneORnot" class="mode mode_done">On going</span>';
                                           }
                                           else{
-                                            echo '<span id = "doneORnot" class="mode mode_near">LATE</span>';
+                                            echo '<span id = "doneORnot" class="mode mode_near">Unaccamplished</span>';
                                           }
                                          }
                                     }
@@ -942,7 +976,7 @@ echo $taskType;
                                             echo '<span id = "doneORnot" class="mode mode_done">On going</span>';
                                           }
                                           else if($meronlastMonth <=0){
-                                        echo '<span id = "doneORnot" class="mode mode_near">LATE</span>';
+                                        echo '<span id = "doneORnot" class="mode mode_near">Unaccamplished</span>';
 
                                           }
                                          }
@@ -1027,7 +1061,7 @@ foreach($period as $dt) {
 $finalDiff=$finalDiff-2;
 // echo $finalDiff; // return difference except weekends
                                           if($finalDiff >=2){
-                                            echo '<span id = "doneORnot" class="mode mode_near">Late</span>';
+                                            echo '<span id = "doneORnot" class="mode mode_near">Unaccamplished</span>';
                                               }
                                               else if($finalDiff <2){
                                             echo '<span id = "doneORnot" class="mode mode_done">On Going</span>';
@@ -1038,7 +1072,7 @@ $finalDiff=$finalDiff-2;
                                          }
                                     }
                                 ?> </td>
-                                 <td style="width: 100px">
+                                 <td style="width: 30%">
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
                                  <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog" role="document">
@@ -1060,9 +1094,40 @@ $finalDiff=$finalDiff-2;
                                                     <label for="message-text" class="col-form-label">Reason:</label>
                                                     <textarea class="form-control" name="reasonInput" id="reason-text"></textarea>
                                                   </div>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Action:</label>
+                                                    <textarea class="form-control" name="ActionInputwithLate" id="reason-text"></textarea>
+                                                  </div>
                                                   <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" name="reason"class="btn btn-primary">Save reason</button>
+                                              </div>
+                           
+                                              </div>
+                                            
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">State your action.</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                           
+                                           
+                                            
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Action:</label>
+                                                    <textarea class="form-control" name="actionInput" id="reason-text"></textarea>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" name="action"class="btn btn-primary">Save action</button>
                                               </div>
                            
                                               </div>
@@ -1087,9 +1152,38 @@ $finalDiff=$finalDiff-2;
                                                     <label for="message-text" class="col-form-label">Reason:</label>
                                                     <textarea class="form-control" name="reasonInputUpdate" id="reason-text"></textarea>
                                                   </div>
+                                                  
                                                   <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" name="reasonUpdate"class="btn btn-primary">Save reason</button>
+                                              </div>
+                           
+                                              </div>
+                                            
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="modal fade" id="actionModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Update your action.</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                           
+                                           
+                                            
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Action:</label>
+                                                    <textarea class="form-control" name="actionInputUpdate" id="reason-text"></textarea>
+                                                  </div>
+                                                  
+                                                  <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" name="actionUpdate"class="btn btn-primary">Save action</button>
                                               </div>
                            
                                               </div>
@@ -1253,10 +1347,12 @@ $finalDiff=$finalDiff-2;
                                
                                   // echo $noOfDays;
                                   ?>
-                                 
+                                      <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                    
                                       <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
                                       <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
-                                      
+
                                    
                                       <?php
                                         }
@@ -1284,8 +1380,11 @@ $finalDiff=$finalDiff-2;
                                 
                                   //  echo $noOfDays;
                                   ?>
-                                 
+                                 <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                    
                                       <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                      
                                       <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
                                       <?php
                                         }
@@ -1313,8 +1412,11 @@ $finalDiff=$finalDiff-2;
                                              <?php
                                            }
                                         ?>
-                                              
+                                                  <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+              
                                             <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                        
                                             <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
                                             <?php
                                               }
@@ -1347,6 +1449,13 @@ $finalDiff=$finalDiff-2;
 
       echo "<script> 
       $('#reasonModalUpdate').modal('show');
+      </script>";
+    }
+    if(isset($_GET['UpdateModalAction'])){
+      $_SESSION['TaskID'] = $_GET['UpdateModalAction'];
+
+      echo "<script> 
+      $('#actionModalUpdate').modal('show');
       </script>";
     }
     
@@ -1418,7 +1527,8 @@ if ($taskType == 'weekly'){
          $_SESSION['TaskID'] = $_GET['FinishSample'];
          $taskID = $_SESSION['TaskID'];
          echo "<script>  
-           document.getElementById('finished$taskID').click();      
+        $('#actionModal').modal('show');
+           //document.getElementById('finished$taskID').click();   DITO AKO NATAPOS   
                    </script>";
 
           }
@@ -1443,7 +1553,8 @@ if ($taskType == 'weekly'){
          $_SESSION['TaskID'] = $_GET['FinishSample'];
          $taskID = $_SESSION['TaskID'];
          echo "<script>  
-           document.getElementById('finished$taskID').click();      
+         $('#actionModal').modal('show');
+          //  document.getElementById('finished$taskID').click();    DITO AKO NATAPOS  
                    </script>";
 
                         }
@@ -1524,7 +1635,8 @@ $finalDiff=$finalDiff-2;
          $taskID = $_SESSION['TaskID'];
          echo "<script>  
          console.log('$taskID');
-           document.getElementById('finished$taskID').click();      
+         $('#actionModal').modal('show');
+          //  document.getElementById('finished$taskID').click();     DITO AKO NATAPOS 
                      </script>";
                   }
          
@@ -1537,15 +1649,51 @@ $finalDiff=$finalDiff-2;
                                                    
     if(isset($_POST['reason'])){
       $_SESSION['reason'] = $_POST['reasonInput'];
-      if($_SESSION['reason'] != ""){
+      $_SESSION['action'] = $_POST['ActionInputwithLate'];
+
+      
+      if($_SESSION['reason'] != "" || $_SESSION['action']=""){
         $taskID = $_SESSION['TaskID'];
         echo $taskID;
-          echo "<script>  document.getElementById('finishedsample$taskID').style.display='none';
+          echo "<script> // document.getElementById('finishedsample$taskID').style.display='none';
           document.getElementById('finished$taskID').click();      
 
           </script>";
       }
+      else{
+        ?><script>
+      Swal.fire({
+    icon: 'error',
+    title: 'Ooppss!',
+    text: 'You have to complete the form1',
+  //   footer: '<a href="">Why do I have this issue?</a>'
+  })
+   </script><?php 
+      }
     }
+
+    if(isset($_POST['action'])){
+      $_SESSION['action'] = $_POST['actionInput'];
+      if($_SESSION['action'] != ""){
+        $taskID = $_SESSION['TaskID'];
+        echo $taskID;
+          echo "<script> // document.getElementById('finishedsample$taskID').style.display='none';
+          document.getElementById('finished$taskID').click();      
+
+          </script>";
+      }
+      else{
+        ?><script>
+      Swal.fire({
+    icon: 'error',
+    title: 'Ooppss!',
+    text: 'You have to complete the form1',
+  //   footer: '<a href="">Why do I have this issue?</a>'
+  })
+   </script><?php 
+      }
+    }
+
     if(isset($_POST['reasonUpdate'])){
       $_SESSION['reason'] = $_POST['reasonInputUpdate'];
       if($_SESSION['reason'] != ""){
@@ -1557,6 +1705,40 @@ $finalDiff=$finalDiff-2;
           document.getElementById('updates$taskID').click();      
 
           </script>";
+      }
+      else{
+        ?><script>
+      Swal.fire({
+    icon: 'error',
+    title: 'Ooppss!',
+    text: 'You have to complete the form1',
+  //   footer: '<a href="">Why do I have this issue?</a>'
+  })
+   </script><?php 
+      }
+    }
+    
+    if(isset($_POST['actionUpdate'])){
+      $_SESSION['action'] = $_POST['actionInputUpdate'];
+      if($_SESSION['action'] != ""){
+        $taskID = $_SESSION['TaskID'];
+        echo $_SESSION['reason'];
+        echo $taskID;
+        echo "<script> console.log('$taskID') </script>";
+          echo "<script>  //document.getElementById('updateAction$taskID').style.display='none';
+          document.getElementById('updatesAction$taskID').click();      
+
+          </script>";
+      }
+      else{
+        ?><script>
+      Swal.fire({
+    icon: 'error',
+    title: 'Ooppss!',
+    text: 'You have to complete the form1',
+  //   footer: '<a href="">Why do I have this issue?</a>'
+  })
+   </script><?php 
       }
     }
 

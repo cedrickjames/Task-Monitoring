@@ -111,6 +111,7 @@ else{
             $_SESSION['year'] = date('Y');
             $_SESSION['date_string'] = date('Y-m-d');
             $_SESSION['reason'] = "";
+            $_SESSION['action']="";
             $_SESSION['TaskID'] = "";
         }
         if($numrowsadmin > 0){
