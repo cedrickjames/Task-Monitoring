@@ -28,7 +28,8 @@
 <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
 <!-- <link rel="stylesheet" href="design_files/css/MainPageStyle.css"> -->
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
+
 <link rel="stylesheet" href="design_files/css/admin.css">
 
 <link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
@@ -569,6 +570,39 @@ if(isset($_POST['AddCategory'])){
             </div>
           </div>
         </div>
+
+                                      <div class="modal fade" id="reasonModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                           
+                                           
+                                              <a type="button" id="Attachments" class="btn btn-outline-info btn-lg btn-block">See attachments</a>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Reason</label>
+                                                    <textarea class="form-control" name="reasonInputUpdate" id="reasonUpdate1" disabled></textarea>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Action</label>
+                                                    <textarea class="form-control" name="actionInputUpdateLate" id="actionUpdate1" disabled></textarea>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <!-- <button type="submit" name="reasonUpdate"class="btn btn-primary">Save reason</button> -->
+                                              </div>
+                           
+                                              </div>
+                                            
+                                            </div>
+                                          </div>
+                                        </div>
+
         <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
@@ -699,11 +733,11 @@ if(isset($_POST['AddCategory'])){
             </h3>
           </div>
           <div class="col-4">
-            <h3 style=" margin: 20px"> <?php echo $_SESSION['userlevel'] ?> (<?php echo $_SESSION['department'] ?>)
+            <h3 style=" margin: 20px"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?>
             </h3>
           </div>
           <div class="col-4">
-            <h3 style=" margin: 20px; " class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
+            <h3 style=" margin: 20px; " class="float-right"> <?php echo $_SESSION['userlevel'] ?> (<?php echo $_SESSION['department'] ?>)</h3>
           </div>
 
 <div class="container"  style="height: 100%; background-color: none;  margin:0 auto; " >
@@ -796,7 +830,7 @@ if(isset($_POST['AddCategory'])){
                     </div>
                     <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
-                        <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                        <table class="table table-striped r" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark" style="position: sticky;top: 0">
                                 <tr>
                                     <th style="min-width:15px;">No.</th>
@@ -847,14 +881,14 @@ if(isset($_POST['AddCategory'])){
                              
                              <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdmin'>
+                             <tr>
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
                              <td>
                                
                                <?php echo $sn; ?></td>
                                <td><?php echo $data['taskArea']; ?></td>
                                 <td><?php echo $data['taskCategory']; ?></td>
-                                <td><?php echo $data['taskName']; ?></td>
+                                <td class="taskNameHover" onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdmin'><?php echo $data['taskName']; ?></td>
                                 <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
         $result = mysqli_query($con, $sql1);
         $numrows = mysqli_num_rows($result);
@@ -892,6 +926,8 @@ if(isset($_POST['AddCategory'])){
                                            $finishedtaskID = $userRow['FinishedTaskID'];
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
                                         //  echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                         $noOfDays = $userRow['noOfDaysLate'];
                                                }
@@ -899,13 +935,19 @@ if(isset($_POST['AddCategory'])){
      
                                                 $weeknumber = $weekNumber;
 
-                                                if($noOfDays >= 3){
-                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                if($noOfDays >= 2){
+                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                                  ?>
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                  
+                                                 <?php
                                                 }
                                                 else if ($noOfDays <= 1){
-                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  ?>
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                <?php
                                                 }
                                                     // echo("<script>console.log('ok');</script>");
           
@@ -930,25 +972,34 @@ if(isset($_POST['AddCategory'])){
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                          $noOfDays = $userRow['noOfDaysLate'];
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
-                                               }
+                                               
                                                if ($weekNumber == "week 1" ){
      
                                                 $weeknumber = $weekNumber;
 
                                                 if($noOfDays >= 3){
-                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  ?>
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
 
+                                                 <?php
                                                 }
                                                 else if ($noOfDays <= 1){
-                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  ?>
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                  
+                                                  <?php
                                                 }
                                                   // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // //echo("<script>console.log('ok');</script>");
           
                                                    }
+                                                  }
                                                //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                    }                       
                                    
@@ -975,32 +1026,39 @@ if(isset($_POST['AddCategory'])){
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                          $noOfDays = $userRow['noOfDaysLate'];
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                         
-                                               }
+                                               
                                                if ($weekNumber == "week 2" ){
      
                                                 $weeknumber = $weekNumber;
 
                                                 if($noOfDays >= 3){
-                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  ?>
+                                                  <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> 
+                                                  <?php
                                                 }
                                                 else if ($noOfDays <= 1){
-                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  ?>
+                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>                                                  
+                                                  <?php
                                                 }
                                                   // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // echo("<script>console.log('ok');</script>");
           
                                                    }
+                                                  }
                                                //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                    }
                                    else{
                                      //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                      //$month = date("F");
                                      //$year = date("Y");
-     
+    //  echo "$taskID, $month, $year";
                                          $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                          $result = mysqli_query($con, $selectUserTask);
@@ -1014,27 +1072,39 @@ if(isset($_POST['AddCategory'])){
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                          $noOfDays = $userRow['noOfDaysLate'];
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                        
-                                               }
+                                      
+                                               
+                                              //  echo "$taskID, $month, $year";
                                                if ($weekNumber == "week 2" ){
      
                                                 $weeknumber = $weekNumber;
 
-                                                if($noOfDays >= 3){
-                                                  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                if($noOfDays >= 2){
+                                                  //  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  ?>
 
+                                                  <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                  
+                                                            <?php
                                                 }
-                                                else if ($noOfDays <= 1){
-                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                else if ($noOfDays <=1){
+                                                  //  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  ?>
 
+                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                  
+                                                            <?php
                                                 }
                                                   //  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // echo("<script>console.log('ok');</script>");
           
                                                    }
                                                //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                   }                       
+                                                  }
+                                              }                       
                                    
                                    ?></td>
                               <td><?php
@@ -1058,18 +1128,26 @@ if(isset($_POST['AddCategory'])){
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                          $noOfDays = $userRow['noOfDaysLate'];
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
                                        //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        if ($weekNumber3 == "week 3" ){
    
                                               $weeknumber = $weekNumber3;
 
                                               if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
 
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                          <?php
                                               }
                                               else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
 
+                                              <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                          <?php
                                               }
 
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
@@ -1098,28 +1176,42 @@ if(isset($_POST['AddCategory'])){
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                          $noOfDays = $userRow['noOfDaysLate'];
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
                                        //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
-                                             }
+                                             
 
                                              if ($weekNumber == "week 3" ){
    
                                               $weeknumber = $weekNumber;
 
                                               
-                                              if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                              if($noOfDays >= 2){
+                                                // echo $reason, $action;
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
 
+                                                <!-- <span class="mode mode_late"><a style = "color: white" href="#" onclick= "showDetails('<?php //echo $reason; ?>','<?php //echo $action; ?>','<?php //echo $fileloc; ?>')"  data-toggle='modal' data-target='#reasonModalUpdate'><?php //echo $dateN ?></a></span> -->
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                
+                                                          <?php
                                               }
-                                              else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                              else if ($noOfDays <=1){
+                                                // echo $reason, $action;
 
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                          <?php
                                               }
 
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo("<script>console.log('ok');</script>");
         
                                                  }
+                                                }
                                              //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                  }                       
                                  
@@ -1147,19 +1239,30 @@ if(isset($_POST['AddCategory'])){
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                          $noOfDays = $userRow['noOfDaysLate'];
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];;
                                        //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
                                              }
                                              if ($weekNumber == "week 4" ){
    
                                               $weeknumber = $weekNumber;
-                                              if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                              if($noOfDays >= 2){
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  //  echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>'.$dateN.'</a></li></ul></span>';
+                                                  ?>
 
+                                                  <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                  
+                                                            <?php
                                               }
                                               else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
 
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                
+                                                          <?php
                                               }
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo("<script>console.log('ok');</script>");
@@ -1185,24 +1288,41 @@ if(isset($_POST['AddCategory'])){
                                          $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
                                          $noOfDays = $userRow['noOfDaysLate'];
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       
-                                             }
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
+                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>"); 
+                                             
                                              if ($weekNumber == "week 4" ){
    
                                               $weeknumber = $weekNumber;
                                               if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="#" onclick= showDetails(&#x27'.$reason.'&#x27,&#x27'.$action.'&#x27)> '.$dateN.'</a></span>';
+                                                ?>
+
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                
+                                                          <?php
+                                                  
+                                                //  echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>'.$dateN.'</a></li></ul></span>';
+
+                                                
 
                                               }
                                               else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                
+                                                          <?php
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
 
                                               }
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo("<script>console.log('ok');</script>");
         
                                                  }
+                                                }
                                              //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                  }                       
                                  
@@ -1230,6 +1350,9 @@ if(isset($_POST['AddCategory'])){
                                         $date = $userRow['Date'];
                                         $dateN =  date('n-d', strtotime($date));
                                         $noOfDays = $userRow['noOfDaysLate'];
+
+                                        $reason = $userRow['reason'];
+                                        $action = $userRow['action'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
                                             }
@@ -1238,12 +1361,16 @@ if(isset($_POST['AddCategory'])){
                                               $weeknumber = $weekNumber;
 
                                               if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                               else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
@@ -1267,30 +1394,36 @@ if(isset($_POST['AddCategory'])){
                                         $time = $userRow['timestamp'];
                                         $finishedtaskID = $userRow['FinishedTaskID'];
                                         $date = $userRow['Date'];
-
+                                        $reason = $userRow['reason'];
+                                        $action = $userRow['action'];
                                         $dateN =  date('n-d', strtotime($date));
                                         $noOfDays = $userRow['noOfDaysLate'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
-                                            }
+                                            
                                             if ($weekNumber == "week 5" ){
   
                                               $weeknumber = $weekNumber;
                                               if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                               else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
         
                                                  }
+                                                 
                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                 }                       
-                                
+                              }
                                  ?></td>
 
 <td><?php
@@ -1315,6 +1448,8 @@ if(isset($_POST['AddCategory'])){
                                         $date = $userRow['Date'];
                                         $dateN =  date('n-d', strtotime($date));
                                         $noOfDays = $userRow['noOfDaysLate'];
+                                        $reason = $userRow['reason'];
+                                        $action = $userRow['action'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
                                             }
@@ -1322,12 +1457,16 @@ if(isset($_POST['AddCategory'])){
   
                                               $weeknumber = $weekNumber;
                                               if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                               else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
@@ -1356,22 +1495,27 @@ if(isset($_POST['AddCategory'])){
                                         $noOfDays = $userRow['noOfDaysLate'];
                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                      
-                                            }
+                                            
                                             if ($weekNumber == "week 6" ){
   
                                               $weeknumber = $weekNumber;
                                               if($noOfDays >= 3){
-                                                echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                               else if ($noOfDays <= 1){
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
+                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                ?>
+                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                 <?php
                                               }
                                                 // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // //echo("<script>console.log('ok');</script>");
         
                                                  }
+                                                }
                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                 }                       
                                 
@@ -1958,6 +2102,47 @@ if(isset($_POST['AddCategory'])){
 </div>
   
       <script>
+$('#reasonModalUpdate').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) ;// Button that triggered the modal
+  var reason = button.data('reason');
+  var action = button.data('action');
+  var location = button.data('location');
+
+  
+  // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  // modal.find('.modal-title').text('New message to ' + recipient)
+  // modal.find('.modal-body reasonUpdate1').val(recipient)
+  document.getElementById("reasonUpdate1").value = reason;
+  document.getElementById("actionUpdate1").value = action;
+  if (location ==''){
+  document.getElementById("Attachments").href='#'; 
+    
+  }
+  else{
+    document.getElementById("Attachments").href=location; 
+
+  }
+})
+// $("#reasonModalUpdate").modal('show');
+
+function showDetails(reason, action, location){
+  document.getElementById("reasonUpdate1").value = reason;
+  document.getElementById("actionUpdate1").value = action;
+  if (location ==''){
+  document.getElementById("Attachments").href='#'; 
+    
+  }
+  else{
+    document.getElementById("Attachments").href=location; 
+
+  }
+  // $("#reasonModalUpdate").modal('show');
+
+}
+
         var userTaskId = "";
 function clickpassdata(userName,usertaskArea,userTaskID, taskname, taskCategory, taskType){
 document.getElementById("usernameSelectmodal").value = userName;

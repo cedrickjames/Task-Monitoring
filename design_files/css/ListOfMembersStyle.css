@@ -363,7 +363,15 @@ body{
          background-color: #f1f1f1;
     }
 }
-
-
+.taskNameHover:hover{
+    background-color: rgb(118, 120, 128);
+    color: white;
+}
+#Attachments{
+    color: #17a2b8;
+}
+#Attachments:hover{
+color: white;
+}
 
 
