@@ -3,9 +3,56 @@
   include ("./connection.php");
 
   
+  //sample of printing weeks number of certain dates
+//   $ddate = '2022-07-24';
+//   $date = new DateTime($ddate);
+//   $week = $date->format("o");
+//   echo "Weeknumber: $week";
+//   echo "<br>";
+
+// $aug = "Jul";
+//   $fDateOfTheMonth = new DateTime('first day of Oct 2022');
+ 
+//   $fday =  $fDateOfTheMonth->format('Y-m-d');
+//   echo "First day of the month: ";
+//   echo $fday;
+//   $lDateOfTheMonth = new DateTime('last day of Apr 2023');
+
+//   $lday =  $lDateOfTheMonth->format('Y-m-d');
+//   echo "last day of the month: ";
+//   echo $lday;
+//   echo "<br>";
   
+// $start = new DateTime($fday);
+// $end = new DateTime($lday);
+// // otherwise the  end date is excluded (bug?)
+// $end->modify('+1 day');
+// // echo date('F j, Y');
+// $interval = $end->diff($start);
+
+// // total days
+// $days = $interval->days;
+// // echo $days;
+// // create an iterateable period of date (P1D equates to 1 day)
+// $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+// // best stored as array, so you can add more than one
+// $holidays = array('2022-07-15');
+// $weekNo ="";
+// foreach($period as $dt) {
+//     $curr = $dt->format('W');
+//     if($curr==$weekNo){
+//       echo null;
+//     }
+//     else{
+//       echo $curr;
+//       echo "\n";
+//       $weekNo = $curr;
+//     }
+// }
 
 
+//end of sample of printing weeks number of certain dates
   ?>
 
 <!DOCTYPE html>
@@ -100,6 +147,8 @@ $tableName2="users";
     $editTaskVar = "0";
 
     $dateToPass = "";
+    $dateToPassEnd = "";
+
     $dateToPass1 = "";
     $dateToPass2 = "";
 
@@ -107,23 +156,51 @@ $tableName2="users";
     $taskfocus = "false";
     $sectionfocus= "focus";
 
+$dateToday = date('Y-m-d');
+$fDateOfTheMonth = new DateTime('first day of '.$dateToday);
+ 
+$FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
 $dateNow = date('Y-m-d');
 
     $month = date("F");
+    $monthEnd = date("F");
+
     $year = date("Y");
-    $today = date("F j, Y"); 
+    $yearEnd = date("Y");
+
+    $today = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEnd = date("F j, Y"); 
+
     $date_string = date('Y-m-d');
+    $date_stringEnd = date('Y-m-d');
+
+    
     if(isset($_POST['submitdate'])){
    $datePicker = $_POST['datepicker'];
+ $datePickerEnd = $_POST['datepickerEnd'];
+
 
     $month = date('F', strtotime($datePicker));
+    $monthEnd = date('F', strtotime($datePickerEnd));
+
     $year = date('Y', strtotime($datePicker));
+    $yearEnd = date('Y', strtotime($datePickerEnd));
+
     $today = date('F j, Y', strtotime($datePicker));
+    $todayEnd = date('F j, Y', strtotime($datePickerEnd));
+
 
     $datePickerget = $datePicker;
+    $datePickergetEnd = $datePickerEnd;
+
     $date_string= date('Y-m-d', strtotime($datePickerget));
+    $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+
+    
     
   $dateToPass = date('Y-m-d', strtotime($datePicker));
+  $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+
   $taskfocus = "true";
 
 
@@ -155,6 +232,23 @@ $dateNow = date('Y-m-d');
   
 
     }
+
+    if(isset($_POST['UpdateStatusName'])){
+      $radioStatus=$_POST['radioStatus']; 
+      $finishedTaskId = $_POST['finishedTaskID'];
+      if($radioStatus=="4"){
+        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='5', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+        mysqli_query($con, $sqlUpdateStatus);
+      
+      }
+      else{
+        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='0', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+        mysqli_query($con, $sqlUpdateStatus);
+      
+      }
+
+
+    }
     if(isset($_POST['UpdateTaskbtn'])){
       $userName3 = $_POST['username'];
 
@@ -168,7 +262,7 @@ $dateNow = date('Y-m-d');
              
               $resultUserId1 = $row["userid"];
             }
-        // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
+        // echo '<script>console.log("TEST: '.$resultUserId.'")</scrip>';
         }
 
       $userTASKid = $_POST['containerOfTaskId'];
@@ -423,7 +517,30 @@ if(isset($_POST['AddCategory'])){
 
 
 ?>
+
+<!-- <div class="normal-container">
+	<div class="smile-rating-container">
+		<div class="smile-rating-toggle-container">
+			<form class="submit-rating">
+				<input id="meh"  name="satisfaction" type="radio" /> 
+				<input id="fun" name="satisfaction" type="radio" /> 
+				<label for="meh" class="rating-label rating-label-meh">Bad</label>
+				<div class="smile-rating-toggle"></div>
+				
+				<div class="rating-eye rating-eye-left"></div>
+				<div class="rating-eye rating-eye-right"></div>
+				
+				<div class="mouth rating-eye-bad-mouth"></div>
+				
+				<div class="toggle-rating-pill"></div>
+				<label for="fun" class="rating-label rating-label-fun">Fun</label>
+			</form>
+		</div>
+	</div>
+</div> -->
+
       <div>
+      
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -572,7 +689,7 @@ if(isset($_POST['AddCategory'])){
         </div>
 
                                       <div class="modal fade" id="reasonModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                          <div class="modal-dialog" role="document">
+                                          <div class="modal-dialog"style="max-width: 700px; width: 600px" role="document">
                                             <div class="modal-content">
                                               <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLabel">Details</h5>
@@ -580,9 +697,56 @@ if(isset($_POST['AddCategory'])){
                                                   <span aria-hidden="true">&times;</span>
                                                 </button>
                                               </div>
-                                              <div class="modal-body">
-                                           
-                                           
+                                       <form action="leader.php" method = "POST" id="updateStatusForm" style="width: 100%; padding: 10px; border: 0;" >
+
+                                              <div class="modal-body" >
+                                                <input type="text" style="display: none" name="finishedTaskID" id="finishedID">
+                                             
+                                              
+
+                                                <div class="form-group">
+  <div class="normal-container">
+	<div class="smile-rating-container">
+		<div class="smile-rating-toggle-container">
+			<div class="submit-rating">
+				<input id="radioLate"  name="radioStatus" value="4" type="radio" checked/> 
+				<input id="radioOnTime" name="radioStatus" value="0" type="radio" /> 
+				<label for="radioLate" class="rating-label rating-label-meh">Late</label>
+				<div class="smile-rating-toggle"></div>
+				
+				<div class="rating-eye rating-eye-left"></div>
+				<div class="rating-eye rating-eye-right"></div>
+				
+				<div class="mouth rating-eye-bad-mouth"></div>
+				
+				<div class="toggle-rating-pill"></div>
+				<label for="radioOnTime" class="rating-label rating-label-fun">On Time</label>
+			</div>
+		</div>
+	</div>
+</div>
+  </div>
+                                              
+                                                <!-- <div class="col-sm-12"  >
+                        <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 22pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding-left: 10px">
+                                    <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
+                                        <input class="form-check-input" type="radio" name="radioStatus" id="radioLate" value="4" checked >
+                                            <label class="form-check-label" for="radioLeader">
+                                             Late
+                                            </label>
+                                     </div>
+                                    <div class="form-check form-check-inline" style="margin-left: 10px">
+                                        <input class="form-check-input" type="radio" name="radioStatus" id="radioOnTime" value="0" >
+                                            <label class="form-check-label" for="radioPIC">
+                                             On Time
+                                            </label>
+                                    </div>
+                                  
+                             </div>
+                        </fieldset>
+                    </div> -->
+                                              <!-- <a type="button" id="Attachments" class="btn btn-outline-warning btn-lg btn-block">Change Status</a> -->
                                               <a type="button" id="Attachments" class="btn btn-outline-info btn-lg btn-block">See attachments</a>
                                                   <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Reason</label>
@@ -593,12 +757,12 @@ if(isset($_POST['AddCategory'])){
                                                     <textarea class="form-control" name="actionInputUpdateLate" id="actionUpdate1" disabled></textarea>
                                                   </div>
                                                   <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <!-- <button type="submit" name="reasonUpdate"class="btn btn-primary">Save reason</button> -->
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                                                
+                                                <button type="submit"  id="UpdateStatus" name="UpdateStatusName"class="btn btn-success">Update Status</button>
                                               </div>
                            
                                               </div>
-                                            
+                                              </form>
                                             </div>
                                           </div>
                                         </div>
@@ -733,7 +897,8 @@ if(isset($_POST['AddCategory'])){
             </h3>
           </div>
           <div class="col-4">
-            <h3 style=" margin: 20px"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?>
+            <h3 style=" margin: 20px"> <?php echo $today ?> Week <?php $date = new DateTime($date_string);
+  $week = $date->format("W"); echo "$week"; ?>
             </h3>
           </div>
           <div class="col-4">
@@ -772,9 +937,16 @@ if(isset($_POST['AddCategory'])){
                         <div class="col-sm-4" style="padding: 0;">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="leader.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker" name="datepicker" onchange="filterMonth();">
-            <input type="submit" name="submitdate">
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
+            
+            <input type="date" id="datepicker" name="datepicker" style="margin-right: 20px" onchange="filterMonth();">
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">End</label>
+            
+            <input type="date" id="datepickerEnd" name="datepickerEnd" onchange="filterMonth();">
+            <button type="submit" name="submitdate" class="btn btn-info btn-sm">Submit</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-print fa-xs"></i> Print</button>
+                         
+            <!-- <input type="submit" name="submitdate"> -->
             </form>
            
         </div></div>
@@ -829,22 +1001,83 @@ if(isset($_POST['AddCategory'])){
                         </div> 
                     </div>
                     <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
-                        <table class="table table-striped r" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
-                            <thead  class="thead-dark" style="position: sticky;top: 0">
+                      <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
+                        <table class="table table-striped " style="width:  100%" id="filtertableMain" class="table datacust-datatable Table ">
+                            <thead  class="thead-dark" style="position: sticky;top: -1px;">
                                 <tr>
                                     <th style="min-width:15px;">No.</th>
-                                    <th style="min-width:10%;">Area</th>
+                                    <th style="min-width:40px;">Area</th>
                                     <th style="min-width:50px;">Category</th>
-                                    <th style="width:20%;" >Task Name</th>
-                                    <th style="width:8%;"  >In charge</th>
-                                    <th style="width:8%;"  >Type</th>
-                                    <th style="width:8%;" >W1</th>
+                                    <th style="width:200px;" >Task Name</th>
+                                    <th style="width:100px;"  >In charge</th>
+                                    <th style="width:180px;"  >Type</th>
+
+
+
+                                    <?php 
+                                    $date = new DateTime($today);
+                                    $dateEnd = new DateTime($todayEnd);
+                                    // $dateEnd = new DateTime('2022-08-31');
+                                    $selectedMonth = $date->format("M");
+                                    $yearoftheDay = $date->format("o");
+                                    $yearoftheDaylast = $dateEnd->format("o");
+
+                                    // echo $yearoftheDay;
+                                    $selectedEndMonth = $dateEnd->format("M");
+                                                                       
+                                   $DateTodayNow = $dateEnd->format('Y-m-d');
+                                   $StartDateSelected = $date->format('Y-m-d');
+
+                                    $fDateOfTheMonth = new DateTime($StartDateSelected);
+                                    // echo "First day of the month: ";
+                                    $fday =   $fDateOfTheMonth->format('Y-m-d');
+                                    $lDateOfTheMonth = new DateTime($DateTodayNow);
+                                    // echo "last day of the month: ";
+                                    $lday = $lDateOfTheMonth->format('Y-m-d');
+                                    // echo "<br>";
+                                  $start = new DateTime($fday);
+                                  $end = new DateTime($lday);
+                                  
+                                  // otherwise the  end date is excluded (bug?)
+                                  $end->modify('+1 day');
+                                  // echo date('F j, Y');
+                                  $interval = $end->diff($start);
+                                  
+                                  // total days
+                                  $days = $interval->days;
+                                  // echo $days;
+                                  // create an iterateable period of date (P1D equates to 1 day)
+                                  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                                  
+                                  // best stored as array, so you can add more than one
+                                  $holidays = array('2022-07-15');
+                                  $weekNo ="";
+                                  $countColumns = 6;
+                                  foreach($period as $dt) {
+                                      $curr = $dt->format('W');
+                                      if($curr==$weekNo){
+                                        echo null;
+                                      }
+                                      else{
+                                        $countColumns++;
+                                  
+
+                                        ?><th style='min-width:150px;' >Week <?php echo $curr?></th><?php
+                                        // echo "<th style='width:240px;' >Week $curr</th>";
+                                        // echo $curr;
+                                        // echo "\n";
+                                        $weekNo = $curr;
+                                      }
+                                  }
+                                  
+                                    ?>
+                                    <input id="countColumn" name="countColumnName" value="<?php echo $countColumns ?>">
+                                    <!-- <th style="width:8%;" >W1</th>
                                     <th style="width:8%;" >W2</th>
                                     <th style="width:8%;" >W3</th>
                                     <th style="width:8%;" >W4</th>
                                     <th style="width:8%;" >W5</th>
-                                    <th style="width:8%;" >W6</th>
+                                    <th style="width:8%;" >W6</th> -->
                                     
 
                                 </tr>
@@ -896,8 +1129,72 @@ if(isset($_POST['AddCategory'])){
          $firstname = $userRow['f_name'];
       } echo  $firstname; ?></td>
                                 <td><?php echo $data['taskType']??''; ?></td>
-                               
-                                <td><?php
+
+                                <!-- start of new code -->
+                               <?php 
+                                      
+                                      $date = new DateTime($today);
+                                    //   $date = new DateTime('2022-06-01');
+
+                                      $dateEnd = new DateTime($todayEnd);
+                                    //   $dateEnd = new DateTime('2022-08-31');
+
+
+                                      $selectedMonth = $date->format("M");
+                                      $selectedEndMonth = $dateEnd->format("M");
+                                    //   echo $selectedEndMonth;
+                                    $yearoftheDay = $date->format("o");
+                                    $yearoftheDaylast = $dateEnd->format("o");
+
+                                    $DateNowAndToday =  $dateEnd->format('Y-m-d');
+                                    $StartDateSelected = $date->format('Y-m-d');
+                                    $fDateOfTheMonth = new DateTime($StartDateSelected);
+                                    // echo "First day of the month: ";
+                                    $fday =   $fDateOfTheMonth->format('Y-m-d');
+                                    $lDateOfTheMonth = new DateTime($DateNowAndToday);
+                                    // echo "last day of the month: ";
+                                    
+                                    $lday = $lDateOfTheMonth->format('Y-m-d');
+                                    // echo $lday;
+                                    // echo "<br>";
+                                    // echo $fday;
+                                    // echo " ";
+                                    // echo $lday;
+                                  $start = new DateTime($fday);
+                                  $end = new DateTime($lday);
+                                  // otherwise the  end date is excluded (bug?)
+                                  $end->modify('+1 day');
+                                  // echo date('F j, Y');
+                                  $interval = $end->diff($start);
+                                  
+                                  // total days
+                                  $days = $interval->days;
+                                  // echo $days;
+                                  // create an iterateable period of date (P1D equates to 1 day)
+                                  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                                  
+                                  // best stored as array, so you can add more than one
+                                  $holidays = array('2022-07-15');
+                                  $weekNo ="";
+                   
+
+                                  foreach($period as $dt) {
+                                      $curr = $dt->format('W');
+                                      $day = $dt->format('Y-m-d');
+
+                                      $monthOfThisDate=$dt->format('F');
+                                      $yearOfThisDate=$dt->format('o');
+
+                                      if($curr==$weekNo){
+                                        echo null;
+                                      }
+                                      else{
+                                        // echo "<th style='width:8%;' >Week $curr</th>";
+                                        ?>
+                                        <td style='width:240px;'><?php
+                                        // echo $curr;
+                                        // echo " ";
+                                        // echo $day;
                                    $taskID = $data['usertaskID'];
                                    $taskType = $data['taskType'];
                                    if($taskType == "daily"){
@@ -911,7 +1208,7 @@ if(isset($_POST['AddCategory'])){
 
 
 
-                                      $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 1' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
+                                      $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate' AND `week` = 'week $curr' ORDER BY `FinishedTaskID` DESC LIMIT 1 ";
 
                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                          $result1 = mysqli_query($con, $selectUserTask1);
@@ -928,26 +1225,48 @@ if(isset($_POST['AddCategory'])){
                                          $dateN =  date('n-d', strtotime($date));
                                          $reason = $userRow['reason'];
                                          $action = $userRow['action'];
+                                         $isCheckedByLeader = $userRow['isCheckedByLeader'];
+
                                         //  echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                         $noOfDays = $userRow['noOfDaysLate'];
                                                }
-                                               if ($weekNumber == "week 1" ){
+                                               if ($weekNumber == "week $curr" ){
      
                                                 $weeknumber = $weekNumber;
 
                                                 if($noOfDays >= 2){
                                                   // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
-                                                  ?>
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                   
-                                                 <?php
+                                                  if($isCheckedByLeader){
+                                                    ?>
+                                                    <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
+
+                                                    <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                     <?php
+                                                  }
+                                                  else{
+                                                    ?>
+                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                     <?php
+                                                  }
+                                                  
+                                                  
+                                                 
                                                 }
                                                 else if ($noOfDays <= 1){
                                                   // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  ?>
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                <?php
+                                                  if($isCheckedByLeader){
+                                                    ?>
+                                                    <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <?php
+                                                  }
+                                                  else{
+                                                    ?>
+                                                    <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <?php
+                                                  }
+                                                  
                                                 }
                                                     // echo("<script>console.log('ok');</script>");
           
@@ -959,7 +1278,7 @@ if(isset($_POST['AddCategory'])){
                                     //  $month = date("F");
                                     //  $year = date("Y");
      
-                                         $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
+                                         $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate';";
                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                          $result = mysqli_query($con, $selectUserTask);
                                          $weekNumber = '';
@@ -974,26 +1293,49 @@ if(isset($_POST['AddCategory'])){
                                          $noOfDays = $userRow['noOfDaysLate'];
                                          $reason = $userRow['reason'];
                                          $action = $userRow['action'];
+                                         $isCheckedByLeader = $userRow['isCheckedByLeader'];
+
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
                                                
-                                               if ($weekNumber == "week 1" ){
+                                               if ($weekNumber == "week $curr" ){
      
                                                 $weeknumber = $weekNumber;
 
-                                                if($noOfDays >= 3){
-                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  ?>
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                if($noOfDays >= 2){
+
+                                                  if($isCheckedByLeader){
+                                                    ?>
+                                                <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
 
                                                  <?php
+                                                  }
+                                                  else{
+                                                    ?>
+                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+    
+                                                     <?php
+                                                  }
+                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  
                                                 }
                                                 else if ($noOfDays <= 1){
                                                   // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                 if($isCheckedByLeader){
+
                                                   ?>
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                  
-                                                  <?php
+                                                  <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    
+                                                    <?php
+
+                                                 }
+                                                 else{
+                                                  ?>
+                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    
+                                                    <?php
+                                                 }
+                                                
                                                 }
                                                   // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // //echo("<script>console.log('ok');</script>");
@@ -1004,522 +1346,26 @@ if(isset($_POST['AddCategory'])){
                                    }                       
                                    
                                 ?></td>
-
-                                <td><?php
-                                   $taskID = $data['usertaskID'];
-                                   $taskType = $data['taskType'];
-                                   if($taskType == "daily"){
-                                     //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                    //  $month = date("F");
-                                    //  $year = date("Y");
-     
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 2' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-                                         // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                         $result = mysqli_query($con, $selectUserTask);
-                                         $weekNumber = '';
-                                         while($userRow = mysqli_fetch_assoc($result)){
-                                     
-                                           $weekNumber = $userRow['week'];
-                                           $fileloc =  $userRow['attachments'];
-                                           $time = $userRow['timestamp'];
-                                           $finishedtaskID = $userRow['FinishedTaskID'];
-                                           $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         $noOfDays = $userRow['noOfDaysLate'];
-                                         $reason = $userRow['reason'];
-                                         $action = $userRow['action'];
-                                         //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
+                                        <?php
+                                        // echo $curr;
+                                        // echo "\n";
+                                        $weekNo = $curr;
                                         
-                                               
-                                               if ($weekNumber == "week 2" ){
-     
-                                                $weeknumber = $weekNumber;
+                                      }
+                                  }
+                                    ?>
 
-                                                if($noOfDays >= 3){
-                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  ?>
-                                                  <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> 
-                                                  <?php
-                                                }
-                                                else if ($noOfDays <= 1){
-                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  ?>
-                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>                                                  
-                                                  <?php
-                                                }
-                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                    // echo("<script>console.log('ok');</script>");
-          
-                                                   }
-                                                  }
-                                               //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                   }
-                                   else{
-                                     //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                     //$month = date("F");
-                                     //$year = date("Y");
-    //  echo "$taskID, $month, $year";
-                                         $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                         // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                         $result = mysqli_query($con, $selectUserTask);
-                                         $weekNumber = '';
-                                         while($userRow = mysqli_fetch_assoc($result)){
-                                     
-                                           $weekNumber = $userRow['week'];
-                                           $fileloc =  $userRow['attachments'];
-                                           $time = $userRow['timestamp'];
-                                           $finishedtaskID = $userRow['FinishedTaskID'];
-                                           $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         $noOfDays = $userRow['noOfDaysLate'];
-                                         $reason = $userRow['reason'];
-                                         $action = $userRow['action'];
-                                         //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                      
-                                               
-                                              //  echo "$taskID, $month, $year";
-                                               if ($weekNumber == "week 2" ){
-     
-                                                $weeknumber = $weekNumber;
+                                    <!-- End of new code -->
+                              
 
-                                                if($noOfDays >= 2){
-                                                  //  echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  ?>
-
-                                                  <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                  
-                                                            <?php
-                                                }
-                                                else if ($noOfDays <=1){
-                                                  //  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  ?>
-
-                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                  
-                                                            <?php
-                                                }
-                                                  //  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                    // echo("<script>console.log('ok');</script>");
-          
-                                                   }
-                                               //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                                  }
-                                              }                       
-                                   
-                                   ?></td>
-                              <td><?php
-                                 $taskID = $data['usertaskID'];
-                                 $taskType = $data['taskType'];
-                                 if($taskType == "daily"){
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                   $selectUserTask3 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 3' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result3 = mysqli_query($con, $selectUserTask3);
-                                       $weekNumber3 = '';
-                                       while($userRow = mysqli_fetch_assoc($result3)){
-                                   
-                                         $weekNumber3 = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         $noOfDays = $userRow['noOfDaysLate'];
-                                         $reason = $userRow['reason'];
-                                         $action = $userRow['action'];
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       if ($weekNumber3 == "week 3" ){
-   
-                                              $weeknumber = $weekNumber3;
-
-                                              if($noOfDays >= 3){
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                          <?php
-                                              }
-                                              else if ($noOfDays <= 1){
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-
-                                              <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                          <?php
-                                              }
-
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                             }
-                                            
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }
-                                 else{
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                       $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result = mysqli_query($con, $selectUserTask);
-                                       $weekNumber = '';
-                                       while($userRow = mysqli_fetch_assoc($result)){
-                                   
-                                         $weekNumber = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         $noOfDays = $userRow['noOfDaysLate'];
-                                         $reason = $userRow['reason'];
-                                         $action = $userRow['action'];
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       
-                                             
-
-                                             if ($weekNumber == "week 3" ){
-   
-                                              $weeknumber = $weekNumber;
-
-                                              
-                                              if($noOfDays >= 2){
-                                                // echo $reason, $action;
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-
-                                                <!-- <span class="mode mode_late"><a style = "color: white" href="#" onclick= "showDetails('<?php //echo $reason; ?>','<?php //echo $action; ?>','<?php //echo $fileloc; ?>')"  data-toggle='modal' data-target='#reasonModalUpdate'><?php //echo $dateN ?></a></span> -->
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                
-                                                          <?php
-                                              }
-                                              else if ($noOfDays <=1){
-                                                // echo $reason, $action;
-
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                          <?php
-                                              }
-
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                                }
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }                       
-                                 
-                              ?></td>
-
-                          <td><?php
-                                 $taskID = $data['usertaskID'];
-                                 $taskType = $data['taskType'];
-                                 if($taskType == "daily"){
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                   $selectUserTask4 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 4' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result4 = mysqli_query($con, $selectUserTask4);
-                                       $weekNumber = '';
-                                       while($userRow = mysqli_fetch_assoc($result4)){
-                                   
-                                         $weekNumber = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         $noOfDays = $userRow['noOfDaysLate'];
-                                         $reason = $userRow['reason'];
-                                         $action = $userRow['action'];;
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       
-                                             }
-                                             if ($weekNumber == "week 4" ){
-   
-                                              $weeknumber = $weekNumber;
-                                              if($noOfDays >= 2){
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  //  echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>'.$dateN.'</a></li></ul></span>';
-                                                  ?>
-
-                                                  <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                  
-                                                            <?php
-                                              }
-                                              else if ($noOfDays <= 1){
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                
-                                                          <?php
-                                              }
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }
-                                 else{
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                       $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result = mysqli_query($con, $selectUserTask);
-                                       $weekNumber = '';
-                                       while($userRow = mysqli_fetch_assoc($result)){
-                                   
-                                         $weekNumber = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         $noOfDays = $userRow['noOfDaysLate'];
-                                         $reason = $userRow['reason'];
-                                         $action = $userRow['action'];
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>"); 
-                                             
-                                             if ($weekNumber == "week 4" ){
-   
-                                              $weeknumber = $weekNumber;
-                                              if($noOfDays >= 3){
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="#" onclick= showDetails(&#x27'.$reason.'&#x27,&#x27'.$action.'&#x27)> '.$dateN.'</a></span>';
-                                                ?>
-
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                
-                                                          <?php
-                                                  
-                                                //  echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>'.$dateN.'</a></li></ul></span>';
-
-                                                
-
-                                              }
-                                              else if ($noOfDays <= 1){
-                                                ?>
-
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                
-                                                          <?php
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-
-                                              }
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                                }
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }                       
-                                 
-                            ?></td>
-
-                          <td><?php
-                                $taskID = $data['usertaskID'];
-                                $taskType = $data['taskType'];
-                                if($taskType == "daily"){
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                  $selectUserTask5 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 5' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result5 = mysqli_query($con, $selectUserTask5);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result5)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-                                        $dateN =  date('n-d', strtotime($date));
-                                        $noOfDays = $userRow['noOfDaysLate'];
-
-                                        $reason = $userRow['reason'];
-                                        $action = $userRow['action'];
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            }
-                                            if ($weekNumber == "week 5" ){
-  
-                                              $weeknumber = $weekNumber;
-
-                                              if($noOfDays >= 3){
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                              else if ($noOfDays <= 1){
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }
-                                else{
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                      $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result = mysqli_query($con, $selectUserTask);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-                                        $reason = $userRow['reason'];
-                                        $action = $userRow['action'];
-                                        $dateN =  date('n-d', strtotime($date));
-                                        $noOfDays = $userRow['noOfDaysLate'];
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            
-                                            if ($weekNumber == "week 5" ){
-  
-                                              $weeknumber = $weekNumber;
-                                              if($noOfDays >= 3){
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                              else if ($noOfDays <= 1){
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                                 
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }                       
-                              }
-                                 ?></td>
-
-<td><?php
-                                $taskID = $data['usertaskID'];
-                                $taskType = $data['taskType'];
-                                if($taskType == "daily"){
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                  $selectUserTask5 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 6' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result5 = mysqli_query($con, $selectUserTask5);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result5)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-                                        $dateN =  date('n-d', strtotime($date));
-                                        $noOfDays = $userRow['noOfDaysLate'];
-                                        $reason = $userRow['reason'];
-                                        $action = $userRow['action'];
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            }
-                                            if ($weekNumber == "week 6" ){
-  
-                                              $weeknumber = $weekNumber;
-                                              if($noOfDays >= 3){
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                              else if ($noOfDays <= 1){
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }
-                                else{
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                      $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result = mysqli_query($con, $selectUserTask);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-
-                                        $dateN =  date('n-d', strtotime($date));
-                                        $noOfDays = $userRow['noOfDaysLate'];
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            
-                                            if ($weekNumber == "week 6" ){
-  
-                                              $weeknumber = $weekNumber;
-                                              if($noOfDays >= 3){
-                                                // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                              else if ($noOfDays <= 1){
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                ?>
-                                                <span class="mode mode_on"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
-                                                 <?php
-                                              }
-                                                // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                                }
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }                       
                                 
-                                 ?></td>
+                              
+
+                          
+
+                          
+
+
 
 
 
@@ -1698,6 +1544,7 @@ if(isset($_POST['AddCategory'])){
                                         
 
                                         ?>
+
                                       <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
                                         style="width:<?php echo round($percent).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
                                         <?php echo round($percent).'%'; ?> 
@@ -1977,7 +1824,7 @@ if(isset($_POST['AddCategory'])){
                             <div class="form-group searchInput">
                                 
                                 <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
+                                <!-- <input type="search" class="form-control" id="filterbox" placeholder=" " > -->
                             </div>
                         </div> 
                     </div>
@@ -2102,21 +1949,38 @@ if(isset($_POST['AddCategory'])){
 </div>
   
       <script>
+        
 $('#reasonModalUpdate').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) ;// Button that triggered the modal
   var reason = button.data('reason');
   var action = button.data('action');
   var location = button.data('location');
-
-  
+  var itoAyID = button.data('taskid');
+  var late = button.data('late');
   // Extract info from data-* attributes
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
   var modal = $(this);
   // modal.find('.modal-title').text('New message to ' + recipient)
   // modal.find('.modal-body reasonUpdate1').val(recipient)
+  console.log(button.data('lates'));
+  document.getElementById("finishedID").value = itoAyID;
   document.getElementById("reasonUpdate1").value = reason;
   document.getElementById("actionUpdate1").value = action;
+  // document.getElementById("UpdateStatus").style.display = 'block';
+
+  if(late == "1"){
+// document.getElementById("UpdateStatus").style.display = 'block';
+document.getElementById("radioLate").checked = true;
+document.getElementById("radioOnTime").checked = false;
+
+  }
+  else{
+// document.getElementById("UpdateStatus").style.display = 'none';
+document.getElementById("radioLate").checked = false;
+document.getElementById("radioOnTime").checked = true;
+
+  }
   if (location ==''){
   document.getElementById("Attachments").href='#'; 
     
@@ -2125,6 +1989,8 @@ $('#reasonModalUpdate').on('show.bs.modal', function (event) {
     document.getElementById("Attachments").href=location; 
 
   }
+
+ 
 })
 // $("#reasonModalUpdate").modal('show');
 
@@ -2183,8 +2049,12 @@ document.getElementById("usernameSelectmodal").disabled = false;
 
 }
 var dateNow = <?php echo json_encode("$dateNow"); ?>;
+var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
 
-document.getElementById("datepicker").value = dateNow;
+
+document.getElementById("datepicker").value = FDateofThisMonth;
+document.getElementById("datepickerEnd").value = dateNow;
+
 document.getElementById("datepicker1").value = dateNow;
 document.getElementById("datepicker2").value = dateNow;
 
@@ -2194,9 +2064,12 @@ document.getElementById("datepicker2").value = dateNow;
 
  var jsonDataPIC = <?php echo json_encode("$picfocus"); ?>;
  var jsonDataTask = <?php echo json_encode("$taskfocus"); ?>;
+ 
  var jsonDataSection = <?php echo json_encode("$sectionfocus"); ?>;
 
  var date = <?php echo json_encode("$dateToPass"); ?>;
+ var dateEnd = <?php echo json_encode("$dateToPassEnd"); ?>;
+
  var date1 = <?php echo json_encode("$dateToPass1"); ?>;
  var date2 = <?php echo json_encode("$dateToPass2"); ?>;
 
@@ -2211,6 +2084,8 @@ $('#myTab li:eq(1) a').tab('show');
 }
 if(jsonDataTask == "true"){
 document.getElementById("datepicker").value = date;
+document.getElementById("datepickerEnd").value = dateEnd;
+
 
 
 $('#myTab li:eq(0) a').tab('show');
@@ -2305,9 +2180,10 @@ $('#myTab li:eq(2) a').tab('show');
 let today = new Date().toISOString().substr(0, 10);
 
 // document.querySelector("#datepicker").valueAsDate = new Date();
+var sheets = new Array();
 
         function getSelectValue()
-{
+      {
     var e = document.getElementById("inputGroupSelect01");
   
     var text=e.options[e.selectedIndex].text;//get the selected option text
@@ -2386,6 +2262,9 @@ else if (text=='In charge'){
 
 let filterInput = document.getElementById('filterbox');
 filterInput.addEventListener('keyup',function(){
+
+  sheets=[-1];
+
     let filterValue=document.getElementById('filterbox').value;
     var table = document.getElementById('TaskTable');
     let tr = table.querySelectorAll('tr');
@@ -2394,6 +2273,7 @@ filterInput.addEventListener('keyup',function(){
         let val = tr[index].getElementsByTagName('td')[4];
         if(val.innerHTML.indexOf(filterValue)> -1){
             tr[index].style.display='';
+            sheets.push(index);
 
         }
         else{
@@ -2521,6 +2401,121 @@ else if (types[3].checked){
 
 
 }
+
+
+
+function exportData(){
+   /* Get the HTML data using Element by Id */
+   var table = document.getElementById("filtertableMain");
+ 
+   /* Declaring array variable */
+   var rows =[];
+   const filterInput1 = document.getElementById('filterbox');
+
+
+   
+
+   
+   var noOfColumns = document.getElementById('countColumn').value;
+ 
+   if (filterInput1.value==""){
+       for(var i=0,row; row = table.rows[i];i++){
+           //rows would be accessed using the "row" variable assigned in the for loop
+           //Get each cell value/column from the row
+        
+          //   column1 = row.cells[0].innerText;
+          //  column2 = row.cells[1].innerText;
+          //  column3 = row.cells[2].innerText;
+          //  column4 = row.cells[3].innerText;
+          //  column5 = row.cells[4].innerText;
+          //  column6 = row.cells[5].innerText;
+          //  column7 = row.cells[6].innerText;
+          //  column8 = row.cells[7].innerText;
+          //  column9 = row.cells[8].innerText;
+          //  column10 = row.cells[9].innerText;
+
+
+
+
+          //  rows.push(
+          //      [
+          //          column1,
+          //          column2,
+          //          column3,
+          //          column4,
+          //          column5,
+          //          column6,
+          //          column7,
+          //          column8,
+          //          column9,
+          //          column10,
+
+                  
+            
+          //      ]
+          //  );
+          var rowsArray =[];
+          for(var j=0; j<noOfColumns; j++){
+            var column = row.cells[j].innerText;
+
+            rowsArray.push([column]);
+          
+          }
+             rows.push(
+               [
+                rowsArray,
+          ])
+          // console.log(i);
+         
+          
+    
+       /* add a new records in the array */
+           
+    
+           }
+   }
+   else{
+     //iterate through rows of table
+   for(var i=0,row; row = table.rows[sheets[i]+1];i++){
+       //rows would be accessed using the "row" variable assigned in the for loop
+       //Get each cell value/column from the row
+       
+       var rowsArray =[];
+          for(var j=0; j<noOfColumns; j++){
+            var column = row.cells[j].innerText;
+
+            rowsArray.push([column]);
+          
+          }
+             rows.push(
+               [
+                rowsArray,
+          ])
+
+
+ 
+       }
+   }
+   console.log(rows);
+       csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "TaskReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+ }
+
+
+
         </script>
     </body>
 </html>

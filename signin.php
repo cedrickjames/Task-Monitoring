@@ -113,6 +113,14 @@ else{
             $_SESSION['reason'] = "";
             $_SESSION['action']="";
             $_SESSION['TaskID'] = "";
+
+$dateNow = date('Y-m-d');
+  $fDateOfTheMonth = new DateTime('first day of '.$dateNow);
+ 
+  $fday =  $fDateOfTheMonth->format('F j, Y');
+  $_SESSION['FirstDayOfTheMonth'] = $fday;
+
+
         }
         if($numrowsadmin > 0){
             header("location: admin.php");

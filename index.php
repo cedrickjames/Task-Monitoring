@@ -5,7 +5,7 @@
 // echo date("Y-m-d", strtotime("monday last week"));
 // echo date("F", strtotime("previous month"));
 // echo  $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
-
+// echo weekOfMonth($_SESSION['date_string']);
 $start = new DateTime('2022-07-08');
 $end = new DateTime('2022-07-18');
 // otherwise the  end date is excluded (bug?)
@@ -179,7 +179,9 @@ $_SESSION['message'] = $message;
 $today=date('F j, Y');
 $month = date("F");
 $year = date("Y");
-$week = 'week '.weekOfMonth($date_string);
+$dateForToday = new DateTime($date_string);
+$weekNumber = $dateForToday->format("W");
+$week = 'week '.$weekNumber;
 $dateNow = date('Y-m-d');
 
 $taskfocus = "false";
@@ -195,7 +197,7 @@ if(isset($_POST['submitdate'])){
   //  echo  $today;
    $_SESSION['today'] = $today;
 $todaySession = $_SESSION['today'];
-  
+// echo  $todaySession;
    $_SESSION['month'] = $month ;
    $_SESSION['year'] = $year;
    $datePickerget = $datePicker;
@@ -271,7 +273,11 @@ echo $taskType;
               $fileloc ="" ;
     
               $today = $_SESSION['today'];
-              $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+
+              $dateNewToday = new DateTime($today);
+                $weekNumberNew = $dateNewToday->format("W");
+                $week = 'week '.$weekNumberNew;
+              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
               $from=date_create(date('Y-m-d'));
               $to=date_create(date('Y-m-d', strtotime($today)));
               $diff=date_diff($to,$from);
@@ -325,7 +331,10 @@ echo $taskType;
               $fileloc ="" ;
     
               $today = $_SESSION['today'];
-              $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+              $dateNewToday = new DateTime($today);
+                $weekNumberNew = $dateNewToday->format("W");
+                $week = 'week '.$weekNumberNew;
+              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
               $from=date_create(date('Y-m-d'));
               $to=date_create(date('Y-m-d', strtotime($today)));
               $diff=date_diff($to,$from);
@@ -385,7 +394,10 @@ echo $taskType;
             $fileloc ="" ;
   
             $today = $_SESSION['today'];
-            $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+            $dateNewToday = new DateTime($today);
+                $weekNumberNew = $dateNewToday->format("W");
+                $week = 'week '.$weekNumberNew;
+              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
             $from=date_create(date('Y-m-d'));
             $to=date_create(date('Y-m-d', strtotime($today)));
             $diff=date_diff($to,$from);
@@ -464,7 +476,10 @@ echo $taskType;
             $fileloc ="" ;
   
             $today = $_SESSION['today'];
-            $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+            $dateNewToday = new DateTime($today);
+                $weekNumberNew = $dateNewToday->format("W");
+                $week = 'week '.$weekNumberNew;
+              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
             $from=date_create(date('Y-m-d'));
             $to=date_create(date('Y-m-d', strtotime($today)));
             $diff=date_diff($to,$from);
@@ -528,7 +543,10 @@ echo $taskType;
             $fileloc ="" ;
   
             $today = $_SESSION['today'];
-            $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+            $dateNewToday = new DateTime($today);
+                $weekNumberNew = $dateNewToday->format("W");
+                $week = 'week '.$weekNumberNew;
+              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
             $from=date_create(date('Y-m-d'));
             $to=date_create(date('Y-m-d', strtotime($today)));
             $diff=date_diff($to,$from);
@@ -836,7 +854,8 @@ echo $taskType;
           </div>
           <div class="col-4" style="padding-top: 20px; color: white">
           <!-- <h3  class="text-center"> <?php if( $_SESSION['userlevel'] == "PIC") echo 'Member' ?> </h3>   -->
-          <h3 class="text-center"> <?php echo  $_SESSION['today'] ?> Week <?php echo weekOfMonth($_SESSION['date_string']) ?></h3>
+          <h3 class="text-center"> <?php echo  $_SESSION['today'] ?> Week <?php $date = new DateTime($_SESSION['date_string']);
+  $week = $date->format("W"); echo "$week"; ?></h3>
 
           </div>
           <div class="col-4">
@@ -854,7 +873,7 @@ echo $taskType;
                         </div>
 
 
-                        <div class="col-sm-4"  style="padding: 0;">
+                        <div class="col-sm-4"  style="padding: 0; display: none">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="index.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
@@ -932,7 +951,10 @@ echo $taskType;
                       // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
 
                       if ($taskType == 'weekly'){
-                        $weekMonth = weekOfMonth($_SESSION['date_string']);
+                        $sessionDateNow=$_SESSION['date_string'];
+                        $date = new DateTime($sessionDateNow);
+                        $weekMonth = $date->format("W");
+                        // $weekMonth = weekOfMonth($_SESSION['date_string']);
                         $month1 = $_SESSION['month'];
                         $year1 = $_SESSION['year'];
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' AND `week` = 'week $weekMonth';";
@@ -973,7 +995,10 @@ echo $taskType;
                                          }
                                     }
                                     else if($taskType == 'monthly'){
-                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                      $sessionDateNow=$_SESSION['date_string'];
+                                      $date = new DateTime($sessionDateNow);
+                                      $weekMonth = $date->format("W");
+                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
                         $month1 = $_SESSION['month'];
                         $year1 = $_SESSION['year'];
                                       
@@ -1018,7 +1043,10 @@ echo $taskType;
                                     
                                     }
                                     else if($taskType == 'daily'){
-                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                      $sessionDateNow=$_SESSION['date_string'];
+                                      $date = new DateTime($sessionDateNow);
+                                      $weekMonth = $date->format("W");
+                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
                                       $today1 = $_SESSION['today'];
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today1';";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
@@ -1164,7 +1192,6 @@ $finalDiff=$finalDiff-2;
                                               <div class="modal-body">
                                            
                                            
-                                            
                                                   <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Action:</label>
                                                     <textarea class="form-control" name="actionInput" id="actionText"></textarea>
@@ -1191,7 +1218,7 @@ $finalDiff=$finalDiff-2;
                                               <div class="modal-body">
                                            
                                            
-                                            
+                                            <input style="display: none" name="ForFinishedTaskName" id="ForFinishedTaskID"> 
                                                   <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Reason:</label>
                                                     <textarea class="form-control" name="reasonInputUpdate" id="reasonUpdate1"></textarea>
@@ -1222,6 +1249,7 @@ $finalDiff=$finalDiff-2;
                                               <div class="modal-body">
                                            
                                            
+                                              <input style="display: none" name="ForFinishedTaskNameForActionOnly" id="ForFinishedTaskIDActionOnly"> 
                                             
                                                   <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Action:</label>
@@ -1260,7 +1288,10 @@ $finalDiff=$finalDiff-2;
                       // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
 
                       if ($taskType == 'weekly'){
-                        $weekMonth = weekOfMonth($_SESSION['date_string']);
+                        $dateForNow = $_SESSION['date_string'];
+                        $date = new DateTime($dateForNow);
+                        $week = $date->format("W");
+                        $weekMonth = $week;
                        $month1 = $_SESSION['month'];
                        $year1 = $_SESSION['year'];
 
@@ -1279,7 +1310,11 @@ $finalDiff=$finalDiff-2;
                                          }
                                     }
                                     else if($taskType == 'monthly'){
-                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                      $dateForNow = $_SESSION['date_string'];
+                        $date = new DateTime($dateForNow);
+                        $week = $date->format("W");
+                        $weekMonth = $week;
+                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
@@ -1296,7 +1331,11 @@ $finalDiff=$finalDiff-2;
                                     
                                     }
                                     else if($taskType == 'daily'){
-                                      $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                      $dateForNow = $_SESSION['date_string'];
+                        $date = new DateTime($dateForNow);
+                        $week = $date->format("W");
+                        $weekMonth = $week;
+                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
                                       $today1 = $_SESSION['today'];
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today1';";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
@@ -1385,10 +1424,17 @@ $finalDiff=$finalDiff-2;
                                     while($userRow = mysqli_fetch_assoc($result)){
                                       $fTaskId = $userRow['FinishedTaskID'];
                                       $noOfDays = $userRow['noOfDaysLate'];
+                                      $reason = $userRow['reason'];
+                                      $action = $userRow['action'];
                                   }
                                   if($noOfDays>=3){
                                    ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                    
+
+                                      
+
                                     <?php
                                   }
                                else{
@@ -1397,7 +1443,9 @@ $finalDiff=$finalDiff-2;
                                   // echo $noOfDays;
                                   ?>
                                       <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                      <!-- <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
+                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#"  data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                     
                                       <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
 
@@ -1422,10 +1470,13 @@ $finalDiff=$finalDiff-2;
                                     while($userRow = mysqli_fetch_assoc($result)){
                                       $fTaskId = $userRow['FinishedTaskID'];
                                       $noOfDays = $userRow['noOfDaysLate'];
+                                      $reason = $userRow['reason'];
+                                      $action = $userRow['action'];
                                   }
                                   if($noOfDays>=3){
                                     ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                    <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                    <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                    <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                   
                                      <?php
                                    }
@@ -1433,7 +1484,8 @@ $finalDiff=$finalDiff-2;
                                   //  echo $noOfDays;
                                   ?>
                                  <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                     
                                       
                                       <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
@@ -1457,19 +1509,23 @@ $finalDiff=$finalDiff-2;
                                             while($userRow = mysqli_fetch_assoc($result)){
                                               $fTaskId = $userRow['FinishedTaskID'];
                                       $noOfDays = $userRow['noOfDaysLate'];
+                                      $reason = $userRow['reason'];
+                                      $action = $userRow['action'];
 
                                           }
                                           // echo $noOfDays;
                                           if($noOfDays>=2){
                                             ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                            <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" data-fid="<?php echo $fTaskId ?>" href="#"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                           
                                              <?php
                                            }
                                            else{
                                         ?>
                                                   <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
               
                                         
                                             <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
@@ -1523,6 +1579,8 @@ $finalDiff=$finalDiff-2;
       $('#reasonModalUpdate').modal('show');
       </script>";
     }
+
+  
     if(isset($_GET['UpdateModalAction'])){
       $_SESSION['TaskID'] = $_GET['UpdateModalAction'];
       $taskID = $_SESSION['TaskID'];
@@ -1779,8 +1837,9 @@ $finalDiff=$finalDiff-2;
     if(isset($_POST['reasonUpdate'])){
       $_SESSION['reason'] = $_POST['reasonInputUpdate'];
       $_SESSION['action'] = $_POST['actionInputUpdateLate'];
+      $finishedTaskId = $_POST['ForFinishedTaskName'];
       if($_SESSION['reason'] != "" || $_SESSION['action'] != ""){
-        $taskID = $_SESSION['TaskID'];
+        $taskID = $finishedTaskId;
         // echo $_SESSION['reason'];
         // echo $taskID;
 
@@ -1803,8 +1862,10 @@ $finalDiff=$finalDiff-2;
     
     if(isset($_POST['actionUpdate'])){
       $_SESSION['action'] = $_POST['actionInputUpdate'];
+      $finishedTaskId = $_POST['ForFinishedTaskNameForActionOnly'];
+      
       if($_SESSION['action'] != ""){
-        $taskID = $_SESSION['TaskID'];
+        $taskID = $finishedTaskId;
         echo $_SESSION['reason'];
         echo $taskID;
         echo "<script> console.log('$taskID') </script>";
@@ -1910,6 +1971,48 @@ $finalDiff=$finalDiff-2;
 // });
 
 //End of Enter event
+
+$('#actionModalUpdate').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) ;// Button that triggered the modal
+  var action = button.data('action');
+ var finishedTaskID = button.data('fid');
+
+  
+  // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  // modal.find('.modal-title').text('New message to ' + recipient)
+  // modal.find('.modal-body reasonUpdate1').val(recipient)
+  document.getElementById("actionUpdateText").value = action;
+  document.getElementById("ForFinishedTaskIDActionOnly").value = finishedTaskID;
+
+
+  
+})
+
+$('#reasonModalUpdate').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) ;// Button that triggered the modal
+  var action = button.data('action');
+  var reason = button.data('reason');
+ var finishedTaskID = button.data('fid');
+  
+
+ 
+
+  
+  // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  // modal.find('.modal-title').text('New message to ' + recipient)
+  // modal.find('.modal-body reasonUpdate1').val(recipient)
+  document.getElementById("actionUpdate1").value = action;
+  document.getElementById("reasonUpdate1").value = reason;
+  document.getElementById("ForFinishedTaskID").value = finishedTaskID;
+
+
+})
 
 
 var jsonData = <?php echo json_encode("$varAlert"); ?>;
