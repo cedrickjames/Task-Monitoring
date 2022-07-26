@@ -113,6 +113,7 @@ else{
             $_SESSION['reason'] = "";
             $_SESSION['action']="";
             $_SESSION['TaskID'] = "";
+            $_SESSION['newFileLoc']="";
 
 $dateNow = date('Y-m-d');
   $fDateOfTheMonth = new DateTime('first day of '.$dateNow);

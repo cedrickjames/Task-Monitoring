@@ -350,7 +350,9 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                 echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                 // //$month = date("F");
                                 // $year = date("Y");
-                                $numberofWeek = weekOfMonth($date_string);
+                                // $numberofWeek = weekOfMonth($date_string);
+                                $date = new DateTime($date_string);
+                                $numberofWeek = $date->format("W");
                                 $weeknow = "week $numberofWeek";
                                     // echo $weeknow;
                                 $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
@@ -392,7 +394,9 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                       echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                       //$month = date("F");
                                       //$year = date("Y");
-                                                    $numberofWeek = weekOfMonth($date_string);
+                                                    // $numberofWeek = weekOfMonth($date_string);
+                                                    $date = new DateTime($date_string);
+                                                    $numberofWeek = $date->format("W");
                                                     $weeknow = "week $numberofWeek";
                                                     // echo $weeknow;
                                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
@@ -439,7 +443,9 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                   echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                   //$month = date("F");
                                   //$year = date("Y");
-                                                $numberofWeek = weekOfMonth($date_string);
+                                                // $numberofWeek = weekOfMonth($date_string);
+                                                $date = new DateTime($date_string);
+                                                $numberofWeek = $date->format("W");
                                                 $weeknow = "week $numberofWeek";
                                                 // echo $weeknow;
                                                 $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
@@ -485,7 +491,9 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                       echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                       //$month = date("F");
                                       //$year = date("Y");
-                                                    $numberofWeek = weekOfMonth($date_string);
+                                                // $numberofWeek = weekOfMonth($date_string);
+                                                $date = new DateTime($date_string);
+                                                $numberofWeek = $date->format("W");
                                                     $weeknow = "week $numberofWeek";
                                                     // echo $weeknow;
                                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
@@ -532,7 +540,9 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                     echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                     //$month = date("F");
                                     //$year = date("Y");
-                                                  $numberofWeek = weekOfMonth($date_string);
+                                                // $numberofWeek = weekOfMonth($date_string);
+                                                $date = new DateTime($date_string);
+                                                $numberofWeek = $date->format("W");
                                                   $weeknow = "week $numberofWeek";
                                                   // echo $weeknow;
                                                   $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";
@@ -579,7 +589,9 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                       echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                       //$month = date("F");
                                       //$year = date("Y");
-                                                    $numberofWeek = weekOfMonth($date_string);
+                                                // $numberofWeek = weekOfMonth($date_string);
+                                                $date = new DateTime($date_string);
+                                                $numberofWeek = $date->format("W");
                                                     $weeknow = "week $numberofWeek";
                                                     // echo $weeknow;
                                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `week` = '$weeknow' AND `month` = '$month' AND `year` = '$year';";

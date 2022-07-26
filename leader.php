@@ -4,27 +4,211 @@
 
   
   //sample of printing weeks number of certain dates
-//   $ddate = '2022-07-24';
-//   $date = new DateTime($ddate);
-//   $week = $date->format("o");
-//   echo "Weeknumber: $week";
-//   echo "<br>";
 
-// $aug = "Jul";
-//   $fDateOfTheMonth = new DateTime('first day of Oct 2022');
- 
-//   $fday =  $fDateOfTheMonth->format('Y-m-d');
-//   echo "First day of the month: ";
-//   echo $fday;
-//   $lDateOfTheMonth = new DateTime('last day of Apr 2023');
+  // Create a new DateTime object
 
-//   $lday =  $lDateOfTheMonth->format('Y-m-d');
-//   echo "last day of the month: ";
-//   echo $lday;
-//   echo "<br>";
   
-// $start = new DateTime($fday);
-// $end = new DateTime($lday);
+  // $arrayWeekNumbers=array("29", "28");
+
+  // $arrlength = count($arrayWeekNumbers);
+
+  // for($x = 0; $x < $arrlength; $x++) {
+   
+  //   $week = 'week '.$arrayWeekNumbers[$x];
+  //   echo $week;
+  //   echo "<br>";
+  // }
+  $arrayNumberOfDaysPass=array();
+  $arrayWeekNumbers=array();
+  $arrayMonth=array();
+  $arrayYear=array();
+  $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '191' LIMIT 1";
+            $result = mysqli_query($con, $selectUserTask);
+  
+            while($userRow = mysqli_fetch_assoc($result)){
+              $dateStarted = $userRow['dateStarted'];
+            }
+  
+            $date = new DateTime($dateStarted);
+            // echo "Next monday is: ";
+            // $date->format('Y-m-d');
+            $startDate = $date->format('Y-m-d');
+            $start = new DateTime($startDate);
+            $end = new DateTime();
+            // otherwise the  end date is excluded (bug?)
+            $start->modify('+1 day');
+            // echo date('F j, Y');
+            $interval = $end->diff($start);
+            
+            // total days
+            $days = $interval->days;
+            // echo $days;
+            // create an iterateable period of date (P1D equates to 1 day)
+            $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+            
+            // best stored as array, so you can add more than one
+            $holidays = array('2022-07-15');
+            $weekNo ="";
+            $NumberOfWeeksToDone = 0;
+            foreach($period as $dt) {
+                $curr = $dt->format('W');
+                $date = $dt->format('Y-m-d');
+                $currMonth = $dt->format('F');
+                $currYear = $dt->format('Y');
+                echo $date;
+                echo "<br>";
+                array_push($arrayNumberOfDaysPass,"$date");
+
+       
+                  // $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
+                  array_push($arrayWeekNumbers,"$curr");
+                  array_push($arrayMonth,"$currMonth");
+                  array_push($arrayYear,"$currYear");
+
+
+                  // echo $curr;
+                  // echo "\n";
+
+                
+            }
+
+
+$arrlength = count($arrayNumberOfDaysPass);
+echo $arrlength;
+
+
+
+
+
+
+
+
+
+
+
+
+  $car = array("2022-07-22", "2022-07-23", "2022-07-25");
+$arrlength = count($car);
+
+for($x = 0; $x < $arrlength; $x++) {
+  // echo $cars[$x];
+  // echo "<br>";
+  $day1 = $car[$x];
+  $date = new DateTime($day1);
+  $day = $date->format('D');
+                  if($day =="Sat" || $day == "Sun"){
+                 
+                  }
+                  else{
+                    echo $day;
+                  }
+}
+
+
+$date = new DateTime('July 08, 2022');
+
+// Modify the date it contains
+// echo $date;
+$date->modify('next monday');
+
+
+$startDate = $date->format('Y-m-d');
+// echo date('r');
+$start = new DateTime($startDate);
+$end = new DateTime();
+// otherwise the  end date is excluded (bug?)
+$end->modify('+1 day');
+// echo date('F j, Y');
+$interval = $end->diff($start);
+
+// total days
+$days = $interval->days;
+// echo $days;
+// create an iterateable period of date (P1D equates to 1 day)
+$period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+// best stored as array, so you can add more than one
+$holidays = array('2022-07-15');
+$weekNo ="";
+foreach($period as $dt) {
+    $curr = $dt->format('W');
+    if($curr==$weekNo){
+      echo null;
+    }
+    else{
+      echo $curr;
+      echo "\n";
+      $weekNo = $curr;
+    }
+}
+// Output
+echo "Next monday is: ";
+          $DateEnd =  $date->format('Y-m-d');
+          echo $date->format('Y-m-d');
+          $end = new DateTime(date('Y-m-d'));
+          $start = new DateTime($DateEnd);
+        // otherwise the  end date is excluded (bug?)
+          $end->modify('+1 day');
+
+          $interval = $end->diff($start);
+
+          // total days
+          $finalDiff = $interval->days;
+
+          // create an iterateable period of date (P1D equates to 1 day)
+          $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+          // best stored as array, so you can add more than one
+          $holidays = array('2012-09-07');
+
+          foreach($period as $dt) {
+              $curr = $dt->format('D');
+
+              // substract if Saturday or Sunday
+              if ($curr == 'Sat' || $curr == 'Sun') {
+                $finalDiff--;
+              }
+
+              // (optional) for the updated question
+              elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+                $finalDiff--;
+              }
+          }
+
+         echo "<br>";
+          echo "Number of days past since the next monday of that day: ";
+          echo $finalDiff;
+
+          echo "<br>";
+  $ddate = '2022-07-24';
+  $date = new DateTime($ddate);
+  
+  $week = $date->format("W");
+  echo "Weeknumber: $week";
+  echo "<br>";
+
+
+
+$aug = "Jul";
+  $fDateOfTheMonth = new DateTime('first day of this month');
+ 
+  $fday =  $fDateOfTheMonth->format('Y-m-d');
+  echo "First day of the month: ";
+  echo $fday;
+  $lDateOfTheMonth = new DateTime('July 13, 2022');
+$sub = 2;
+  $lDateOfTheMonth->modify("-$sub day");
+  $lday =  $lDateOfTheMonth->format('F j, Y');
+  $realDate = date('Y-m-d', strtotime($lday));
+  echo "<br>";
+  echo "subtracted Date from 2: ";
+  echo $realDate;
+  echo "<br>";
+
+
+  //code of getting week numbers from this date to this date
+// $start = new DateTime("July 04, 2022");
+// $end = new DateTime();
 // // otherwise the  end date is excluded (bug?)
 // $end->modify('+1 day');
 // // echo date('F j, Y');
@@ -944,7 +1128,7 @@ if(isset($_POST['AddCategory'])){
             
             <input type="date" id="datepickerEnd" name="datepickerEnd" onchange="filterMonth();">
             <button type="submit" name="submitdate" class="btn btn-info btn-sm">Submit</button>
-            <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-print fa-xs"></i> Print</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
                          
             <!-- <input type="submit" name="submitdate"> -->
             </form>
@@ -1071,7 +1255,7 @@ if(isset($_POST['AddCategory'])){
                                   }
                                   
                                     ?>
-                                    <input id="countColumn" name="countColumnName" value="<?php echo $countColumns ?>">
+                                    <input id="countColumn" disabled style="display: none;" name="countColumnName" value="<?php echo $countColumns ?>">
                                     <!-- <th style="width:8%;" >W1</th>
                                     <th style="width:8%;" >W2</th>
                                     <th style="width:8%;" >W3</th>
