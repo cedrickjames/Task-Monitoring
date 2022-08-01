@@ -261,18 +261,23 @@ echo $taskType;
 
           $mondaylw =  date("Y-m-d", strtotime("monday last week"));
           $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
-              echo "merom";
+              //echo "merom";
           $meronBaSiyaLastWeek = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `realDate` BETWEEN '$mondaylw' AND '$sundaylw';";
           // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
           $result = mysqli_query($con, $meronBaSiyaLastWeek);
           $meron = mysqli_num_rows($result);
           $IntervalDays = $_SESSION['noOfDaysLate'];
           echo "<script> console.log('$meron') </script>";//find2
-          if($IntervalDays <=7 ){
+          if($IntervalDays <=5 ){
             // echo "meron";
             if($_SESSION['newFileLoc'] ==""){
-              echo "merom";
               $fileloc ="" ;
+            }
+            else{
+              $fileloc = $_SESSION['newFileLoc'];
+            }
+              //echo "merom";
+              
     
               $today = $_SESSION['today'];
 
@@ -302,34 +307,15 @@ echo $taskType;
 
               $_SESSION['noOfDaysLate']="";
     
-            }else{
-              $today = $_SESSION['today'];
-    
-              $from=date_create(date('Y-m-d'));
-              $to=date_create(date('Y-m-d', strtotime($today)));
-              $diff=date_diff($to,$from);
-              // print_r($diff);
-              // $finalDiff =  $diff->format('%R%a');
-              $finalDiff = "0";
-              $fileloc = $_SESSION['newFileLoc'] ;
-              $myReason = $_SESSION['reason'];
-              $realDate = date('Y-m-d', strtotime($today));
-    
-              $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
-    
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate' ,'1');";
-              mysqli_query($con, $sqlinsert);
-              header("location:index.php");
-              unset($_SESSION['newFileLoc']);
-              $_SESSION['reason'] = "";
-              $_SESSION['noOfDaysLate']="";
-              $_SESSION['action'] = "";
-              
-            }
           }
-          else if($IntervalDays >7) {//find3
+          else if($IntervalDays >5) {//find3
+          
             if($_SESSION['newFileLoc'] ==""){
+              $fileloc ="" ;
+            }
+            else{
+              $fileloc = $_SESSION['newFileLoc'];
+            }
 
               $arrayWeekNumbers=array();
               $arrayMonth=array();
@@ -391,8 +377,8 @@ $arrlength = count($arrayWeekNumbers);
 
 for($x = 0; $x <$arrlength; $x++) {
   // echo $cars[$x];
-           $fileloc ="" ;
-    
+          
+    //ito ang gayahan
               $today = $_SESSION['today'];
               $dateNewToday = new DateTime($today);
                 $weekNumberNew = $dateNewToday->format("W");
@@ -422,7 +408,7 @@ for($x = 0; $x <$arrlength; $x++) {
                   
 
               if($x<$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0');";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -432,7 +418,7 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5');";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -441,7 +427,7 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVar2){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1');";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -481,31 +467,7 @@ for($x = 0; $x <$arrlength; $x++) {
     //           $_SESSION['noOfDaysLate']="";
     //           $_SESSION['action'] = "";
     
-            }else{
-              $today = $_SESSION['today'];
-    
-              $from=date_create(date('Y-m-d'));
-              $to=date_create(date('Y-m-d', strtotime($today)));
-              $diff=date_diff($to,$from);
-              // print_r($diff);
-              // $finalDiff =  $diff->format('%R%a');
-              $finalDiff =4;
-              $fileloc = $_SESSION['newFileLoc'] ;
-              $myReason = $_SESSION['reason'];
-              $realDate = date('Y-m-d', strtotime($today));
-    
-              $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
-    
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate', '0.5');";
-              mysqli_query($con, $sqlinsert);
-              header("location:index.php");
-              unset($_SESSION['newFileLoc']);
-              $_SESSION['reason'] = "";
-              $_SESSION['noOfDaysLate']="";
-              $_SESSION['action'] = "";
-              
-            }
+            
           }
         }
           
@@ -517,7 +479,10 @@ for($x = 0; $x <$arrlength; $x++) {
         else if($taskType == "daily"){
           if($_SESSION['newFileLoc'] ==""){
             $fileloc ="" ;
-  
+          }
+          else{
+            $fileloc = $_SESSION['newFileLoc'];
+          }
             $today = $_SESSION['today'];
             $dateNewToday = new DateTime($today);
                 $weekNumberNew = $dateNewToday->format("W");
@@ -534,6 +499,7 @@ for($x = 0; $x <$arrlength; $x++) {
   // $myReason = $_SESSION['reason'];
   
   if($finalDiff >=2){
+    $isLate = true;
      
     $arrayNumberOfDaysPass=array();
     $arrayWeekNumbers=array();
@@ -551,9 +517,20 @@ for($x = 0; $x <$arrlength; $x++) {
               // $date->format('Y-m-d');
               $startDate = $date->format('Y-m-d');
               $start = new DateTime($startDate);
+              // $start->modify('+1 day');
+              $eme = $start->format('D');
+                    if($eme == "Sat"){
+                      $start->modify('-1 day');
+
+                    }
+                    else if( $eme =="Sun"){
+                      $start->modify('-2 day');
+                    }
+              $start->modify('+1 day');
+                    
               $end = new DateTime();
               // otherwise the  end date is excluded (bug?)
-               $start->modify('+1 day');
+              //  $end->modify('+1 day');
               // echo date('F j, Y');
               $interval = $end->diff($start);
               
@@ -568,20 +545,34 @@ for($x = 0; $x <$arrlength; $x++) {
               $weekNo ="";
               $NumberOfWeeksToDone = 0;
               foreach($period as $dt) {
+
+                $currd = $dt->format('D');
+
+// substract if Saturday or Sunday
+
                   $curr = $dt->format('W');
                   $date = $dt->format('Y-m-d');
                   $currMonth = $dt->format('F');
                   $currYear = $dt->format('Y');
-                  array_push($arrayNumberOfDaysPass,"$date");
+
+              $day = $dt->format('D');
+                              if($day =="Sat" || $day == "Sun"){
+                                // echo "";
+                             
+                              }
+                              else{
+                                array_push($arrayNumberOfDaysPass,"$date");
 
          
-                    // $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
-                    array_push($arrayWeekNumbers,"$curr");
-                    array_push($arrayMonth,"$currMonth");
-                    array_push($arrayYear,"$currYear");
+                                // $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
+                                array_push($arrayWeekNumbers,"$curr");
+                                array_push($arrayMonth,"$currMonth");
+                                array_push($arrayYear,"$currYear");
+                              }
+                 
 
 
-                    // echo $curr;
+         // echo $curr;
                     // echo "\n";
  
                   
@@ -589,15 +580,554 @@ for($x = 0; $x <$arrlength; $x++) {
 
 
 $arrlength = count($arrayNumberOfDaysPass);
+$arrlengthBasis = count($arrayNumberOfDaysPass);
+
+$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+$result = mysqli_query($con, $selectUserTask);
+
+while($userRow = mysqli_fetch_assoc($result)){
+  $todayss = $userRow['dateStarted'];
+}
+
+// $from=date_create(date('Y-m-d'));
+// $to=date_create(date('Y-m-d', strtotime($today)));
+// $diff=date_diff($to,$from);
+// // print_r($diff);
+// $finalDiff =  $diff->format('%R%a');
+// $finalDiff = $finalDiff-1;
+
+$ends = new DateTime(date('Y-m-d'));
+$starts = new DateTime(date('Y-m-d', strtotime($todayss)));
+// otherwise the  end date is excluded (bug?)
+
+
+$eme = $starts->format('D');
+      if($eme == "Sat"){
+        $starts->modify('-1 day');
+
+      }
+      else if( $eme =="Sun"){
+        $starts->modify('-2 day');
+      }
+       $starts->modify('+1 day');
+$end = new DateTime();
+// $ends->modify('+1 day');
+
+$intervals = $ends->diff($starts);
+
+// total days
+$finalDiffs = $intervals->days;
+
+// create an iterateable period of date (P1D equates to 1 day)
+$periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+
+// best stored as array, so you can add more than one
+$holidays = array('2012-09-07');
+
+foreach($periods as $dts) {
+$currs = $dts->format('D');
+
+// substract if Saturday or Sunday
+if ($currs == 'Sat' || $currs == 'Sun') {
+$finalDiffs--;
+
+}
+
+// (optional) for the updated question
+else if (in_array($dts->format('Y-m-d'), $holidays)) {
+$finalDiffs--;
+
+}
+}
+echo " <script>console.log('1. $finalDiffs') </script>";
+// $finalDiffs=$finalDiffs-2;
 for($x = 0; $x <$arrlength; $x++) {
   // echo $cars[$x];
-  $finalDiff = $arrlength;
-           $fileloc ="" ;
+
+
+  echo " <script>console.log('VALUE NG X. $x') </script>";
+
+
+
+
+
+          //  $fileloc ="" ;
     
               $today = $_SESSION['today'];
               $dateNewToday = new DateTime($today);
                 $weekNumberNew = $dateNewToday->format("W");
                 $week = 'week '.$arrayWeekNumbers[$x];
+                $month = $arrayMonth[$x];
+                  $year = $arrayYear[$x];
+              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+              $from=date_create(date('Y-m-d'));
+              $to=date_create(date('Y-m-d', strtotime($today)));
+              $diff=date_diff($to,$from);
+              // print_r($diff);
+              // $finalDiff =  $diff->format('%R%a');
+              // $finalDiff =$IntervalDays; //ibig sabihin late na
+              $realDate = date('Y-m-d', strtotime($today));
+    
+    // $myReason = $_SESSION['reason'];
+
+    $date = new DateTime($today);
+
+    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+              mysqli_query($con, $updateDateStarted);
+
+              $validationVariable = $arrlengthBasis-2;
+              $validationVar2 = $arrlengthBasis-1;
+              echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </script>";
+
+              //find4
+
+              $day1 = $arrayNumberOfDaysPass[$x];
+
+              $dateToConvert = new DateTime($day1);
+              $today = $dateToConvert->format('F j, Y');
+              $realDate = $dateToConvert->format('Y-m-d');
+                               
+              if($x<$validationVariable){
+echo " <script>console.log('ITO ANG VALUE NG Xx. $x') </script>";
+echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </script>";
+
+
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0', $isLate);";
+                mysqli_query($con, $sqlinsert);
+                // header("location:index.php");
+                unset($_SESSION['newFileLoc']);
+                // echo $_SESSION
+                $_SESSION['reason'] = "";
+                $_SESSION['noOfDaysLate']="";
+                $_SESSION['action'] = "";
+                $finalDiffs--;
+                
+              }
+              else if($x==$validationVariable){
+echo " <script>console.log('2. $finalDiff') </script>";
+echo " <script>console.log('ITO ANG VALUE NG y. $x') </script>";
+
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0.5', $isLate);";
+                mysqli_query($con, $sqlinsert);
+                // header("location:index.php");
+                unset($_SESSION['newFileLoc']);
+                $_SESSION['reason'] = "";
+                $_SESSION['noOfDaysLate']="";
+                $_SESSION['action'] = "";
+                $finalDiffs--;
+
+               
+              }
+              else if($x==$validationVar2){
+echo " <script>console.log('3. $finalDiff') </script>";
+echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
+
+
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', $isLate);";
+                mysqli_query($con, $sqlinsert);
+                // header("location:index.php");
+                unset($_SESSION['newFileLoc']);
+                $_SESSION['reason'] = "";
+                $_SESSION['noOfDaysLate']="";
+                $_SESSION['action'] = "";
+                $finalDiffs--;
+
+               
+              }
+                              
+
+
+
+  }
+  header("location:index.php");
+
+}
+  else{
+
+    $isLate = true;
+     
+    $arrayNumberOfDaysPass=array();
+    $arrayWeekNumbers=array();
+    $arrayMonth=array();
+    $arrayYear=array();
+    $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+              $result = mysqli_query($con, $selectUserTask);
+    
+              while($userRow = mysqli_fetch_assoc($result)){
+                $dateStarted = $userRow['dateStarted'];
+              }
+    
+              $date = new DateTime($dateStarted);
+              // echo "Next monday is: ";
+              // $date->format('Y-m-d');
+              $startDate = $date->format('Y-m-d');
+              $start = new DateTime($startDate);
+              // $start->modify('+1 day');
+              $eme = $start->format('D');
+                    if($eme == "Sat"){
+                      $start->modify('-1 day');
+
+                    }
+                    else if( $eme =="Sun"){
+                      $start->modify('-2 day');
+                    }
+              $start->modify('+1 day');
+                    
+              $end = new DateTime();
+              // otherwise the  end date is excluded (bug?)
+              //  $end->modify('+1 day');
+              // echo date('F j, Y');
+              $interval = $end->diff($start);
+              
+              // total days
+              $days = $interval->days;
+              // echo $days;
+              // create an iterateable period of date (P1D equates to 1 day)
+              $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+              
+              // best stored as array, so you can add more than one
+              $holidays = array('2022-07-15');
+              $weekNo ="";
+              $NumberOfWeeksToDone = 0;
+              foreach($period as $dt) {
+
+                $currd = $dt->format('D');
+
+// substract if Saturday or Sunday
+
+                  $curr = $dt->format('W');
+                  $date = $dt->format('Y-m-d');
+                  $currMonth = $dt->format('F');
+                  $currYear = $dt->format('Y');
+
+              $day = $dt->format('D');
+                              if($day =="Sat" || $day == "Sun"){
+                                // echo "";
+                             
+                              }
+                              else{
+                                array_push($arrayNumberOfDaysPass,"$date");
+
+         
+                                // $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
+                                array_push($arrayWeekNumbers,"$curr");
+                                array_push($arrayMonth,"$currMonth");
+                                array_push($arrayYear,"$currYear");
+                              }
+                 
+
+
+         // echo $curr;
+                    // echo "\n";
+ 
+                  
+              }
+
+
+$arrlength = count($arrayNumberOfDaysPass);
+$arrlengthBasis = count($arrayNumberOfDaysPass);
+
+$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+$result = mysqli_query($con, $selectUserTask);
+
+while($userRow = mysqli_fetch_assoc($result)){
+  $todayss = $userRow['dateStarted'];
+}
+
+// $from=date_create(date('Y-m-d'));
+// $to=date_create(date('Y-m-d', strtotime($today)));
+// $diff=date_diff($to,$from);
+// // print_r($diff);
+// $finalDiff =  $diff->format('%R%a');
+// $finalDiff = $finalDiff-1;
+
+$ends = new DateTime(date('Y-m-d'));
+$starts = new DateTime(date('Y-m-d', strtotime($todayss)));
+// otherwise the  end date is excluded (bug?)
+
+
+$eme = $starts->format('D');
+      if($eme == "Sat"){
+        $starts->modify('-1 day');
+
+      }
+      else if( $eme =="Sun"){
+        $starts->modify('-2 day');
+      }
+       $starts->modify('+1 day');
+$end = new DateTime();
+// $ends->modify('+1 day');
+
+$intervals = $ends->diff($starts);
+
+// total days
+$finalDiffs = $intervals->days;
+
+// create an iterateable period of date (P1D equates to 1 day)
+$periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+
+// best stored as array, so you can add more than one
+$holidays = array('2012-09-07');
+
+foreach($periods as $dts) {
+$currs = $dts->format('D');
+
+// substract if Saturday or Sunday
+if ($currs == 'Sat' || $currs == 'Sun') {
+$finalDiffs--;
+
+}
+
+// (optional) for the updated question
+else if (in_array($dts->format('Y-m-d'), $holidays)) {
+$finalDiffs--;
+
+}
+}
+echo " <script>console.log('1. $finalDiffs') </script>";
+// $finalDiffs=$finalDiffs-2;
+for($x = 0; $x <$arrlength; $x++) {
+  // echo $cars[$x];
+
+
+  echo " <script>console.log('VALUE NG X. $x') </script>";
+
+
+
+
+
+          //  $fileloc ="" ;
+    
+              $today = $_SESSION['today'];
+              $dateNewToday = new DateTime($today);
+                $weekNumberNew = $dateNewToday->format("W");
+                $week = 'week '.$arrayWeekNumbers[$x];
+                $month = $arrayMonth[$x];
+                  $year = $arrayYear[$x];
+              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+              $from=date_create(date('Y-m-d'));
+              $to=date_create(date('Y-m-d', strtotime($today)));
+              $diff=date_diff($to,$from);
+              // print_r($diff);
+              // $finalDiff =  $diff->format('%R%a');
+              // $finalDiff =$IntervalDays; //ibig sabihin late na
+              $realDate = date('Y-m-d', strtotime($today));
+    
+    // $myReason = $_SESSION['reason'];
+
+    $date = new DateTime($today);
+
+    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+              mysqli_query($con, $updateDateStarted);
+
+              $validationVariable = $arrlengthBasis-2;
+              $validationVar2 = $arrlengthBasis-1;
+              echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </script>";
+
+              //find4
+
+              $day1 = $arrayNumberOfDaysPass[$x];
+
+              $dateToConvert = new DateTime($day1);
+              $today = $dateToConvert->format('F j, Y');
+              $realDate = $dateToConvert->format('Y-m-d');
+                               
+              if($x<$validationVariable){
+echo " <script>console.log('ITO ANG VALUE NG Xx. $x') </script>";
+echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </script>";
+
+
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0', false);";
+                mysqli_query($con, $sqlinsert);
+                // header("location:index.php");
+                unset($_SESSION['newFileLoc']);
+                // echo $_SESSION
+                $_SESSION['reason'] = "";
+                $_SESSION['noOfDaysLate']="";
+                $_SESSION['action'] = "";
+                $finalDiffs--;
+                
+              }
+              else if($x==$validationVariable){
+echo " <script>console.log('2. $finalDiff') </script>";
+echo " <script>console.log('ITO ANG VALUE NG y. $x') </script>";
+
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
+                mysqli_query($con, $sqlinsert);
+                // header("location:index.php");
+                unset($_SESSION['newFileLoc']);
+                $_SESSION['reason'] = "";
+                $_SESSION['noOfDaysLate']="";
+                $_SESSION['action'] = "";
+                $finalDiffs--;
+
+               
+              }
+              else if($x==$validationVar2){
+echo " <script>console.log('3. $finalDiff') </script>";
+echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
+
+
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
+                mysqli_query($con, $sqlinsert);
+                // header("location:index.php");
+                unset($_SESSION['newFileLoc']);
+                $_SESSION['reason'] = "";
+                $_SESSION['noOfDaysLate']="";
+                $_SESSION['action'] = "";
+                $finalDiffs--;
+
+               
+              }
+                              
+
+
+
+  }
+  header("location:index.php");
+
+
+  }
+  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+            mysqli_query($con, $updateDateStarted);
+            
+            // $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
+            // mysqli_query($con, $sqlinsert);
+          //  header("location:index.php");//comment
+
+  
+          
+        }
+
+       else if($taskType == "monthly"){
+
+
+        $IntervalDays = $_SESSION['noOfDaysLate'];
+        echo "<script> console.log('$meron') </script>";//find2
+        if($IntervalDays ==0 ){
+          // echo "meron";
+          if($_SESSION['newFileLoc'] ==""){
+            $fileloc ="" ;
+          }
+          else{
+            $fileloc = $_SESSION['newFileLoc'];
+          }
+            //echo "merom";
+            
+  
+            $today = $_SESSION['today'];
+
+            $dateNewToday = new DateTime($today);
+              $weekNumberNew = $dateNewToday->format("W");
+              $week = 'week '.$weekNumberNew;
+            // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+            $from=date_create(date('Y-m-d'));
+            $to=date_create(date('Y-m-d', strtotime($today)));
+            $diff=date_diff($to,$from);
+            // print_r($diff);
+            // $finalDiff =  $diff->format('%R%a');
+            $finalDiff = "0";
+            $realDate = date('Y-m-d', strtotime($today));
+  
+  $myReason = $_SESSION['reason'];
+  
+  
+  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+            mysqli_query($con, $updateDateStarted);
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
+            mysqli_query($con, $sqlinsert);
+            header("location:index.php");
+            unset($_SESSION['newFileLoc']);
+            $_SESSION['reason'] = "";
+            $_SESSION['action'] = "";
+
+            $_SESSION['noOfDaysLate']="";
+  
+          
+        }
+        else if($IntervalDays >0) {//find3
+        
+          if($_SESSION['newFileLoc'] ==""){
+            $fileloc ="" ;
+          }
+          else{
+            $fileloc = $_SESSION['newFileLoc'];
+          }
+
+            $arrayWeekNumbers=array();
+            $arrayMonth=array();
+            $arrayYear=array();
+            $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+              $result = mysqli_query($con, $selectUserTask);
+    
+              while($userRow = mysqli_fetch_assoc($result)){
+                $dateStarted = $userRow['dateStarted'];
+              }
+
+              $date = new DateTime($dateStarted);
+              $date->modify('next month');
+              $monthOfDate =  $date->format('F');
+              $year =  $date->format('Y');
+
+              $fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+              $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+
+              $lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
+              $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
+
+              $start = new DateTime($FDateofThisMonth);
+              $end = new DateTime();
+              $end->modify('+1 day');
+
+              $interval = $end->diff($start);
+              
+              $days = $interval->days;
+
+              $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+              $holidays = array('2022-07-15');
+
+              $monthNo ="";
+              $NumberOfWeeksToDone = 0;
+              foreach($period as $dt) {
+
+                 
+                  $curr = $dt->format('F');
+                  $currYear = $dt->format('Y');
+
+                  $day =  $dt->format('Y-m-d');
+                  $LDateOfTheMonth = new DateTime('last day of '.$curr);
+                  $Lday =  $LDateOfTheMonth->format('Y-m-d');
+                  $datesss = new DateTime($Lday);
+  
+                  $weeksss = $datesss->format("W");
+                  // echo "Weeknumber: $week";
+                  // echo "<br>";
+
+                  if($curr==$monthNo){
+                    echo null;
+                  }
+                  else{
+                    $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
+                    array_push($arrayMonth,"$curr");
+                    array_push($arrayYear,"$currYear");
+                    array_push($arrayWeekNumbers,"$weeksss");
+                    // echo $curr;
+                    echo "\n";
+                    $monthNo = $curr;
+                  }
+              }
+              $arrlength = count($arrayMonth);
+
+              
+for($x = 0; $x <$arrlength; $x++) {
+  // echo $cars[$x];
+       
+    
+              $today = $_SESSION['today'];
+              $dateNewToday = new DateTime($today);
+                $weekNumberNew = $dateNewToday->format("W");
+                $week = 'week '.$arrayWeekNumbers[$x]; //baguhin, dapat ay present week
                 $month = $arrayMonth[$x];
                   $year = $arrayYear[$x];
               // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
@@ -620,22 +1150,10 @@ for($x = 0; $x <$arrlength; $x++) {
               $validationVar2 = $arrlength-1;
 
               //find4
+                  
 
-              $day1 = $arrayNumberOfDaysPass[$x];
-
-              $dateToConvert = new DateTime($day1);
-              $today = $dateToConvert->format('F j, Y');
-              $realDate = $dateToConvert->format('Y-m-d');
-              $date = new DateTime($day1);
-              $day = $date->format('D');
-                              if($day =="Sat" || $day == "Sun"){
-                                // echo "";
-                                $finalDiff =  $finalDiff-1;
-                              }
-                              else{
-                               
               if($x<$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0');";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -645,7 +1163,7 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5');";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -654,7 +1172,8 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVar2){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1');";
+                $week = 'week '.$weekNumberNew;
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -662,288 +1181,10 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['noOfDaysLate']="";
                 $_SESSION['action'] = "";
               }
-                              }
-
-
-//     // for($i=2; $i >= 0; $i--){
-//     //   echo "<script> console.log('ced:$i') </script>";
-//     // }
-//     for($i=$finalDiff; $i >= 0; $i--){
-//       echo "<script> console.log('ceds:$i') </script>";
-// echo "<script> console.log('$finalDiff') </script>";
-//       // $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '$i');";
-//       //   mysqli_query($con, $sqlinsert);
-//       $initialDateTosubtract = new DateTime($today);
-
-//       $initialDateTosubtract->modify("-$i day");
-//       $subtractedDate =  $initialDateTosubtract->format('F j, Y');
-//       $realDate = date('Y-m-d', strtotime($subtractedDate));
-// for($a=1; $a<=2; $a++){
-//   // $initialDateTosubtract->modify("-$i day");
-//   // $subtractedDate =  $initialDateTosubtract->format('F j, Y');
-//   // $realDate = date('Y-m-d', strtotime($subtractedDate));
-
-//   $day = $initialDateTosubtract->format('D');
-
-// if($day =='Sat' || $day=='Sun'){
-//   $initialDateTosubtract->modify("-$i day");
-//   $subtractedDate =  $initialDateTosubtract->format('F j, Y');
-//   $realDate = date('Y-m-d', strtotime($subtractedDate));
-// }
-// }
-
-//       $weekNumberNew = $initialDateTosubtract->format("W");
-//       $week = 'week '.$weekNumberNew;
-
-      
-//       $validationVariable = $finalDiff-1;
-//       // echo "<script> console.log('$i') </script>";
-
-
-//       if($i < $validationVariable &&  $i !=0){
-//         $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $subtractedDate', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason', '$action', '$realDate', '0');";
-//         mysqli_query($con, $sqlinsert);
-//         unset($_SESSION['newFileLoc']);
-//         $_SESSION['reason'] = "";
-//         $_SESSION['noOfDaysLate']="";
-//         $_SESSION['action'] = "";
-//       }
-//       else if($i == $validationVariable ){
-//         $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $subtractedDate', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason', '$action', '$realDate', '0.5');";
-//         mysqli_query($con, $sqlinsert);
-//         unset($_SESSION['newFileLoc']);
-//         $_SESSION['reason'] = "";
-//         $_SESSION['noOfDaysLate']="";
-//         $_SESSION['action'] = "";
-//       }
-//       else if($i==0){
-//         $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $subtractedDate', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason', '$action', '$realDate', '1');";
-//         mysqli_query($con, $sqlinsert);
-//         unset($_SESSION['newFileLoc']);
-//         $_SESSION['reason'] = "";
-//         $_SESSION['noOfDaysLate']="";
-//         $_SESSION['action'] = "";
-//       }
-//       else if($i==$finalDiff){
-//         $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $subtractedDate', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason', '$action', '$realDate', '0');";
-//         mysqli_query($con, $sqlinsert);
-//                     unset($_SESSION['newFileLoc']);
-//             $_SESSION['reason'] = "";
-//             $_SESSION['noOfDaysLate']="";
-//             $_SESSION['action'] = "";
-//       }
-// echo "<script> console.log('hello $finalDiff') </script>";
-    
-       
-      
-        
-//     }
-  }
+              
 }
-  else{
-    if($finalDiff == 1){
-      $initialDateTosubtract = new DateTime($today);
 
-      $initialDateTosubtract->modify("-1 day");
-      $subtractedDate =  $initialDateTosubtract->format('F j, Y');
-      $realDate = date('Y-m-d', strtotime($subtractedDate));
-
-      $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $subtractedDate', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '0.5');";
-        mysqli_query($con, $sqlinsert);
-    }
-    else if($finalDiff == 0){
-      $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID','  $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '0.5');";
-      mysqli_query($con, $sqlinsert);
-    }
-
-  }
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-            
-            // $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
-            // mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-
-  
-          }else{
-            $today = $_SESSION['today'];
-  
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff = $_SESSION['noOfDaysLate'];
-            $fileloc = $_SESSION['newFileLoc'] ;
-            $myReason = $_SESSION['reason'];
-            $realDate = date('Y-m-d', strtotime($today));
-  
-            
-  if($finalDiff >=2){
-    $score = 0.5;
-  }
-  else{
-    $score = 1;
-  }
-            $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-  
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate` ,`score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate', '$score');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            $_SESSION['action'] = "";
-            
-          }
-        }
-
-       else if($taskType == "monthly"){
-        // echo "orayt";
-
-        $lastMonth =  date("F", strtotime("previous month"));
-        
-            // echo "merom";
-        $meronBaSiyaLastMonth = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `month`= '$lastMonth';";
-        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-        $result = mysqli_query($con, $meronBaSiyaLastMonth);
-        $meron = mysqli_num_rows($result);
-        echo "<script> console.log('$meron') </>";
-        if($meron >=1 ){
-          // echo "meron";
-          if($_SESSION['newFileLoc'] ==""){
-            // echo "merom";
-            $fileloc ="" ;
-  
-            $today = $_SESSION['today'];
-            $dateNewToday = new DateTime($today);
-                $weekNumberNew = $dateNewToday->format("W");
-                $week = 'week '.$weekNumberNew;
-              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff = "0";
-            $realDate = date('Y-m-d', strtotime($today));
-  
-  $myReason = $_SESSION['reason'];
-  if($finalDiff >=2){
-    $score = 0.5;
-  }
-  else{
-    $score = 1;
-  }
-  
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate` ,`score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate' ,'$score');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            $_SESSION['action'] = "";
-
-  
-          }else{
-            $today = $_SESSION['today'];
-  
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff = "0";
-            $fileloc = $_SESSION['newFileLoc'] ;
-            $myReason = $_SESSION['reason'];
-            $realDate = date('Y-m-d', strtotime($today));
-            if($finalDiff >=2){
-              $score = 0.5;
-            }
-            else{
-              $score = 1;
-            }
-            $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-  
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate', '$score');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            $_SESSION['action'] = "";
-            
-          }
-        }
-        else if($meron == 0) {
-          if($_SESSION['newFileLoc'] ==""){
-            $fileloc ="" ;
-  
-            $today = $_SESSION['today'];
-            $dateNewToday = new DateTime($today);
-                $weekNumberNew = $dateNewToday->format("W");
-                $week = 'week '.$weekNumberNew;
-              // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff =4; //ibig sabihin late na
-            $realDate = date('Y-m-d', strtotime($today));
-  
-  $myReason = $_SESSION['reason'];
-  if($finalDiff >=2){
-    $score = 0.5;
-  }
-  else{
-    $score = 1;
-  }
-  
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`,  `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate', '$score');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            $_SESSION['action'] = "";
-  
-          }else{
-            $today = $_SESSION['today'];
-  
-            $from=date_create(date('Y-m-d'));
-            $to=date_create(date('Y-m-d', strtotime($today)));
-            $diff=date_diff($to,$from);
-            // print_r($diff);
-            // $finalDiff =  $diff->format('%R%a');
-            $finalDiff =4;
-            $fileloc = $_SESSION['newFileLoc'] ;
-            $myReason = $_SESSION['reason'];
-            $realDate = date('Y-m-d', strtotime($today));
-            if($finalDiff >=2){
-              $score = 0.5;
-            }
-            else{
-              $score = 1;
-            }
-            $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
-  
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`, `task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason','$action', '$realDate', '$score');";
-            mysqli_query($con, $sqlinsert);
-            header("location:index.php");
-            unset($_SESSION['newFileLoc']);
-            $_SESSION['reason'] = "";
-            $_SESSION['noOfDaysLate']="";
-            $_SESSION['action'] = "";
-            
-          }
+          
         }
        }
   
@@ -1328,7 +1569,7 @@ for($x = 0; $x <$arrlength; $x++) {
                                           $result = mysqli_query($con, $meronBaSiyaLastWeek);
                                           $meron = mysqli_num_rows($result);
                                           if($meron >=1){
-                                            echo '<span id = "doneORnot" class="mode mode_done">On going</span>';
+                                            echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
                                           }
                                           else{
                                             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
@@ -1356,7 +1597,7 @@ for($x = 0; $x <$arrlength; $x++) {
                                   }
                                     if ($numrows >= 1){
                                       if($noOfDays > 2){
-                                        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                        echo '<span id = "doneORnot" class="mode mode_late">LATEs</span>';
                                       }
                                       else if($noOfDays <=2 && $noOfDays>=0){
                                         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
@@ -1374,7 +1615,7 @@ for($x = 0; $x <$arrlength; $x++) {
                                           $meronlastMonth = mysqli_num_rows($resultm);
 
                                           if($meronlastMonth >=1){
-                                            echo '<span id = "doneORnot" class="mode mode_done">On going</span>';
+                                            echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
                                           }
                                           else if($meronlastMonth <=0){
                                         echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
@@ -1396,20 +1637,20 @@ for($x = 0; $x <$arrlength; $x++) {
                                     $numrows = mysqli_num_rows($result);
                                     $don = "0";
                                     while($userRow = mysqli_fetch_assoc($result)){
-                                      $noOfDays = $userRow['noOfDaysLate'];
+                                      $isLate = $userRow['isLate'];
                                     
                           
                                   }
                                   
 
                                     if ($numrows >= 1){
-                                      if($noOfDays >= 2){
+                                      if($isLate){
                                         echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
                                       }
-                                      else if($noOfDays <=1 && $noOfDays >=0){
+                                      else if(!$isLate){
                                         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
                                       }
-                                      else if($noOfDays <1){
+                                      else if(!$isLate){
                                         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
                                       }
                                       $don = "1";
@@ -1476,10 +1717,10 @@ $finalDiff=$finalDiff-2;
                                             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
                                               }
                                               else if($finalDiff <= 0){
-                                            echo '<span id = "doneORnot" class="mode mode_done">On Going</span>';
+                                            echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
                                               }
                                               else if($finalDiff ==1){
-                                                echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">On goinqg</span>';
+                                                echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
                                                   }
                                                   // echo $finalDiff;
                                          }
@@ -2036,7 +2277,7 @@ if ($taskType == 'weekly'){
           // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
           $result = mysqli_query($con, $meronBaSiyaLastWeek);
           $meron = mysqli_num_rows($result);
-          if($finalDiff >7){
+          if($finalDiff >5){
             $_SESSION['noOfDaysLate']=$finalDiff;
             $_SESSION['TaskID'] = $_GET['FinishSample'];
             echo "<script> 
@@ -2046,7 +2287,7 @@ if ($taskType == 'weekly'){
   document.getElementById('daysLate').value=$finalDiff;
   </script>";
           }
-          else if($finalDiff <=7){
+          else if($finalDiff <=5){
      $_SESSION['noOfDaysLate']='0';
          $_SESSION['TaskID'] = $_GET['FinishSample'];
          $taskID = $_SESSION['TaskID'];
@@ -2060,38 +2301,318 @@ if ($taskType == 'weekly'){
          
     }
     else if($taskType == 'monthly'){
-      $year1 = $_SESSION['year'];
-                    
 
-                    
-                        $lastmonth =  date("F", strtotime("previous month"));
 
-                        $meronBaSiyaLastMonth = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$lastmonth' AND `year` = '$year1' ;";
-                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                        $resultm = mysqli_query($con, $meronBaSiyaLastMonth);
+ 
+      $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+      $result = mysqli_query($con, $selectUserTask);
 
-                        $meronlastMonth = mysqli_num_rows($resultm);
+      while($userRow = mysqli_fetch_assoc($result)){
+        $dateStarted = $userRow['dateStarted'];
+      }
 
-                        if($meronlastMonth >=1){
-                          $_SESSION['noOfDaysLate']='0';
-         $_SESSION['TaskID'] = $_GET['FinishSample'];
-         $taskID = $_SESSION['TaskID'];
-         echo "<script>  
-         $('#actionModal').modal('show');
-          //  document.getElementById('finished$taskID').click();    DITO AKO NATAPOS  
-                   </script>";
+      $date = new DateTime($dateStarted);
+      $datenow = new DateTime($dateStarted);
 
-                        }
-                        else if($meronlastMonth <=0){
-                          $_SESSION['noOfDaysLate']= '4';
-                          $_SESSION['TaskID'] = $_GET['FinishSample'];
-                          echo "<script> 
-                          document.getElementById('daysLateDiv').style.display = 'none';
-                          $('#reasonModal').modal('show');
+
+      $dateStarteds = new DateTime($dateStarted);
+      $monthOfLastDate =  $dateStarteds->format('F');
+          $yearOfLastDate =  $dateStarteds->format('Y');
+    
+          $monthofThisMonth = new DateTime(date('Y-m-d'));
+          $Month_Now = $monthofThisMonth->format('F');
+          $yearOfThisMonth = new DateTime(date('Y-m-d'));
+          $Year_Now = $yearOfThisMonth->format('Y');
+    
+
+          $nextMonth = $date->modify('next month');
+          // $date->format('Y-m-d');
+          $nextMonthHehe =  $nextMonth->format('F');
+          $yearOfNextDate =  $date->format('Y');
+
+
+          if($nextMonthHehe == $Month_Now ){
+
+$finalDiff = "0";
+$finalDiff2 = "2";
+
+            
+//       // $date->format('Y-m-d');
+//       $monthOfDate =  $date->format('F');
+//       $year =  $date->format('Y');
+
+// $fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+// $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+
+//       // echo $FDateofThisMonth;
+
+//       $lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
+//       $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
+//           // echo $FDateofThisMonth;
+
+//       $end2 = new DateTime(date($LDateofThisMonth));
+//       $start2 = new DateTime($FDateofThisMonth);
+//     // otherwise the  end date is excluded (bug?)
+//       $end2->modify('+1 day');
+
+//       $interval2 = $end2->diff($start2);
+
+//       // total days
+//       $finalDiff2 = $interval2->days;
+
+//       // create an iterateable period of date (P1D equates to 1 day)
+//       $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
+
+//       // best stored as array, so you can add more than one
+//       $holidays2 = array('2012-09-07');
+
+//       foreach($period2 as $dt2) {
+//           $curr2 = $dt2->format('D');
+
+//           // substract if Saturday or Sunday
+//           if ($curr2 == 'Sat' || $curr2 == 'Sun') {
+//             $finalDiff2--;
+//           }
+
+//           // (optional) for the updated question
+//           elseif (in_array($dt2->format('Y-m-d'), $holidays2)) {
+//             $finalDiff2--;
+//           }
+//       }
+//       $finalDiff3 = $finalDiff2;
+// $finalDiff2 = $finalDiff2+2;
+
+
+//             // $date->format('Y-m-d');
+//             $monthOfDate =  $date->format('F');
+//             $year =  $date->format('Y');
+     
       
-                </script>";
+      
+//             // $date->format('Y-m-d');
+//             // $DateEnd =  $date->format('Y-m-d');
+//             $end = new DateTime(date('Y-m-d'));
+//             $start = new DateTime($dateStarted);
+      
+      
+//             // echo $n1 + $n2;
+      
+      
+      
+//             $eememe =  $end->format('Y-m-d');
+//               $DateEnd =  $start->format('Y-m-d');
+//           // otherwise the  end date is excluded (bug?)
+//             $end->modify('+1 day');
+           
+//             $interval = $end->diff($start);
+      
+//             // total days
+//             $finalDiff = $interval->days;
+      
+//             // create an iterateable period of date (P1D equates to 1 day)
+//             $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+      
+//             // best stored as array, so you can add more than one
+//             $holidays = array('2012-09-07');
+      
+//             foreach($period as $dt) {
+//                 $curr = $dt->format('D');
+      
+//                 // substract if Saturday or Sunday
+//                 if ($curr == 'Sat' || $curr == 'Sun') {
+//                   $finalDiff--;
+//                 }
+      
+//                 // (optional) for the updated question
+//                 elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+//                   $finalDiff--;
+//                 }
+//             }
+//             $finalDiff = $finalDiff-2;
+          }
+          else{
+          // echo "Next monday is: ";
+      // $date->modify('next monday');
 
-                        }
+
+      // echo "Next monday is: ";
+      // $date->modify('next monday');
+
+
+      // echo "Next monday is: ";
+      $date->modify('next month');
+      // $date->format('Y-m-d');
+      $monthOfDate =  $date->format('F');
+      $year =  $date->format('Y');
+
+$fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+$FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+
+      // echo $FDateofThisMonth;
+
+      $lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
+      $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
+          // echo $FDateofThisMonth;
+
+      $end2 = new DateTime(date($LDateofThisMonth));
+      $start2 = new DateTime($FDateofThisMonth);
+    // otherwise the  end date is excluded (bug?)
+      $end2->modify('+1 day');
+
+      $interval2 = $end2->diff($start2);
+
+      // total days
+      $finalDiff2 = $interval2->days;
+
+      // create an iterateable period of date (P1D equates to 1 day)
+      $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
+
+      // best stored as array, so you can add more than one
+      $holidays2 = array('2012-09-07');
+
+      foreach($period2 as $dt2) {
+          $curr2 = $dt2->format('D');
+
+          // substract if Saturday or Sunday
+          if ($curr2 == 'Sat' || $curr2 == 'Sun') {
+            $finalDiff2--;
+          }
+
+          // (optional) for the updated question
+          elseif (in_array($dt2->format('Y-m-d'), $holidays2)) {
+            $finalDiff2--;
+          }
+      }
+      $finalDiff3 = $finalDiff2;
+
+$finalDiff2 = $finalDiff2+2;
+
+
+
+
+      // $date->format('Y-m-d');
+      // $DateEnd =  $date->format('Y-m-d');
+      $end = new DateTime(date('Y-m-d'));
+      // $end = new DateTime('2022-06-30');
+
+      $start = new DateTime($FDateofThisMonth);
+
+
+
+      $from=date_create(date('Y-m-d'));
+      $to=date_create($FDateofThisMonth);
+      $diff=date_diff($to,$from);
+      // print_r($diff);
+      // echo $diff->format('%R%a');
+      
+      $Difference = $diff->format('%R%a');
+
+      // echo $n1 + $n2;
+
+
+
+      $eememe =  $end->format('Y-m-d');
+        $DateEnd =  $start->format('Y-m-d');
+    // otherwise the  end date is excluded (bug?)
+      $end->modify('+1 day');
+     
+      $interval = $end->diff($start);
+
+      // total days
+      $finalDiff = $interval->days;
+
+      // create an iterateable period of date (P1D equates to 1 day)
+      $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+      // best stored as array, so you can add more than one
+      $holidays = array('2012-09-07');
+
+      foreach($period as $dt) {
+          $curr = $dt->format('D');
+
+          // substract if Saturday or Sunday
+          if ($curr == 'Sat' || $curr == 'Sun') {
+            $finalDiff--;
+          }
+
+          // (optional) for the updated question
+          elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+            $finalDiff--;
+          }
+      }
+      $finalDifFinal = $finalDiff - $finalDiff3;
+
+          }
+
+
+
+
+      // $finalDiff=$finalDiff-1;
+      // $start =  $start->format('Y');
+      $mondaylw =  date("Y-m-d", strtotime("monday last week"));
+      $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
+         
+      $meronBaSiyaLastWeek = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `realDate` BETWEEN '$mondaylw' AND '$sundaylw';";
+      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+      $result = mysqli_query($con, $meronBaSiyaLastWeek);
+      $meron = mysqli_num_rows($result);
+      if($finalDiff >0){
+        $_SESSION['noOfDaysLate']=$finalDiff;
+        $_SESSION['TaskID'] = $_GET['FinishSample'];
+        // echo $eememe;
+        echo "<script> 
+        // document.getElementById('daysLateDiv').style.display = 'none';
+        console.log('$finalDiff');
+        $('#reasonModal').modal('show');
+console.log('$eememe');
+document.getElementById('daysLate').value='$finalDiff';
+</script>";
+      }
+      else if($finalDiff == 0){
+ $_SESSION['noOfDaysLate']='0';
+     $_SESSION['TaskID'] = $_GET['FinishSample'];
+     $taskID = $_SESSION['TaskID'];
+
+     echo "<script>  
+// document.getElementById('actionText').value='$finalDiff';
+
+    $('#actionModal').modal('show');
+
+
+       //document.getElementById('finished$taskID').click();   DITO AKO NATAPOS   
+               </script>";
+
+      }
+      
+     // $year1 = $_SESSION['year'];
+        //                 $lastmonth =  date("F", strtotime("previous month"));
+
+        //                 $meronBaSiyaLastMonth = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$lastmonth' AND `year` = '$year1' ;";
+        //                 // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+        //                 $resultm = mysqli_query($con, $meronBaSiyaLastMonth);
+
+        //                 $meronlastMonth = mysqli_num_rows($resultm);
+
+        //                 if($meronlastMonth >=1){
+        //                   $_SESSION['noOfDaysLate']='0';
+        //  $_SESSION['TaskID'] = $_GET['FinishSample'];
+        //  $taskID = $_SESSION['TaskID'];
+        //  echo "<script>  
+        //  $('#actionModal').modal('show');
+        //   //  document.getElementById('finished$taskID').click();    DITO AKO NATAPOS  
+        //            </script>";
+
+        //                 }
+        //                 else if($meronlastMonth <=0){
+        //                   $_SESSION['noOfDaysLate']= '4';
+        //                   $_SESSION['TaskID'] = $_GET['FinishSample'];
+        //                   echo "<script> 
+        //                   document.getElementById('daysLateDiv').style.display = 'none';
+        //                   $('#reasonModal').modal('show');
+      
+        //         </script>";
+
+        //                 }
                        
     
     }
@@ -2104,7 +2625,19 @@ if ($taskType == 'weekly'){
           while($userRow = mysqli_fetch_assoc($result)){
             $today = $userRow['dateStarted'];
           }
+          $datesssss = new DateTime($today);
+  
+          $weekssss = $datesssss->format("D");
+          if($weekssss == "Sat"){
+            $datesssss->modify("-1 day");
+  $today =  $datesssss->format('Y-m-d');
 
+          }
+          else if($weekssss == "Sun"){
+            $datesssss->modify("-2 day");
+            $today =  $datesssss->format('Y-m-d');
+
+          }
           // $from=date_create(date('Y-m-d'));
           // $to=date_create(date('Y-m-d', strtotime($today)));
           // $diff=date_diff($to,$from);

@@ -18,6 +18,220 @@
   //   echo $week;
   //   echo "<br>";
   // }
+
+  
+
+
+  $aug = "aug";
+  $fDateOfTheMonth = new DateTime('last day of '.$aug);
+ 
+  $fday =  $fDateOfTheMonth->format('Y-m-d');
+  echo "First day of the month: ";
+  echo $fday;
+  $ddate = '2022-08-01';
+  $date = new DateTime($ddate);
+  
+  $week = $date->format("W");
+  echo "Weeknumber: $week";
+  echo "<br>";
+
+
+
+  $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '35' LIMIT 1";
+  $result = mysqli_query($con, $selectUserTask);
+
+  while($userRow = mysqli_fetch_assoc($result)){
+    $dateStarted = $userRow['dateStarted'];
+  }
+
+  $date = new DateTime($dateStarted);
+  $datenow = new DateTime($dateStarted);
+
+
+  $dateStarteds = new DateTime($dateStarted);
+  $monthOfLastDate =  $dateStarteds->format('F');
+      $yearOfLastDate =  $dateStarteds->format('Y');
+
+      $monthofThisMonth = new DateTime(date('Y-m-d'));
+      $Month_Now = $monthofThisMonth->format('F');
+      $yearOfThisMonth = new DateTime(date('Y-m-d'));
+      $Year_Now = $yearOfThisMonth->format('Y');
+
+
+      $nextMonth = $date->modify('next month');
+      // $date->format('Y-m-d');
+      $nextMonthHehe =  $nextMonth->format('F');
+      $yearOfNextDate =  $date->format('Y');
+
+
+      if($nextMonthHehe == $Month_Now ){
+
+$finalDiff = "0";
+        echo"asdasd";
+      }
+      else{
+
+      }
+
+
+  $from=date_create(date('Y-m-d'));
+  $to=date_create("2022-08-27");
+  $diff=date_diff($to,$from);
+  // print_r($diff);
+  echo $diff->format('%R%a');
+  
+  $n1 = $diff->format('%R%a');
+  $n2 = 3;
+  echo "<br>";
+  echo $n1 + $n2;
+  if($n1>1){
+    echo "hello";
+  }
+  
+  echo "<br>";
+
+  $date = new DateTime('May 16, 2022');
+  // echo "Next monday is: ";
+  // $date->modify('next monday');
+
+
+  // echo "Next monday is: ";
+  $date->modify('+2 months');
+  // $date->modify('next month');
+
+  // $date->format('Y-m-d');
+  $monthOfDate =  $date->format('F');
+  $monthOfDate =  $date->format('F');
+  $year =  $date->format('Y');
+
+$fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+$FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+
+$lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
+  $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
+  
+       echo $LDateofThisMonth;
+
+
+
+
+      $DateEnd2 =  $date->format('Y-m-d');
+      $end2 = new DateTime(date($LDateofThisMonth));
+      $start2 = new DateTime($FDateofThisMonth);
+    // otherwise the  end date is excluded (bug?)
+      $end2->modify('+1 day');
+
+      $interval2 = $end2->diff($start2);
+
+      // total days
+      $finalDiff2 = $interval2->days;
+
+      // create an iterateable period of date (P1D equates to 1 day)
+      $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
+
+      // best stored as array, so you can add more than one
+      $holidays2 = array('2012-09-07');
+
+      foreach($period2 as $dt2) {
+          $curr2 = $dt2->format('D');
+
+          // substract if Saturday or Sunday
+          if ($curr2 == 'Sat' || $curr2 == 'Sun') {
+            $finalDiff2--;
+          }
+
+          // (optional) for the updated question
+          elseif (in_array($dt2->format('Y-m-d'), $holidays2)) {
+            $finalDiff2--;
+          }
+      }
+
+$finalDiff2 = $finalDiff2+2;
+echo "<br>";
+
+echo $finalDiff2;
+echo "<br>";
+  $date = new DateTime('June 15, 2022');
+      // echo "Next monday is: ";
+      $date->modify('next month');
+      // $date->format('Y-m-d');
+      $DateEnd =  $date->format('F');
+      $year =  $date->format('Y');
+
+$fDateOfTheMonth = new DateTime('first day of '.$DateEnd. $year);
+$FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+      echo $FDateofThisMonth;
+      echo "<br>";
+
+$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '192' LIMIT 1";
+$result = mysqli_query($con, $selectUserTask);
+
+while($userRow = mysqli_fetch_assoc($result)){
+  $todayss = $userRow['dateStarted'];
+}
+
+// $from=date_create(date('Y-m-d'));
+// $to=date_create(date('Y-m-d', strtotime($today)));
+// $diff=date_diff($to,$from);
+// // print_r($diff);
+// $finalDiff =  $diff->format('%R%a');
+// $finalDiff = $finalDiff-1;
+
+$ends = new DateTime(date('Y-m-d'));
+$starts = new DateTime(date('Y-m-d', strtotime('July 23, 2022')));
+
+
+$eme = $starts->format('D');
+echo $eme;
+if($eme == "Sat"){
+  $starts->modify('-1 day');
+
+}
+else if( $eme =="Sun"){
+  $starts->modify('-2 day');
+}
+// echo "Next monday is: ";
+// $date->format('Y-m-d');
+
+// otherwise the  end date is excluded (bug?)
+$ends->modify('+1 day');
+
+$intervals = $ends->diff($starts);
+
+// total days
+$finalDiffs = $intervals->days;
+
+echo $starts->format('Y-m-d');
+// create an iterateable period of date (P1D equates to 1 day)
+$periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+
+// best stored as array, so you can add more than one
+$holidays = array('2012-09-07');
+
+foreach($periods as $dts) {
+$currs = $dts->format('D');
+
+// substract if Saturday or Sunday
+if ($currs == 'Sat' || $currs == 'Sun') {
+$finalDiffs--;
+}
+
+// (optional) for the updated question
+else if (in_array($dts->format('Y-m-d'), $holidays)) {
+$finalDiffs--;
+}
+}
+echo "<br>";
+
+echo $finalDiffs;
+
+$finalDiffs=$finalDiffs-2;
+
+echo "<br>";
+
+echo $finalDiffs;
+echo "<br>";
+
   $arrayNumberOfDaysPass=array();
   $arrayWeekNumbers=array();
   $arrayMonth=array();
@@ -75,8 +289,7 @@
 
 $arrlength = count($arrayNumberOfDaysPass);
 echo $arrlength;
-
-
+echo "<br>";
 
 
 
@@ -1180,7 +1393,7 @@ if(isset($_POST['AddCategory'])){
                                     
                                   </select>
                                 <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
+                                <input type="search" class="form-control" id="filterbox" placeholder=" "onkeyup="getSelectValue();" >
                             </div>
                         </div> 
                     </div>
@@ -1298,7 +1511,7 @@ if(isset($_POST['AddCategory'])){
                              
                              <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr>
+                             <tr class="ewan">
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
                              <td>
                                
@@ -2366,136 +2579,22 @@ let today = new Date().toISOString().substr(0, 10);
 // document.querySelector("#datepicker").valueAsDate = new Date();
 var sheets = new Array();
 
-        function getSelectValue()
-      {
-    var e = document.getElementById("inputGroupSelect01");
-  
-    var text=e.options[e.selectedIndex].text;//get the selected option text
-    if(text=='Task Name'){
 
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
-            var table = document.getElementById('TaskTable');
-            let tr = table.querySelectorAll('tr');
-            
-            for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[3];
-                if(val.innerHTML.indexOf(filterValue)> -1){
-                    tr[index].style.display='';
-        
-                }
-                else{
-                    tr[index].style.display='none';
-                }
-            }
-            
-        }
-        
-        );
-        
-    }
-    
-    else if (text=='Type'){
-
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
-            var table = document.getElementById('TaskTable');
-            let tr = table.querySelectorAll('tr');
-            
-            for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
-                if(val.innerHTML.indexOf(filterValue)> -1){
-                    tr[index].style.display='';
-        
-                }
-                else{
-                    tr[index].style.display='none';
-                }
-            }
-            
-        }
-        
-        );
-    }
-    else if (text=='Category'){
-
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[2];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
-
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
-    
-}
-
-);
-}
-else if (text=='In charge'){
-
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-
-  sheets=[-1];
-
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[4];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
-            sheets.push(index);
-
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
-    
-}
-
-);
-}
-else if (text=='Area'){
-
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[1];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
-
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
-    
-}
-
-);
-}
-
-}
 getSelectValue();
-
+function getSelectValue() {
+    let input = document.getElementById('filterbox').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('ewan');
+      
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="table-row";                 
+        }
+    }
+}
 
 function checkTextBox(){
 
