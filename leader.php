@@ -22,277 +22,274 @@
   
 
 
-  $aug = "aug";
-  $fDateOfTheMonth = new DateTime('last day of '.$aug);
+//   $aug = "aug";
+//   $fDateOfTheMonth = new DateTime('last day of '.$aug);
  
-  $fday =  $fDateOfTheMonth->format('Y-m-d');
-  echo "First day of the month: ";
-  echo $fday;
-  $ddate = '2022-08-01';
-  $date = new DateTime($ddate);
+//   $fday =  $fDateOfTheMonth->format('Y-m-d');
+//   echo "First day of the month: ";
+//   echo $fday;
+//   $ddate = '2022-08-01';
+//   $date = new DateTime($ddate);
   
-  $week = $date->format("W");
-  echo "Weeknumber: $week";
-  echo "<br>";
+//   $week = $date->format("W");
+//   echo "Weeknumber: $week";
+//   echo "<br>";
 
 
 
-  $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '35' LIMIT 1";
-  $result = mysqli_query($con, $selectUserTask);
+//   $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '35' LIMIT 1";
+//   $result = mysqli_query($con, $selectUserTask);
 
-  while($userRow = mysqli_fetch_assoc($result)){
-    $dateStarted = $userRow['dateStarted'];
-  }
+//   while($userRow = mysqli_fetch_assoc($result)){
+//     $dateStarted = $userRow['dateStarted'];
+//   }
 
-  $date = new DateTime($dateStarted);
-  $datenow = new DateTime($dateStarted);
-
-
-  $dateStarteds = new DateTime($dateStarted);
-  $monthOfLastDate =  $dateStarteds->format('F');
-      $yearOfLastDate =  $dateStarteds->format('Y');
-
-      $monthofThisMonth = new DateTime(date('Y-m-d'));
-      $Month_Now = $monthofThisMonth->format('F');
-      $yearOfThisMonth = new DateTime(date('Y-m-d'));
-      $Year_Now = $yearOfThisMonth->format('Y');
+//   $date = new DateTime($dateStarted);
+//   $datenow = new DateTime($dateStarted);
 
 
-      $nextMonth = $date->modify('next month');
-      // $date->format('Y-m-d');
-      $nextMonthHehe =  $nextMonth->format('F');
-      $yearOfNextDate =  $date->format('Y');
+//   $dateStarteds = new DateTime($dateStarted);
+//   $monthOfLastDate =  $dateStarteds->format('F');
+//       $yearOfLastDate =  $dateStarteds->format('Y');
+
+//       $monthofThisMonth = new DateTime(date('Y-m-d'));
+//       $Month_Now = $monthofThisMonth->format('F');
+//       $yearOfThisMonth = new DateTime(date('Y-m-d'));
+//       $Year_Now = $yearOfThisMonth->format('Y');
 
 
-      if($nextMonthHehe == $Month_Now ){
-
-$finalDiff = "0";
-        echo"asdasd";
-      }
-      else{
-
-      }
+//       $nextMonth = $date->modify('next month');
+//       // $date->format('Y-m-d');
+//       $nextMonthHehe =  $nextMonth->format('F');
+//       $yearOfNextDate =  $date->format('Y');
 
 
-  $from=date_create(date('Y-m-d'));
-  $to=date_create("2022-08-27");
-  $diff=date_diff($to,$from);
-  // print_r($diff);
-  echo $diff->format('%R%a');
+//       if($nextMonthHehe == $Month_Now ){
+
+// $finalDiff = "0";
+//         echo"asdasd";
+//       }
+//       else{
+
+//       }
+
+
+//   $from=date_create(date('Y-m-d'));
+//   $to=date_create("2022-08-27");
+//   $diff=date_diff($to,$from);
+//   // print_r($diff);
+//   echo $diff->format('%R%a');
   
-  $n1 = $diff->format('%R%a');
-  $n2 = 3;
-  echo "<br>";
-  echo $n1 + $n2;
-  if($n1>1){
-    echo "hello";
-  }
+//   $n1 = $diff->format('%R%a');
+//   $n2 = 3;
+//   echo "<br>";
+//   echo $n1 + $n2;
+//   if($n1>1){
+//     echo "hello";
+//   }
   
-  echo "<br>";
+//   echo "<br>";
 
-  $date = new DateTime('May 16, 2022');
-  // echo "Next monday is: ";
-  // $date->modify('next monday');
+//   $date = new DateTime('May 16, 2022');
+//   // echo "Next monday is: ";
+//   // $date->modify('next monday');
 
 
-  // echo "Next monday is: ";
-  $date->modify('+2 months');
-  // $date->modify('next month');
+//   // echo "Next monday is: ";
+//   $date->modify('+2 months');
+//   // $date->modify('next month');
 
-  // $date->format('Y-m-d');
-  $monthOfDate =  $date->format('F');
-  $monthOfDate =  $date->format('F');
-  $year =  $date->format('Y');
+//   // $date->format('Y-m-d');
+//   $monthOfDate =  $date->format('F');
+//   $monthOfDate =  $date->format('F');
+//   $year =  $date->format('Y');
 
-$fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
-$FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+// $fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+// $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
 
-$lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
-  $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
+// $lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
+//   $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
   
-       echo $LDateofThisMonth;
+//        echo $LDateofThisMonth;
 
 
 
 
-      $DateEnd2 =  $date->format('Y-m-d');
-      $end2 = new DateTime(date($LDateofThisMonth));
-      $start2 = new DateTime($FDateofThisMonth);
-    // otherwise the  end date is excluded (bug?)
-      $end2->modify('+1 day');
+//       $DateEnd2 =  $date->format('Y-m-d');
+//       $end2 = new DateTime(date($LDateofThisMonth));
+//       $start2 = new DateTime($FDateofThisMonth);
+//     // otherwise the  end date is excluded (bug?)
+//       $end2->modify('+1 day');
 
-      $interval2 = $end2->diff($start2);
+//       $interval2 = $end2->diff($start2);
 
-      // total days
-      $finalDiff2 = $interval2->days;
+//       // total days
+//       $finalDiff2 = $interval2->days;
 
-      // create an iterateable period of date (P1D equates to 1 day)
-      $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
+//       // create an iterateable period of date (P1D equates to 1 day)
+//       $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
 
-      // best stored as array, so you can add more than one
-      $holidays2 = array('2012-09-07');
+//       // best stored as array, so you can add more than one
+//       $holidays2 = array('2012-09-07');
 
-      foreach($period2 as $dt2) {
-          $curr2 = $dt2->format('D');
+//       foreach($period2 as $dt2) {
+//           $curr2 = $dt2->format('D');
 
-          // substract if Saturday or Sunday
-          if ($curr2 == 'Sat' || $curr2 == 'Sun') {
-            $finalDiff2--;
-          }
+//           // substract if Saturday or Sunday
+//           if ($curr2 == 'Sat' || $curr2 == 'Sun') {
+//             $finalDiff2--;
+//           }
 
-          // (optional) for the updated question
-          elseif (in_array($dt2->format('Y-m-d'), $holidays2)) {
-            $finalDiff2--;
-          }
-      }
+//           // (optional) for the updated question
+//           elseif (in_array($dt2->format('Y-m-d'), $holidays2)) {
+//             $finalDiff2--;
+//           }
+//       }
 
-$finalDiff2 = $finalDiff2+2;
-echo "<br>";
+// $finalDiff2 = $finalDiff2+2;
+// echo "<br>";
 
-echo $finalDiff2;
-echo "<br>";
-  $date = new DateTime('June 15, 2022');
-      // echo "Next monday is: ";
-      $date->modify('next month');
-      // $date->format('Y-m-d');
-      $DateEnd =  $date->format('F');
-      $year =  $date->format('Y');
+// echo $finalDiff2;
+// echo "<br>";
+//   $date = new DateTime('June 15, 2022');
+//       // echo "Next monday is: ";
+//       $date->modify('next month');
+//       // $date->format('Y-m-d');
+//       $DateEnd =  $date->format('F');
+//       $year =  $date->format('Y');
 
-$fDateOfTheMonth = new DateTime('first day of '.$DateEnd. $year);
-$FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
-      echo $FDateofThisMonth;
-      echo "<br>";
+// $fDateOfTheMonth = new DateTime('first day of '.$DateEnd. $year);
+// $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+//       echo $FDateofThisMonth;
+//       echo "<br>";
 
-$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '192' LIMIT 1";
-$result = mysqli_query($con, $selectUserTask);
+// $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '192' LIMIT 1";
+// $result = mysqli_query($con, $selectUserTask);
 
-while($userRow = mysqli_fetch_assoc($result)){
-  $todayss = $userRow['dateStarted'];
-}
+// while($userRow = mysqli_fetch_assoc($result)){
+//   $todayss = $userRow['dateStarted'];
+// }
 
-// $from=date_create(date('Y-m-d'));
-// $to=date_create(date('Y-m-d', strtotime($today)));
-// $diff=date_diff($to,$from);
-// // print_r($diff);
-// $finalDiff =  $diff->format('%R%a');
-// $finalDiff = $finalDiff-1;
+// // $from=date_create(date('Y-m-d'));
+// // $to=date_create(date('Y-m-d', strtotime($today)));
+// // $diff=date_diff($to,$from);
+// // // print_r($diff);
+// // $finalDiff =  $diff->format('%R%a');
+// // $finalDiff = $finalDiff-1;
 
-$ends = new DateTime(date('Y-m-d'));
-$starts = new DateTime(date('Y-m-d', strtotime('July 23, 2022')));
+// $ends = new DateTime(date('Y-m-d'));
+// $starts = new DateTime(date('Y-m-d', strtotime('July 23, 2022')));
 
 
-$eme = $starts->format('D');
-echo $eme;
-if($eme == "Sat"){
-  $starts->modify('-1 day');
+// $eme = $starts->format('D');
+// echo $eme;
+// if($eme == "Sat"){
+//   $starts->modify('-1 day');
 
-}
-else if( $eme =="Sun"){
-  $starts->modify('-2 day');
-}
-// echo "Next monday is: ";
-// $date->format('Y-m-d');
+// }
+// else if( $eme =="Sun"){
+//   $starts->modify('-2 day');
+// }
+// // echo "Next monday is: ";
+// // $date->format('Y-m-d');
 
-// otherwise the  end date is excluded (bug?)
-$ends->modify('+1 day');
+// // otherwise the  end date is excluded (bug?)
+// $ends->modify('+1 day');
 
-$intervals = $ends->diff($starts);
+// $intervals = $ends->diff($starts);
 
-// total days
-$finalDiffs = $intervals->days;
+// // total days
+// $finalDiffs = $intervals->days;
 
-echo $starts->format('Y-m-d');
-// create an iterateable period of date (P1D equates to 1 day)
-$periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+// echo $starts->format('Y-m-d');
+// // create an iterateable period of date (P1D equates to 1 day)
+// $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
 
-// best stored as array, so you can add more than one
-$holidays = array('2012-09-07');
+// // best stored as array, so you can add more than one
+// $holidays = array('2012-09-07');
 
-foreach($periods as $dts) {
-$currs = $dts->format('D');
+// foreach($periods as $dts) {
+// $currs = $dts->format('D');
 
-// substract if Saturday or Sunday
-if ($currs == 'Sat' || $currs == 'Sun') {
-$finalDiffs--;
-}
+// // substract if Saturday or Sunday
+// if ($currs == 'Sat' || $currs == 'Sun') {
+// $finalDiffs--;
+// }
 
-// (optional) for the updated question
-else if (in_array($dts->format('Y-m-d'), $holidays)) {
-$finalDiffs--;
-}
-}
-echo "<br>";
+// // (optional) for the updated question
+// else if (in_array($dts->format('Y-m-d'), $holidays)) {
+// $finalDiffs--;
+// }
+// }
+// echo "<br>";
 
-echo $finalDiffs;
+// echo $finalDiffs;
 
-$finalDiffs=$finalDiffs-2;
+// $finalDiffs=$finalDiffs-2;
 
-echo "<br>";
+// echo "<br>";
 
-echo $finalDiffs;
-echo "<br>";
+// echo $finalDiffs;
+// echo "<br>";
 
-  $arrayNumberOfDaysPass=array();
-  $arrayWeekNumbers=array();
-  $arrayMonth=array();
-  $arrayYear=array();
-  $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '191' LIMIT 1";
-            $result = mysqli_query($con, $selectUserTask);
+//   $arrayNumberOfDaysPass=array();
+//   $arrayWeekNumbers=array();
+//   $arrayMonth=array();
+//   $arrayYear=array();
+//   $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '191' LIMIT 1";
+//             $result = mysqli_query($con, $selectUserTask);
   
-            while($userRow = mysqli_fetch_assoc($result)){
-              $dateStarted = $userRow['dateStarted'];
-            }
+//             while($userRow = mysqli_fetch_assoc($result)){
+//               $dateStarted = $userRow['dateStarted'];
+//             }
   
-            $date = new DateTime($dateStarted);
-            // echo "Next monday is: ";
-            // $date->format('Y-m-d');
-            $startDate = $date->format('Y-m-d');
-            $start = new DateTime($startDate);
-            $end = new DateTime();
-            // otherwise the  end date is excluded (bug?)
-            $start->modify('+1 day');
-            // echo date('F j, Y');
-            $interval = $end->diff($start);
+//             $date = new DateTime($dateStarted);
+//             // echo "Next monday is: ";
+//             // $date->format('Y-m-d');
+//             $startDate = $date->format('Y-m-d');
+//             $start = new DateTime($startDate);
+//             $end = new DateTime();
+//             // otherwise the  end date is excluded (bug?)
+//             $start->modify('+1 day');
+//             // echo date('F j, Y');
+//             $interval = $end->diff($start);
             
-            // total days
-            $days = $interval->days;
-            // echo $days;
-            // create an iterateable period of date (P1D equates to 1 day)
-            $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+//             // total days
+//             $days = $interval->days;
+//             // echo $days;
+//             // create an iterateable period of date (P1D equates to 1 day)
+//             $period = new DatePeriod($start, new DateInterval('P1D'), $end);
             
-            // best stored as array, so you can add more than one
-            $holidays = array('2022-07-15');
-            $weekNo ="";
-            $NumberOfWeeksToDone = 0;
-            foreach($period as $dt) {
-                $curr = $dt->format('W');
-                $date = $dt->format('Y-m-d');
-                $currMonth = $dt->format('F');
-                $currYear = $dt->format('Y');
-                echo $date;
-                echo "<br>";
-                array_push($arrayNumberOfDaysPass,"$date");
+//             // best stored as array, so you can add more than one
+//             $holidays = array('2022-07-15');
+//             $weekNo ="";
+//             $NumberOfWeeksToDone = 0;
+//             foreach($period as $dt) {
+//                 $curr = $dt->format('W');
+//                 $date = $dt->format('Y-m-d');
+//                 $currMonth = $dt->format('F');
+//                 $currYear = $dt->format('Y');
+//                 echo $date;
+//                 echo "<br>";
+//                 array_push($arrayNumberOfDaysPass,"$date");
 
        
-                  // $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
-                  array_push($arrayWeekNumbers,"$curr");
-                  array_push($arrayMonth,"$currMonth");
-                  array_push($arrayYear,"$currYear");
+//                   // $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
+//                   array_push($arrayWeekNumbers,"$curr");
+//                   array_push($arrayMonth,"$currMonth");
+//                   array_push($arrayYear,"$currYear");
 
 
-                  // echo $curr;
-                  // echo "\n";
+//                   // echo $curr;
+//                   // echo "\n";
 
                 
-            }
+//             }
 
 
-$arrlength = count($arrayNumberOfDaysPass);
-echo $arrlength;
-echo "<br>";
-
-
-
+// $arrlength = count($arrayNumberOfDaysPass);
+// echo $arrlength;
+// echo "<br>";
 
 
 
@@ -300,123 +297,126 @@ echo "<br>";
 
 
 
-  $car = array("2022-07-22", "2022-07-23", "2022-07-25");
-$arrlength = count($car);
 
-for($x = 0; $x < $arrlength; $x++) {
-  // echo $cars[$x];
-  // echo "<br>";
-  $day1 = $car[$x];
-  $date = new DateTime($day1);
-  $day = $date->format('D');
-                  if($day =="Sat" || $day == "Sun"){
+
+
+//   $car = array("2022-07-22", "2022-07-23", "2022-07-25");
+// $arrlength = count($car);
+
+// for($x = 0; $x < $arrlength; $x++) {
+//   // echo $cars[$x];
+//   // echo "<br>";
+//   $day1 = $car[$x];
+//   $date = new DateTime($day1);
+//   $day = $date->format('D');
+//                   if($day =="Sat" || $day == "Sun"){
                  
-                  }
-                  else{
-                    echo $day;
-                  }
-}
+//                   }
+//                   else{
+//                     echo $day;
+//                   }
+// }
 
 
-$date = new DateTime('July 08, 2022');
+// $date = new DateTime('July 08, 2022');
 
-// Modify the date it contains
-// echo $date;
-$date->modify('next monday');
+// // Modify the date it contains
+// // echo $date;
+// $date->modify('next monday');
 
 
-$startDate = $date->format('Y-m-d');
-// echo date('r');
-$start = new DateTime($startDate);
-$end = new DateTime();
-// otherwise the  end date is excluded (bug?)
-$end->modify('+1 day');
-// echo date('F j, Y');
-$interval = $end->diff($start);
+// $startDate = $date->format('Y-m-d');
+// // echo date('r');
+// $start = new DateTime($startDate);
+// $end = new DateTime();
+// // otherwise the  end date is excluded (bug?)
+// $end->modify('+1 day');
+// // echo date('F j, Y');
+// $interval = $end->diff($start);
 
-// total days
-$days = $interval->days;
-// echo $days;
-// create an iterateable period of date (P1D equates to 1 day)
-$period = new DatePeriod($start, new DateInterval('P1D'), $end);
+// // total days
+// $days = $interval->days;
+// // echo $days;
+// // create an iterateable period of date (P1D equates to 1 day)
+// $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
-// best stored as array, so you can add more than one
-$holidays = array('2022-07-15');
-$weekNo ="";
-foreach($period as $dt) {
-    $curr = $dt->format('W');
-    if($curr==$weekNo){
-      echo null;
-    }
-    else{
-      echo $curr;
-      echo "\n";
-      $weekNo = $curr;
-    }
-}
-// Output
-echo "Next monday is: ";
-          $DateEnd =  $date->format('Y-m-d');
-          echo $date->format('Y-m-d');
-          $end = new DateTime(date('Y-m-d'));
-          $start = new DateTime($DateEnd);
-        // otherwise the  end date is excluded (bug?)
-          $end->modify('+1 day');
+// // best stored as array, so you can add more than one
+// $holidays = array('2022-07-15');
+// $weekNo ="";
+// foreach($period as $dt) {
+//     $curr = $dt->format('W');
+//     if($curr==$weekNo){
+//       echo null;
+//     }
+//     else{
+//       echo $curr;
+//       echo "\n";
+//       $weekNo = $curr;
+//     }
+// }
+// // Output
+// echo "Next monday is: ";
+//           $DateEnd =  $date->format('Y-m-d');
+//           echo $date->format('Y-m-d');
+//           $end = new DateTime(date('Y-m-d'));
+//           $start = new DateTime($DateEnd);
+//         // otherwise the  end date is excluded (bug?)
+//           $end->modify('+1 day');
 
-          $interval = $end->diff($start);
+//           $interval = $end->diff($start);
 
-          // total days
-          $finalDiff = $interval->days;
+//           // total days
+//           $finalDiff = $interval->days;
 
-          // create an iterateable period of date (P1D equates to 1 day)
-          $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+//           // create an iterateable period of date (P1D equates to 1 day)
+//           $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
-          // best stored as array, so you can add more than one
-          $holidays = array('2012-09-07');
+//           // best stored as array, so you can add more than one
+//           $holidays = array('2012-09-07');
 
-          foreach($period as $dt) {
-              $curr = $dt->format('D');
+//           foreach($period as $dt) {
+//               $curr = $dt->format('D');
 
-              // substract if Saturday or Sunday
-              if ($curr == 'Sat' || $curr == 'Sun') {
-                $finalDiff--;
-              }
+//               // substract if Saturday or Sunday
+//               if ($curr == 'Sat' || $curr == 'Sun') {
+//                 $finalDiff--;
+//               }
 
-              // (optional) for the updated question
-              elseif (in_array($dt->format('Y-m-d'), $holidays)) {
-                $finalDiff--;
-              }
-          }
+//               // (optional) for the updated question
+//               elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+//                 $finalDiff--;
+//               }
+//           }
 
-         echo "<br>";
-          echo "Number of days past since the next monday of that day: ";
-          echo $finalDiff;
+//          echo "<br>";
+//           echo "Number of days past since the next monday of that day: ";
+//           echo $finalDiff;
 
-          echo "<br>";
-  $ddate = '2022-07-24';
-  $date = new DateTime($ddate);
+//           echo "<br>";
+//   $ddate = '2022-07-24';
+//   $date = new DateTime($ddate);
   
-  $week = $date->format("W");
-  echo "Weeknumber: $week";
-  echo "<br>";
+//   $week = $date->format("W");
+//   echo "Weeknumber: $week";
+//   echo "<br>";
 
 
 
-$aug = "Jul";
-  $fDateOfTheMonth = new DateTime('first day of this month');
+// $aug = "Jul";
+//   $fDateOfTheMonth = new DateTime('first day of this month');
  
-  $fday =  $fDateOfTheMonth->format('Y-m-d');
-  echo "First day of the month: ";
-  echo $fday;
-  $lDateOfTheMonth = new DateTime('July 13, 2022');
-$sub = 2;
-  $lDateOfTheMonth->modify("-$sub day");
-  $lday =  $lDateOfTheMonth->format('F j, Y');
-  $realDate = date('Y-m-d', strtotime($lday));
-  echo "<br>";
-  echo "subtracted Date from 2: ";
-  echo $realDate;
-  echo "<br>";
+//   $fday =  $fDateOfTheMonth->format('Y-m-d');
+//   echo "First day of the month: ";
+//   echo $fday;
+//   $lDateOfTheMonth = new DateTime('July 13, 2022');
+// $sub = 2;
+//   $lDateOfTheMonth->modify("-$sub day");
+//   $lday =  $lDateOfTheMonth->format('F j, Y');
+//   $realDate = date('Y-m-d', strtotime($lday));
+//   echo "<br>";
+//   echo "subtracted Date from 2: ";
+//   echo $realDate;
+//   echo "<br>";
 
 
   //code of getting week numbers from this date to this date
@@ -546,11 +546,14 @@ $tableName2="users";
     $dateToPass = "";
     $dateToPassEnd = "";
 
+    $dateToPassDaily = "";
+    $dateToPassEndDaily = "";
     $dateToPass1 = "";
     $dateToPass2 = "";
 
     $picfocus = "false";
     $taskfocus = "false";
+    $dailyfocus = "false";
     $sectionfocus= "focus";
 
 $dateToday = date('Y-m-d');
@@ -567,11 +570,15 @@ $dateNow = date('Y-m-d');
 
     $today = $_SESSION['FirstDayOfTheMonth']; 
     $todayEnd = date("F j, Y"); 
+    $todayDaily = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndDaily = date("F j, Y"); 
 
     $date_string = date('Y-m-d');
     $date_stringEnd = date('Y-m-d');
 
-    
+    $TaskActive = "active";
+    $MembersActive = "";
+
     if(isset($_POST['submitdate'])){
    $datePicker = $_POST['datepicker'];
  $datePickerEnd = $_POST['datepickerEnd'];
@@ -600,8 +607,51 @@ $dateNow = date('Y-m-d');
 
   $taskfocus = "true";
 
+     $MembersActive = "";
+                      $TaskActive = "active";
 
     }
+
+    
+    if(isset($_POST['submitdateProgDaily'])){
+      $datePickerDaily = $_POST['datepickerProgDaily'];
+    $datePickerEndDaily = $_POST['datepickerEndProgDaily'];
+   
+   
+       $monthDaily = date('F', strtotime($datePickerDaily));
+       $monthEndDaily = date('F', strtotime($datePickerEndDaily));
+   
+       $yearDaily = date('Y', strtotime($datePickerDaily));
+       $yearEndDaily = date('Y', strtotime($datePickerEndDaily));
+   
+       $todayDaily = date('F j, Y', strtotime($datePickerDaily));
+       $todayEndDaily = date('F j, Y', strtotime($datePickerEndDaily));
+   
+   
+       $datePickergetDaily = $datePickerDaily;
+       $datePickergetEndDaily = $datePickerEndDaily;
+   
+       $date_stringDaily= date('Y-m-d', strtotime($datePickergetDaily));
+       $date_stringEndDaily= date('Y-m-d', strtotime($datePickergetEndDaily));
+   
+       
+       
+     $dateToPassDaily = date('Y-m-d', strtotime($datePickerDaily));
+     $dateToPassEndDaily = date('Y-m-d', strtotime($datePickerEndDaily));
+   
+     $dailyfocus = "true";
+   
+      
+     $date = new DateTime($todayDaily);
+      $dateEnd = new DateTime($todayEndDaily);
+
+      $DateNowAndToday =  $dateEnd->format('Y-m-d');
+      $StartDateSelected = $date->format('Y-m-d');
+
+
+      $TaskActive = "";
+      $MembersActive = "active";
+       }
 
     
     $month1 = date("F");
@@ -758,6 +808,43 @@ $dateNow = date('Y-m-d');
      }
      return $msg;
      }
+
+
+
+
+     $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+     $fetchDataProg = fetchDataProg($db, $tableName, $columns, $username);
+ 
+     function fetchDataProg($db, $tableName, $columns, $username){
+       if(empty($db)){
+        $msg= "Database connection error";
+       }elseif (empty($columns) || !is_array($columns)) {
+        $msg="columns Name must be defined in an indexed array";
+       }elseif(empty($tableName)){
+         $msg= "Table Name is empty";
+      }else{
+      $columnName = implode(", ", $columns);
+      $Department = $_SESSION['userDept'];
+      $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY username ASC;";
+     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+      $result = $db->query($query);
+      if($result== true){ 
+       if ($result->num_rows > 0) {
+          $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+          $msg= $row;
+       } else {
+          $msg= "No Data Found"; 
+       }
+      }else{
+        $msg= mysqli_error($db);
+      }
+      }
+      return $msg;
+      }
+
+
+
 
      //echo("<script>console.log('USER: " .$username . "');</script>");
      $tableNameCat = 'category';
@@ -1306,13 +1393,13 @@ if(isset($_POST['AddCategory'])){
 <div class="d-flex justify-content-start col-sm-6" style="background-color: none;padding-left: 0px; margin-left: 30px; width: 100%; max-width: 100% "> 
 <ul class="nav nav-pills mb-3 d-flex justify-content-start" id="myTab" role="tablist" style="height: fit-content">
   <li class="nav-item">
-    <a class="nav-link active" id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Task</a>
+    <a class="nav-link <?php echo $TaskActive; ?> " id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Task</a>
   </li>
   <!-- <li class="nav-item">
     <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
   </li> --> 
-  <li class="nav-item">
-    <a class="nav-link" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
+  <li class="nav-item ">
+    <a class="nav-link <?php echo $MembersActive; ?>" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Section's Progress</a>
@@ -1320,7 +1407,7 @@ if(isset($_POST['AddCategory'])){
 </ul>
 </div>
 <div class="tab-content" id="myTabContent" style="height: 100%;margin: 30px; margin-top: 0px ">
-<div class="tab-pane fade show active" id="task" style="height: 90%;  background-color: none" role="tabpanel" aria-labelledby="task-tab">
+<div class="tab-pane fade show <?php echo $TaskActive; ?>" id="task" style="height: 90%;  background-color: none" role="tabpanel" aria-labelledby="task-tab">
   
           <div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
         <div class="ms-1 shadow row" >
@@ -1336,12 +1423,12 @@ if(isset($_POST['AddCategory'])){
                           <form action="leader.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
             
-            <input type="date" id="datepicker" name="datepicker" style="margin-right: 20px" onchange="filterMonth();">
+            <input type="date" id="datepicker" value="<?php $startDate = new DateTime($today);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepicker" style="margin-right: 20px" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">End</label>
             
-            <input type="date" id="datepickerEnd" name="datepickerEnd" onchange="filterMonth();">
-            <button type="submit" name="submitdate" class="btn btn-info btn-sm">Submit</button>
-            <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
+            <input type="date" id="datepickerEnd" value="<?php $EndDate = new DateTime($todayEnd); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="datepickerEnd" onchange="filterMonth();">
+          <button type="submit" name="submitdate" class="btn btn-info btn-sm" onclick="submitDate();">Submit</button>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
                          
             <!-- <input type="submit" name="submitdate"> -->
             </form>
@@ -1382,8 +1469,8 @@ if(isset($_POST['AddCategory'])){
                              </div>
                         </fieldset>
                     </div>
-                            <div class="form-group searchInput">
-                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
+                            <div class="form-group searchInput" >
+                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();"style="display: none">
                                     <option  disabled selected hidden>Search by</option>
                                     <option value="1">Area</option>
                                     <option value="2">Task Name</option>
@@ -1793,8 +1880,188 @@ if(isset($_POST['AddCategory'])){
         </div>
       </div>
       </div>
+      <?php
+                    //                 $todayss="2022-07-01";            
+                    //       $ends = new DateTime(date('Y-m-d'));
+                    //       $starts = new DateTime(date('Y-m-d', strtotime($todayss)));
+                    //       // otherwise the  end date is excluded (bug?)
 
-      <div class="tab-pane fade " style="height: 90%; padding: 0px; background-color: none; " id="PIC" role="tabpanel" aria-labelledby="pic-tab">
+
+                    //       $eme = $starts->format('D');
+                    //             if($eme == "Sat"){
+                    //               $starts->modify('-1 day');
+
+                    //             }
+                    //             else if( $eme =="Sun"){
+                    //               $starts->modify('-2 day');
+                    //             }
+                    //             // $starts->modify('+1 day');
+                    //       $end = new DateTime();
+                    //       $intervals = $ends->diff($starts);
+                    //       $finalDiffs = $intervals->days;
+                    //       // create an iterateable period of date (P1D equates to 1 day)
+                    //       $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+                    //       // best stored as array, so you can add more than one
+                    //       $holidays = array('2012-09-07');
+                    //       foreach($periods as $dts) {
+                    //       $currs = $dts->format('D');
+                    //       // substract if Saturday or Sunday
+                    //       if ($currs == 'Sat' || $currs == 'Sun') {
+                    //       $finalDiffs--;
+                    //       }
+                    //       // (optional) for the updated question
+                    //       else if (in_array($dts->format('Y-m-d'), $holidays)) {
+                    //       $finalDiffs--;
+                    //       }
+                    //       }
+                      
+                    //       $countDaily = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
+                    // $result = mysqli_query($con, $countDaily);
+                    // while($userRow = mysqli_fetch_assoc($result)){
+                    //   $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                    // }
+                    // $countHalfDaily = "SELECT COUNT(score) as TotalNumberOfPointFive FROM `finishedtask` WHERE `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
+                    // $result = mysqli_query($con, $countHalfDaily);
+                    // while($userRow = mysqli_fetch_assoc($result)){
+                    //   $totalNumberOfScorePointFive = $userRow['TotalNumberOfPointFive'];
+                    // }
+                    // $finalDiffs = $finalDiffs *3;
+                    // $totalPointsofLate = $totalNumberOfScorePointFive * 0.5;
+                    // $TotalPoints = $totalNumberOfScore1 + $totalPointsofLate ;
+                    // $TotalPercentage = ($TotalPoints / $finalDiffs)* 100;
+                    //   echo "Total Number of daily task to perform from July 1 up to Now: $finalDiffs <br>" ;
+                    //   echo "Total Number of finished daily task from July 1 up to Now: $totalNumberOfScore1<br>" ;
+                    //   echo "Total Number of late daily task from July 1 up to Now: $totalNumberOfScorePointFive <br>" ;
+                    //   echo "Total point for daily task from July 1 up to Now: $TotalPoints <br>" ;
+                    //   echo "Total percentage for daily task from July 1 up to Now: $TotalPercentage% <br>" ;
+
+                     
+
+                    //                 $todayss="2022-07-01";            
+                    //                 $start = new DateTime($todayss);
+                    //                 $end = new DateTime();
+                    //                 // $start->modify('-1 day');
+          
+                    //                 $interval = $end->diff($start);
+                                    
+                    //                 $days = $interval->days;
+                    //                 echo $days;
+                    //                 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                      
+                    //                 $holidays = array('2022-07-15');
+                      
+                    //                 $monthNo ="";
+                    //                 $NumberOfWeeksToDone = 0;
+                    //                 // echo $days;
+                    //                 $noOfMonths = 0;
+
+                    //                 foreach($period as $dt) {
+                    //                     $curr = $dt->format('F');
+                    //                     $currYear = $dt->format('Y');
+                    //                     $day =  $dt->format('Y-m-d');
+                    //                     // echo "Weeknumber: $week";
+                    //                     // echo "<br>";
+                    //                     // echo $curr;
+                    //                     // echo $day;
+
+                    //                     // echo "<br>";
+                    //                     if($curr==$monthNo){
+                    //                       // echo $curr;
+                    //                       // echo "<br>";
+                    //                       $days--;
+                    //                     }
+                    //                     else{
+                    //                       $noOfMonths++;
+                    //                 // echo $curr;
+                    //                 // echo "<br>";
+                    //                 // $days++;
+                    //                       $monthNo = $curr;
+                    //                     }
+                    //                 }
+                    //   $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
+                    //   $result = mysqli_query($con, $countMonthly);
+                    //   while($userRow = mysqli_fetch_assoc($result)){
+                    //     $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                    //   }
+                    //   $countHalfMonthly = "SELECT COUNT(score) as TotalNumberOfPointFive FROM `finishedtask` WHERE `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
+                    //   $result = mysqli_query($con, $countHalfMonthly);
+                    //   while($userRow = mysqli_fetch_assoc($result)){
+                    //     $totalNumberOfScorePointFive = $userRow['TotalNumberOfPointFive'];
+                    //   }
+                    //   $totalPointsofLate = $totalNumberOfScorePointFive * 0.5;
+                    //   $TotalPoints = $totalNumberOfScore1 + $totalPointsofLate ;
+                    //   $TotalPercentage = ($TotalPoints / $noOfMonths)* 100;
+                    //   echo "<br>";echo "<br>";echo "<br>";
+                    //     echo "Total Number of monthly task to perform from July 1 up to Now: $noOfMonths <br>" ;
+                    //     echo "Total Number of finished monthly task from July 1 up to Now: $totalNumberOfScore1<br>" ;
+                    //     echo "Total Number of late monthly task from July 1 up to Now: $totalNumberOfScorePointFive <br>" ;
+                    //     echo "Total point for monthly task from July 1 up to Now: $TotalPoints <br>" ;
+                    //     echo "Total percentage for monthly task from July 1 up to Now: $TotalPercentage% <br>" ;
+  
+  
+                    //     $todayss="2022-07-01";   
+                    //     $date = new DateTime($todayss);
+                    //     // echo "Next monday is: ";
+                    //     // $date->format('Y-m-d');
+                    //     $startDate = $date->format('Y-m-d');
+                    //     $start = new DateTime($startDate);
+                    //     $end = new DateTime();
+                    //     // otherwise the  end date is excluded (bug?)
+                    //     $end->modify('+1 day');
+                    //     // echo date('F j, Y');
+                    //     $interval = $end->diff($start);
+                        
+                    //     // total days
+                    //     $days = $interval->days;
+                    //     // echo $days;
+                    //     // create an iterateable period of date (P1D equates to 1 day)
+                    //     $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                        
+                    //     // best stored as array, so you can add more than one
+                    //     $holidays = array('2022-07-15');
+                    //     $weekNo ="";
+                    //     $NumberOfWeeksToDone = 0;
+                    //     foreach($period as $dt) {
+                    //         $curr = $dt->format('W');
+                    //         $currMonth = $dt->format('F');
+                    //         $currYear = $dt->format('Y');
+          
+          
+                    //         if($curr==$weekNo){
+                    //           echo null;
+                    //         }
+                    //         else{
+                    //           echo $curr;
+                    //           echo "<br>";
+                    //           $NumberOfWeeksToDone++;
+                    //           $weekNo = $curr;
+                    //         }
+                    //     }
+                    //     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `score` = '1' AND `sched_Type` = 'weekly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';"; //kunin ang first monday date na pipiliin
+                    //     $result = mysqli_query($con, $countMonthly);
+                    //     while($userRow = mysqli_fetch_assoc($result)){
+                    //       $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                    //     }
+                    //     $countHalfMonthly = "SELECT COUNT(score) as TotalNumberOfPointFive FROM `finishedtask` WHERE `score` = '0.5' AND `sched_Type` = 'weekly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
+                    //     $result = mysqli_query($con, $countHalfMonthly);
+                    //     while($userRow = mysqli_fetch_assoc($result)){
+                    //       $totalNumberOfScorePointFive = $userRow['TotalNumberOfPointFive'];
+                    //     }
+                    //     $NumberOfWeeksToDone = $NumberOfWeeksToDone *3;
+                    //     $totalPointsofLate = $totalNumberOfScorePointFive * 0.5;
+                    //     $TotalPoints = $totalNumberOfScore1 + $totalPointsofLate ;
+                    //     $TotalPercentage = ($TotalPoints / $NumberOfWeeksToDone)* 100;
+                    //     echo "<br>";echo "<br>";echo "<br>";
+                    //       echo "Total Number of monthly task to perform from July 1 up to Now: $NumberOfWeeksToDone <br>" ;
+                    //       echo "Total Number of finished monthly task from July 1 up to Now: $totalNumberOfScore1<br>" ;
+                    //       echo "Total Number of late monthly task from July 1 up to Now: $totalNumberOfScorePointFive <br>" ;
+                    //       echo "Total point for monthly task from July 1 up to Now: $TotalPoints <br>" ;
+                    //       echo "Total percentage for monthly task from July 1 up to Now: $TotalPercentage% <br>" ;
+    
+    
+  
+                      ?>
+      <div class="tab-pane fade show <?php echo $MembersActive; ?>" style="height: 90%; padding: 0px; background-color: none; " id="PIC" role="tabpanel" aria-labelledby="pic-tab">
       <div class="container p-30 " id="TableListOfMembers" style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
         <div class="ms-1 shadow row">
            <div class="shadow col-md-12 main-datatable"> 
@@ -1803,17 +2070,9 @@ if(isset($_POST['AddCategory'])){
                         <div class="col-sm-2 createSegment"> 
                          <h3>Members Progress</h3> 
                         </div>
-                        <div class="col-sm-4"  style="padding: 0px;">
-                          <div class="form-group row d-flex justify-content-center" >
-                          <form action="leader.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker1" name="datepicker1" onchange="filterMonth();">
-            <input type="submit" name="submitdate1"  value = "Submit">
-            </form>
-           
-        </div></div>
                         
-        <div class="col-sm-6" style="padding: 0" >
+                        <div class="col-sm-7 add_flex" style="padding: 0">
+                        <div class="col-sm-4" style="padding: 0" >
                         <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
                             <div class="form-check" style="padding: 0px">
                                    
@@ -1847,10 +2106,201 @@ if(isset($_POST['AddCategory'])){
                              </div>
                         </fieldset>
                     </div>
+                    <div class="form-group searchInput">
+                              
+                                <!-- <label for="email">Search:</label> -->
+                                <input type="search" class="form-control" id="filterboxDaily" placeholder=" " onkeyup="getSelectValueDaily();">
+                            </div>
+                  </div>
+
                     </div>
                     <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
-                        <table  style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+
+                     
+                      <table class="table table-bordered" class="table datacust-datatable Table ">
+                        <thead  style="position: sticky; top: -1px;">
+                          <tr class="table-dark text-center">
+                            <th scope="col" colspan="10" style=" border-bottom: 0px">Detailed Daily Task Report</th>
+                          </tr>
+                          <tr class="table-info text-center" style="border-width: 0px" >
+                            <th scope="col" colspan="10">
+                              <div class="col-sm-4" style="padding: 0; margin: 0 auto" >
+                          <div class="form-group row d-flex justify-content-center" >
+                          <form action="leader.php" method = "POST" >
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
+            
+            <input type="date" id="datepickerProgDaily" value="<?php $startDate = new DateTime($todayDaily);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepickerProgDaily" style="margin-right: 20px" onchange="filterMonth();">
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">End</label>
+            
+            <input type="date" id="datepickerEndProgDaily" value="<?php $startDate = new DateTime($todayEndDaily);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepickerEndProgDaily" onchange="filterMonth();">
+            <button type="submit" name="submitdateProgDaily" class="btn btn-info btn-sm">Submit</button>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
+                         
+            <!-- <input type="submit" name="submitdate"> -->
+            </form>
+           
+        </div></div> </th>
+                          </tr>
+
+                          <tr class="table-secondary text-center" >
+                              <th>#</th>
+                              <th>In charge</th>
+                              <th>Task</th>
+                              <th>No. of ontime (1pt)</th>
+                              <th>No. of late (0.5pt)</th>
+                              <th>Total points earned</th>
+                              <th>Target points</th>
+                              <th>Percentage</th>
+<!-- find -->
+                            </tr>
+                          </thead>
+                          
+                          
+                         
+                   
+                          
+                         
+                        <tbody class="text-center">
+                        <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                  if(is_array($fetchDataProg)){      
+                                    $sn=1;
+                                  foreach($fetchDataProg as $data){
+                                    if($sn % 2 == 0){
+                                      $color = $color1;
+                                    }
+                                    else{
+                                      $color = $color2;
+
+                                    }
+                                    $taskname = $data['taskName'];
+                                    $taskCategory = $data['taskCategory'];
+                                    $taskType = $data['taskType'];
+                                    $userTaskID = $data['usertaskID'];
+                                    $taskArea = $data['taskArea'];
+                                    $taskUser = $data['username'];
+
+
+                                    $TotalPointsEarned = 0;
+                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                    
+                              //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
+
+                            ?>
+                             
+                             <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
+                             <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
+                             <tr class="dailyTable">
+                             <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
+                             <td> <?php echo $sn; ?></td>
+                             <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
+        $result = mysqli_query($con, $sql1);
+        $numrows = mysqli_num_rows($result);
+        while($userRow = mysqli_fetch_assoc($result)){
+         $firstname = $userRow['f_name'];
+      } echo  $firstname; ?></td>
+
+                             <td class="taskNameHover" ><?php echo $taskname; ?></td>
+                             <td name="noOfOntime">
+                                  <?php
+                                     $StartDateSelected = new DateTime($todayDaily);
+                                       $startDATE =  $StartDateSelected->format('Y-m-d'); 
+
+                                     $DateNowAndToday = new DateTime($todayEndDaily);  
+                                     $endDATE =  $DateNowAndToday->format('Y-m-d');
+
+                                      $countDaily = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                                      $result = mysqli_query($con, $countDaily);
+                                      while($userRow = mysqli_fetch_assoc($result)){
+                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                                      }
+                                      echo $totalNumberOfScore1;
+                                      $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                  ?>
+                             </td>
+                             <td name="noOfLate">
+                             <?php
+                                     
+                                     $countDaily = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                                     $result = mysqli_query($con, $countDaily);
+                                     while($userRow = mysqli_fetch_assoc($result)){
+                                     $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                                     }
+                                     echo $totalNumberOfScore1;
+                                     $totalNumberOfScore1 = $totalNumberOfScore1 * 0.5;
+                                     $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+
+                                 ?>        
+
+                             </td>
+                             <td name="totalEarnedPoints"> <?php echo $TotalPointsEarned; ?></td>
+                             <td name="targetPoints">
+                                       <?php 
+                                        $todayss="2022-07-01";            
+                                        $ends = new DateTime(date('Y-m-d', strtotime($endDATE)));
+                                        $starts = new DateTime(date('Y-m-d', strtotime($startDATE)));
+                                        // otherwise the  end date is excluded (bug?)
+                                        $eme = $starts->format('D');
+                                              if($eme == "Sat"){
+                                                $starts->modify('-1 day');
+
+                                              }
+                                              else if( $eme =="Sun"){
+                                                $starts->modify('-2 day');
+                                              }
+                                              // $starts->modify('+1 day');
+                                        $end = new DateTime();
+                                        $intervals = $ends->diff($starts);
+                                        $finalDiffs = $intervals->days;
+                                        // create an iterateable period of date (P1D equates to 1 day)
+                                        $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+                                        // best stored as array, so you can add more than one
+                                        $holidays = array('2012-09-07');
+                                        foreach($periods as $dts) {
+                                        $currs = $dts->format('D');
+                                        // substract if Saturday or Sunday
+                                        if ($currs == 'Sat' || $currs == 'Sun') {
+                                        $finalDiffs--;
+                                        }
+                                        // (optional) for the updated question
+                                        else if (in_array($dts->format('Y-m-d'), $holidays)) {
+                                        $finalDiffs--;
+                                        }
+                                        }
+                                        echo $finalDiffs;
+                                    ?>
+
+
+
+                             </td>
+                             <td>
+                             <?php 
+                              
+                              $TotalPercentage = ($TotalPointsEarned / $finalDiffs)* 100; ?> 
+                              <div class="progress" style="height: 30px">
+                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                                        style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                        <?php echo round($TotalPercentage).'%'; ?> 
+                                       
+                                      </div>
+                                      </div></td>
+                             </tr>
+                             <?php
+                        $sn++; }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchData; ?>
+                        </td>
+                         </tr>
+                          <?php
+                          echo "No data found";
+    }                     ?>       
+                        </tbody>
+                      </table>
+                        <table  style="width:100%; display: none" id="filtertable" class="table datacust-datatable Table ">
                             <thead  class="thead-dark">
                                 <tr>
                                     <th style="width:30%;">Members</th>
@@ -2449,59 +2899,64 @@ var dateNow = <?php echo json_encode("$dateNow"); ?>;
 var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
 
 
-document.getElementById("datepicker").value = FDateofThisMonth;
-document.getElementById("datepickerEnd").value = dateNow;
 
-document.getElementById("datepicker1").value = dateNow;
-document.getElementById("datepicker2").value = dateNow;
+// document.getElementById("datepicker").value = FDateofThisMonth;
+// document.getElementById("datepickerEnd").value = dateNow;
+
+// document.getElementById("datepickerProgDaily").value = FDateofThisMonth;
+// document.getElementById("datepickerEndProgDaily").value = dateNow;
+
+// document.getElementById("datepicker1").value = dateNow;
+// document.getElementById("datepicker2").value = dateNow;
 
 
+// $('#myTab li:eq(0) a').tab('show');
 
+// function submitDate(){
+//  var jsonDataPIC = <?php echo json_encode("$picfocus"); ?>;
+//  var jsonDataTask = <?php echo json_encode("$taskfocus"); ?>;
+//  var jsonDailyTask= <?php echo json_encode("$dailyfocus"); ?>;
 
-
- var jsonDataPIC = <?php echo json_encode("$picfocus"); ?>;
- var jsonDataTask = <?php echo json_encode("$taskfocus"); ?>;
  
- var jsonDataSection = <?php echo json_encode("$sectionfocus"); ?>;
+//  var jsonDataSection = <?php echo json_encode("$sectionfocus"); ?>;
 
- var date = <?php echo json_encode("$dateToPass"); ?>;
- var dateEnd = <?php echo json_encode("$dateToPassEnd"); ?>;
+//  var date = <?php echo json_encode("$dateToPass"); ?>;
+//  var dateEnd = <?php echo json_encode("$dateToPassEnd"); ?>;
 
- var date1 = <?php echo json_encode("$dateToPass1"); ?>;
- var date2 = <?php echo json_encode("$dateToPass2"); ?>;
-
-// console.log(jsonDataPIC);
  
-if(jsonDataPIC == "true"){
-document.getElementById("datepicker1").value = date1;
+//  var datedaily = <?php echo json_encode("$dateToPassDaily"); ?>;
+//  var dateEnddaily = <?php echo json_encode("$dateToPassEndDaily"); ?>;
+
+//  var date1 = <?php echo json_encode("$dateToPass1"); ?>;
+//  var date2 = <?php echo json_encode("$dateToPass2"); ?>;
+
+// // console.log(jsonDataPIC);
+ 
+// // if(jsonDailyTask == "true"){
+// //   document.getElementById("datepickerProgDaily").value = datedaily;
+// // document.getElementById("datepickerEndProgDaily").value = dateEnddaily;
 
 
-$('#myTab li:eq(1) a').tab('show');
+// // // $('#myTab li:eq(1) a').tab('show');
 
-}
-if(jsonDataTask == "true"){
-document.getElementById("datepicker").value = date;
-document.getElementById("datepickerEnd").value = dateEnd;
-
-
-
-$('#myTab li:eq(0) a').tab('show');
-
-
-
-}
-if(jsonDataSection == "true"){
-document.getElementById("datepicker2").value = date2;
+// // }
+// if(jsonDataTask == "true"){
+// document.getElementById("datepicker").value = date;
+// document.getElementById("datepickerEnd").value = dateEnd;
+// $('#myTab li:eq(0) a').tab('show');
+// }
+// if(jsonDataSection == "true"){
+// document.getElementById("datepicker2").value = date2;
 
 
-$('#myTab li:eq(2) a').tab('show');
+// $('#myTab li:eq(2) a').tab('show');
 
 
 
-}
+// }
 
 
-
+// }
 
  function FilterSched(){
 
@@ -2595,6 +3050,22 @@ function getSelectValue() {
         }
     }
 }
+getSelectValueDaily();
+function getSelectValueDaily() {
+    let input = document.getElementById('filterboxDaily').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('dailyTable');
+      
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="table-row";                 
+        }
+    }
+}
+
 
 function checkTextBox(){
 
