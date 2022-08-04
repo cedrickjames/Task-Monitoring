@@ -2,6 +2,28 @@
   session_start();
   include ("./connection.php");
 
+  // $StartDateSelected = new DateTime('2022-07-28');
+  // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+  // $startDAY=  $StartDateSelected->format('D'); 
+
+
+  // if ($startDAY == 'Mon') {
+  // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+   
+  //   }
+  //   else if($startDAY == 'Sun'){
+  //     $StartDateSelected->modify('next monday');
+  //     $startDATE =  $StartDateSelected->format('Y-m-d'); 
+
+  //   }
+  //   else{
+  //    $StartDateSelected->modify('last monday');
+  //    $startDATE =  $StartDateSelected->format('Y-m-d'); 
+
+  //   }
+  //   echo $startDATE;
+
+
 
   for($i=2; $i >= 0; $i--){
     echo "<script> console.log('ced:$i') </script>";

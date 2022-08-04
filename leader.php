@@ -572,12 +572,23 @@ $dateNow = date('Y-m-d');
     $todayEnd = date("F j, Y"); 
     $todayDaily = $_SESSION['FirstDayOfTheMonth']; 
     $todayEndDaily = date("F j, Y"); 
+    $todayWeekly = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndWeekly = date("F j, Y"); 
+
+    $todayMonthly = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndMonthly = date("F j, Y"); 
+
 
     $date_string = date('Y-m-d');
     $date_stringEnd = date('Y-m-d');
 
     $TaskActive = "active";
     $MembersActive = "";
+
+    $dailyChecked = "checked";
+    $weeklyChecked = "";
+    $monthlyChecked = "";
+
 
     if(isset($_POST['submitdate'])){
    $datePicker = $_POST['datepicker'];
@@ -651,9 +662,105 @@ $dateNow = date('Y-m-d');
 
       $TaskActive = "";
       $MembersActive = "active";
+
+      $dailyChecked = "checked";
+      $weeklyChecked = "";
+      $monthlyChecked = "";
+
+      
        }
 
+       if(isset($_POST['submitdateProgWeekly'])){
+        $datePickerWeekly = $_POST['datepickerProgWeekly'];
+      $datePickerEndWeekly = $_POST['datepickerEndProgWeekly'];
+     
+     
+         $monthWeekly = date('F', strtotime($datePickerWeekly));
+         $monthEndWeekly = date('F', strtotime($datePickerEndWeekly));
+     
+         $yearWeekly = date('Y', strtotime($datePickerWeekly));
+         $yearEndWeekly = date('Y', strtotime($datePickerEndWeekly));
+     
+         $todayWeekly = date('F j, Y', strtotime($datePickerWeekly));
+         $todayEndWeekly = date('F j, Y', strtotime($datePickerEndWeekly));
+     
+     
+         $datePickergetWeekly = $datePickerWeekly;
+         $datePickergetEndWeekly = $datePickerEndWeekly;
+     
+         $date_stringWeekly= date('Y-m-d', strtotime($datePickergetWeekly));
+         $date_stringEndWeekly= date('Y-m-d', strtotime($datePickergetEndWeekly));
+     
+         
+         
+       $dateToPassWeekly = date('Y-m-d', strtotime($datePickerWeekly));
+       $dateToPassEndWeekly = date('Y-m-d', strtotime($datePickerEndWeekly));
+     
+       $weeklyfocus = "true";
+     
+        
+       $date = new DateTime($todayWeekly);
+        $dateEnd = new DateTime($todayEndWeekly);
+  
+        $DateNowAndToday =  $dateEnd->format('Y-m-d');
+        $StartDateSelected = $date->format('Y-m-d');
+  
+  
+        $TaskActive = "";
+        $MembersActive = "active";
+
+        $dailyChecked = "";
+        $weeklyChecked = "checked";
+        $monthlyChecked = "";
+
+
+         }
+
     
+         if(isset($_POST['submitdateProgMonthly'])){
+          $datePickerMonthly = $_POST['datepickerProgMonthly'];
+        $datePickerEndMonthly = $_POST['datepickerEndProgMonthly'];
+       
+       
+           $monthMonthly = date('F', strtotime($datePickerMonthly));
+           $monthEndMonthly = date('F', strtotime($datePickerEndMonthly));
+       
+           $yearMonthly = date('Y', strtotime($datePickerMonthly));
+           $yearEndMonthly = date('Y', strtotime($datePickerEndMonthly));
+       
+           $todayMonthly = date('F j, Y', strtotime($datePickerMonthly));
+           $todayEndMonthly = date('F j, Y', strtotime($datePickerEndMonthly));
+       
+       
+           $datePickergetMonthly = $datePickerMonthly;
+           $datePickergetEndMonthly = $datePickerEndMonthly;
+       
+           $date_stringMonthly= date('Y-m-d', strtotime($datePickergetMonthly));
+           $date_stringEndMonthly= date('Y-m-d', strtotime($datePickergetEndMonthly));
+       
+           
+           
+         $dateToPassMonthly = date('Y-m-d', strtotime($datePickerMonthly));
+         $dateToPassEndMonthly = date('Y-m-d', strtotime($datePickerEndMonthly));
+       
+         $monthlyfocus = "true";
+       
+          
+         $date = new DateTime($todayMonthly);
+          $dateEnd = new DateTime($todayEndMonthly);
+    
+          $DateNowAndToday =  $dateEnd->format('Y-m-d');
+          $StartDateSelected = $date->format('Y-m-d');
+    
+    
+          $TaskActive = "";
+          $MembersActive = "active";
+
+          $dailyChecked = "";
+          $weeklyChecked = "";
+          $monthlyChecked = "checked";
+
+           }
     $month1 = date("F");
     $year1 = date("Y");
     $today1 = date("F j, Y"); 
@@ -825,7 +932,7 @@ $dateNow = date('Y-m-d');
       }else{
       $columnName = implode(", ", $columns);
       $Department = $_SESSION['userDept'];
-      $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY username ASC;";
+      $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department' AND taskType = 'daily' ORDER BY username ASC;";
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -843,7 +950,68 @@ $dateNow = date('Y-m-d');
       return $msg;
       }
 
+      $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+      $fetchDataProgWeeky = fetchDataProgWeeky($db, $tableName, $columns, $username);
+  
+      function fetchDataProgWeeky($db, $tableName, $columns, $username){
+        if(empty($db)){
+         $msg= "Database connection error";
+        }elseif (empty($columns) || !is_array($columns)) {
+         $msg="columns Name must be defined in an indexed array";
+        }elseif(empty($tableName)){
+          $msg= "Table Name is empty";
+       }else{
+       $columnName = implode(", ", $columns);
+       $Department = $_SESSION['userDept'];
+       $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department' AND taskType = 'weekly' ORDER BY username ASC;";
+      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+       $result = $db->query($query);
+       if($result== true){ 
+        if ($result->num_rows > 0) {
+           $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+           $msg= $row;
+        } else {
+           $msg= "No Data Found"; 
+        }
+       }else{
+         $msg= mysqli_error($db);
+       }
+       }
+       return $msg;
+       }
 
+
+           $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+      $fetchDataProgMonthly = fetchDataProgMonthly($db, $tableName, $columns, $username);
+  
+      function fetchDataProgMonthly($db, $tableName, $columns, $username){
+        if(empty($db)){
+         $msg= "Database connection error";
+        }elseif (empty($columns) || !is_array($columns)) {
+         $msg="columns Name must be defined in an indexed array";
+        }elseif(empty($tableName)){
+          $msg= "Table Name is empty";
+       }else{
+       $columnName = implode(", ", $columns);
+       $Department = $_SESSION['userDept'];
+       $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department' AND taskType = 'monthly' ORDER BY username ASC;";
+      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+       $result = $db->query($query);
+       if($result== true){ 
+        if ($result->num_rows > 0) {
+           $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+           $msg= $row;
+        } else {
+           $msg= "No Data Found"; 
+        }
+       }else{
+         $msg= mysqli_error($db);
+       }
+       }
+       return $msg;
+       }
 
 
      //echo("<script>console.log('USER: " .$username . "');</script>");
@@ -1402,7 +1570,7 @@ if(isset($_POST['AddCategory'])){
     <a class="nav-link <?php echo $MembersActive; ?>" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Section's Progress</a>
+    <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Summary Report</a>
   </li>
 </ul>
 </div>
@@ -1880,187 +2048,7 @@ if(isset($_POST['AddCategory'])){
         </div>
       </div>
       </div>
-      <?php
-                    //                 $todayss="2022-07-01";            
-                    //       $ends = new DateTime(date('Y-m-d'));
-                    //       $starts = new DateTime(date('Y-m-d', strtotime($todayss)));
-                    //       // otherwise the  end date is excluded (bug?)
 
-
-                    //       $eme = $starts->format('D');
-                    //             if($eme == "Sat"){
-                    //               $starts->modify('-1 day');
-
-                    //             }
-                    //             else if( $eme =="Sun"){
-                    //               $starts->modify('-2 day');
-                    //             }
-                    //             // $starts->modify('+1 day');
-                    //       $end = new DateTime();
-                    //       $intervals = $ends->diff($starts);
-                    //       $finalDiffs = $intervals->days;
-                    //       // create an iterateable period of date (P1D equates to 1 day)
-                    //       $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
-                    //       // best stored as array, so you can add more than one
-                    //       $holidays = array('2012-09-07');
-                    //       foreach($periods as $dts) {
-                    //       $currs = $dts->format('D');
-                    //       // substract if Saturday or Sunday
-                    //       if ($currs == 'Sat' || $currs == 'Sun') {
-                    //       $finalDiffs--;
-                    //       }
-                    //       // (optional) for the updated question
-                    //       else if (in_array($dts->format('Y-m-d'), $holidays)) {
-                    //       $finalDiffs--;
-                    //       }
-                    //       }
-                      
-                    //       $countDaily = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
-                    // $result = mysqli_query($con, $countDaily);
-                    // while($userRow = mysqli_fetch_assoc($result)){
-                    //   $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
-                    // }
-                    // $countHalfDaily = "SELECT COUNT(score) as TotalNumberOfPointFive FROM `finishedtask` WHERE `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
-                    // $result = mysqli_query($con, $countHalfDaily);
-                    // while($userRow = mysqli_fetch_assoc($result)){
-                    //   $totalNumberOfScorePointFive = $userRow['TotalNumberOfPointFive'];
-                    // }
-                    // $finalDiffs = $finalDiffs *3;
-                    // $totalPointsofLate = $totalNumberOfScorePointFive * 0.5;
-                    // $TotalPoints = $totalNumberOfScore1 + $totalPointsofLate ;
-                    // $TotalPercentage = ($TotalPoints / $finalDiffs)* 100;
-                    //   echo "Total Number of daily task to perform from July 1 up to Now: $finalDiffs <br>" ;
-                    //   echo "Total Number of finished daily task from July 1 up to Now: $totalNumberOfScore1<br>" ;
-                    //   echo "Total Number of late daily task from July 1 up to Now: $totalNumberOfScorePointFive <br>" ;
-                    //   echo "Total point for daily task from July 1 up to Now: $TotalPoints <br>" ;
-                    //   echo "Total percentage for daily task from July 1 up to Now: $TotalPercentage% <br>" ;
-
-                     
-
-                    //                 $todayss="2022-07-01";            
-                    //                 $start = new DateTime($todayss);
-                    //                 $end = new DateTime();
-                    //                 // $start->modify('-1 day');
-          
-                    //                 $interval = $end->diff($start);
-                                    
-                    //                 $days = $interval->days;
-                    //                 echo $days;
-                    //                 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
-                      
-                    //                 $holidays = array('2022-07-15');
-                      
-                    //                 $monthNo ="";
-                    //                 $NumberOfWeeksToDone = 0;
-                    //                 // echo $days;
-                    //                 $noOfMonths = 0;
-
-                    //                 foreach($period as $dt) {
-                    //                     $curr = $dt->format('F');
-                    //                     $currYear = $dt->format('Y');
-                    //                     $day =  $dt->format('Y-m-d');
-                    //                     // echo "Weeknumber: $week";
-                    //                     // echo "<br>";
-                    //                     // echo $curr;
-                    //                     // echo $day;
-
-                    //                     // echo "<br>";
-                    //                     if($curr==$monthNo){
-                    //                       // echo $curr;
-                    //                       // echo "<br>";
-                    //                       $days--;
-                    //                     }
-                    //                     else{
-                    //                       $noOfMonths++;
-                    //                 // echo $curr;
-                    //                 // echo "<br>";
-                    //                 // $days++;
-                    //                       $monthNo = $curr;
-                    //                     }
-                    //                 }
-                    //   $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
-                    //   $result = mysqli_query($con, $countMonthly);
-                    //   while($userRow = mysqli_fetch_assoc($result)){
-                    //     $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
-                    //   }
-                    //   $countHalfMonthly = "SELECT COUNT(score) as TotalNumberOfPointFive FROM `finishedtask` WHERE `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
-                    //   $result = mysqli_query($con, $countHalfMonthly);
-                    //   while($userRow = mysqli_fetch_assoc($result)){
-                    //     $totalNumberOfScorePointFive = $userRow['TotalNumberOfPointFive'];
-                    //   }
-                    //   $totalPointsofLate = $totalNumberOfScorePointFive * 0.5;
-                    //   $TotalPoints = $totalNumberOfScore1 + $totalPointsofLate ;
-                    //   $TotalPercentage = ($TotalPoints / $noOfMonths)* 100;
-                    //   echo "<br>";echo "<br>";echo "<br>";
-                    //     echo "Total Number of monthly task to perform from July 1 up to Now: $noOfMonths <br>" ;
-                    //     echo "Total Number of finished monthly task from July 1 up to Now: $totalNumberOfScore1<br>" ;
-                    //     echo "Total Number of late monthly task from July 1 up to Now: $totalNumberOfScorePointFive <br>" ;
-                    //     echo "Total point for monthly task from July 1 up to Now: $TotalPoints <br>" ;
-                    //     echo "Total percentage for monthly task from July 1 up to Now: $TotalPercentage% <br>" ;
-  
-  
-                    //     $todayss="2022-07-01";   
-                    //     $date = new DateTime($todayss);
-                    //     // echo "Next monday is: ";
-                    //     // $date->format('Y-m-d');
-                    //     $startDate = $date->format('Y-m-d');
-                    //     $start = new DateTime($startDate);
-                    //     $end = new DateTime();
-                    //     // otherwise the  end date is excluded (bug?)
-                    //     $end->modify('+1 day');
-                    //     // echo date('F j, Y');
-                    //     $interval = $end->diff($start);
-                        
-                    //     // total days
-                    //     $days = $interval->days;
-                    //     // echo $days;
-                    //     // create an iterateable period of date (P1D equates to 1 day)
-                    //     $period = new DatePeriod($start, new DateInterval('P1D'), $end);
-                        
-                    //     // best stored as array, so you can add more than one
-                    //     $holidays = array('2022-07-15');
-                    //     $weekNo ="";
-                    //     $NumberOfWeeksToDone = 0;
-                    //     foreach($period as $dt) {
-                    //         $curr = $dt->format('W');
-                    //         $currMonth = $dt->format('F');
-                    //         $currYear = $dt->format('Y');
-          
-          
-                    //         if($curr==$weekNo){
-                    //           echo null;
-                    //         }
-                    //         else{
-                    //           echo $curr;
-                    //           echo "<br>";
-                    //           $NumberOfWeeksToDone++;
-                    //           $weekNo = $curr;
-                    //         }
-                    //     }
-                    //     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `score` = '1' AND `sched_Type` = 'weekly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';"; //kunin ang first monday date na pipiliin
-                    //     $result = mysqli_query($con, $countMonthly);
-                    //     while($userRow = mysqli_fetch_assoc($result)){
-                    //       $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
-                    //     }
-                    //     $countHalfMonthly = "SELECT COUNT(score) as TotalNumberOfPointFive FROM `finishedtask` WHERE `score` = '0.5' AND `sched_Type` = 'weekly' AND  `realDate` BETWEEN '2022-07-01' AND '2022-08-01';";
-                    //     $result = mysqli_query($con, $countHalfMonthly);
-                    //     while($userRow = mysqli_fetch_assoc($result)){
-                    //       $totalNumberOfScorePointFive = $userRow['TotalNumberOfPointFive'];
-                    //     }
-                    //     $NumberOfWeeksToDone = $NumberOfWeeksToDone *3;
-                    //     $totalPointsofLate = $totalNumberOfScorePointFive * 0.5;
-                    //     $TotalPoints = $totalNumberOfScore1 + $totalPointsofLate ;
-                    //     $TotalPercentage = ($TotalPoints / $NumberOfWeeksToDone)* 100;
-                    //     echo "<br>";echo "<br>";echo "<br>";
-                    //       echo "Total Number of monthly task to perform from July 1 up to Now: $NumberOfWeeksToDone <br>" ;
-                    //       echo "Total Number of finished monthly task from July 1 up to Now: $totalNumberOfScore1<br>" ;
-                    //       echo "Total Number of late monthly task from July 1 up to Now: $totalNumberOfScorePointFive <br>" ;
-                    //       echo "Total point for monthly task from July 1 up to Now: $TotalPoints <br>" ;
-                    //       echo "Total percentage for monthly task from July 1 up to Now: $TotalPercentage% <br>" ;
-    
-    
-  
-                      ?>
       <div class="tab-pane fade show <?php echo $MembersActive; ?>" style="height: 90%; padding: 0px; background-color: none; " id="PIC" role="tabpanel" aria-labelledby="pic-tab">
       <div class="container p-30 " id="TableListOfMembers" style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
         <div class="ms-1 shadow row">
@@ -2076,31 +2064,26 @@ if(isset($_POST['AddCategory'])){
                         <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
                             <div class="form-check" style="padding: 0px">
                                    
-                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
-                                        <input class="form-check-input"  type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
-                                            <label  class="form-check-label" for="checkPIC">
-                                             Monthly
-                                            </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
+                            <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $dailyChecked ?> onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
                                              Daily
                                             </label>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
+                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
+                                        <input class="form-check-input"  type="radio" name="ProgFilter" id="ProgFilter" <?php echo $weeklyChecked ?> onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
                                              Weekly
                                             </label>
-                                     </div>
-                                     <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" checked onclick="FilterProgress();">
+                                    </div>
+                                   
+                                    <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $monthlyChecked ?> onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
-                                             All
+                                             Monthly
                                             </label>
                                      </div>
-                                     
+                                    
                                    
                                   
                              </div>
@@ -2114,535 +2097,15 @@ if(isset($_POST['AddCategory'])){
                   </div>
 
                     </div>
-                    <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
+                    <?php include "./Code For Members Progress Report/DetailedDailyTaskReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedWeeklyReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedMonthlyReport.php" ?>
 
-                     
-                      <table class="table table-bordered" class="table datacust-datatable Table ">
-                        <thead  style="position: sticky; top: -1px;">
-                          <tr class="table-dark text-center">
-                            <th scope="col" colspan="10" style=" border-bottom: 0px">Detailed Daily Task Report</th>
-                          </tr>
-                          <tr class="table-info text-center" style="border-width: 0px" >
-                            <th scope="col" colspan="10">
-                              <div class="col-sm-4" style="padding: 0; margin: 0 auto" >
-                          <div class="form-group row d-flex justify-content-center" >
-                          <form action="leader.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
-            
-            <input type="date" id="datepickerProgDaily" value="<?php $startDate = new DateTime($todayDaily);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepickerProgDaily" style="margin-right: 20px" onchange="filterMonth();">
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">End</label>
-            
-            <input type="date" id="datepickerEndProgDaily" value="<?php $startDate = new DateTime($todayEndDaily);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepickerEndProgDaily" onchange="filterMonth();">
-            <button type="submit" name="submitdateProgDaily" class="btn btn-info btn-sm">Submit</button>
-            <button type="button" class="btn btn-outline-success btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
-                         
-            <!-- <input type="submit" name="submitdate"> -->
-            </form>
-           
-        </div></div> </th>
-                          </tr>
+                    
 
-                          <tr class="table-secondary text-center" >
-                              <th>#</th>
-                              <th>In charge</th>
-                              <th>Task</th>
-                              <th>No. of ontime (1pt)</th>
-                              <th>No. of late (0.5pt)</th>
-                              <th>Total points earned</th>
-                              <th>Target points</th>
-                              <th>Percentage</th>
-<!-- find -->
-                            </tr>
-                          </thead>
-                          
-                          
-                         
-                   
-                          
-                         
-                        <tbody class="text-center">
-                        <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                  if(is_array($fetchDataProg)){      
-                                    $sn=1;
-                                  foreach($fetchDataProg as $data){
-                                    if($sn % 2 == 0){
-                                      $color = $color1;
-                                    }
-                                    else{
-                                      $color = $color2;
 
-                                    }
-                                    $taskname = $data['taskName'];
-                                    $taskCategory = $data['taskCategory'];
-                                    $taskType = $data['taskType'];
-                                    $userTaskID = $data['usertaskID'];
-                                    $taskArea = $data['taskArea'];
-                                    $taskUser = $data['username'];
 
 
-                                    $TotalPointsEarned = 0;
-                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
-                                    
-                              //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
-
-                            ?>
-                             
-                             <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
-                             <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr class="dailyTable">
-                             <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
-                             <td> <?php echo $sn; ?></td>
-                             <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
-        $result = mysqli_query($con, $sql1);
-        $numrows = mysqli_num_rows($result);
-        while($userRow = mysqli_fetch_assoc($result)){
-         $firstname = $userRow['f_name'];
-      } echo  $firstname; ?></td>
-
-                             <td class="taskNameHover" ><?php echo $taskname; ?></td>
-                             <td name="noOfOntime">
-                                  <?php
-                                     $StartDateSelected = new DateTime($todayDaily);
-                                       $startDATE =  $StartDateSelected->format('Y-m-d'); 
-
-                                     $DateNowAndToday = new DateTime($todayEndDaily);  
-                                     $endDATE =  $DateNowAndToday->format('Y-m-d');
-
-                                      $countDaily = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
-                                      $result = mysqli_query($con, $countDaily);
-                                      while($userRow = mysqli_fetch_assoc($result)){
-                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
-                                      }
-                                      echo $totalNumberOfScore1;
-                                      $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
-                                  ?>
-                             </td>
-                             <td name="noOfLate">
-                             <?php
-                                     
-                                     $countDaily = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
-                                     $result = mysqli_query($con, $countDaily);
-                                     while($userRow = mysqli_fetch_assoc($result)){
-                                     $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
-                                     }
-                                     echo $totalNumberOfScore1;
-                                     $totalNumberOfScore1 = $totalNumberOfScore1 * 0.5;
-                                     $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
-
-                                 ?>        
-
-                             </td>
-                             <td name="totalEarnedPoints"> <?php echo $TotalPointsEarned; ?></td>
-                             <td name="targetPoints">
-                                       <?php 
-                                        $todayss="2022-07-01";            
-                                        $ends = new DateTime(date('Y-m-d', strtotime($endDATE)));
-                                        $starts = new DateTime(date('Y-m-d', strtotime($startDATE)));
-                                        // otherwise the  end date is excluded (bug?)
-                                        $eme = $starts->format('D');
-                                              if($eme == "Sat"){
-                                                $starts->modify('-1 day');
-
-                                              }
-                                              else if( $eme =="Sun"){
-                                                $starts->modify('-2 day');
-                                              }
-                                              // $starts->modify('+1 day');
-                                        $end = new DateTime();
-                                        $intervals = $ends->diff($starts);
-                                        $finalDiffs = $intervals->days;
-                                        // create an iterateable period of date (P1D equates to 1 day)
-                                        $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
-                                        // best stored as array, so you can add more than one
-                                        $holidays = array('2012-09-07');
-                                        foreach($periods as $dts) {
-                                        $currs = $dts->format('D');
-                                        // substract if Saturday or Sunday
-                                        if ($currs == 'Sat' || $currs == 'Sun') {
-                                        $finalDiffs--;
-                                        }
-                                        // (optional) for the updated question
-                                        else if (in_array($dts->format('Y-m-d'), $holidays)) {
-                                        $finalDiffs--;
-                                        }
-                                        }
-                                        echo $finalDiffs;
-                                    ?>
-
-
-
-                             </td>
-                             <td>
-                             <?php 
-                              
-                              $TotalPercentage = ($TotalPointsEarned / $finalDiffs)* 100; ?> 
-                              <div class="progress" style="height: 30px">
-                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                        style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                        <?php echo round($TotalPercentage).'%'; ?> 
-                                       
-                                      </div>
-                                      </div></td>
-                             </tr>
-                             <?php
-                        $sn++; }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchData; ?>
-                        </td>
-                         </tr>
-                          <?php
-                          echo "No data found";
-    }                     ?>       
-                        </tbody>
-                      </table>
-                        <table  style="width:100%; display: none" id="filtertable" class="table datacust-datatable Table ">
-                            <thead  class="thead-dark">
-                                <tr>
-                                    <th style="width:30%;">Members</th>
-                                    <th style="width:70%;" >Progress</th>
-                                   
-
-                                </tr>
-                            </thead>
-                            
-                            <tbody id="tblAll" style="display: null">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                               
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                  <td>
-                                    
-                                    <div class="progress">
-                                    <?php
-                                         $username = $data['username'];
-                                        
-                                         $Department = $_SESSION['userDept'];
-                                        $selectUserTask = "SELECT * FROM usertask WHERE username = '$username' AND Department = '$Department' AND `taskType` != 'daily';";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                        $result = mysqli_query($con, $selectUserTask);
-                                        $numOfTask = mysqli_num_rows($result);
-
-                                        $selectUserTaskDaily = "SELECT * FROM usertask WHERE username = '$username' AND Department = '$Department' AND `taskType` = 'daily' ;";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                        $resultdaily = mysqli_query($con, $selectUserTaskDaily);
-                                        $numOfTaskdaily = mysqli_num_rows($resultdaily);
-
-
-                                          //echo("<script>console.log('number of task: " .$numOfTask . "');</script>");
-                                        
-                                          $weekMonth = weekOfMonth($date_string1);
-                                        $selectTaskeme = "SELECT * FROM finishedtask WHERE in_charge = '$username' AND Department = '$Department' AND `month` = '$month1' AND `year` = '$year1' AND `week` = 'week $weekMonth' AND `sched_Type` != 'daily';";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-
-                                        $result2 = mysqli_query($con, $selectTaskeme);
-                                        $numOfFinished = mysqli_num_rows($result2);
-
-                                        // $today = date("F j, Y");
-                                        $selectTaskdaiy = "SELECT * FROM finishedtask WHERE in_charge = '$username' AND Department = '$Department'AND `sched_Type` = 'daily' AND `Date` = ' $today1' ;";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-
-                                        $resultdaily2 = mysqli_query($con, $selectTaskdaiy);
-                                        $numOfFinisheddaily = mysqli_num_rows($resultdaily2);
-
-                                        //echo("<script>console.log('number of finished daily: " .$numOfFinisheddaily . "');</script>");
-                                        
-                                        // if($numOfFinisheddaily == 0){
-                                        //   $percent = ($numOfFinished /  $numOfTask)* 100;
-                                        //   //echo("<script>console.log('qoutient1234: " .$percent . "');</script>");
-                                        // }
-                                        // else{
-                                          
-                                          
-                                          $divident1 = $numOfFinished + $numOfFinisheddaily;
-                                          $divident2 = $numOfTask + $numOfTaskdaily;
-                                                  if($divident1 != 0 || $divident2 != 0){
-                                                    $percent = ($divident1 /  $divident2)* 100;
-                                                  }
-                                                    else{
-                                                      $percent = 0;
-                                                    }                                   
-                                                    
-
-                                          //echo("<script>console.log('qoutient242: " .$percent . "');</script>");
-                                        // }
-                                        // $percent = ($numOfFinished /  $numOfTask)* 100;
-                                        // //echo("<script>console.log('qoutient: " .$percent . "');</script>");
-
-                                        
-
-                                        ?>
-
-                                      <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                        style="width:<?php echo round($percent).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                        <?php echo round($percent).'%'; ?> 
-                                       
-                                      </div>
-                                    </div>
-                                  </td>
-                                
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-
-                            <tbody id="tblMonthly" style="display: none">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                               
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                <td>
-                
-                                        <div class="progress">
-                                        <?php
-                                            $usernameM = $data['username'];
-                                            
-                                            $DepartmentM = $_SESSION['userDept'];
-                                            $selectUserTaskM = "SELECT * FROM usertask WHERE username = '$usernameM' AND Department = '$DepartmentM' AND `taskType` = 'monthly';";
-
-                                            $resultM = mysqli_query($con, $selectUserTaskM);
-                                            $numOfTaskM = mysqli_num_rows($resultM);
-
-
-
-
-                                            
-                                              $weekMonth = weekOfMonth($date_string1);
-                                            $selectTaskemeM = "SELECT * FROM finishedtask WHERE in_charge = '$usernameM' AND Department = '$DepartmentM' AND `month` = '$month1' AND `year` = '$year1' AND `sched_Type` = 'monthly';";
-
-
-                                            $result2M = mysqli_query($con, $selectTaskemeM);
-                                            $numOfFinishedM = mysqli_num_rows($result2M);
-
-
-                                             
-
-                                            
-                                        if($numOfFinishedM !=0 || $numOfTaskM !=0){
-                                          $percentM = ($numOfFinishedM /  $numOfTaskM)* 100;
-                                        }
-                                        else{
-                                          $percentM = 0;
-                                        }
-
-                                            ?>
-                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                            style="width:<?php echo round($percentM).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                            <?php echo round($percentM).'%'; ?> 
-                                          
-                                          </div>
-                                        </div>
-                                        </td>
-                                
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-
-                            
-                           
-                            <tbody id="tblWeekly" style="display: none">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                               
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                <td>
-                
-                                        <div class="progress">
-                                        <?php
-                                            $usernameW = $data['username'];
-                                            
-                                            $DepartmentW = $_SESSION['userDept'];
-                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW' AND Department = '$DepartmentW' AND `taskType` = 'weekly';";
-
-                                            $resultW = mysqli_query($con, $selectUserTaskW);
-                                            $numOfTaskW = mysqli_num_rows($resultW);
-
-
-
-
-                                            
-                                              $weekMonth = weekOfMonth($date_string1);
-                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND Department = '$DepartmentW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonth' AND `sched_Type` = 'weekly';";
-
-
-                                            $result2W = mysqli_query($con, $selectTaskemeW);
-                                            $numOfFinishedW = mysqli_num_rows($result2W);
-
-
-                                             
-
-                                              if($numOfFinishedW !=0 || $numOfTaskW !=0){
-                                                $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
-                                              }
-                                              else{
-                                                $percentW = 0;
-                                              }
-                                            
-
-                                            ?>
-                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                            <?php echo round($percentW).'%'; ?> 
-                                          
-                                          </div>
-                                        </div>
-                                        </td>
-                                
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-                            <tbody id="tblDaily" style="display: none">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                               
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                <td>
-                
-                                        <div class="progress">
-                                        <?php
-                                            $usernameW = $data['username'];
-                                            
-                                            $DepartmentW = $_SESSION['userDept'];
-                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW' AND Department = '$DepartmentW' AND `taskType` = 'daily';";
-
-                                            $resultW = mysqli_query($con, $selectUserTaskW);
-                                            $numOfTaskW = mysqli_num_rows($resultW);
-
-
-
-
-                                            
-                                              $weekMonthD = weekOfMonth($date_string1);
-                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND Department = '$DepartmentW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonthD' AND `sched_Type` = 'daily';";
-
-
-                                            $result2W = mysqli_query($con, $selectTaskemeW);
-                                            $numOfFinishedW = mysqli_num_rows($result2W);
-
-                                        if($numOfFinishedW !=0 || $numOfTaskW !=0){
-                                          $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
-                                        }
-                                        else{
-                                          $percentW = 0;
-                                        }
-                                            
-
-                                            
-
-                                            ?>
-                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                            <?php echo round($percentW).'%'; ?> 
-                                          
-                                          </div>
-                                        </div>
-                                        </td>
-                                
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -2655,131 +2118,18 @@ if(isset($_POST['AddCategory'])){
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-3 createSegment"> 
-                         <h3>Section's Progress</h3> 
+                         <h3>Summary Report</h3> 
                         </div>
-                        <div class="col-sm-4">
-                          <div class="form-group row d-flex justify-content-center" >
-                          <form action="leader.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker2" name="datepicker2" onchange="filterMonth();">
-            <input type="submit" name="submitdate2"  value = "Submit">
-            </form>
-           
-        </div></div>
                         
-                        <div class="col-sm-5 add_flex">
-                            <div class="form-group searchInput">
-                                
-                                <!-- <label for="email">Search:</label> -->
-                                <!-- <input type="search" class="form-control" id="filterbox" placeholder=" " > -->
-                            </div>
-                        </div> 
+                        
+        <div class="form-group searchInput">
+                              
+                              <!-- <label for="email">Search:</label> -->
+                              <input type="search" class="form-control" id="filterboxDaily" placeholder=" " onkeyup="getSelectValueDaily();">
+                          </div>
                     </div>
-                    <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
-                            <thead  class="thead-dark">
-                                <tr>
-                                    <th style="width:30%;">Section</th>
-                                    <th style="width:70%;" >Progress</th>
-                                   
-
-                                </tr>
-                            </thead>
-                            <tbody id="TaskTable1">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-
-                              $departmentvar="";
-                                    if(is_array($fetchDataUT2)){      
-                                      $sn=1;
-
-                                    foreach($fetchDataUT2 as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-                                      
-
-                             if($data['department'] != $departmentvar){
-                                      ?><tr>
-                                 
-                                      <td><?php echo $data['department'] ?></td>
-                                        <td>
-                                          
-                                          <div class="progress">
-                                          <?php
-                                               $username = $data['username'];
-                                                $dept = $data['department'];
-      
-                                              $selectUserTask = "SELECT * FROM usertask WHERE Department = '$dept' AND `taskType` != 'daily';";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                              $result = mysqli_query($con, $selectUserTask);
-                                              $numOfTask = mysqli_num_rows($result);
-                                              //echo("<script>console.log('number of task: " .$numOfTask . "');</script>");
-      
-                                              $selectUserTaskDaily = "SELECT * FROM usertask WHERE Department = '$dept'  AND `taskType` = 'daily' ;";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                              $resultdaily = mysqli_query($con, $selectUserTaskDaily);
-                                              $numOfTaskdaily = mysqli_num_rows($resultdaily);
-      
-      
-                                              
-                                              $weekMonth = weekOfMonth($date_string2);
-                                              $selectTaskeme = "SELECT * FROM finishedtask WHERE Department = '$dept' AND `month` = '$month2' AND `year` = '$year2' AND `week` = 'week $weekMonth' AND `sched_Type` != 'daily';";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-      
-                                              $result2 = mysqli_query($con, $selectTaskeme);
-                                              $numOfFinished = mysqli_num_rows($result2);
-                                              //echo("<script>console.log('number of finishedsdf: " .$numOfFinished . "');</script>");
-      
-                                              // $today = date("F j, Y");
-                                              $selectTaskdaiy = "SELECT * FROM finishedtask WHERE Department = '$dept' AND `sched_Type` = 'daily' AND `Date` = ' $today2' ;";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-      
-                                              $resultdaily2 = mysqli_query($con, $selectTaskdaiy);
-                                              $numOfFinisheddaily = mysqli_num_rows($resultdaily2);
-      
-                                              //echo("<script>console.log('number of finished daily: " .$numOfFinisheddaily . "');</script>");
-                                              
-                                                $percents = (($numOfFinished + $numOfFinisheddaily) /  ($numOfTask + $numOfTaskdaily))* 100;
-                                                //echo("<script>console.log('qoutient242: " .$percents . "');</script>");
-                                              
-                                              // $percent = ($numOfFinished /  $numOfTask)* 100;
-                                              // echo("<script>console.log('qoutient: " .$percent . "');</script>");
-                                              
-                                              
-      
-                                              ?>
-                                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                              style="width:<?php echo round($percents).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                              <?php echo round($percents).'%'; ?> 
-                                             
-                                            </div>
-                                          </div>
-                                        </td>
-      
-                                        </tr>
-                                <?php  } $departmentvar = $data['department']; ?>
-                                
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
+                    <?php include "./Code For Summary Report/DetailedSummaryReport.php"?>
+                    
                 </div>
             </div>
         </div>
@@ -2797,6 +2147,13 @@ if(isset($_POST['AddCategory'])){
   
       <script>
         
+
+        // document.getElementById('WeeklyReportArea').style.display='none';
+        // document.getElementById('monthyReportArea').style.display='none';
+
+
+
+
 $('#reasonModalUpdate').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) ;// Button that triggered the modal
   var reason = button.data('reason');
@@ -3094,64 +2451,25 @@ function FilterProgress(){
 var types=document.getElementsByName('ProgFilter');
 
 if(types[0].checked){
-
-
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdWeekly = document.getElementById("tblWeekly");
-  var tdDaily = document.getElementById("tblDaily");
-  var tdAll= document.getElementById("tblAll");
-
-
-
-  tdMonthly.style.display = null;
-  tdWeekly.style.display = 'none';
-  tdDaily.style.display = 'none';
-  tdAll.style.display = 'none';
-
-
-
-  
+  document.getElementById('DailyReportArea').style.display='block';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='none';  
 }
 else if (types[1].checked){
-  
-  var tdAll= document.getElementById("tblAll");
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdWeekly = document.getElementById("tblWeekly");
-  var tdDaily = document.getElementById("tblDaily");
+  document.getElementById('DailyReportArea').style.display='none';
+  document.getElementById('WeeklyReportArea').style.display='block';
+  document.getElementById('monthyReportArea').style.display='none';  
 
-  tdWeekly.style.display = 'none';
-  tdDaily.style.display = null;
-  tdMonthly.style.display = 'none';
-  tdAll.style.display = 'none';
 
 }
 else if (types[2].checked){
-  
-  var tdAll= document.getElementById("tblAll");
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdWeekly = document.getElementById("tblWeekly");
-  var tdDaily = document.getElementById("tblDaily");
+  document.getElementById('DailyReportArea').style.display='none';
 
-  tdDaily.style.display = 'none';
-  tdWeekly.style.display = null;
-  tdMonthly.style.display = 'none';
-  tdAll.style.display = 'none';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='block';  
 
 }
-else if (types[3].checked){
 
-  var tdAll= document.getElementById("tblAll");
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdDaily = document.getElementById("tblDaily");
-  var tdWeekly = document.getElementById("tblWeekly");
-
-  tdAll.style.display = null;
-  tdWeekly.style.display = 'none';
-  tdMonthly.style.display = 'none';
-  tdDaily.style.display = 'none';
-
-
-}
 
 
 }
