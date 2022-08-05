@@ -570,6 +570,10 @@ $dateNow = date('Y-m-d');
 
     $today = $_SESSION['FirstDayOfTheMonth']; 
     $todayEnd = date("F j, Y"); 
+
+    $todaySummary = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndSummary = date("F j, Y"); 
+
     $todayDaily = $_SESSION['FirstDayOfTheMonth']; 
     $todayEndDaily = date("F j, Y"); 
     $todayWeekly = $_SESSION['FirstDayOfTheMonth']; 
@@ -624,6 +628,50 @@ $dateNow = date('Y-m-d');
     }
 
     
+    if(isset($_POST['submitdateProgDailySummary'])){
+      $datePickerSummary = $_POST['datepickerProgSummary'];
+    $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+   
+   
+       $monthSummary = date('F', strtotime($datePickerSummary));
+       $monthEndSummary = date('F', strtotime($datePickerEndSummary));
+   
+       $yearSummary = date('Y', strtotime($datePickerSummary));
+       $yearEndSummary = date('Y', strtotime($datePickerEndSummary));
+   
+       $todaySummary = date('F j, Y', strtotime($datePickerSummary));
+       $todayEndSummary = date('F j, Y', strtotime($datePickerEndSummary));
+   
+   
+       $datePickergetSummary = $datePickerSummary;
+       $datePickergetEndSummary = $datePickerEndSummary;
+   
+       $date_stringSummary= date('Y-m-d', strtotime($datePickergetSummary));
+       $date_stringEndSummary= date('Y-m-d', strtotime($datePickergetEndSummary));
+   
+       
+       
+     $dateToPassSummary = date('Y-m-d', strtotime($datePickerSummary));
+     $dateToPassEndSummary = date('Y-m-d', strtotime($datePickerEndSummary));
+   
+     $Summaryfocus = "true";
+   
+      
+     $date = new DateTime($todaySummary);
+      $dateEnd = new DateTime($todayEndSummary);
+  
+      $DateNowAndToday =  $dateEnd->format('Y-m-d');
+      $StartDateSelected = $date->format('Y-m-d');
+  
+  
+      $TaskActive = "";
+      $MembersActive = "";
+      $SummaryActive = "active";
+  
+      
+       }
+
+
     if(isset($_POST['submitdateProgDaily'])){
       $datePickerDaily = $_POST['datepickerProgDaily'];
     $datePickerEndDaily = $_POST['datepickerEndProgDaily'];
@@ -1012,6 +1060,41 @@ $dateNow = date('Y-m-d');
        }
        return $msg;
        }
+
+
+
+       
+       $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+       $fetchDataSummary = fetchDataSummary($db, $tableName, $columns, $username);
+   
+       function fetchDataSummary($db, $tableName, $columns, $username){
+         if(empty($db)){
+          $msg= "Database connection error";
+         }elseif (empty($columns) || !is_array($columns)) {
+          $msg="columns Name must be defined in an indexed array";
+         }elseif(empty($tableName)){
+           $msg= "Table Name is empty";
+        }else{
+        $columnName = implode(", ", $columns);
+        $Department = $_SESSION['userDept'];
+        $query = "SELECT * FROM `users` WHERE `Department` = '$Department' AND userlevel='PIC' ORDER BY username ASC;";
+       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+        $result = $db->query($query);
+        if($result== true){ 
+         if ($result->num_rows > 0) {
+            $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+            $msg= $row;
+         } else {
+            $msg= "No Data Found"; 
+         }
+        }else{
+          $msg= mysqli_error($db);
+        }
+        }
+        return $msg;
+        }
+
 
 
      //echo("<script>console.log('USER: " .$username . "');</script>");
@@ -1570,7 +1653,7 @@ if(isset($_POST['AddCategory'])){
     <a class="nav-link <?php echo $MembersActive; ?>" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Summary Report</a>
+    <a class="nav-link <?php echo $SummaryActive; ?>" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Summary Report</a>
   </li>
 </ul>
 </div>
@@ -2111,7 +2194,7 @@ if(isset($_POST['AddCategory'])){
         </div>
       </div>
     </div>
-    <div class="tab-pane fade" id="Dept" role="tabpanel" aria-labelledby="dept-tab">
+    <div class="tab-pane fade show <?php echo $SummaryActive; ?>" id="Dept" role="tabpanel" aria-labelledby="dept-tab">
       <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
       <div class="ms-1 shadow row" >
       <div class="shadow col-md-12 main-datatable"> 

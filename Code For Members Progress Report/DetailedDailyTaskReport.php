@@ -154,6 +154,8 @@
                                               }
                                               // $starts->modify('+1 day');
                                         $end = new DateTime();
+                                        $ends->modify('+1 day');
+
                                         $intervals = $ends->diff($starts);
                                         $finalDiffs = $intervals->days;
                                         // create an iterateable period of date (P1D equates to 1 day)
