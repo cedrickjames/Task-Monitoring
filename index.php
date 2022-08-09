@@ -305,6 +305,9 @@ echo $taskType;
 
               $dateNewToday = new DateTime($today);
                 $weekNumberNew = $dateNewToday->format("W");
+                $dateNewTodayFormat  = $dateNewToday->format('D'); 
+                $lastMonday  = $dateNewToday->format('Y-m-d'); 
+
                 $week = 'week '.$weekNumberNew;
               // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
               $from=date_create(date('Y-m-d'));
@@ -316,11 +319,28 @@ echo $taskType;
               $realDate = date('Y-m-d', strtotime($today));
     
     $myReason = $_SESSION['reason'];
-    
+
+    if ($dateNewTodayFormat == 'Mon') {
+      //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+       $lastMonday = $dateNewToday->format('Y-m-d');
+        
+         }
+         else if($dateNewTodayFormat == 'Sun'){
+           $StartDateSelected->modify('next monday');
+          //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+           $lastMonday = $dateNewToday->format('Y-m-d');
+     
+         }
+         else{
+          $StartDateSelected->modify('last monday');
+          // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+          $lastMonday = $dateNewToday->format('Y-m-d');
+     
+         }
     
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
+              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` ,`lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew', '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
               mysqli_query($con, $sqlinsert);
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
@@ -340,6 +360,8 @@ echo $taskType;
             }
 
               $arrayWeekNumbers=array();
+              $arrayMondays=array();
+
               $arrayMonth=array();
               $arrayYear=array();
 
@@ -376,7 +398,7 @@ echo $taskType;
                   $curr = $dt->format('W');
                   $currMonth = $dt->format('F');
                   $currYear = $dt->format('Y');
-
+                  $monday = $dt->format('Y-m-d');
 
                   if($curr==$weekNo){
                     echo null;
@@ -384,6 +406,7 @@ echo $taskType;
                   else{
                     $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
                     array_push($arrayWeekNumbers,"$curr");
+                    array_push($arrayMondays,"$monday");
                     array_push($arrayMonth,"$currMonth");
                     array_push($arrayYear,"$currYear");
 
@@ -403,7 +426,14 @@ for($x = 0; $x <$arrlength; $x++) {
     //ito ang gayahan
               $today = $_SESSION['today'];
               $dateNewToday = new DateTime($today);
-                $weekNumberNew = $dateNewToday->format("W");
+              $weekNumberNew = $dateNewToday->format("W");
+
+              $mondayArray = $arrayMondays[$x];
+              $dateNewTodayforMonday = new DateTime($mondayArray);
+
+                $dateNewTodayFormat  = $dateNewTodayforMonday->format('D'); 
+                $lastMonday  = $dateNewToday->format('Y-m-d'); 
+                $weekNumberOrayt = $arrayWeekNumbers[$x];
                 $week = 'week '.$arrayWeekNumbers[$x];
                 $month = $arrayMonth[$x];
                   $year = $arrayYear[$x];
@@ -429,8 +459,25 @@ for($x = 0; $x <$arrlength; $x++) {
               //find4
                   
 
+              if ($dateNewTodayFormat == 'Mon') {
+                //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                 $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
+                  
+                   }
+                   else if($dateNewTodayFormat == 'Sun'){
+                     $StartDateSelected->modify('next monday');
+                    //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                     $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
+               
+                   }
+                   else{
+                    $StartDateSelected->modify('last monday');
+                    // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                    $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
+               
+                   }
               if($x<$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` , `lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt', '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -440,7 +487,7 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt',  '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -449,7 +496,7 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVar2){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew',  '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1052,11 +1099,14 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
             $realDate = date('Y-m-d', strtotime($today));
   
   $myReason = $_SESSION['reason'];
-  
+  $startDateMonth = $dateNewToday->format('F');
+  $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
+                                         
+                                           $firstDateOfTheMonth =  $fDateOfTheMonth->format('Y-m-d');
   
   $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
@@ -1078,6 +1128,8 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
             $arrayWeekNumbers=array();
             $arrayMonth=array();
+            $arrayFirstDate=array();
+            
             $arrayYear=array();
             $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
               $result = mysqli_query($con, $selectUserTask);
@@ -1125,7 +1177,10 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
                   $weeksss = $datesss->format("W");
                   // echo "Weeknumber: $week";
                   // echo "<br>";
+                     
 
+                  $fDateOfTheMonth = new DateTime('first day of '.$curr);
+                  $firstDateOfTheMonthOrayt =  $fDateOfTheMonth->format('Y-m-d');
                   if($curr==$monthNo){
                     echo null;
                   }
@@ -1134,6 +1189,7 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
                     array_push($arrayMonth,"$curr");
                     array_push($arrayYear,"$currYear");
                     array_push($arrayWeekNumbers,"$weeksss");
+                    array_push($arrayFirstDate, "$firstDateOfTheMonthOrayt");
                     // echo $curr;
                     echo "\n";
                     $monthNo = $curr;
@@ -1160,7 +1216,8 @@ for($x = 0; $x <$arrlength; $x++) {
               // $finalDiff =  $diff->format('%R%a');
               $finalDiff =$IntervalDays; //ibig sabihin late na
               $realDate = date('Y-m-d', strtotime($today));
-    
+
+              $firstdayorayt = $arrayFirstDate[$x];
     // $myReason = $_SESSION['reason'];
 
     $date = new DateTime($today);
@@ -1175,7 +1232,7 @@ for($x = 0; $x <$arrlength; $x++) {
                   
 
               if($x<$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1185,7 +1242,7 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1195,7 +1252,7 @@ for($x = 0; $x <$arrlength; $x++) {
               }
               else if($x==$validationVar2){
                 $week = 'week '.$weekNumberNew;
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1503,16 +1560,16 @@ for($x = 0; $x <$arrlength; $x++) {
                         </fieldset>
                     </div>
                             <div class="form-group searchInput">
-                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
+                                <!-- <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
                                     <option  disabled selected hidden>Search by</option>
                                     
                                     <option value="2">Task Name</option>
                                     <option value="3">Type</option>
                                     <option value="3">Category</option>
                                     <option value="4">Status</option>
-                                  </select>
+                                  </select> -->
                                 <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
+                                <input type="search" class="form-control" id="filterbox" placeholder=" " onkeyup="getSelectValueDaily();">
                             </div>
                         </div> 
                     </div>
@@ -1535,7 +1592,7 @@ for($x = 0; $x <$arrlength; $x++) {
                                   $sn=1;
                                   foreach($fetchData as $data){
                             ?>
-                             <tr style="height:50px">
+                             <tr class="tableMain" style="height:50px">
                                 <td  style="width: 1%;"><?php echo $sn; ?></td>
                                 <td style="width:30%;"><?php echo $data['taskName']??''; ?></td>
                                 <td  style="width: 5%;"><?php echo $data['taskType']??''; ?></td>
@@ -1603,8 +1660,8 @@ for($x = 0; $x <$arrlength; $x++) {
                                       $date = new DateTime($sessionDateNow);
                                       $weekMonth = $date->format("W");
                                       // $weekMonth = weekOfMonth($_SESSION['date_string']);
-                        $month1 = $_SESSION['month'];
-                        $year1 = $_SESSION['year'];
+                                    $month1 = $_SESSION['month'];
+                                    $year1 = $_SESSION['year'];
                                       
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
@@ -1619,7 +1676,7 @@ for($x = 0; $x <$arrlength; $x++) {
                                   }
                                     if ($numrows >= 1){
                                       if($noOfDays > 2){
-                                        echo '<span id = "doneORnot" class="mode mode_late">LATEs</span>';
+                                        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
                                       }
                                       else if($noOfDays <=2 && $noOfDays>=0){
                                         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
@@ -1641,7 +1698,6 @@ for($x = 0; $x <$arrlength; $x++) {
                                           }
                                           else if($meronlastMonth <=0){
                                         echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
-
                                           }
                                          }
                                     
@@ -2969,6 +3025,26 @@ successAlertWord.innerText = "Attachment for "+jsonDataID+" uploaded succesfully
 
 
 }
+
+getSelectValueDaily();
+function getSelectValueDaily() {
+    let input = document.getElementById('filterbox').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('tableMain');
+      
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="table-row";                 
+        }
+    }
+}
+
+
+
+
  function done(){
   var checkBox = document.getElementById("checkDone");
   if (checkBox.checked == true){
@@ -3008,107 +3084,107 @@ successAlertWord.innerText = "Attachment for "+jsonDataID+" uploaded succesfully
 
 // document.getElementById("successAlert").style.display="block";
 
- function getSelectValue()
-{
-    var e = document.getElementById("inputGroupSelect01");
+//  function getSelectValue()
+// {
+//     var e = document.getElementById("inputGroupSelect01");
   
-    var text=e.options[e.selectedIndex].text;//get the selected option text
-    if(text=='Task Name'){
+//     var text=e.options[e.selectedIndex].text;//get the selected option text
+//     if(text=='Task Name'){
 
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
-            var table = document.getElementById('TaskTable');
-            let tr = table.querySelectorAll('tr');
+//         let filterInput = document.getElementById('filterbox');
+//         filterInput.addEventListener('keyup',function(){
+//             let filterValue=document.getElementById('filterbox').value;
+//             var table = document.getElementById('TaskTable');
+//             let tr = table.querySelectorAll('tr');
             
-            for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[1];
-                if(val.innerHTML.indexOf(filterValue)> -1){
-                    tr[index].style.display='';
+//             for(let index=0; index < tr.length;index++){
+//                 let val = tr[index].getElementsByTagName('td')[1];
+//                 if(val.innerHTML.indexOf(filterValue)> -1){
+//                     tr[index].style.display='';
         
-                }
-                else{
-                    tr[index].style.display='none';
-                }
-            }
+//                 }
+//                 else{
+//                     tr[index].style.display='none';
+//                 }
+//             }
             
-        }
+//         }
         
-        );
+//         );
         
-    }
+//     }
     
-    else if (text=='Type'){
+//     else if (text=='Type'){
 
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
-            var table = document.getElementById('TaskTable');
-            let tr = table.querySelectorAll('tr');
+//         let filterInput = document.getElementById('filterbox');
+//         filterInput.addEventListener('keyup',function(){
+//             let filterValue=document.getElementById('filterbox').value;
+//             var table = document.getElementById('TaskTable');
+//             let tr = table.querySelectorAll('tr');
             
-            for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[2];
-                if(val.innerHTML.indexOf(filterValue)> -1){
-                    tr[index].style.display='';
+//             for(let index=0; index < tr.length;index++){
+//                 let val = tr[index].getElementsByTagName('td')[2];
+//                 if(val.innerHTML.indexOf(filterValue)> -1){
+//                     tr[index].style.display='';
         
-                }
-                else{
-                    tr[index].style.display='none';
-                }
-            }
+//                 }
+//                 else{
+//                     tr[index].style.display='none';
+//                 }
+//             }
             
-        }
+//         }
         
-        );
-    }
-    else if (text=='Category'){
+//         );
+//     }
+//     else if (text=='Category'){
 
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
+// let filterInput = document.getElementById('filterbox');
+// filterInput.addEventListener('keyup',function(){
+//     let filterValue=document.getElementById('filterbox').value;
+//     var table = document.getElementById('TaskTable');
+//     let tr = table.querySelectorAll('tr');
     
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[3];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
+//     for(let index=0; index < tr.length;index++){
+//         let val = tr[index].getElementsByTagName('td')[3];
+//         if(val.innerHTML.indexOf(filterValue)> -1){
+//             tr[index].style.display='';
 
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
+//         }
+//         else{
+//             tr[index].style.display='none';
+//         }
+//     }
     
-}
+// }
 
-);
-}
-    else if (text=='Status'){
+// );
+// }
+//     else if (text=='Status'){
 
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
+// let filterInput = document.getElementById('filterbox');
+// filterInput.addEventListener('keyup',function(){
+//     let filterValue=document.getElementById('filterbox').value;
+//     var table = document.getElementById('TaskTable');
+//     let tr = table.querySelectorAll('tr');
     
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[4];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
+//     for(let index=0; index < tr.length;index++){
+//         let val = tr[index].getElementsByTagName('td')[4];
+//         if(val.innerHTML.indexOf(filterValue)> -1){
+//             tr[index].style.display='';
 
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
+//         }
+//         else{
+//             tr[index].style.display='none';
+//         }
+//     }
     
-}
+// }
 
-);
-}
-}
-getSelectValue();
+// );
+// }
+// }
+// getSelectValue();
 
 
 var dateNow = <?php echo json_encode("$today"); ?>;

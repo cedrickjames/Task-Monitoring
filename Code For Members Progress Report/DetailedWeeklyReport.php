@@ -104,19 +104,19 @@
                                      
                                        if ($startDAY == 'Mon') {
                                       //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                       $startDATE = $StartDateSelected->format('W');
+                                       $startDATE = $StartDateSelected->format('Y-m-d');
                                         
                                          }
                                          else if($startDAY == 'Sun'){
                                            $StartDateSelected->modify('next monday');
                                           //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                           $startDATE = $StartDateSelected->format('W');
+                                           $startDATE = $StartDateSelected->format('Y-m-d');
                                      
                                          }
                                          else{
                                           $StartDateSelected->modify('last monday');
                                           // $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                          $startDATE = $StartDateSelected->format('W');
+                                          $startDATE = $StartDateSelected->format('Y-m-d');
                                      
                                          }
                                       
@@ -124,12 +124,12 @@
                                     // (optional) for the updated question
                                     
                                      $DateNowAndToday = new DateTime($todayEndWeekly);  
-                                    //  $endDATE =  $DateNowAndToday->format('Y-m-d');
-                                     $endDATE = $DateNowAndToday->format('W');
+                                     $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                    //  $endDATE = $DateNowAndToday->format('W');
                                     //  echo "week".$startDATE;
                                     //  echo "week".$endDATE;
 
-                                      $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `weekNumber` BETWEEN '$startDATE' AND '$endDATE';";
+                                      $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
                                       $result = mysqli_query($con, $countWeekly);
                                       while($userRow = mysqli_fetch_assoc($result)){
                                       $totalNumberOfScore1 = $userRow['TotalNumberOf1'];

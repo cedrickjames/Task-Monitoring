@@ -99,7 +99,22 @@ $tableName="usertask";
     }
     return $retWeek;
 }
+if(isset($_POST['UpdateStatusName'])){
+  $radioStatus=$_POST['radioStatus']; 
+  $finishedTaskId = $_POST['finishedTaskID'];
+  if($radioStatus=="4"){
+    $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='5', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+    mysqli_query($con, $sqlUpdateStatus);
+  
+  }
+  else{
+    $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='0', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+    mysqli_query($con, $sqlUpdateStatus);
+  
+  }
 
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -251,7 +266,84 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
             </div>
           </div>
         </div>
+        <div class="modal fade" id="reasonModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog"style="max-width: 700px; width: 600px" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                       <form action="daily.php" method = "POST" id="updateStatusForm" style="width: 100%; padding: 10px; border: 0;" >
 
+                                              <div class="modal-body" >
+                                                <input type="text" style="display: none" name="finishedTaskID" id="finishedID">
+                                             
+                                              
+
+                                                <div class="form-group">
+  <div class="normal-container">
+	<div class="smile-rating-container">
+		<div class="smile-rating-toggle-container">
+			<div class="submit-rating">
+				<input id="radioLate"  name="radioStatus" value="4" type="radio" checked/> 
+				<input id="radioOnTime" name="radioStatus" value="0" type="radio" /> 
+				<label for="radioLate" class="rating-label rating-label-meh">Late</label>
+				<div class="smile-rating-toggle"></div>
+				
+				<div class="rating-eye rating-eye-left"></div>
+				<div class="rating-eye rating-eye-right"></div>
+				
+				<div class="mouth rating-eye-bad-mouth"></div>
+				
+				<div class="toggle-rating-pill"></div>
+				<label for="radioOnTime" class="rating-label rating-label-fun">On Time</label>
+			</div>
+		</div>
+	</div>
+</div>
+  </div>
+                                              
+                                                <!-- <div class="col-sm-12"  >
+                        <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 22pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding-left: 10px">
+                                    <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
+                                        <input class="form-check-input" type="radio" name="radioStatus" id="radioLate" value="4" checked >
+                                            <label class="form-check-label" for="radioLeader">
+                                             Late
+                                            </label>
+                                     </div>
+                                    <div class="form-check form-check-inline" style="margin-left: 10px">
+                                        <input class="form-check-input" type="radio" name="radioStatus" id="radioOnTime" value="0" >
+                                            <label class="form-check-label" for="radioPIC">
+                                             On Time
+                                            </label>
+                                    </div>
+                                  
+                             </div>
+                        </fieldset>
+                    </div> -->
+                                              <!-- <a type="button" id="Attachments" class="btn btn-outline-warning btn-lg btn-block">Change Status</a> -->
+                                              <a type="button" id="Attachments" class="btn btn-outline-info btn-lg btn-block">See attachments</a>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Reason</label>
+                                                    <textarea class="form-control" name="reasonInputUpdate" id="reasonUpdate1" disabled></textarea>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Action</label>
+                                                    <textarea class="form-control" name="actionInputUpdateLate" id="actionUpdate1" disabled></textarea>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                                                
+                                                <button type="submit"  id="UpdateStatus" name="UpdateStatusName"class="btn btn-success">Update Status</button>
+                                              </div>
+                           
+                                              </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
         <div class="parent" style= "max-height: 100%; height: 100%; ">
           <div class="wrapper" style= " max-height: 100%; height: 100% ;">
          
@@ -285,7 +377,7 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                         
                         <div class="col-sm-6 add_flex">
                             <div class="form-group searchInput">
-                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
+                                <!-- <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
                                     <option  disabled selected hidden>Search by</option>
                                     
                                     <option value="1">Task Name</option>
@@ -293,9 +385,9 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                     <option value="2">In charge</option>
                                     <option value="0">Category</option>
                                     
-                                  </select>
+                                  </select> -->
                                 <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
+                                <input type="search" class="form-control" id="filterbox" placeholder=" " onkeyup="getSelectValueDaily();">
                             </div>
                         </div> 
                     </div>
@@ -335,7 +427,7 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                       echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
                             ?>
-                             <tr style="background-color: <?php echo $color?>">
+                             <tr class="tableMain" style="background-color: <?php echo $color?>">
                                 
                                 <td><?php echo $data['taskCategory']??''; ?></td>
                                 <td><?php echo $data['taskName']??''; ?></td>
@@ -366,14 +458,53 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                 $time = $userRow['timestamp'];
                                 $dateoftask = $userRow['Date'];
                                 $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+                                $noOfDays = $userRow['noOfDaysLate'];
+                                $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                $finishedtaskID = $userRow['FinishedTaskID'];
 
+                                $reason = $userRow['reason'];
+                                $action = $userRow['action'];
                                 $timestamp = strtotime($dateofTassk);
                                 $datenow = date('l', $timestamp);
                                       // echo $dateoftask;
                                       // $trimedDate = str_replace(",","",$dateoftask);
                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                       if ($datenow == "Monday" ){
-                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                        if($noOfDays >= 2){
+                                          // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                          // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                          
+                                          if($isCheckedByLeader){
+                                            ?>
+                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+
+                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                             <?php
+                                          }
+                                          else{
+                                            ?>
+                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                             <?php
+                                          }
+                                          
+                                          
+                                         
+                                        }
+                                        else if ($noOfDays <= 1){
+                                          // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                          if($isCheckedByLeader){
+                                            ?>
+                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                            <?php
+                                          }
+                                          else{
+                                            ?>
+                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                            <?php
+                                          }
+                                          
+                                        }
+                                         //echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
                                      // echo("<script>console.log('ok');</script>");
    
                                      }
@@ -410,15 +541,53 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                       $time = $userRow['timestamp'];
                                                       $dateoftask = $userRow['Date'];
                                                       $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+                                                      $noOfDays = $userRow['noOfDaysLate'];
+                                                       $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                                      $finishedtaskID = $userRow['FinishedTaskID'];
 
+                                                        $reason = $userRow['reason'];
+                                                        $action = $userRow['action'];
                                                           $timestamp = strtotime($dateofTassk);
                                                           $datenow = date('l', $timestamp);
                                                       // echo $dateoftask;
                                                       // $trimedDate = str_replace(",","",$dateoftask);
                                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                       if ($datenow == "Tuesday" ){
-                                                    
-                                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                        if($noOfDays >= 2){
+                                                          // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                          // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                                          
+                                                          if($isCheckedByLeader){
+                                                            ?>
+                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                
+                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                             <?php
+                                                          }
+                                                          else{
+                                                            ?>
+                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                             <?php
+                                                          }
+                                                          
+                                                          
+                                                         
+                                                        }
+                                                        else if ($noOfDays <= 1){
+                                                          // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                          if($isCheckedByLeader){
+                                                            ?>
+                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <?php
+                                                          }
+                                                          else{
+                                                            ?>
+                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <?php
+                                                          }
+                                                          
+                                                        }
+                                                        // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
                                                         
     
                                           // echo("<script>console.log('ok');</script>");
@@ -459,7 +628,12 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                   $time = $userRow['timestamp'];
                                                   $dateoftask = $userRow['Date'];
                                                   $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
+                                                  $noOfDays = $userRow['noOfDaysLate'];
+                                                  $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                                 $finishedtaskID = $userRow['FinishedTaskID'];
 
+                                                   $reason = $userRow['reason'];
+                                                   $action = $userRow['action'];
                                                       $timestamp = strtotime($dateofTassk);
                                                       $datenow = date('l', $timestamp);
                                                   // echo $dateoftask;
@@ -467,7 +641,41 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                   // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                   if ($datenow == "Wednesday" ){
                                                 
-                                                    echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                    if($noOfDays >= 2){
+                                                      // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                      // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                                      
+                                                      if($isCheckedByLeader){
+                                                        ?>
+                                                        <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+            
+                                                        <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                         <?php
+                                                      }
+                                                      else{
+                                                        ?>
+                                                        <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                         <?php
+                                                      }
+                                                      
+                                                      
+                                                     
+                                                    }
+                                                    else if ($noOfDays <= 1){
+                                                      // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                      if($isCheckedByLeader){
+                                                        ?>
+                                                        <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                        <?php
+                                                      }
+                                                      else{
+                                                        ?>
+                                                        <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                        <?php
+                                                      }
+                                                      
+                                                    }
+                                                    //echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
                                                     
     
                                       // echo("<script>console.log('ok');</script>");
@@ -507,15 +715,53 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                       $time = $userRow['timestamp'];
                                                       $dateoftask = $userRow['Date'];
                                                       $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
-
+                                                      $noOfDays = $userRow['noOfDaysLate'];
+                                                      $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                                     $finishedtaskID = $userRow['FinishedTaskID'];
+    
+                                                       $reason = $userRow['reason'];
+                                                       $action = $userRow['action'];
                                                           $timestamp = strtotime($dateofTassk);
                                                           $datenow = date('l', $timestamp);
                                                       // echo $dateoftask;
                                                       // $trimedDate = str_replace(",","",$dateoftask);
                                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                       if ($datenow == "Thursday" ){
-                                                    
-                                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                        if($noOfDays >= 2){
+                                                          // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                          // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                                          
+                                                          if($isCheckedByLeader){
+                                                            ?>
+                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                
+                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                             <?php
+                                                          }
+                                                          else{
+                                                            ?>
+                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                             <?php
+                                                          }
+                                                          
+                                                          
+                                                         
+                                                        }
+                                                        else if ($noOfDays <= 1){
+                                                          // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                          if($isCheckedByLeader){
+                                                            ?>
+                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <?php
+                                                          }
+                                                          else{
+                                                            ?>
+                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <?php
+                                                          }
+                                                          
+                                                        }
+                                                       // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
                                                         
     
                                           // echo("<script>console.log('ok');</script>");
@@ -556,15 +802,53 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                     $time = $userRow['timestamp'];
                                                     $dateoftask = $userRow['Date'];
                                                     $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
-
+                                                    $noOfDays = $userRow['noOfDaysLate'];
+                                                    $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                                   $finishedtaskID = $userRow['FinishedTaskID'];
+  
+                                                     $reason = $userRow['reason'];
+                                                     $action = $userRow['action'];
                                                         $timestamp = strtotime($dateofTassk);
                                                         $datenow = date('l', $timestamp);
                                                     // echo $dateoftask;
                                                     // $trimedDate = str_replace(",","",$dateoftask);
                                                     // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                     if ($datenow == "Friday" ){
-                                                  
-                                                      echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
+                                                      if($noOfDays >= 2){
+                                                        // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                        // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                                        
+                                                        if($isCheckedByLeader){
+                                                          ?>
+                                                          <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+              
+                                                          <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                           <?php
+                                                        }
+                                                        else{
+                                                          ?>
+                                                          <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                           <?php
+                                                        }
+                                                        
+                                                        
+                                                       
+                                                      }
+                                                      else if ($noOfDays <= 1){
+                                                        // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                        if($isCheckedByLeader){
+                                                          ?>
+                                                          <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                          <?php
+                                                        }
+                                                        else{
+                                                          ?>
+                                                          <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                          <?php
+                                                        }
+                                                        
+                                                      }
+                                                  //  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
                                                       
     
                                         // echo("<script>console.log('ok');</script>");
@@ -605,19 +889,54 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                       $time = $userRow['timestamp'];
                                                       $dateoftask = $userRow['Date'];
                                                       $dateofTassk =  date('Y-m-d', strtotime($dateoftask));
-
+                                                      $noOfDays = $userRow['noOfDaysLate'];
+                                                      $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                                     $finishedtaskID = $userRow['FinishedTaskID'];
+    
+                                                       $reason = $userRow['reason'];
+                                                       $action = $userRow['action'];
                                                           $timestamp = strtotime($dateofTassk);
                                                           $datenow = date('l', $timestamp);
                                                       // echo $dateoftask;
                                                       // $trimedDate = str_replace(",","",$dateoftask);
                                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                       if ($datenow == "Saturday" ){
-                                                    
-                                                        echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>';
-                                                        
-    
+                                                        if($noOfDays >= 2){
+                                                          // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                          // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                                          
+                                                          if($isCheckedByLeader){
+                                                            ?>
+                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                
+                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                             <?php
+                                                          }
+                                                          else{
+                                                            ?>
+                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                             <?php
+                                                          }
+                                                          
+                                                          
+                                                         
+                                                        }
+                                                        else if ($noOfDays <= 1){
+                                                          // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                          if($isCheckedByLeader){
+                                                            ?>
+                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <?php
+                                                          }
+                                                          else{
+                                                            ?>
+                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <?php
+                                                          }
+                                                          
+                                                        }
+                                                        // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>'; 
                                           // echo("<script>console.log('ok');</script>");
-    
                                             }
                                                   }
                                                   // echo trim($dateoftask, 'April');
@@ -666,112 +985,74 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
   
       <script>
 
+
+
+$('#reasonModalUpdate').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) ;// Button that triggered the modal
+  var reason = button.data('reason');
+  var action = button.data('action');
+  var location = button.data('location');
+  var itoAyID = button.data('taskid');
+  var late = button.data('late');
+  // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  // modal.find('.modal-title').text('New message to ' + recipient)
+  // modal.find('.modal-body reasonUpdate1').val(recipient)
+  console.log(button.data('lates'));
+  document.getElementById("finishedID").value = itoAyID;
+  document.getElementById("reasonUpdate1").value = reason;
+  document.getElementById("actionUpdate1").value = action;
+  // document.getElementById("UpdateStatus").style.display = 'block';
+
+  if(late == "1"){
+// document.getElementById("UpdateStatus").style.display = 'block';
+document.getElementById("radioLate").checked = true;
+document.getElementById("radioOnTime").checked = false;
+
+  }
+  else{
+// document.getElementById("UpdateStatus").style.display = 'none';
+document.getElementById("radioLate").checked = false;
+document.getElementById("radioOnTime").checked = true;
+
+  }
+  if (location ==''){
+  document.getElementById("Attachments").href='#'; 
+    
+  }
+  else{
+    document.getElementById("Attachments").href=location; 
+
+  }
+
+ 
+})
+
+
+
 let today = new Date().toISOString().substr(0, 10);
 
 document.querySelector("#datepicker").valueAsDate = new Date();
 
-        function getSelectValue()
-{
-    var e = document.getElementById("inputGroupSelect01");
-  
-    var text=e.options[e.selectedIndex].text;//get the selected option text
-    if(text=='Task Name'){
 
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
-            var table = document.getElementById('TaskTable');
-            let tr = table.querySelectorAll('tr');
-            
-            for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[1];
-                if(val.innerHTML.indexOf(filterValue)> -1){
-                    tr[index].style.display='';
-        
-                }
-                else{
-                    tr[index].style.display='none';
-                }
-            }
-            
+
+getSelectValueDaily();
+function getSelectValueDaily() {
+    let input = document.getElementById('filterbox').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('tableMain');
+      
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
         }
-        
-        );
-        
-    }
-    
-    else if (text=='Type'){
-
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
-            var table = document.getElementById('TaskTable');
-            let tr = table.querySelectorAll('tr');
-            
-            for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[3];
-                if(val.innerHTML.indexOf(filterValue)> -1){
-                    tr[index].style.display='';
-        
-                }
-                else{
-                    tr[index].style.display='none';
-                }
-            }
-            
-        }
-        
-        );
-    }
-    else if (text=='Category'){
-
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[0];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
-
-        }
-        else{
-            tr[index].style.display='none';
+        else {
+            x[i].style.display="table-row";                 
         }
     }
-    
 }
-
-);
-}
-else if (text=='In charge'){
-
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[2];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
-
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
-    
-}
-
-);
-}
-
-}
-getSelectValue();
         </script>
     </body>
 </html>
