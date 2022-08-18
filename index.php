@@ -1,7 +1,111 @@
 <?php
   session_start();
   include ("./connection.php");
+  include ("./holidays.php");
 
+//   $dateOfNow = new DateTime(date('Y-m-d'));
+//   $MonthOfNow =  $dateOfNow->format('F');
+//   $YearToUseForApril = "";
+//   $YearToUseforMarch = "";
+//   if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+
+//     $YearToUseforMarch =  $dateOfNow->format('Y');
+//     $dateOfNow->modify('last year');
+//     $YearToUseForApril =  $dateOfNow->format('Y');
+//   }
+//   else{
+//     $YearToUseForApril =  $dateOfNow->format('Y');
+// $dateOfNow->modify('next year');
+// $YearToUseforMarch =  $dateOfNow->format('Y');
+
+
+//   }
+
+//   $April = new DateTime($YearToUseForApril.'-04-01');
+//   $March = new DateTime($YearToUseforMarch.'-03-31');
+//   $April =  $April->format('Y-m-d');
+//   $March =  $March->format('Y-m-d');
+// // echo "asf";
+// // echo $April;
+// // echo "<br>";
+// // echo $March;
+//   // $April = $fDateOfTheMonth = new DateTime('last April');
+// $january = new DateTime('2010-01-01');
+// $february = new DateTime('2010-02-01');
+// $interval = $february->diff($january);
+
+// // %a will output the total number of days.
+// // echo $interval->format('%R %a total days')."\n";
+
+// // // While %d will only output the number of days not already covered by the
+// // // month.
+// // echo $interval->format('%m month, %d days');
+
+
+// $date = new DateTime('2022-08-18');
+// $date->modify('next year');
+// $nextYearSample =  $date->format('Y');
+// // echo $nextYearSample;
+// $date = new DateTime($nextYearSample.'-03-01');
+// $nextYearMarch =  $date->format('Y-m-d');
+// // echo $nextYearMarch;
+// $end = new DateTime(date('Y-m-d'));
+// $start = new DateTime($nextYearMarch);
+
+// $end->modify('+1 day');
+// $interval = $end->diff($start);
+// echo "<br>";
+// // echo $interval->days;
+// $finalDiff =  $interval->format('%R%a')."\n";
+// // echo $daysInterval;
+// // $finalDiff = $interval->days;
+// echo "<br>";
+
+// echo $finalDiff ;
+// echo "<br>";
+// if($finalDiff<0){
+//   $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+//   foreach($period as $dt) {
+//       $curr = $dt->format('D');
+  
+//       if ($curr == 'Sat' || $curr == 'Sun') {
+//         $finalDiff++;
+//       }
+  
+//       elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+//         $finalDiff++;
+//       }
+//   }
+// }
+// else{
+// $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+// foreach($period as $dt) {
+//     $curr = $dt->format('D');
+
+//     if ($curr == 'Sat' || $curr == 'Sun') {
+//       $finalDiff--;
+//     }
+
+//     elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+//       $finalDiff--;
+//     }
+// }
+// }echo $finalDiff;
+
+// if($finalDiff <=-2){
+//   echo '<span id = "doneORnot" >Unaccomplished</span>';
+//     }
+//     else if($finalDiff >=0){
+//   echo '<span id = "doneORnot" >Pending</span>';
+//     }
+//     else if($finalDiff ==-1){
+//       echo '<span></span><span id = "doneORnot" >!Pending</span>';
+//         }
+
+
+// echo 3-5;
   // $StartDateSelected = new DateTime('2022-07-28');
   // $startDATE =  $StartDateSelected->format('Y-m-d'); 
   // $startDAY=  $StartDateSelected->format('D'); 
@@ -22,8 +126,16 @@
 
   //   }
   //   echo $startDATE;
+//   $today = $_SESSION['today'];
+//   date_default_timezone_set("Asia/Singapore");
+// echo date('Y-m-d');
 
+//   $timenowForSameId = date("h:i");       
+//   $realDateForSameId =  new DateTime($today);
+//    $curr = $realDateForSameId->format('Y-m-d');
 
+//   $sameID=$timenowForSameId . $curr;
+// echo $sameID;
 
   for($i=2; $i >= 0; $i--){
     echo "<script> console.log('ced:$i') </script>";
@@ -47,7 +159,8 @@ $days = $interval->days;
 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
 // best stored as array, so you can add more than one
-$holidays = array('2022-07-15');
+// $holidays = array('2022-07-15');
+// $holidays = $holidaysArray;
 
 foreach($period as $dt) {
     $curr = $dt->format('D');
@@ -104,6 +217,14 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
   date_default_timezone_set("Asia/Singapore");
   $db= $con;
 
+  $query = "SELECT * FROM `holidays`;";
+  $result = mysqli_query($con, $query);
+  $holidaysArray = array();
+  if(mysqli_num_rows($result)>0){
+  while($row = mysqli_fetch_assoc($result)){
+    $holidaysArray[]=$row;
+  }
+  }
 
   $from=date_create(date('Y-m-d'));
 $to=date_create("2022-06-27");
@@ -134,7 +255,9 @@ $tableName="usertask";
      $datess = 'April 26, 2022';
 // echo date('Y-m-d', strtotime($datess));
 
-$timenow = date("h:i a");       
+$timenow = date("h:i a");  
+    
+
 echo("<script>console.log('Time Now: " .$timenow. "');</script>");
 
 $PassContainer ="";
@@ -253,7 +376,7 @@ $week = 'week '.weekOfMonth($date_string);
     if(isset($_GET['Finish'])){
 $reason = $_SESSION['reason'];
 $action = $_SESSION['action'];
-echo "akjshdas";
+echo "There is an error, please contact the developer";
 // echo $_FILES['uploadedFile']['tmp_name']
       // if (!file_exists($_FILES['uploadedFile']['tmp_name']) || !is_uploaded_file($_FILES['uploadedFile']['tmp_name'])) {
 
@@ -290,7 +413,7 @@ echo $taskType;
           $meron = mysqli_num_rows($result);
           $IntervalDays = $_SESSION['noOfDaysLate'];
           echo "<script> console.log('$meron') </script>";//find2
-          if($IntervalDays <=5 ){
+          if($IntervalDays <=0 ){
             // echo "meron";
             if($_SESSION['newFileLoc'] ==""){
               $fileloc ="" ;
@@ -337,10 +460,15 @@ echo $taskType;
           $lastMonday = $dateNewToday->format('Y-m-d');
      
          }
-    
+         
+        $timenowForSameId = date("h-i");       
+        $realDateForSameId = $dateSubmitted;     
+        $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
+        $dateSubmitted = date('Y-m-d');
+
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` ,`lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew', '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
+              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` ,`lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew', '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
               mysqli_query($con, $sqlinsert);
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
@@ -350,7 +478,7 @@ echo $taskType;
               $_SESSION['noOfDaysLate']="";
     
           }
-          else if($IntervalDays >5) {//find3
+          else if($IntervalDays >0) {//find3
           
             if($_SESSION['newFileLoc'] ==""){
               $fileloc ="" ;
@@ -361,6 +489,8 @@ echo $taskType;
 
               $arrayWeekNumbers=array();
               $arrayMondays=array();
+              $arrayNoOfDaysLate=array();
+
 
               $arrayMonth=array();
               $arrayYear=array();
@@ -391,7 +521,9 @@ echo $taskType;
               $period = new DatePeriod($start, new DateInterval('P1D'), $end);
               
               // best stored as array, so you can add more than one
-              $holidays = array('2022-07-15');
+              // $holidays = array('2022-07-15');
+              // $holidays = $holidaysArray;
+
               $weekNo ="";
               $NumberOfWeeksToDone = 0;
               foreach($period as $dt) {
@@ -450,6 +582,12 @@ for($x = 0; $x <$arrlength; $x++) {
 
     $date = new DateTime($today);
 
+
+         $timenowForSameId = date("hi");       
+         $realDateForSameId = $dateSubmitted;
+         $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
+
+
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
 
@@ -477,7 +615,7 @@ for($x = 0; $x <$arrlength; $x++) {
                
                    }
               if($x<$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` , `lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt', '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` , `lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt', '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -487,7 +625,11 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt',  '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
+                $pointFive = 0.5;
+                if($finalDiff>2){
+                  $pointFive = 0;
+                }
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt',  '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'$pointFive', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -496,13 +638,19 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVar2){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew',  '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew',  '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
                 $_SESSION['noOfDaysLate']="";
                 $_SESSION['action'] = "";
+              }
+              
+              // $finalDiff =$IntervalDays;
+              $IntervalDays = $IntervalDays-5;
+              if($IntervalDays <0){
+                $IntervalDays = 0;
               }
               
 }
@@ -610,7 +758,8 @@ for($x = 0; $x <$arrlength; $x++) {
               $period = new DatePeriod($start, new DateInterval('P1D'), $end);
               
               // best stored as array, so you can add more than one
-              $holidays = array('2022-07-15');
+              // $holidays = array('2022-07-15');
+              // $holidays = $holidaysArray;
               $weekNo ="";
               $NumberOfWeeksToDone = 0;
               foreach($period as $dt) {
@@ -629,6 +778,10 @@ for($x = 0; $x <$arrlength; $x++) {
                                 // echo "";
                              
                               }
+                              else if (in_array($dt->format('Y-m-d'), $holidays)) {
+                         
+                                
+                                }
                               else{
                                 array_push($arrayNumberOfDaysPass,"$date");
 
@@ -691,7 +844,9 @@ $finalDiffs = $intervals->days;
 $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
 
 // best stored as array, so you can add more than one
-$holidays = array('2012-09-07');
+// $holidays = array('2012-09-07');
+// $holidays = $holidaysArray;
+
 
 foreach($periods as $dts) {
 $currs = $dts->format('D');
@@ -741,6 +896,7 @@ for($x = 0; $x <$arrlength; $x++) {
 
     $date = new DateTime($today);
 
+
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
 
@@ -755,13 +911,20 @@ for($x = 0; $x <$arrlength; $x++) {
               $dateToConvert = new DateTime($day1);
               $today = $dateToConvert->format('F j, Y');
               $realDate = $dateToConvert->format('Y-m-d');
-                               
+                         
+              
+              $timenowForSameId = date("hi");       
+              $realDateForSameId =$dateSubmitted;     
+              $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
+                   
+              $dateSubmitted = date('Y-m-d');
+
               if($x<$validationVariable){
 echo " <script>console.log('ITO ANG VALUE NG Xx. $x') </script>";
 echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </script>";
 
 
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0', $isLate);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0', $isLate);";
                 mysqli_query($con, $sqlinsert);
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -776,7 +939,7 @@ echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </scri
 echo " <script>console.log('2. $finalDiff') </script>";
 echo " <script>console.log('ITO ANG VALUE NG y. $x') </script>";
 
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0.5', $isLate);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0.5', $isLate);";
                 mysqli_query($con, $sqlinsert);
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -792,7 +955,7 @@ echo " <script>console.log('3. $finalDiff') </script>";
 echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
 
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', $isLate);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', $isLate);";
                 mysqli_query($con, $sqlinsert);
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -855,7 +1018,9 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
               $period = new DatePeriod($start, new DateInterval('P1D'), $end);
               
               // best stored as array, so you can add more than one
-              $holidays = array('2022-07-15');
+              // $holidays = array('2022-07-15');
+              // $holidays = $holidaysArray;
+
               $weekNo ="";
               $NumberOfWeeksToDone = 0;
               foreach($period as $dt) {
@@ -873,6 +1038,10 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
                               if($day =="Sat" || $day == "Sun"){
                                 // echo "";
                              
+                              }
+                              else if (in_array($dt->format('Y-m-d'), $holidays)) {
+                         
+                                
                               }
                               else{
                                 array_push($arrayNumberOfDaysPass,"$date");
@@ -936,7 +1105,8 @@ $finalDiffs = $intervals->days;
 $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
 
 // best stored as array, so you can add more than one
-$holidays = array('2012-09-07');
+//$holidays = array('2012-09-07');
+// $holidays = $holidaysArray;
 
 foreach($periods as $dts) {
 $currs = $dts->format('D');
@@ -981,6 +1151,7 @@ for($x = 0; $x <$arrlength; $x++) {
               // $finalDiff =  $diff->format('%R%a');
               // $finalDiff =$IntervalDays; //ibig sabihin late na
               $realDate = date('Y-m-d', strtotime($today));
+              $dateSubmitted = date('Y-m-d');
     
     // $myReason = $_SESSION['reason'];
 
@@ -1000,13 +1171,19 @@ for($x = 0; $x <$arrlength; $x++) {
               $dateToConvert = new DateTime($day1);
               $today = $dateToConvert->format('F j, Y');
               $realDate = $dateToConvert->format('Y-m-d');
-                               
+                  
+              
+              $timenowForSameId = date("hi");       
+              $realDateForSameId = $dateSubmitted;     
+              $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
+
+
               if($x<$validationVariable){
 echo " <script>console.log('ITO ANG VALUE NG Xx. $x') </script>";
 echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </script>";
 
 
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0', false);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
                 mysqli_query($con, $sqlinsert);
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1021,7 +1198,7 @@ echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </scri
 echo " <script>console.log('2. $finalDiff') </script>";
 echo " <script>console.log('ITO ANG VALUE NG y. $x') </script>";
 
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0.5', true);";
                 mysqli_query($con, $sqlinsert);
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1037,7 +1214,7 @@ echo " <script>console.log('3. $finalDiff') </script>";
 echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
 
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
                 mysqli_query($con, $sqlinsert);
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1102,11 +1279,14 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
   $startDateMonth = $dateNewToday->format('F');
   $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
                                          
-                                           $firstDateOfTheMonth =  $fDateOfTheMonth->format('Y-m-d');
-  
+          $firstDateOfTheMonth =  $fDateOfTheMonth->format('Y-m-d');
+          $timenowForSameId = date("hi");       
+          $realDateForSameId = $dateSubmitted;     
+          $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
+
   $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
-            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$sameID','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
             mysqli_query($con, $sqlinsert);
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
@@ -1159,7 +1339,8 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
               $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
-              $holidays = array('2022-07-15');
+              //$holidays = array('2022-07-15');
+              // $holidays = $holidaysArray;
 
               $monthNo ="";
               $NumberOfWeeksToDone = 0;
@@ -1222,6 +1403,49 @@ for($x = 0; $x <$arrlength; $x++) {
 
     $date = new DateTime($today);
 
+
+   
+    $datenextnext= new DateTime($firstdayorayt);
+
+    $monthOfThis =  $datenextnext->format('F');
+    $monthOfsubmittedDay =  $date->format('F');
+
+if($monthOfThis == $monthOfsubmittedDay){
+$finalDiff = 0;
+}
+else{
+  $datenextnext->modify('next month');
+  $monthOfDate =  $datenextnext->format('F');
+  $year =  $datenextnext->format('Y');
+  $fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+  $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+
+  $end = new DateTime(date('Y-m-d'));
+  $start = new DateTime($FDateofThisMonth);
+  $end->modify('+1 day');
+  $interval = $end->diff($start);
+  $finalDiff = $interval->days;
+  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+    //$holidays = array('2012-09-07');
+    // $holidays = $holidaysArray;
+
+    foreach($period as $dt) {
+        $curr = $dt->format('D');
+        if ($curr == 'Sat' || $curr == 'Sun') {
+          $finalDiff--;
+        }
+        else if (in_array($dt->format('Y-m-d'), $holidays)) {
+          $finalDiff--;
+        }
+    }
+}
+    
+        $timenowForSameId = date("hi");       
+        $realDateForSameId = $dateSubmitted;     
+        $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
+        $dateSubmitted = date('Y-m-d');
+
+
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
 
@@ -1232,7 +1456,7 @@ for($x = 0; $x <$arrlength; $x++) {
                   
 
               if($x<$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1242,7 +1466,11 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVariable){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0.5', true);";
+                $pointFive = 0.5;
+                if($finalDiff>2){
+                  $pointFive = 0;
+                }
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'$pointFive', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1252,7 +1480,7 @@ for($x = 0; $x <$arrlength; $x++) {
               }
               else if($x==$validationVar2){
                 $week = 'week '.$weekNumberNew;
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
+                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
@@ -1261,6 +1489,7 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               
+
 }
 
           
@@ -1295,10 +1524,13 @@ for($x = 0; $x <$arrlength; $x++) {
       $myReason = $_SESSION['reason'];
       echo "<script> console.log('$myReason') </script>";
       $myAction = $_SESSION['action'];
-      $sqldelete = "UPDATE `finishedtask` SET `reason`='$myReason', `action`= '$myAction' WHERE `FinishedTaskID`='$FtaskID';";
+      // $sqldelete = "UPDATE `finishedtask` SET `reason`='$myReason', `action`= '$myAction' WHERE `FinishedTaskID`='$FtaskID';";
+      $sqldelete = "UPDATE `finishedtask` SET `reason`='$myReason', `action`= '$myAction' WHERE `sameID`='$FtaskID';";
+
       mysqli_query($con, $sqldelete);
       $_SESSION['reason'] = "";
       $_SESSION['action'] = "";
+      header("location:index.php");
 
       // header("location:index.php");
 
@@ -1313,10 +1545,11 @@ for($x = 0; $x <$arrlength; $x++) {
       // $month = date("F");
       // $year = date("Y");
       $myAction = $_SESSION['action'];
-      $sqlUpdate = "UPDATE `finishedtask` SET `action`='$myAction' WHERE `FinishedTaskID`='$FtaskID';";
+      $sqlUpdate = "UPDATE `finishedtask` SET `action`='$myAction' WHERE `sameID`='$FtaskID';";
       mysqli_query($con, $sqlUpdate);
       $_SESSION['reason'] = "";
       $_SESSION['action'] = "";
+      header("location:index.php");
 
       // header("location:index.php");
 
@@ -1627,18 +1860,99 @@ for($x = 0; $x <$arrlength; $x++) {
                                     $don = "0";
                                     while($userRow = mysqli_fetch_assoc($result)){
                                       $noOfDays = $userRow['noOfDaysLate'];
+                                      $isLate = $userRow['isLate'];
+
+
                                   }
-                                    if ($numrows >= 1){
-                                      if($noOfDays > 2){
-                                        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+
+
+                                  //new code for weekly 
+                                  $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+                                  $result = mysqli_query($con, $selectUserTask);
+                        
+                                  while($userRow = mysqli_fetch_assoc($result)){
+                                    $dateStarted = $userRow['dateStarted'];
+                                  }
+                        
+                                  $date = new DateTime($dateStarted);
+                                  // echo "Next monday is: ";
+                                  $date->modify('next monday');
+                                  // $date->format('Y-m-d');
+                                  $DateEnd =  $date->format('Y-m-d');
+                                  $end = new DateTime(date('Y-m-d'));
+                                  $start = new DateTime($DateEnd);
+                                // otherwise the  end date is excluded (bug?)
+                                  $end->modify('+1 day');
+                        
+                                  $interval = $end->diff($start);
+                        
+                                  // total days
+                                  $finalDiff = $interval->days;
+                        // echo $finalDiff;
+                                  // create an iterateable period of date (P1D equates to 1 day)
+                                  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                        
+                                  // best stored as array, so you can add more than one
+                                  //$holidays = array('2012-09-07');
+                                  // $holidays = $holidaysArray;
+                        
+                                  foreach($period as $dt) {
+                                      $curr = $dt->format('D');
+                        
+                                      // substract if Saturday or Sunday
+                                      if ($curr == 'Sat' || $curr == 'Sun') {
+                                        $finalDiff--;
                                       }
-                                       else if($noOfDays<=2 && $noOfDays>=0){
-                                        echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                        
+                                      // (optional) for the updated question
+                                      elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+                                        $finalDiff--;
                                       }
+                                  }
+                        
+                                  // $finalDiff=$finalDiff-1;
+                        
+                                  $mondaylw =  date("Y-m-d", strtotime("monday last week"));
+                                  $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
                                      
-                                      $don = "1";
-                                      // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
-                                         }
+                                  $meronBaSiyaLastWeek = "SELECT * FROM `finishedtask` WHERE `taskID` = '$taskID' AND `realDate` BETWEEN '$mondaylw' AND '$sundaylw';";
+                                  // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                  $result = mysqli_query($con, $meronBaSiyaLastWeek);
+                                  $meron = mysqli_num_rows($result);
+                                  // echo $finalDiff;
+                                  $finalDiff = $finalDiff - 5;
+                                  if ($numrows >= 1){
+                                    if($isLate){
+                                      echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                    }
+                                    else{
+                                      echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                    }
+                                    $don = "1";
+                                  //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                       }
+                                       else{
+                                  if($finalDiff >=2){
+                                            echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+                                              }
+                                              else if($finalDiff <= 0){
+                                            echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                              }
+                                              else if($finalDiff ==1){
+                                                echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                                  }
+                                  //end of new code for weekly
+                                    // if ($numrows >= 1){
+                                    //   if($isLate){
+                                    //     echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                    //   }
+                                    //    else {
+                                    //     echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                    //   }
+                                     
+                                    //   $don = "1";
+                                    //   // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
+                                    //      }
                                          else{
                                           $mondaylw =  date("Y-m-d", strtotime("monday last week"));
                                           $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
@@ -1654,6 +1968,7 @@ for($x = 0; $x <$arrlength; $x++) {
                                             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
                                           }
                                          }
+                                        }
                                     }
                                     else if($taskType == 'monthly'){
                                       $sessionDateNow=$_SESSION['date_string'];
@@ -1671,35 +1986,211 @@ for($x = 0; $x <$arrlength; $x++) {
                                     $don = "0";
                                     while($userRow = mysqli_fetch_assoc($result)){
                                       $noOfDays = $userRow['noOfDaysLate'];
+                                      $isLate = $userRow['isLate'];
                                     
                           
                                   }
-                                    if ($numrows >= 1){
-                                      if($noOfDays > 2){
-                                        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
-                                      }
-                                      else if($noOfDays <=2 && $noOfDays>=0){
-                                        echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
-                                      }
-                                      $don = "1";
-                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                         }
-                                         else{
-                                          $lastmonth =  date("F", strtotime("previous month"));
-  
-                                          $meronBaSiyaLastMonth = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$lastmonth' AND `year` = '$year1' ;";
-                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                          $resultm = mysqli_query($con, $meronBaSiyaLastMonth);
-      
-                                          $meronlastMonth = mysqli_num_rows($resultm);
+                                  //new monthly code
 
-                                          if($meronlastMonth >=1){
-                                            echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
-                                          }
-                                          else if($meronlastMonth <=0){
-                                        echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
-                                          }
-                                         }
+                                  $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+                                  $result = mysqli_query($con, $selectUserTask);
+                            
+                                  while($userRow = mysqli_fetch_assoc($result)){
+                                    $dateStarted = $userRow['dateStarted'];
+                                  }
+                            
+                                  $date = new DateTime($dateStarted);
+                                  $datenow = new DateTime($dateStarted);
+                            
+                            
+                                  $dateStarteds = new DateTime($dateStarted);
+                                  $monthOfLastDate =  $dateStarteds->format('F');
+                                      $yearOfLastDate =  $dateStarteds->format('Y');
+                                
+                                      $monthofThisMonth = new DateTime(date('Y-m-d'));
+                                      $Month_Now = $monthofThisMonth->format('F');
+                                      $yearOfThisMonth = new DateTime(date('Y-m-d'));
+                                      $Year_Now = $yearOfThisMonth->format('Y');
+                                
+                            
+                                      $nextMonth = $date->modify('next month');
+                                      // $date->format('Y-m-d');
+                                      $nextMonthHehe =  $nextMonth->format('F');
+                                      $yearOfNextDate =  $date->format('Y');
+                            // echo $nextMonthHehe;
+                            
+                                      if($nextMonthHehe == $Month_Now ){
+                            
+                            $finalDiff = "0";
+                            $finalDiff2 = "2";
+                            
+                                      }
+                                      else{
+                                      // echo "Next monday is: ";
+                                  // $date->modify('next monday');
+                            
+                            
+                                  // echo "Next monday is: ";
+                                  // $date->modify('next monday');
+                            
+                            
+                                  // echo "Next monday is: ";
+                                  $date->modify('next month');
+                                  
+                                  // $date->format('Y-m-d');
+                                  $monthOfDate =  $date->format('F');
+                                  $year =  $date->format('Y');
+                            // echo $monthOfDate;
+                            $fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+                            $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+                            
+                                  // echo $FDateofThisMonth;
+                            
+                                  $lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
+                                  $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
+                                      // echo $FDateofThisMonth;
+                            
+                                  $end2 = new DateTime(date($LDateofThisMonth));
+                                  $start2 = new DateTime($FDateofThisMonth);
+                                // otherwise the  end date is excluded (bug?)
+                                  $end2->modify('+1 day');
+                            
+                                  $interval2 = $end2->diff($start2);
+                            
+                                  // total days
+                                  $finalDiff2 = $interval2->days;
+                            
+                                  // create an iterateable period of date (P1D equates to 1 day)
+                                  $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
+                            
+                                  // best stored as array, so you can add more than one
+                                  // $holidays2 = array('2012-09-07');
+                                    $holidays2 = $holidaysArray;
+                            
+                                  foreach($period2 as $dt2) {
+                                      $curr2 = $dt2->format('D');
+                            
+                                      // substract if Saturday or Sunday
+                                      if ($curr2 == 'Sat' || $curr2 == 'Sun') {
+                                        $finalDiff2--;
+                                      }
+                            
+                                      // (optional) for the updated question
+                                      elseif (in_array($dt2->format('Y-m-d'), $holidays)) {
+                                        $finalDiff2--;
+                                      }
+                                  }
+                                  $finalDiff3 = $finalDiff2;
+                            
+                            $finalDiff2 = $finalDiff2+2;
+                            
+                            
+                            
+                            
+                                  // $date->format('Y-m-d');
+                                  // $DateEnd =  $date->format('Y-m-d');
+                                  $end = new DateTime(date('Y-m-d'));
+                                  // $end = new DateTime('2022-06-30');
+                            
+                                  $start = new DateTime($FDateofThisMonth);
+                            
+                            
+                            
+                                  $from=date_create(date('Y-m-d'));
+                                  $to=date_create($FDateofThisMonth);
+                                  $diff=date_diff($to,$from);
+                                  // print_r($diff);
+                                  // echo $diff->format('%R%a');
+                                  
+                                  $Difference = $diff->format('%R%a');
+                            
+                                  // echo $n1 + $n2;
+                            
+                            
+                            
+                                  $eememe =  $end->format('Y-m-d');
+                                    $DateEnd =  $start->format('Y-m-d');
+                                // otherwise the  end date is excluded (bug?)
+                                  $end->modify('+1 day');
+                                 
+                                  $interval = $end->diff($start);
+                            
+                                  // total days
+                                  $finalDiff = $interval->days;
+                            
+                                  // create an iterateable period of date (P1D equates to 1 day)
+                                  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                            
+                                  // best stored as array, so you can add more than one
+                                  //$holidays = array('2012-09-07');
+                                    // $holidays = $holidaysArray;
+                                  
+                                  foreach($period as $dt) {
+                                      $curr = $dt->format('D');
+                            
+                                      // substract if Saturday or Sunday
+                                      if ($curr == 'Sat' || $curr == 'Sun') {
+                                        $finalDiff--;
+                                      }
+                            
+                                      // (optional) for the updated question
+                                      elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+                                        $finalDiff--;
+                                      }
+                                  }
+                                  $finalDifFinal = $finalDiff - $finalDiff3;
+                            
+                                      }
+                                      if ($numrows >= 1){
+                                        if($isLate){
+                                          echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                        }
+                                        else{
+                                          echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                        }
+                                        $don = "1";
+                                      //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                           }
+                                           else{
+                                            if($finalDiff >=2){
+                                              echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+                                                }
+                                                else if($finalDiff <= 0){
+                                              echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                                }
+                                                else if($finalDiff ==1){
+                                                  echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                                    }
+                                           }
+                            
+                               
+                                  //end of new monthly code
+                                    // if ($numrows >= 1){
+                                    //   if($isLate){
+                                    //     echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                    //   }
+                                    //   else{
+                                    //     echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                    //   }
+                                    //   $don = "1";
+                                    // //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                    //      }
+                                    //      else{
+                                    //       $lastmonth =  date("F", strtotime("previous month"));
+  
+                                    //       $meronBaSiyaLastMonth = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$lastmonth' AND `year` = '$year1' ;";
+                                    //       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    //       $resultm = mysqli_query($con, $meronBaSiyaLastMonth);
+      
+                                    //       $meronlastMonth = mysqli_num_rows($resultm);
+
+                                    //       if($meronlastMonth >=1){
+                                    //         echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                    //       }
+                                    //       else if($meronlastMonth <=0){
+                                    //     echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+                                    //       }
+                                    //      }
                                     
                                     }
                                     else if($taskType == 'daily'){
@@ -1772,7 +2263,8 @@ $finalDiff = $interval->days;
 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
 // best stored as array, so you can add more than one
-$holidays = array('2022-01-01');
+//$holidays = array('2022-01-01');
+// $holidays = $holidaysArray;
 
 foreach($period as $dt) {
     $curr = $dt->format('D');
@@ -1803,6 +2295,229 @@ $finalDiff=$finalDiff-2;
                                                   // echo $finalDiff;
                                          }
                                     }
+
+
+                                   
+else if($taskType == 'annual'){
+                                      
+
+  $dateOfNow = new DateTime(date('Y-m-d'));
+  $MonthOfNow =  $dateOfNow->format('F');
+  $YearToUseForApril = "";
+  $YearToUseforMarch = "";
+  if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+
+    $YearToUseforMarch =  $dateOfNow->format('Y');
+    $dateOfNow->modify('last year');
+    $YearToUseForApril =  $dateOfNow->format('Y');
+  }
+  else{
+    $YearToUseForApril =  $dateOfNow->format('Y');
+$dateOfNow->modify('next year');
+$YearToUseforMarch =  $dateOfNow->format('Y');
+
+
+  }
+
+  $April = new DateTime($YearToUseForApril.'-04-01');
+  $March = new DateTime($YearToUseforMarch.'-03-31');
+  $April =  $April->format('Y-m-d');
+  $March =  $March->format('Y-m-d');
+
+  $selectUserTasks = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `DateSubmitted` BETWEEN '$April' AND '$March';";
+  // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+  $result = mysqli_query($con, $selectUserTasks);
+
+  $numrows = mysqli_num_rows($result);
+  $don = "0";
+  while($userRow = mysqli_fetch_assoc($result)){
+    $noOfDays = $userRow['noOfDaysLate'];
+    $isLate = $userRow['isLate'];
+  
+
+}
+//new monthly code
+
+$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+$result = mysqli_query($con, $selectUserTask);
+
+while($userRow = mysqli_fetch_assoc($result)){
+  $dateStarted = $userRow['dateStarted'];
+}
+
+$date = new DateTime($dateStarted);
+$dateYear = new DateTime($dateStarted);
+
+
+
+$dateYear->modify('next year');
+$nextYearSample =  $dateYear->format('Y');
+
+$date = new DateTime($nextYearSample.'-04-01');
+$nextYearApril =  $date->format('Y-m-d');
+
+$dateYear->modify('next year');
+$nextYearSample =  $dateYear->format('Y');
+
+$date = new DateTime($nextYearSample.'-03-31');
+$nextYearMarch=  $date->format('Y-m-d');
+// $end = new DateTime(date('Y-m-d'));
+
+
+// $start = new DateTime($nextYearMarch);
+
+
+// $end->modify('+1 day');
+
+// $interval = $end->diff($start);
+
+// // total days
+// $finalDiff = $interval->days;
+
+$yearOfThisMonth = new DateTime('2023-04-05');
+$Year_Now = $yearOfThisMonth->format('Y');
+
+$nextYear = $date->modify('next year');
+$nextYearHehe =  $nextYear->format('Y');
+echo $nextYearHehe;
+
+$paymentDate = date('Y-m-d');
+$paymentDate=date('Y-m-d', strtotime($paymentDate));
+//echo $paymentDate; // echos today! 
+$contractDateBegin = date('Y-m-d', strtotime($nextYearApril));
+$contractDateEnd = date('Y-m-d', strtotime($nextYearMarch));
+    
+if (($paymentDate >= $contractDateBegin) && ($paymentDate <= $contractDateEnd)){
+  echo "is between";
+}
+//https://stackoverflow.com/questions/19070116/php-check-if-date-between-two-dates
+else{
+  $date->modify('next year');
+  $year =  $date->format('Y');
+
+echo $year;
+echo "<br>";
+$date = new DateTime($year.'-04-01');
+$nextYearApril =  $date->format('Y-m-d');
+
+$end = new DateTime('2023-03-05');
+
+
+$start = new DateTime($nextYearApril);
+
+
+$end->modify('+1 day');
+
+$interval = $end->diff($start);
+
+// total days
+$finalDiff = $interval->days;
+echo $finalDiff;
+}
+// $finalDiff =  $interval->format('%R%a')."\n";
+// echo $finalDiff;
+// create an iterateable period of date (P1D equates to 1 day)
+
+
+// best stored as array, so you can add more than one
+//$holidays = array('2012-09-07');
+  // $holidays = $holidaysArray;
+  
+
+  
+    $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+    foreach($period as $dt) {
+        $curr = $dt->format('D');
+    // echo $curr;
+   
+
+        if ($curr == 'Sat' || $curr == 'Sun') {
+          $finalDiff++;
+        }
+    
+        if (in_array($dt->format('Y-m-d'), $holidays)) {
+          $finalDiff++;
+        }
+    }
+    echo "<br>";
+    // echo $finalDiff;
+
+// else{
+// // echo $finalDiff;
+
+// $periods = new DatePeriod($start, new DateInterval('P1D'), $end);
+// foreach($periods as $dt) {
+//     $currs = $dt->format('D');
+//     // echo $currs;
+
+//     // substract if Saturday or Sunday
+//     if ($currs == 'Sat' || $currs == 'Sun') {
+//       $finalDiff--;
+//     }
+
+//     // (optional) for the updated question
+//   if (in_array($dt->format('Y-m-d'), $holidays)) {
+//       $finalDiff--;
+//     }
+// }
+// }
+
+
+    
+    if ($numrows >= 1){
+      if($isLate){
+        echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+      }
+      else{
+        echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+      }
+      $don = "1";
+    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+         }
+         else{
+          if($finalDiff<=-2){
+            echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+              }
+              else if($finalDiff >=0){
+            echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+              }
+              else if($finalDiff ==-1){
+                echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                  }
+         }
+
+
+//end of new monthly code
+  // if ($numrows >= 1){
+  //   if($isLate){
+  //     echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+  //   }
+  //   else{
+  //     echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+  //   }
+  //   $don = "1";
+  // //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+  //      }
+  //      else{
+  //       $lastmonth =  date("F", strtotime("previous month"));
+
+  //       $meronBaSiyaLastMonth = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$lastmonth' AND `year` = '$year1' ;";
+  //       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+  //       $resultm = mysqli_query($con, $meronBaSiyaLastMonth);
+
+  //       $meronlastMonth = mysqli_num_rows($resultm);
+
+  //       if($meronlastMonth >=1){
+  //         echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+  //       }
+  //       else if($meronlastMonth <=0){
+  //     echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+  //       }
+  //      }
+  
+  }
+                                  
+
                                 ?> </td>
                                  <td style="width: 30%">
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
@@ -1990,6 +2705,48 @@ $finalDiff=$finalDiff-2;
                                          }
                                     
                                     }
+                                    else if($taskType == 'annual'){
+                                                                        
+                                    $dateOfNow = new DateTime(date('Y-m-d'));
+                                    $MonthOfNow =  $dateOfNow->format('F');
+                                    $YearToUseForApril = "";
+                                    $YearToUseforMarch = "";
+                                    if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+
+                                      $YearToUseforMarch =  $dateOfNow->format('Y');
+                                      $dateOfNow->modify('last year');
+                                      $YearToUseForApril =  $dateOfNow->format('Y');
+                                    }
+                                    else{
+                                      $YearToUseForApril =  $dateOfNow->format('Y');
+                                  $dateOfNow->modify('next year');
+                                  $YearToUseforMarch =  $dateOfNow->format('Y');
+
+
+                                    }
+
+                                    $April = new DateTime($YearToUseForApril.'-04-01');
+                                    $March = new DateTime($YearToUseforMarch.'-03-31');
+                                    $April =  $April->format('Y-m-d');
+                                    $March =  $March->format('Y-m-d');
+
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `DateSubmitted` BETWEEN '$April' AND '$March';";
+                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
+                                    // $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
+                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                    $result = mysqli_query($con, $selectUserTask);
+
+                                    $numrows = mysqli_num_rows($result);
+                                    $don = "0";
+
+                                    if ($numrows == 1){
+                                      echo 'disabled';
+
+                                      $don = "1";
+                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                         }
+                                    
+                                    }
                                     else if($taskType == 'daily'){
                                       $dateForNow = $_SESSION['date_string'];
                         $date = new DateTime($dateForNow);
@@ -2043,7 +2800,7 @@ $finalDiff=$finalDiff-2;
                                           var nId = 'uploadsample'+dataId;
                                           // alert(nId);
                                           document.getElementById(nId).disabled = false;
-                                          // var nId = '#'+dataId;
+                                          // var nId = '#'+dataId;finishedsample
                                           // alert(nId);
                                           // $(nId).prop('disabled', false);
                                           // alert(fileInputId);
@@ -2082,38 +2839,70 @@ $finalDiff=$finalDiff-2;
 
                                     // $don = "0";
                                     while($userRow = mysqli_fetch_assoc($result)){
-                                      $fTaskId = $userRow['FinishedTaskID'];
+                                      $fTaskId = $userRow['sameID'];
                                       $noOfDays = $userRow['noOfDaysLate'];
                                       $reason = $userRow['reason'];
                                       $action = $userRow['action'];
+                                      $isLates = $userRow['isLate'];
+                                      // echo $isLates;
                                   }
-                                  if($noOfDays>=3){
-                                   ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
-                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                    
-
-                                      
-
-                                    <?php
-                                  }
-                               else{
-
-                               
-                                  // echo $noOfDays;
-                                  ?>
-                                      <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
-                                      <!-- <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
-                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#"  data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                    
-                                      <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                            if($numrows>0){
+                              if($isLates){
+                                ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                   <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                   <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                 
 
                                    
-                                      <?php
+
+                                 <?php
                                }
+                            else{
+
+                            
+                               // echo $noOfDays;
                                ?>
-                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                   <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                   <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                   <!-- <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
+                                   <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#"  data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                 
+                                   <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+
+                                
+                                   <?php
+                            }
+                            }
+                            else{
+                              if($noOfDays>=3){
+                                ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                   <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                   <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                 
+
+                                   
+
+                                 <?php
+                               }
+                            else{
+
+                            
+                               // echo $noOfDays;
+                               ?>
+                                   <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                   <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                   <!-- <span class="mode mode_late"><a style = "color: white" href="#" data-location="<?php echo $fileloc?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
+                                   <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#"  data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                 
+                                   <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+
+                                
+                                   <?php
+                            }
+                            }
+
+                               ?>
+                                      <!-- <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
                                           <?php
                                         }
 
@@ -2128,33 +2917,141 @@ $finalDiff=$finalDiff-2;
 
                                     // $don = "0";
                                     while($userRow = mysqli_fetch_assoc($result)){
-                                      $fTaskId = $userRow['FinishedTaskID'];
+                                      $fTaskId = $userRow['sameID'];
                                       $noOfDays = $userRow['noOfDaysLate'];
                                       $reason = $userRow['reason'];
                                       $action = $userRow['action'];
+                                      $isLate = $userRow['isLate'];
                                   }
-                                  if($noOfDays>=3){
-                                    ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                    <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
-                                    <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                  
-                                     <?php
-                                   }
-                                else{
-                                  //  echo $noOfDays;
-                                  ?>
-                                 <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
-                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                  if($numrows>0){
+                                    if($isLate){
+                                      ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                     
+                                       <?php
+                                     }
+                                  else{
+                                    //  echo $noOfDays;
+                                    ?>
+                                   <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                        <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                        <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                       
-                                      <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
-                                      <?php
-                                }
+                                        
+                                        <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                        <?php
+                                  }
+                                  }
+                                  else{
+                                    if($noOfDays>=3){
+                                      ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                    
+                                       <?php
+                                     }
+                                  else{
+                                    //  echo $noOfDays;
+                                    ?>
+                                   <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                        <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                        <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      
+                                        
+                                        <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                        <?php
+                                  }
+                                  }
+                                  
                                 ?>
-                                      <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                      <!-- <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
                                       <?php
                                         }
+                                        else if ($taskType == 'annual'){
+
+                                          $dateOfNow = new DateTime(date('Y-m-d'));
+                                          $MonthOfNow =  $dateOfNow->format('F');
+                                          $YearToUseForApril = "";
+                                          $YearToUseforMarch = "";
+                                          if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+                                        
+                                            $YearToUseforMarch =  $dateOfNow->format('Y');
+                                            $dateOfNow->modify('last year');
+                                            $YearToUseForApril =  $dateOfNow->format('Y');
+                                          }
+                                          else{
+                                            $YearToUseForApril =  $dateOfNow->format('Y');
+                                        $dateOfNow->modify('next year');
+                                        $YearToUseforMarch =  $dateOfNow->format('Y');
+                                        
+                                        
+                                          }
+                                        
+                                          $April = new DateTime($YearToUseForApril.'-04-01');
+                                          $March = new DateTime($YearToUseforMarch.'-03-31');
+                                          $April =  $April->format('Y-m-d');
+                                          $March =  $March->format('Y-m-d');
+                                        
+                                          $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `DateSubmitted` BETWEEN '$April' AND '$March';";
+                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                          $result = mysqli_query($con, $selectUserTask);
+      
+                                          $numrows = mysqli_num_rows($result);
+      
+                                          // $don = "0";
+                                          while($userRow = mysqli_fetch_assoc($result)){
+                                            $fTaskId = $userRow['sameID'];
+                                            $noOfDays = $userRow['noOfDaysLate'];
+                                            $reason = $userRow['reason'];
+                                            $action = $userRow['action'];
+                                            $isLate = $userRow['isLate'];
+                                        }
+                                        if($numrows>0){
+                                          if($isLate){
+                                            ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                            <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                          
+                                             <?php
+                                           }
+                                        else{
+                                          //  echo $noOfDays;
+                                          ?>
+                                         <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                              <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                              <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            
+                                              
+                                              <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                              <?php
+                                        }
+                                        }
+                                        else{
+                                          if($noOfDays>=3){
+                                            ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                            <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                          
+                                             <?php
+                                           }
+                                        else{
+                                          //  echo $noOfDays;
+                                          ?>
+                                         <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                              <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                              <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            
+                                              
+                                              <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                              <?php
+                                        }
+                                        }
+                                        
+                                      ?>
+                                            <!-- <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "cancel<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
+                                            <?php
+                                              }
 
                                         else if ($taskType == 'daily'){
                                           $today = $_SESSION['today'];              
@@ -2167,32 +3064,54 @@ $finalDiff=$finalDiff-2;
                                           // $don = "0";
                                           
                                             while($userRow = mysqli_fetch_assoc($result)){
-                                              $fTaskId = $userRow['FinishedTaskID'];
+                                              $fTaskId = $userRow['sameID'];
                                       $noOfDays = $userRow['noOfDaysLate'];
                                       $reason = $userRow['reason'];
                                       $action = $userRow['action'];
-
+                                      $isLate = $userRow['isLate'];
+                                          }
+                                          if($numrows>0){
+                                            if($isLate){
+                                              ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                              <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                        <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" data-fid="<?php echo $fTaskId ?>" href="#"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            
+                                               <?php
+                                             }
+                                             else{
+                                          ?>
+                                                    <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                        <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                        <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                
+                                          
+                                              <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                              <?php
+                                             }
+                                          }
+                                          else{
+                                            if($noOfDays>=2){
+                                              ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                              <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                        <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" data-fid="<?php echo $fTaskId ?>" href="#"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            
+                                               <?php
+                                             }
+                                             else{
+                                          ?>
+                                                    <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                        <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
+                                        <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                
+                                          
+                                              <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
+                                              <?php
+                                             }
                                           }
                                           // echo $noOfDays;
-                                          if($noOfDays>=2){
-                                            ?> <a href="index.php?Update=<?php echo $fTaskId ?>" style="display: none" id= "updates<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                            <!-- <a href="index.php?UpdateModal=<?php echo $fTaskId ?>"  id= "update<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
-                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" data-fid="<?php echo $fTaskId ?>" href="#"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                           
-                                             <?php
-                                           }
-                                           else{
-                                        ?>
-                                                  <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-                                      <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
-                                      <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>"  data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
-              
-                                        
-                                            <!-- <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a> -->
-                                            <?php
-                                           }
                                            ?>
-                                            <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a>
+                                            <!-- <a href="index.php?Cancel=<?php echo $fTaskId ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
 <?php
                                               }
                                        ?>
@@ -2330,8 +3249,9 @@ if ($taskType == 'weekly'){
           $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
           // best stored as array, so you can add more than one
-          $holidays = array('2012-09-07');
-
+          // $holidays = array('2012-09-07');
+          // $holidays = $holidaysArray;
+              
           foreach($period as $dt) {
               $curr = $dt->format('D');
 
@@ -2355,7 +3275,10 @@ if ($taskType == 'weekly'){
           // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
           $result = mysqli_query($con, $meronBaSiyaLastWeek);
           $meron = mysqli_num_rows($result);
-          if($finalDiff >5){
+          $finalDiff = $finalDiff - 5;
+          if($finalDiff >0){
+             // August 10, 2022 changes
+           
             $_SESSION['noOfDaysLate']=$finalDiff;
             $_SESSION['TaskID'] = $_GET['FinishSample'];
             echo "<script> 
@@ -2365,7 +3288,7 @@ if ($taskType == 'weekly'){
   document.getElementById('daysLate').value=$finalDiff;
   </script>";
           }
-          else if($finalDiff <=5){
+          else if($finalDiff <=0){
      $_SESSION['noOfDaysLate']='0';
          $_SESSION['TaskID'] = $_GET['FinishSample'];
          $taskID = $_SESSION['TaskID'];
@@ -2546,8 +3469,9 @@ $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
       $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
 
       // best stored as array, so you can add more than one
-      $holidays2 = array('2012-09-07');
-
+      // $holidays2 = array('2012-09-07');
+      $holidays2 = $holidaysArray;
+        
       foreach($period2 as $dt2) {
           $curr2 = $dt2->format('D');
 
@@ -2603,8 +3527,19 @@ $finalDiff2 = $finalDiff2+2;
       $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
       // best stored as array, so you can add more than one
-      $holidays = array('2012-09-07');
+       //$holidays = array('2022-08-15');
 
+
+      //  $holidays = $holidaysArray;
+      //  print($holidaysArray[1]);
+//        $myarray = array(1,2,3,4,5,6,7,7);
+// // Print PHP array using echo and print() functions.
+// echo $myarray[2];
+// print($myarray[0]); 
+//        echo "<script> 
+  
+//        console.log('$holidays');
+// </script>";
       foreach($period as $dt) {
           $curr = $dt->format('D');
 
@@ -2614,7 +3549,7 @@ $finalDiff2 = $finalDiff2+2;
           }
 
           // (optional) for the updated question
-          elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+          else if (in_array($dt->format('Y-m-d'), $holidays)) {
             $finalDiff--;
           }
       }
@@ -2694,6 +3629,157 @@ document.getElementById('daysLate').value='$finalDiff';
                        
     
     }
+    else if($taskType == 'annual'){
+
+
+ 
+      $dateOfNow = new DateTime(date('Y-m-d'));
+      $MonthOfNow =  $dateOfNow->format('F');
+      $YearToUseForApril = "";
+      $YearToUseforMarch = "";
+      if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+    
+        $YearToUseforMarch =  $dateOfNow->format('Y');
+        $dateOfNow->modify('last year');
+        $YearToUseForApril =  $dateOfNow->format('Y');
+      }
+      else{
+        $YearToUseForApril =  $dateOfNow->format('Y');
+    $dateOfNow->modify('next year');
+    $YearToUseforMarch =  $dateOfNow->format('Y');
+    
+    
+      }
+    
+      $April = new DateTime($YearToUseForApril.'-04-01');
+      $March = new DateTime($YearToUseforMarch.'-03-31');
+      $April =  $April->format('Y-m-d');
+      $March =  $March->format('Y-m-d');
+    
+      $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `DateSubmitted` BETWEEN '$April' AND '$March';";
+      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+      $result = mysqli_query($con, $selectUserTask);
+    
+      $numrows = mysqli_num_rows($result);
+      $don = "0";
+      while($userRow = mysqli_fetch_assoc($result)){
+        $noOfDays = $userRow['noOfDaysLate'];
+        $isLate = $userRow['isLate'];
+      
+    
+    }
+    //new monthly code
+    
+    $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+    $result = mysqli_query($con, $selectUserTask);
+    
+    while($userRow = mysqli_fetch_assoc($result)){
+      $dateStarted = $userRow['dateStarted'];
+    }
+    
+    $date = new DateTime($dateStarted);
+    
+    
+    $date->modify('next year');
+    $nextYearSample =  $date->format('Y');
+    
+    $date = new DateTime($nextYearSample.'-04-01');
+    $nextYearMarch =  $date->format('Y-m-d');
+    
+    $end = new DateTime(date('Y-m-d'));
+    
+    
+    $start = new DateTime($nextYearMarch);
+    
+    
+    $end->modify('+1 day');
+    
+    $interval = $end->diff($start);
+    
+    // total days
+    // $finalDiff = $interval->days;
+    $finalDiff =  $interval->format('%R%a')."\n";
+    // echo $finalDiff;
+    // create an iterateable period of date (P1D equates to 1 day)
+    
+    
+    // best stored as array, so you can add more than one
+    //$holidays = array('2012-09-07');
+      // $holidays = $holidaysArray;
+      // echo $finalDiff;
+    if($finalDiff<0){
+        $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+    
+        foreach($period as $dt) {
+            $curr = $dt->format('D');
+        
+            if ($curr == 'Sat' || $curr == 'Sun') {
+              $finalDiff++;
+            }
+        
+            else if (in_array($dt->format('Y-m-d'), $holidays)) {
+              $finalDiff++;
+            }
+        }
+    }
+    else{
+      // echo $finalDiff;
+      
+    $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+    foreach($period as $dt) {
+        $curr = $dt->format('D');
+    
+        // substract if Saturday or Sunday
+        if ($curr == 'Sat' || $curr == 'Sun') {
+          $finalDiff--;
+        }
+    
+        // (optional) for the updated question
+        elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+          $finalDiff--;
+        }
+    }
+    // echo $finalDiff;
+
+    }
+    
+    
+      // echo $finalDiff;
+      $finalDiff = str_replace("+", "", $finalDiff);
+    if($finalDiff <=-1){
+      $finalDiff = $finalDiff *-1;
+
+      $_SESSION['noOfDaysLate']=$finalDiff;
+      $_SESSION['TaskID'] = $_GET['FinishSample'];
+      // echo $eememe;
+      echo "<script> 
+      // document.getElementById('daysLateDiv').style.display = 'none';
+      console.log('$finalDiff');
+      $('#reasonModal').modal('show');
+      
+document.getElementById('daysLate').value='$finalDiff';
+</script>";
+    }
+    else if($finalDiff >=0){
+   $finalDiff = $finalDiff *-1;
+
+$_SESSION['noOfDaysLate']='0';
+   $_SESSION['TaskID'] = $_GET['FinishSample'];
+   $taskID = $_SESSION['TaskID'];
+
+   echo "<script>  
+
+
+  $('#actionModal').modal('show');
+
+
+     //document.getElementById('finished$taskID').click();   DITO AKO NATAPOS   
+             </script>";
+
+    }
+    
+  
+  }
     else if($taskType == 'daily'){
 
   
@@ -2726,7 +3812,7 @@ document.getElementById('daysLate').value='$finalDiff';
           $end = new DateTime(date('Y-m-d'));
           $start = new DateTime(date('Y-m-d', strtotime($today)));
 // otherwise the  end date is excluded (bug?)
-$end->modify('+1 day');
+// $end->modify('+1 day');
 
 $interval = $end->diff($start);
 
@@ -2737,7 +3823,7 @@ $finalDiff = $interval->days;
 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
 // best stored as array, so you can add more than one
-$holidays = array('2012-09-07');
+//$holidays = array('2012-09-07');
 
 foreach($period as $dt) {
     $curr = $dt->format('D');
@@ -2753,8 +3839,8 @@ foreach($period as $dt) {
     }
 }
 
-$finalDiff=$finalDiff-2;
-          if($finalDiff >=2 ){
+$finalDiff=$finalDiff-1;
+          if($finalDiff >=1 ){
             $_SESSION['noOfDaysLate']=$finalDiff;
          $_SESSION['TaskID'] = $_GET['FinishSample'];
          $taskID = $_SESSION['TaskID'];

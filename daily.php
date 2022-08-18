@@ -103,12 +103,12 @@ if(isset($_POST['UpdateStatusName'])){
   $radioStatus=$_POST['radioStatus']; 
   $finishedTaskId = $_POST['finishedTaskID'];
   if($radioStatus=="4"){
-    $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='5', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+    $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='5', `score`='0.5', `isLate`= true,`isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
     mysqli_query($con, $sqlUpdateStatus);
   
   }
   else{
-    $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='0', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+    $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='0', `score`='1', `isLate`= false, `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
     mysqli_query($con, $sqlUpdateStatus);
   
   }
@@ -326,7 +326,15 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                     </div> -->
                                               <!-- <a type="button" id="Attachments" class="btn btn-outline-warning btn-lg btn-block">Change Status</a> -->
                                               <a type="button" id="Attachments" class="btn btn-outline-info btn-lg btn-block">See attachments</a>
-                                                  <div class="form-group">
+                                              <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Date and Time Submitted</label>
+                                                    <input class="form-control" name="dateSubmitted" id="dateSubmitted" disabled></input>
+                                                  </div>
+                                              <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Point</label>
+                                                    <input class="form-control" name="pointReceived" id="pointReceived" disabled></input>
+                                                  </div>  
+                                              <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Reason</label>
                                                     <textarea class="form-control" name="reasonInputUpdate" id="reasonUpdate1" disabled></textarea>
                                                   </div>
@@ -466,40 +474,45 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                 $action = $userRow['action'];
                                 $timestamp = strtotime($dateofTassk);
                                 $datenow = date('l', $timestamp);
+                                $pointReceived = $userRow['score'];
+                                $DateSubmitted = $userRow['DateSubmitted'];
+                                $dateN =  date('n-d', strtotime($DateSubmitted));
+                                $timestamp = $userRow['timestamp'];
+                                
                                       // echo $dateoftask;
                                       // $trimedDate = str_replace(",","",$dateoftask);
                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                       if ($datenow == "Monday" ){
-                                        if($noOfDays >= 2){
+                                        if($noOfDays >= 1){
                                           // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                           // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
                                           
                                           if($isCheckedByLeader){
                                             ?>
-                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
 
-                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                              <?php
                                           }
                                           else{
                                             ?>
-                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>"data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                              <?php
                                           }
                                           
                                           
                                          
                                         }
-                                        else if ($noOfDays <= 1){
+                                        else if ($noOfDays <= 0){
                                           // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                           if($isCheckedByLeader){
                                             ?>
-                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0"data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                             <?php
                                           }
                                           else{
                                             ?>
-                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>"data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                             <?php
                                           }
                                           
@@ -549,40 +562,46 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                         $action = $userRow['action'];
                                                           $timestamp = strtotime($dateofTassk);
                                                           $datenow = date('l', $timestamp);
+                                $pointReceived = $userRow['score'];
+                                $DateSubmitted = $userRow['DateSubmitted'];
+                                $timestamp = $userRow['timestamp'];
+
+                                $dateN =  date('n-d', strtotime($DateSubmitted));
+
                                                       // echo $dateoftask;
                                                       // $trimedDate = str_replace(",","",$dateoftask);
                                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                       if ($datenow == "Tuesday" ){
-                                                        if($noOfDays >= 2){
+                                                        if($noOfDays >= 1){
                                                           // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                           // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
                                                           
                                                           if($isCheckedByLeader){
                                                             ?>
-                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
                 
-                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                              <?php
                                                           }
                                                           else{
                                                             ?>
-                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                              <?php
                                                           }
                                                           
                                                           
                                                          
                                                         }
-                                                        else if ($noOfDays <= 1){
+                                                        else if ($noOfDays <= 0){
                                                           // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                           if($isCheckedByLeader){
                                                             ?>
-                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                             <?php
                                                           }
                                                           else{
                                                             ?>
-                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                             <?php
                                                           }
                                                           
@@ -636,41 +655,46 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                    $action = $userRow['action'];
                                                       $timestamp = strtotime($dateofTassk);
                                                       $datenow = date('l', $timestamp);
+                                $pointReceived = $userRow['score'];
+                                $DateSubmitted = $userRow['DateSubmitted'];
+                                $dateN =  date('n-d', strtotime($DateSubmitted));
+                                $timestamp = $userRow['timestamp'];
+
                                                   // echo $dateoftask;
                                                   // $trimedDate = str_replace(",","",$dateoftask);
                                                   // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                   if ($datenow == "Wednesday" ){
                                                 
-                                                    if($noOfDays >= 2){
+                                                    if($noOfDays >= 1){
                                                       // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                       // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
                                                       
                                                       if($isCheckedByLeader){
                                                         ?>
-                                                        <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                                                        <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
             
-                                                        <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                        <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                          <?php
                                                       }
                                                       else{
                                                         ?>
-                                                        <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                        <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                          <?php
                                                       }
                                                       
                                                       
                                                      
                                                     }
-                                                    else if ($noOfDays <= 1){
+                                                    else if ($noOfDays <= 0){
                                                       // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                       if($isCheckedByLeader){
                                                         ?>
-                                                        <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                        <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                         <?php
                                                       }
                                                       else{
                                                         ?>
-                                                        <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                        <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                         <?php
                                                       }
                                                       
@@ -723,40 +747,45 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                        $action = $userRow['action'];
                                                           $timestamp = strtotime($dateofTassk);
                                                           $datenow = date('l', $timestamp);
+                                $pointReceived = $userRow['score'];
+                                $DateSubmitted = $userRow['DateSubmitted'];
+                                $dateN =  date('n-d', strtotime($DateSubmitted));
+                                $timestamp = $userRow['timestamp'];
+
                                                       // echo $dateoftask;
                                                       // $trimedDate = str_replace(",","",$dateoftask);
                                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                       if ($datenow == "Thursday" ){
-                                                        if($noOfDays >= 2){
+                                                        if($noOfDays >= 1){
                                                           // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                           // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
                                                           
                                                           if($isCheckedByLeader){
                                                             ?>
-                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
                 
-                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                              <?php
                                                           }
                                                           else{
                                                             ?>
-                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                              <?php
                                                           }
                                                           
                                                           
                                                          
                                                         }
-                                                        else if ($noOfDays <= 1){
+                                                        else if ($noOfDays <= 0){
                                                           // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                           if($isCheckedByLeader){
                                                             ?>
-                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                             <?php
                                                           }
                                                           else{
                                                             ?>
-                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                             <?php
                                                           }
                                                           
@@ -810,40 +839,45 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                      $action = $userRow['action'];
                                                         $timestamp = strtotime($dateofTassk);
                                                         $datenow = date('l', $timestamp);
+                                $pointReceived = $userRow['score'];
+                                $DateSubmitted = $userRow['DateSubmitted'];
+                                $dateN =  date('n-d', strtotime($DateSubmitted));
+                                $timestamp = $userRow['timestamp'];
+
                                                     // echo $dateoftask;
                                                     // $trimedDate = str_replace(",","",$dateoftask);
                                                     // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                     if ($datenow == "Friday" ){
-                                                      if($noOfDays >= 2){
+                                                      if($noOfDays >= 1){
                                                         // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                         // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
                                                         
                                                         if($isCheckedByLeader){
                                                           ?>
-                                                          <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                                                          <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
               
-                                                          <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                          <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                            <?php
                                                         }
                                                         else{
                                                           ?>
-                                                          <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                          <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                            <?php
                                                         }
                                                         
                                                         
                                                        
                                                       }
-                                                      else if ($noOfDays <= 1){
+                                                      else if ($noOfDays <= 0){
                                                         // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                         if($isCheckedByLeader){
                                                           ?>
-                                                          <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                          <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                           <?php
                                                         }
                                                         else{
                                                           ?>
-                                                          <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                          <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>"  data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                           <?php
                                                         }
                                                         
@@ -897,45 +931,50 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                        $action = $userRow['action'];
                                                           $timestamp = strtotime($dateofTassk);
                                                           $datenow = date('l', $timestamp);
+                                $pointReceived = $userRow['score'];
+                                $DateSubmitted = $userRow['DateSubmitted'];
+                                $dateN =  date('n-d', strtotime($DateSubmitted));
+                                $timestamp = $userRow['timestamp'];
+                                
                                                       // echo $dateoftask;
                                                       // $trimedDate = str_replace(",","",$dateoftask);
                                                       // echo("<script>console.log('sample trim:".trim(strtotime($dateoftask), "April")."');</script>");
                                                       if ($datenow == "Saturday" ){
-                                                        if($noOfDays >= 2){
+                                                        if($noOfDays >= 1){
                                                           // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                           // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
                                                           
                                                           if($isCheckedByLeader){
                                                             ?>
-                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span> -->
+                                                            <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
                 
-                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                              <?php
                                                           }
                                                           else{
                                                             ?>
-                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                              <?php
                                                           }
                                                           
                                                           
                                                          
                                                         }
-                                                        else if ($noOfDays <= 1){
+                                                        else if ($noOfDays <= 0){
                                                           // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                           if($isCheckedByLeader){
                                                             ?>
-                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                             <?php
                                                           }
                                                           else{
                                                             ?>
-                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $time ?></a></span>
+                                                            <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>"  data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                             <?php
                                                           }
                                                           
                                                         }
-                                                        // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$time.'</a></span>'; 
+                                                        // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>'; 
                                           // echo("<script>console.log('ok');</script>");
                                             }
                                                   }
@@ -994,6 +1033,10 @@ $('#reasonModalUpdate').on('show.bs.modal', function (event) {
   var location = button.data('location');
   var itoAyID = button.data('taskid');
   var late = button.data('late');
+  var point = button.data('point');
+  var dateSubmitted = button.data('datesubmitted');
+  var time = button.data('time');
+
   // Extract info from data-* attributes
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
@@ -1004,6 +1047,9 @@ $('#reasonModalUpdate').on('show.bs.modal', function (event) {
   document.getElementById("finishedID").value = itoAyID;
   document.getElementById("reasonUpdate1").value = reason;
   document.getElementById("actionUpdate1").value = action;
+  document.getElementById("pointReceived").value = point;
+  document.getElementById("dateSubmitted").value = dateSubmitted;
+
   // document.getElementById("UpdateStatus").style.display = 'block';
 
   if(late == "1"){

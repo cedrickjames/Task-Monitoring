@@ -116,7 +116,7 @@ session_start();
       $src1 = $_POST['strnow'];
 $array11 = explode(",", $src1);
 
-print_r($array11);
+// print_r($array11);
 
       // const numberOfAddedProducts=document.getElementById("countInput").value;
       $numberofAddedTask = $_POST['countInput'];
@@ -167,10 +167,10 @@ print_r($array11);
           echo '<script>console.log("TEST: '.$taskCategory.'")</script>';
           echo '<script>console.log("TEST: '.$taskType.'")</script>';
           // echo '<script>console.log("arrayyyy: '.$finalarray[1].'")</script>';
-
+          $dateStarted = date('F j, Y');
           try {
   
-          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `department`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1');";
+          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `Department`, `dateStarted`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1', '$dateStarted');";
                   mysqli_query($con, $sqlinsert);
             $num++;
           }

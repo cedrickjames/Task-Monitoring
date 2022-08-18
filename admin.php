@@ -839,12 +839,12 @@ $dateNow = date('Y-m-d');
       $radioStatus=$_POST['radioStatus']; 
       $finishedTaskId = $_POST['finishedTaskID'];
       if($radioStatus=="4"){
-        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='5', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='5', `score`='0.5', `isLate`= true,`isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
         mysqli_query($con, $sqlUpdateStatus);
       
       }
       else{
-        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='0', `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='0', `score`='1', `isLate`= false, `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
         mysqli_query($con, $sqlUpdateStatus);
       
       }
@@ -1249,7 +1249,36 @@ if(isset($_POST['AddCategory'])){
   }
          
 }
+if(isset($_POST['RemoveCategory'])){
+     
+  $category = $_POST['inputCategoryRemove'];
+  $categoryId = $_POST['inputCategoryRemoveId'];
 
+
+  if($category == ""){
+    ?><script>
+          Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You have to choose a category.',
+      //   footer: '<a href="">Why do I have this issue?</a>'
+      })
+       </script><?php 
+  }
+  else{
+    $sqlinsert = "DELETE FROM `category` WHERE categoryId = '$categoryId';";
+    mysqli_query($con, $sqlinsert);
+    ?><script>
+    Swal.fire({
+  icon: 'success',
+  title: 'Success',
+  text: 'You have successfully remove a category',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+         
+}
 
 ?>
 
@@ -1301,9 +1330,11 @@ if(isset($_POST['AddCategory'])){
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
                     <a class="dropdown-item"  href="./signup.php">Register User</a>
-                    <a class="dropdown-item"  href="./addTask.php">Add Task</a>
+                    <a class="dropdown-item"  href="./addTaskAdmin.php">Add Task</a>
                     <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
                       data-target='#modalAdminCategory'>Add Category</a> 
+                      <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
+                      data-target='#modalAdminRemoveCategory'>Remove Category</a> 
                     <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
 
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
@@ -1422,6 +1453,73 @@ if(isset($_POST['AddCategory'])){
             </div>
           </div>
         </div>
+        <div class="modal fade" id="modalAdminRemoveCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Remove Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               
+                   
+                <form action="leader.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
+                     
+                  <div class="form-group">
+                   
+                    <label  for="message-text" class="col-form-label">Click to select category</label>
+                    <input  type="text"class="form-control"  name="inputCategoryRemove" id="inputCategoryRemove" >
+                    <input  type="text"class="form-control"  name="inputCategoryRemoveId" id="inputCategoryRemoveId" style="display: none">
+
+                  </div>
+                  <div class="overflow-x">
+                      <div class="overflow-y" style="overflow-y: scroll; height:480px;"> 
+                        <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                            <thead  class="thead-dark" >
+                                <tr>
+                                <th style="min-width:15px;">Categories</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CategoryTable">
+                       <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                  if(is_array($fetchDataCat)){      
+                                 
+                                  foreach($fetchDataCat as $data){
+                                   $category =  $data['categoryId'];
+                                    ?>
+                                    <tr>
+                                      <td onclick= "clickpassdataCategory('<?php echo $data['CategoryName'];?>','<?php echo $category ?>')" ><a><?php echo $data['CategoryName']; ?> </a></td>
+                                  </tr>
+ <?php
+                         }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchData; ?>
+                        </td>
+                         </tr>
+                          <?php
+                          echo "PETMALU";
+    }                     ?>                   
+                            </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" name="RemoveCategory" class="btn btn-danger" >Remove</button>
+            
+               </div>
+                </form>
+              </div>
+             
+            </div>
+          </div>
+        </div>
 
                                       <div class="modal fade" id="reasonModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog"style="max-width: 700px; width: 600px" role="document">
@@ -1483,7 +1581,15 @@ if(isset($_POST['AddCategory'])){
                     </div> -->
                                               <!-- <a type="button" id="Attachments" class="btn btn-outline-warning btn-lg btn-block">Change Status</a> -->
                                               <a type="button" id="Attachments" class="btn btn-outline-info btn-lg btn-block">See attachments</a>
-                                                  <div class="form-group">
+                                              <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Date and Time Submitted</label>
+                                                    <input class="form-control" name="dateSubmitted" id="dateSubmitted" disabled></input>
+                                                  </div>
+                                              <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Point</label>
+                                                    <input class="form-control" name="pointReceived" id="pointReceived" disabled></input>
+                                                  </div>    
+                                              <div class="form-group">
                                                     <label for="message-text" class="col-form-label">Reason</label>
                                                     <textarea class="form-control" name="reasonInputUpdate" id="reasonUpdate1" disabled></textarea>
                                                   </div>
@@ -1965,6 +2071,10 @@ if(isset($_POST['AddCategory'])){
                                          $reason = $userRow['reason'];
                                          $action = $userRow['action'];
                                          $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                         $pointReceived = $userRow['score'];
+                                         $DateSubmitted = $userRow['DateSubmitted'];
+                                         $dateN =  date('n-d', strtotime($DateSubmitted));
+                                         $timestamp = $userRow['timestamp'];
 
                                         //  echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                         $noOfDays = $userRow['noOfDaysLate'];
@@ -1973,7 +2083,7 @@ if(isset($_POST['AddCategory'])){
      
                                                 $weeknumber = $weekNumber;
 
-                                                if($noOfDays >= 2){
+                                                if($noOfDays >= 1){
                                                   // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
                                                   
@@ -1981,28 +2091,28 @@ if(isset($_POST['AddCategory'])){
                                                     ?>
                                                     <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
 
-                                                    <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1"  data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                      <?php
                                                   }
                                                   else{
                                                     ?>
-                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                      <?php
                                                   }
                                                   
                                                   
                                                  
                                                 }
-                                                else if ($noOfDays <= 1){
+                                                else if ($noOfDays <= 0){
                                                   // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                   if($isCheckedByLeader){
                                                     ?>
-                                                    <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                     <?php
                                                   }
                                                   else{
                                                     ?>
-                                                    <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                     <?php
                                                   }
                                                   
@@ -2033,6 +2143,9 @@ if(isset($_POST['AddCategory'])){
                                          $reason = $userRow['reason'];
                                          $action = $userRow['action'];
                                          $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                         $pointReceived = $userRow['score'];
+                                         $timestamp = $userRow['timestamp'];
+                                         $DateSubmitted = $userRow['DateSubmitted'];
 
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
@@ -2045,13 +2158,13 @@ if(isset($_POST['AddCategory'])){
 
                                                   if($isCheckedByLeader){
                                                     ?>
-                                                <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
 
                                                  <?php
                                                   }
                                                   else{
                                                     ?>
-                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
     
                                                      <?php
                                                   }
@@ -2063,14 +2176,14 @@ if(isset($_POST['AddCategory'])){
                                                  if($isCheckedByLeader){
 
                                                   ?>
-                                                  <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                  <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                     
                                                     <?php
 
                                                  }
                                                  else{
                                                   ?>
-                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>"  data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
                                                     
                                                     <?php
                                                  }
@@ -2248,6 +2361,10 @@ $('#reasonModalUpdate').on('show.bs.modal', function (event) {
   var location = button.data('location');
   var itoAyID = button.data('taskid');
   var late = button.data('late');
+  var point = button.data('point');
+  var dateSubmitted = button.data('datesubmitted');
+  var time = button.data('time');
+
   // Extract info from data-* attributes
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
@@ -2258,6 +2375,9 @@ $('#reasonModalUpdate').on('show.bs.modal', function (event) {
   document.getElementById("finishedID").value = itoAyID;
   document.getElementById("reasonUpdate1").value = reason;
   document.getElementById("actionUpdate1").value = action;
+  document.getElementById("pointReceived").value = point;
+  document.getElementById("dateSubmitted").value = dateSubmitted;
+
   // document.getElementById("UpdateStatus").style.display = 'block';
 
   if(late == "1"){
@@ -2312,6 +2432,12 @@ document.getElementById("taskAreamodal").value = usertaskArea;
 
 
 userTaskId = userTaskID;
+}
+
+function clickpassdataCategory(name,id){
+  document.getElementById("inputCategoryRemove").value = name;
+  document.getElementById("inputCategoryRemoveId").value = id;
+
 }
 
 function PassTaskData(){
