@@ -280,7 +280,7 @@
                         $sn++; }}else{ ?>
                             <tr>
                               <td colspan="8">
-                          <?php echo $fetchData; ?>
+                          <?php echo $fetchDataProgWeeky; ?>
                         </td>
                          </tr>
                           <?php

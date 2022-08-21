@@ -14,7 +14,7 @@
                           
                           <input type="date" id="datepickerEndProgSummary" value="<?php $endDate = new DateTime($todayEndSummary);  $endDate =  $endDate->format('Y-m-d'); echo $endDate ?>" name="datepickerEndProgSummary" onchange="filterMonth();">
                           <button type="submit" name="submitdateProgDailySummary" class="btn btn-info btn-sm">Submit</button>
-                          <button type="button" class="btn btn-outline-success btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
+                          <button type="submit" name="exportProgDailySummary"class="btn btn-outline-success btn-sm" > <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
                                       
                           <!-- <input type="submit" name="submitdate"> -->
                           </form>
@@ -26,7 +26,9 @@
 
                             <th  class="table-info" scope="col" colspan="2" style=" border-bottom: 0px">Daily</th>
                             <th class="table-warning" scope="col" colspan="2" style=" border-bottom: 0px">Weekly</th>
-                            <th class="table-success" scope="col" colspan="2" style=" border-bottom: 0px">Monthly</th>
+                            <th class="table-danger" scope="col" colspan="2" style=" border-bottom: 0px">Monthly</th>
+                            <th class="table-primary" scope="col" colspan="2" style=" border-bottom: 0px">Annual</th>
+
 
 
                           </tr>
@@ -39,13 +41,15 @@
                               <th class="table-info" style="border-bottom: 2px solid black;">No. of late (0.5pt)</th>
                               <th class="table-warning" style="border-bottom: 2px solid black;">No. of ontime (1pt)</th>
                               <th class="table-warning" style="border-bottom: 2px solid black;">No. of late (0.5pt)</th>
-                              <th class="table-success"  style="border-bottom: 2px solid black;">No. of ontime (1pt)</th>
-                              <th class="table-success" style="border-bottom: 2px solid black;">No. of late (0.5pt)</th>
+                              <th class="table-danger"  style="border-bottom: 2px solid black;">No. of ontime (1pt)</th>
+                              <th class="table-danger" style="border-bottom: 2px solid black;">No. of late (0.5pt)</th>
+                              <th class="table-primary"  style="border-bottom: 2px solid black;">No. of ontime (1pt)</th>
+                              <th class="table-primary" style="border-bottom: 2px solid black;">No. of late (0.5pt)</th>
                   
 <!-- find -->
                             </tr>
                           </thead>
-                          <tbody  class="table-dark text-center">
+                          <tbody id="tableOfSummary" class="table-dark text-center">
 
                           <?php
 
@@ -261,7 +265,76 @@
                                      $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
                                  ?>
                             </td>
+                            <td class="table-light" name="noOfAnnual">
+                                 <?php
+                                  $dateOfNow = new DateTime($todaySummary);
+                                  $MonthOfNow =  $dateOfNow->format('F');
+                                  $YearToUseForApril = "";
+                                  $YearToUseforMarch = "";
+                                  if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+                                 
+                                    $YearToUseforMarch =  $dateOfNow->format('Y');
+                                    $dateOfNow->modify('last year');
+                                    $YearToUseForApril =  $dateOfNow->format('Y');
+                                  }
+                                  else{
+                                    $YearToUseForApril =  $dateOfNow->format('Y');
+                                 $dateOfNow->modify('next year');
+                                 $YearToUseforMarch =  $dateOfNow->format('Y');
+                                 
+                                 }
+                                 $April = new DateTime($YearToUseForApril.'-04-01');
+                                 $March = new DateTime($YearToUseforMarch.'-03-31');
+                                 $April =  $April->format('Y-m-d');
+                                 $March =  $March->format('Y-m-d');
+                                 
+                                     $countAnnual = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';";
+                                     $result = mysqli_query($con, $countAnnual);
+                                     while($userRow = mysqli_fetch_assoc($result)){
+                                     $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                                     }
+                                     echo $totalNumberOfScore1;
+                                     $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
 
+                                 ?>
+                            </td>
+
+                            <td class="table-light" name="noOfLateAnnual">
+                                 <?php
+                                      $dateOfNow = new DateTime($todaySummary);
+                                      $MonthOfNow =  $dateOfNow->format('F');
+                                      $YearToUseForApril = "";
+                                      $YearToUseforMarch = "";
+                                      if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+                                     
+                                        $YearToUseforMarch =  $dateOfNow->format('Y');
+                                        $dateOfNow->modify('last year');
+                                        $YearToUseForApril =  $dateOfNow->format('Y');
+                                      }
+                                      else{
+                                        $YearToUseForApril =  $dateOfNow->format('Y');
+                                     $dateOfNow->modify('next year');
+                                     $YearToUseforMarch =  $dateOfNow->format('Y');
+                                     
+                                     }
+                                     $April = new DateTime($YearToUseForApril.'-04-01');
+                                     $March = new DateTime($YearToUseforMarch.'-03-31');
+                                     $April =  $April->format('Y-m-d');
+                                     $March =  $March->format('Y-m-d');
+                                     
+                                    $April = new DateTime($todayAnnual);  $April =  $April->format('Y-m-d');
+                                    $March = new DateTime($todayEndAnnual);  $March =  $March->format('Y-m-d');
+
+                                    $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
+                                     $result = mysqli_query($con, $countAnnual);
+                                     while($userRow = mysqli_fetch_assoc($result)){
+                                       $totalNumberOfScore1 = $userRow['TotalNumberOfp5'];
+                                     }
+                                    echo $totalNumberOfScore1;
+                                    // $totalNumberOfScore1 = $totalNumberOfScore1 * 0.5;
+                                    $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                    ?>
+                            </td>
                                  </tr>
                           <?php
                        $sn++; }}else{ ?>
@@ -419,6 +492,44 @@
                    $TotalPointsOntimeEarned = $TotalPointsOntimeEarned + $totalNumberOfScore1;
 
 
+
+
+
+
+                   $dateOfNow = new DateTime($todaySummary);
+                                  $MonthOfNow =  $dateOfNow->format('F');
+                                  $YearToUseForApril = "";
+                                  $YearToUseforMarch = "";
+                                  if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+                                 
+                                    $YearToUseforMarch =  $dateOfNow->format('Y');
+                                    $dateOfNow->modify('last year');
+                                    $YearToUseForApril =  $dateOfNow->format('Y');
+                                  }
+                                  else{
+                                    $YearToUseForApril =  $dateOfNow->format('Y');
+                                 $dateOfNow->modify('next year');
+                                 $YearToUseforMarch =  $dateOfNow->format('Y');
+                                 
+                                 }
+                                 $April = new DateTime($YearToUseForApril.'-04-01');
+                                 $March = new DateTime($YearToUseforMarch.'-03-31');
+                                 $April =  $April->format('Y-m-d');
+                                 $March =  $March->format('Y-m-d');
+                                 
+                                     $countAnnual = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';";
+                                     $result = mysqli_query($con, $countAnnual);
+                                     while($userRow = mysqli_fetch_assoc($result)){
+                                     $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                                     }
+                                    //  echo $totalNumberOfScore1;
+                                     $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                     $TotalPointsOntimeEarned = $TotalPointsOntimeEarned + $totalNumberOfScore1;
+
+                                  
+
+
+
                       echo $TotalPointsOntimeEarned; ?> </td>
 
                   <td class="table-light"> <?php 
@@ -513,6 +624,41 @@
                 $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
                 $TotalPointsLateEarned = $TotalPointsLateEarned + $totalNumberOfScore1;
 
+
+                $dateOfNow = new DateTime($todaySummary);
+                $MonthOfNow =  $dateOfNow->format('F');
+                $YearToUseForApril = "";
+                $YearToUseforMarch = "";
+                if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+               
+                  $YearToUseforMarch =  $dateOfNow->format('Y');
+                  $dateOfNow->modify('last year');
+                  $YearToUseForApril =  $dateOfNow->format('Y');
+                }
+                else{
+                  $YearToUseForApril =  $dateOfNow->format('Y');
+               $dateOfNow->modify('next year');
+               $YearToUseforMarch =  $dateOfNow->format('Y');
+               
+               }
+               $April = new DateTime($YearToUseForApril.'-04-01');
+               $March = new DateTime($YearToUseforMarch.'-03-31');
+               $April =  $April->format('Y-m-d');
+               $March =  $March->format('Y-m-d');
+               
+              $April = new DateTime($todayAnnual);  $April =  $April->format('Y-m-d');
+              $March = new DateTime($todayEndAnnual);  $March =  $March->format('Y-m-d');
+
+              $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
+               $result = mysqli_query($con, $countAnnual);
+               while($userRow = mysqli_fetch_assoc($result)){
+                 $totalNumberOfScore1 = $userRow['TotalNumberOfp5'];
+               }
+              // echo $totalNumberOfScore1;
+              // $totalNumberOfScore1 = $totalNumberOfScore1 * 0.5;
+              $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+              $TotalPointsLateEarned = $TotalPointsLateEarned + $totalNumberOfScore1;
+              
 
                    echo $TotalPointsLateEarned; 
                   
@@ -681,6 +827,14 @@
       $noOfMonthlyTask = $result;
       $TargetPoints=$TargetPoints + ($finalDiffs * $noOfTask );
 
+      $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `username` = '$username' AND taskType = 'annual';"; 
+      $result = mysqli_query($con, $countAnnual);
+
+
+      while($userRow = mysqli_fetch_assoc($result)){
+        $noOfTask = $userRow['noOfTask'];
+      }
+      $TargetPoints=$TargetPoints + $noOfTask;
       echo $TargetPoints;
       // echo $noOfDailyTask + $noOfWeeklyTask + $noOfMonthlyTask ;
     ?> </td>
@@ -689,7 +843,10 @@
     <?php 
                              // echo $TotalPointsEarned;
                              // echo $finalDiffs;
-                             $TotalPercentage = ($TotalPointsEarnedForSelectedDate / $TargetPoints)* 100; ?> 
+                             $TotalPercentage = ($TotalPointsEarnedForSelectedDate / $TargetPoints)* 100;
+                            //  echo round($TotalPercentage).'%';
+                              ?> 
+                             
                              <div class="progress" style="height: 30px">
                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
                                        style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
@@ -707,7 +864,7 @@
 $sn++; }}else{ ?>
  <tr>
    <td colspan="8">
-<?php echo $fetchData; ?>
+<?php echo $fetchDataSummary; ?>
 </td>
 </tr>
 <?php

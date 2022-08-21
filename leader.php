@@ -604,7 +604,39 @@ $dateNow = date('Y-m-d');
 
     $todayMonthly = $_SESSION['FirstDayOfTheMonth']; 
     $todayEndMonthly = date("F j, Y"); 
+    
 
+//for annual
+
+$dateOfNow = new DateTime(date('Y-m-d'));
+$MonthOfNow =  $dateOfNow->format('F');
+$YearToUseForApril = "";
+$YearToUseforMarch = "";
+if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+
+  $YearToUseforMarch =  $dateOfNow->format('Y');
+  $dateOfNow->modify('last year');
+  $YearToUseForApril =  $dateOfNow->format('Y');
+}
+else{
+  $YearToUseForApril =  $dateOfNow->format('Y');
+$dateOfNow->modify('next year');
+$YearToUseforMarch =  $dateOfNow->format('Y');
+
+}
+
+
+$April = new DateTime($YearToUseForApril.'-04-01');
+$March = new DateTime($YearToUseforMarch.'-03-31');
+$April =  $April->format('Y-m-d');
+$March =  $March->format('Y-m-d');
+
+  
+$todayAnnual = date('F j, Y', strtotime($April));
+$todayEndAnnual = date('F j, Y', strtotime($March));
+
+//end for annual
+    
 
     $date_string = date('Y-m-d');
     $date_stringEnd = date('Y-m-d');
@@ -615,6 +647,8 @@ $dateNow = date('Y-m-d');
     $dailyChecked = "checked";
     $weeklyChecked = "";
     $monthlyChecked = "";
+    $annualChecked = "";
+
 
 
     if(isset($_POST['submitdate'])){
@@ -649,7 +683,14 @@ $dateNow = date('Y-m-d');
                       $TaskActive = "active";
 
     }
+    if(isset($_POST['exportProgDailySummary'])){
+      $datePickerSummary = $_POST['datepickerProgSummary'];
+    $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
 
+    $_SESSION['dateStarted'] = $datePickerSummary;
+    $_SESSION['dateEnded']=$datePickerEndSummary ;
+    header("location: SummaryReport.php");
+    }
     
     if(isset($_POST['submitdateProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
@@ -737,6 +778,7 @@ $dateNow = date('Y-m-d');
       $dailyChecked = "checked";
       $weeklyChecked = "";
       $monthlyChecked = "";
+      $annualChecked = "";
 
       
        }
@@ -783,6 +825,7 @@ $dateNow = date('Y-m-d');
         $dailyChecked = "";
         $weeklyChecked = "checked";
         $monthlyChecked = "";
+        $annualChecked = "";
 
 
          }
@@ -830,8 +873,55 @@ $dateNow = date('Y-m-d');
           $dailyChecked = "";
           $weeklyChecked = "";
           $monthlyChecked = "checked";
+          $annualChecked = "";
 
            }
+           if(isset($_POST['submitdateProgAnnual'])){
+            $datePickerAnnual = $_POST['datepickerProgAnnual'];
+          $datePickerEndAnnual = $_POST['datepickerEndProgAnnual'];
+
+          
+        
+      
+          ////////////////////////////////////////
+          $dateOfNow = new DateTime($datePickerAnnual);
+          $MonthOfNow =  $dateOfNow->format('F');
+          $YearToUseForApril = "";
+          $YearToUseforMarch = "";
+          if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+         
+            $YearToUseforMarch =  $dateOfNow->format('Y');
+            $dateOfNow->modify('last year');
+            $YearToUseForApril =  $dateOfNow->format('Y');
+          }
+          else{
+            $YearToUseForApril =  $dateOfNow->format('Y');
+         $dateOfNow->modify('next year');
+         $YearToUseforMarch =  $dateOfNow->format('Y');
+         
+         }
+         $April = new DateTime($YearToUseForApril.'-04-01');
+         $March = new DateTime($YearToUseforMarch.'-03-31');
+         $April =  $April->format('Y-m-d');
+         $March =  $March->format('Y-m-d');
+         //////////////////////////////////////
+         $dateToPassAnnual = date('Y-m-d', strtotime($datePickerAnnual));
+         $dateToPassEndAnnual = date('Y-m-d', strtotime($datePickerEndAnnual));
+       
+         $todayAnnual = date('F j, Y', strtotime($April));
+         $todayEndAnnual = date('F j, Y', strtotime($March));
+           $annualfocus = "true";
+         
+      
+            $TaskActive = "";
+            $MembersActive = "active";
+  
+            $dailyChecked = "";
+            $weeklyChecked = "";
+            $monthlyChecked = "";
+            $annualChecked = "checked";
+  
+             }
     $month1 = date("F");
     $year1 = date("Y");
     $today1 = date("F j, Y"); 
@@ -1086,6 +1176,40 @@ $dateNow = date('Y-m-d');
 
 
 
+
+       $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+       $fetchDataProgAnnual = fetchDataProgAnnual($db, $tableName, $columns, $username);
+   
+       function fetchDataProgAnnual($db, $tableName, $columns, $username){
+         if(empty($db)){
+          $msg= "Database connection error";
+         }elseif (empty($columns) || !is_array($columns)) {
+          $msg="columns Name must be defined in an indexed array";
+         }elseif(empty($tableName)){
+           $msg= "Table Name is empty";
+        }else{
+        $columnName = implode(", ", $columns);
+        $Department = $_SESSION['userDept'];
+        $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department' AND taskType = 'annual' ORDER BY username ASC;";
+       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+        $result = $db->query($query);
+        if($result== true){ 
+         if ($result->num_rows > 0) {
+            $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+            $msg= $row;
+         } else {
+            $msg= "No Data Found"; 
+         }
+        }else{
+          $msg= mysqli_error($db);
+        }
+        }
+        return $msg;
+        }
+ 
+ 
+ 
        
        $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
        $fetchDataSummary = fetchDataSummary($db, $tableName, $columns, $username);
@@ -1731,6 +1855,8 @@ if(isset($_POST['RemoveCategory'])){
                                     <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
                                     <option value="monthly">Monthly</option>
+                                    <option value="annual">Annually</option>
+
                               
 
                                 </select>
@@ -2060,14 +2186,15 @@ if(isset($_POST['RemoveCategory'])){
                                       }
                                       else{
                                         // echo "<th style='width:8%;' >Week $curr</th>";
-                                        ?>
-                                        <td style='width:240px;'><?php
+                                       
                                         // echo $curr;
                                         // echo " ";
                                         // echo $day;
                                    $taskID = $data['usertaskID'];
                                    $taskType = $data['taskType'];
                                    if($taskType == "daily"){
+                                    ?>
+                                    <td style='width:240px;'><?php
                                     //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                     //  $month = date("F");
                                     //  $year = date("Y");
@@ -2147,8 +2274,108 @@ if(isset($_POST['RemoveCategory'])){
           
                                                    }
                                               //  //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                   }
+                                              ?> </td><?php
+                                            }
+                                   else if($taskType == "annual"){
+                                    ?>
+                                <?php
+ // code for annual
+ $dateOfNow = new DateTime($today);
+ $MonthOfNow =  $dateOfNow->format('F');
+ $YearToUseForApril = "";
+ $YearToUseforMarch = "";
+ if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+
+   $YearToUseforMarch =  $dateOfNow->format('Y');
+   $dateOfNow->modify('last year');
+   $YearToUseForApril =  $dateOfNow->format('Y');
+ }
+ else{
+   $YearToUseForApril =  $dateOfNow->format('Y');
+$dateOfNow->modify('next year');
+$YearToUseforMarch =  $dateOfNow->format('Y');
+
+}
+$April = new DateTime($YearToUseForApril.'-04-01');
+$March = new DateTime($YearToUseforMarch.'-03-31');
+$April =  $April->format('Y-m-d');
+$March =  $March->format('Y-m-d');
+
+
+     $selectUserTasks = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `realDate` BETWEEN '$April' AND '$March';";
+     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+     $result = mysqli_query($con, $selectUserTasks);
+
+     $numrows = mysqli_num_rows($result);
+     $don = "0";
+     while($userRow = mysqli_fetch_assoc($result)){
+       $noOfDays = $userRow['noOfDaysLate'];
+       $isLate = $userRow['isLate'];
+       $weekNumber = $userRow['week'];
+                                           $fileloc =  $userRow['attachments'];
+                                           $time = $userRow['timestamp'];
+                                           $finishedtaskID = $userRow['FinishedTaskID'];
+                                           $date = $userRow['Date'];
+                                         $dateN =  date('n-d', strtotime($date));
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
+                                         $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                         $pointReceived = $userRow['score'];
+                                         $timestamp = $userRow['timestamp'];
+                                         $DateSubmitted = $userRow['DateSubmitted'];
+
+   }
+   if ($numrows >= 1){
+    if($isLate){
+      if($isCheckedByLeader){
+        ?>
+        <td style='width:240px; background-color:  #ff4800;'>
+    <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+      </td>
+     <?php
+      }
+      else{
+        ?>
+            <td style='width:240px; background-color:  #ff8000;'>
+
+        <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+      </td>
+         <?php
+      }
+    }
+    else{
+      if($isCheckedByLeader){
+
+        ?>
+        <td style='width:240px; background-color: #00b7ff;'>
+
+        <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+          </td>
+          <?php
+
+       }
+       else{
+        ?>
+            <td  colspan="1" style='width:240px; background-color: #09922d'>
+        <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>"  data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+       </td>
+          <?php
+       }
+    }
+    $don = "1";
+  //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+       }
+       else{
+        ?>
+        <td  colspan="1" style='width:240px;'>
+   </td> <?php
+       }
+       ?> <?php
+//end of code for annual
+                                  }
                                    else{
+                                    ?>
+                                    <td style='width:240px;'><?php
                                      //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                     //  $month = date("F");
                                     //  $year = date("Y");
@@ -2220,10 +2447,11 @@ if(isset($_POST['RemoveCategory'])){
           
                                                    }
                                                   }
+                                                  ?> </td><?php
                                                //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                    }                       
                                    
-                                ?></td>
+                                ?>
                                         <?php
                                         // echo $curr;
                                         // echo "\n";
@@ -2286,7 +2514,7 @@ if(isset($_POST['RemoveCategory'])){
                         </div>
                         
                         <div class="col-sm-7 add_flex" style="padding: 0">
-                        <div class="col-sm-4" style="padding: 0" >
+                        <div class="col-sm-7" style="padding: 0" >
                         <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
                             <div class="form-check" style="padding: 0px">
                                    
@@ -2309,7 +2537,12 @@ if(isset($_POST['RemoveCategory'])){
                                              Monthly
                                             </label>
                                      </div>
-                                    
+                                     <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $annualChecked ?> onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Annually
+                                            </label>
+                                     </div>
                                    
                                   
                              </div>
@@ -2326,6 +2559,8 @@ if(isset($_POST['RemoveCategory'])){
                     <?php include "./Code For Members Progress Report/DetailedDailyTaskReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedWeeklyReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedMonthlyReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedAnnuallyReport.php" ?>
+
 
                     
 
@@ -2694,11 +2929,16 @@ if(types[0].checked){
   document.getElementById('DailyReportArea').style.display='block';
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('annualReportArea').style.display='none';  
+
+
 }
 else if (types[1].checked){
   document.getElementById('DailyReportArea').style.display='none';
   document.getElementById('WeeklyReportArea').style.display='block';
-  document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('monthyReportArea').style.display='none'; 
+  document.getElementById('annualReportArea').style.display='none';  
+
 
 
 }
@@ -2707,15 +2947,74 @@ else if (types[2].checked){
 
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='block';  
+  document.getElementById('annualReportArea').style.display='none';  
+
+
+}
+else if (types[3].checked){
+  document.getElementById('DailyReportArea').style.display='none';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('annualReportArea').style.display='block';  
 
 }
 
 
-
 }
 
 
+function exportDataSummary(){
+  
+  var table = document.getElementById("tableOfSummary");
+  var rows =[];
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+           column9 = row.cells[8].innerText;
+           column10 = row.cells[9].innerText;
 
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+                   column9,
+                   column10,
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "SummaryReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
 function exportData(){
    /* Get the HTML data using Element by Id */
    var table = document.getElementById("filtertableMain");
