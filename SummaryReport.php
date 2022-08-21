@@ -52,7 +52,7 @@ $todayEndSummary = $_SESSION['dateEnded'];
 $todayMonthly = date('F j, Y', strtotime($todaySummary));
 $todayEndMonthly = date('F j, Y', strtotime($todayEndSummary));
 
-
+ 
 $html = '   <!DOCTYPE html>
             <html lang="en">
             <head>
