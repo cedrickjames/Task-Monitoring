@@ -658,7 +658,21 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
                       $TaskActive = "active";
 
     }
+    if(isset($_POST['exportProgDailySummary'])){
+      $datePickerSummary = $_POST['datepickerProgSummary'];
+    $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
 
+    $_SESSION['dateStarted'] = $datePickerSummary;
+    $_SESSION['dateEnded']=$datePickerEndSummary ;
+    $userlevel = $_SESSION['userlevel'];
+    if($userlevel =="Leader"){
+      header("location: SummaryReport.php");
+    }
+    else{
+      header("location: SummaryReportForAdmin.php");
+
+    }
+    }
     
     if(isset($_POST['submitdateProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
@@ -1580,7 +1594,7 @@ if(isset($_POST['RemoveCategory'])){
               <div class="modal-body">
                
                    
-                <form action="leader.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
+                <form action="admin.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
                      
                   <div class="form-group">
                    
@@ -2763,7 +2777,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -2779,7 +2793,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -2795,7 +2809,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -2812,7 +2826,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -2835,13 +2849,14 @@ function getSelectValue() {
     let input = document.getElementById('filterbox').value
     input=input.toLowerCase();
     let x = document.getElementsByClassName('ewan');
-      
+    sheets=[-1];
     for (i = 0; i < x.length; i++) { 
         if (!x[i].innerHTML.toLowerCase().includes(input)) {
             x[i].style.display="none";
         }
         else {
-            x[i].style.display="table-row";                 
+            x[i].style.display="table-row";   
+            sheets.push(i);              
         }
     }
 }
@@ -2850,13 +2865,14 @@ function getSelectValueDaily() {
     let input = document.getElementById('filterboxDaily').value
     input=input.toLowerCase();
     let x = document.getElementsByClassName('dailyTable');
-      
+    sheets=[-1];
     for (i = 0; i < x.length; i++) { 
         if (!x[i].innerHTML.toLowerCase().includes(input)) {
             x[i].style.display="none";
         }
         else {
-            x[i].style.display="table-row";                 
+            x[i].style.display="table-row";      
+            sheets.push(i);              
         }
     }
 }
@@ -2924,6 +2940,325 @@ else if (types[3].checked){
 }
 
 
+
+function exportDataAnnual(){
+  
+  var table = document.getElementById("tableOfAnnual");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyAnnual.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+function exportDataMonthly(){
+  
+  var table = document.getElementById("tableOfMonthly");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyMonthly.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+function exportDataWeekly(){
+  
+  var table = document.getElementById("tableOfWeekly");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+
+function exportDataDaily(){
+  
+  var table = document.getElementById("tableOfDaily");
+  
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "DailyReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
 
 function exportData(){
    /* Get the HTML data using Element by Id */

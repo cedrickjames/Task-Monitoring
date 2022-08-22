@@ -32,7 +32,7 @@ function fetchDataSummary($db, $tableName, $columns, $username){
 
  
 
-  $query = "SELECT * FROM `users` WHERE `Department` = '$Department' AND userlevel='PIC' ORDER BY username ASC;";
+ $query = "SELECT * FROM `users` WHERE userlevel='PIC' ORDER BY username ASC;";
 
 
 //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
@@ -70,12 +70,8 @@ $html = '   <!DOCTYPE html>
             </head>
             <body>
                 <div>
-          
-                <h5 style="margin: 0; padding: 0;">Summary Report for Task Monitoring</h5>
-                <h5 style="margin: 0; padding: 0;">Date from '.$todayMonthly.' to '.$todayEndMonthly.'</h5>
-
-
-
+               
+                    <h5 style="margin: 0; padding: 0;">Summary Report for Task Monitoring</h5>
                     
                    
                 </div>

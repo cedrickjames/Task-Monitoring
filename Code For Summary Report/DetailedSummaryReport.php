@@ -6,7 +6,7 @@
                             <th scope="col" colspan="10">
                               <div class="col-sm-4" style="padding: 0; margin: 0 auto" >
                           <div class="form-group row d-flex justify-content-center" >
-                          <form action="leader.php" method = "POST" >
+                          <form action="<?php $userlevel = $_SESSION['userlevel']; if($userlevel =='Leader'){?>leader.php<?php ; }else{?>admin.php<?php ;} ?>" method = "POST" >
                           <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
                           
                           <input type="date" id="datepickerProgSummary" value="<?php $startDate = new DateTime($todaySummary);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepickerProgSummary" style="margin-right: 20px" onchange="filterMonth();">
@@ -14,7 +14,7 @@
                           
                           <input type="date" id="datepickerEndProgSummary" value="<?php $endDate = new DateTime($todayEndSummary);  $endDate =  $endDate->format('Y-m-d'); echo $endDate ?>" name="datepickerEndProgSummary" onchange="filterMonth();">
                           <button type="submit" name="submitdateProgDailySummary" class="btn btn-info btn-sm">Submit</button>
-                          <button type="submit" name="exportProgDailySummary"class="btn btn-outline-success btn-sm" > <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
+                          <button type="submit" name="exportProgDailySummary"class="btn btn-outline-danger btn-sm" > <i style="font-size: 20px;"class="fas fa-file-pdf fa-xs"></i> Export</button>
                                       
                           <!-- <input type="submit" name="submitdate"> -->
                           </form>
@@ -340,7 +340,7 @@
                        $sn++; }}else{ ?>
                            <tr>
                              <td colspan="8">
-                         <?php echo $fetchData; ?>
+                         <?php echo $fetchDataSummary; ?>
                        </td>
                         </tr>
                          <?php

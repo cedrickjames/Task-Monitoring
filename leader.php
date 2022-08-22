@@ -689,7 +689,14 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
     $_SESSION['dateStarted'] = $datePickerSummary;
     $_SESSION['dateEnded']=$datePickerEndSummary ;
-    header("location: SummaryReport.php");
+    $userlevel = $_SESSION['userlevel'];
+    if($userlevel =="Leader"){
+      header("location: SummaryReport.php");
+    }
+    else{
+      header("location: SummaryReportForAdmin.php");
+
+    }
     }
     
     if(isset($_POST['submitdateProgDailySummary'])){
@@ -2962,22 +2969,20 @@ else if (types[3].checked){
 
 }
 
-
-function exportDataSummary(){
+function exportDataAnnual(){
   
-  var table = document.getElementById("tableOfSummary");
+  var table = document.getElementById("tableOfAnnual");
   var rows =[];
-  for(var i=0,row; row = table.rows[i];i++){
-        column1 = row.cells[0].innerText;
-           column2 = row.cells[1].innerText;
-           column3 = row.cells[2].innerText;
-           column4 = row.cells[3].innerText;
-           column5 = row.cells[4].innerText;
-           column6 = row.cells[5].innerText;
-           column7 = row.cells[6].innerText;
-           column8 = row.cells[7].innerText;
-           column9 = row.cells[8].innerText;
-           column10 = row.cells[9].innerText;
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
 
            
            rows.push(
@@ -2990,8 +2995,36 @@ function exportDataSummary(){
                    column6,
                    column7,
                    column8,
-                   column9,
-                   column10,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
 
                   
             
@@ -3010,7 +3043,245 @@ function exportDataSummary(){
        var encodedUri = encodeURI(csvContent);
        var link = document.createElement("a");
        link.setAttribute("href", encodedUri);
-       link.setAttribute("download", "SummaryReport.csv");
+       link.setAttribute("download", "WeeklyAnnual.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+function exportDataMonthly(){
+  
+  var table = document.getElementById("tableOfMonthly");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyMonthly.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+function exportDataWeekly(){
+  
+  var table = document.getElementById("tableOfWeekly");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+
+function exportDataDaily(){
+  
+  var table = document.getElementById("tableOfDaily");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "DailyReport.csv");
        document.body.appendChild(link);
         /* download the data file named "Stock_Price_Report.csv" */
        link.click();

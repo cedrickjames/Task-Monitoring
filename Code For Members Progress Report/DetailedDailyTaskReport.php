@@ -17,7 +17,7 @@
                               <th scope="col" colspan="10">
                                 <div class="col-sm-4" style="padding: 0; margin: 0 auto">
                                   <div class="form-group row d-flex justify-content-center">
-                                    <form action="leader.php" method="POST">
+                                    <form action="<?php $userlevel = $_SESSION['userlevel']; if($userlevel =='Leader'){?>leader.php<?php ; }else{?>admin.php<?php ;} ?>" method="POST">
                                       <label for="colFormLabelLg" class="col-form-label-lg"
                                         style="margin-right: 10px">Start</label>
 
@@ -33,7 +33,7 @@
                                       <button type="submit" name="submitdateProgDaily"
                                         class="btn btn-info btn-sm">Submit</button>
                                       <button type="button" class="btn btn-outline-success btn-sm"
-                                        onclick="exportData()"> <i style="font-size: 20px;"
+                                        onclick="exportDataDaily()"> <i style="font-size: 20px;"
                                           class="fas fa-file-csv fa-xs"></i> Export</button>
 
                                       <!-- <input type="submit" name="submitdate"> -->
@@ -62,7 +62,7 @@
 
 
 
-                          <tbody class="text-center">
+                          <tbody class="text-center" id="tableOfDaily">
                             <?php
                               $color1 = "#f9f9f9;";
                               $color2 = "white";

@@ -6,9 +6,18 @@ session_start();
   if($_SESSION['userlevel'] == "PIC"){
     header("location: index.php");
   }
- 
+//  $taskType="daily";
+//  $dateStarted = date('F j, Y');
+//   // $dateStarted = date('F j, Y');
+//   if($taskType == "daily"){
 
- 
+// $dateStarted = new DateTime($dateStarted);
+// $dateStarted->modify('-1 day');
+// $dateStarted = $dateStarted->format('Y-m-d');
+
+// }
+// echo $dateStarted;
+
   $tableNameCat = 'category';
      $columnsCat= ['categoryId', 'CategoryName'];
      $fetchDataCat = fetch_dataCat($db, $tableNameCat, $columnsCat, $username);
@@ -168,8 +177,28 @@ $array11 = explode(",", $src1);
           echo '<script>console.log("TEST: '.$taskType.'")</script>';
           // echo '<script>console.log("arrayyyy: '.$finalarray[1].'")</script>';
           $dateStarted = date('F j, Y');
+
           try {
-  
+            if($taskType == "daily"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('-1 day');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
+            else if($taskType == "weekly"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('monday last week');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
+            else if($taskType == "monthly"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('last month');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
+            else if($taskType == "annual"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('last year');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
           $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `Department`, `dateStarted`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1', '$dateStarted');";
                   mysqli_query($con, $sqlinsert);
             $num++;
@@ -281,7 +310,7 @@ $array11 = explode(",", $src1);
             <div class="inner" style="width: 1000px; height: 500px; max-width: 1000px; border-radius: 60px">
                
                 
-                <form id="account-settings" action="addTaskAdmin.php" method = "POST" style="width: 1000px; padding: 10px;"  >
+                <form id="account-settings" action="addTask.php" method = "POST" style="width: 1000px; padding: 10px;"  >
                     <!-- <h3>Register User</h3> -->
                    
                      <h3 style="text-align: center; margin-bottom: 40px; ">Add task</h3>

@@ -169,7 +169,26 @@ $array11 = explode(",", $src1);
           // echo '<script>console.log("arrayyyy: '.$finalarray[1].'")</script>';
           $dateStarted = date('F j, Y');
           try {
-  
+            if($taskType == "daily"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('-1 day');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
+            else if($taskType == "weekly"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('monday last week');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
+            else if($taskType == "monthly"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('last month');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
+            else if($taskType == "annual"){
+              $dateStarted = new DateTime($dateStarted);
+              $dateStarted->modify('last year');
+              $dateStarted = $dateStarted->format('F j, Y');
+            }
           $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `Department`, `dateStarted`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1', '$dateStarted');";
                   mysqli_query($con, $sqlinsert);
             $num++;
