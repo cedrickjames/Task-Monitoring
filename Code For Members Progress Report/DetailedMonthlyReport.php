@@ -171,8 +171,32 @@
                          $endDATE =  $DateNowAndToday->format('Y-m-d');
 
                        
-                       $start = new DateTime($todayMonthly);
-                       $end = new DateTime($todayEndMonthly);
+                         $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$userTaskID';"; //kunin ang first monday date na pipiliin
+                         $result = mysqli_query($con, $selectDateAdded);
+                         while($userRow = mysqli_fetch_assoc($result)){
+                           $dateAdded = $userRow['dateAdded'];
+                           $targetDate = $userRow['targetDate'];
+
+                         
+// echo  date('Y-m-d', strtotime($dateAdded)) .' '.date('Y-m-d', strtotime($targetDate)) ."<br>";
+// echo  date('Y-m-d', strtotime($todayWeekly)) .' '.date('Y-m-d', strtotime($todayEndWeekly)) ."<br>";
+                         
+                         $dateAdded = date($dateAdded);
+                         $targetDate = date($targetDate);
+
+                           $START = date('Y-m-d', strtotime($todayMonthly));
+                           $END = date('Y-m-d', strtotime($todayEndMonthly));
+                             if($START < $dateAdded){
+                               $startDATE = $dateAdded;
+                             }
+                           if($END > $targetDate){
+                                 $endDATE = $targetDate;
+                             }
+                            }
+
+
+                       $start = new DateTime($startDATE);
+                       $end = new DateTime($endDATE);
                        // otherwise the  end date is excluded (bug?)
                        $end->modify('+1 day');
                        // echo date('F j, Y');

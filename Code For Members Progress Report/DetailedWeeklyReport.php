@@ -5,7 +5,7 @@
                     else{
                       echo "none";
                     }  ?>">
-                    <?php echo $weeklyChecked;?>
+                    <!-- <?php echo $weeklyChecked;?> -->
                       <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
 
                      
@@ -181,15 +181,37 @@
                              <td name="totalEarnedPoints"> <?php echo $TotalPointsEarned; ?></td>
                              <td name="targetPoints">
                                        <?php 
-                           $StartDateSelected = new DateTime($todayWeekly);
-                           $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                     
-                          $DateNowAndToday = new DateTime($todayEndWeekly);  
-                          $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                        $StartDateSelected = new DateTime($todayWeekly);
+                                        $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                      $DateNowAndToday = new DateTime($todayEndWeekly);  
+                                        $endDATE =  $DateNowAndToday->format('Y-m-d');
 
-                        
-                        $start = new DateTime($todayWeekly);
-                        $end = new DateTime($todayEndWeekly);
+
+                                                   $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$userTaskID';"; //kunin ang first monday date na pipiliin
+                                                   $result = mysqli_query($con, $selectDateAdded);
+                                                   while($userRow = mysqli_fetch_assoc($result)){
+                                                     $dateAdded = $userRow['dateAdded'];
+                                                     $targetDate = $userRow['targetDate'];
+               
+                                                   
+// echo  date('Y-m-d', strtotime($dateAdded)) .' '.date('Y-m-d', strtotime($targetDate)) ."<br>";
+// echo  date('Y-m-d', strtotime($todayWeekly)) .' '.date('Y-m-d', strtotime($todayEndWeekly)) ."<br>";
+                                                   
+                                                   $dateAdded = date($dateAdded);
+                                                   $targetDate = date($targetDate);
+               
+                                                     $START = date('Y-m-d', strtotime($todayWeekly));
+                                                     $END = date('Y-m-d', strtotime($todayEndWeekly));
+                                                       if($START < $dateAdded){
+                                                         $startDATE = $dateAdded;
+                                                       }
+                                                     if($END > $targetDate){
+                                                           $endDATE = $targetDate;
+                                                       }
+                                                      }
+
+                        $start = new DateTime(date('Y-m-d', strtotime($startDATE)));
+                        $end = new DateTime(date('Y-m-d', strtotime($endDATE)));
                         // otherwise the  end date is excluded (bug?)
                         $end->modify('+1 day');
                         // echo date('F j, Y');

@@ -140,6 +140,26 @@
                               <td name="totalEarnedPoints"> <?php echo $TotalPointsEarned; ?></td>
                               <td name="targetPoints">
                                 <?php 
+
+                                    $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$userTaskID';"; //kunin ang first monday date na pipiliin
+                                    $result = mysqli_query($con, $selectDateAdded);
+                                    while($userRow = mysqli_fetch_assoc($result)){
+                                      $dateAdded = $userRow['dateAdded'];
+                                      $targetDate = $userRow['targetDate'];
+
+                                    }
+                                    $dateAdded = date($dateAdded);
+                                    $targetDate = date($targetDate);
+
+                                      $START = date($startDATE);
+                                      $END = date($endDATE);
+                                        if($START < $dateAdded){
+                                          $startDATE = $dateAdded;
+                                        }
+                                      if($END > $targetDate){
+                                            $endDATE = $targetDate;
+                                        }
+// echo $START .$startDATE;
                                         $todayss="2022-07-01";            
                                         $ends = new DateTime(date('Y-m-d', strtotime($endDATE)));
                                         $starts = new DateTime(date('Y-m-d', strtotime($startDATE)));

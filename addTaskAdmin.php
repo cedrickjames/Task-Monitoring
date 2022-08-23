@@ -121,6 +121,8 @@ $array11 = explode(",", $src1);
       // const numberOfAddedProducts=document.getElementById("countInput").value;
       $numberofAddedTask = $_POST['countInput'];
       $enteredUserName = $_POST['username'];
+      $endTargetDate = $_POST['endTargetDate'];
+
       $arrraayyy = $_POST['strnow'];
       echo '<script>console.log("Number of Added Task: '.$numberofAddedTask.'")</script>';
       $num = 1;
@@ -189,7 +191,9 @@ $array11 = explode(",", $src1);
               $dateStarted->modify('last year');
               $dateStarted = $dateStarted->format('F j, Y');
             }
-          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `Department`, `dateStarted`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1', '$dateStarted');";
+            $dateAdded= date('Y-m-d');
+
+          $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `Department`, `dateStarted`, `dateAdded`,`targetDate`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1', '$dateStarted','$dateAdded','$endTargetDate');";
                   mysqli_query($con, $sqlinsert);
             $num++;
           }
@@ -336,7 +340,38 @@ $array11 = explode(",", $src1);
                          </div>
 
                      </div>
-                                       
+                     <?php 
+              $dateOfNow = new DateTime(date('Y-m-d'));
+              $MonthOfNow =  $dateOfNow->format('F');
+              $YearToUseForApril = "";
+              $YearToUseforMarch = "";
+              if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+            
+                $YearToUseforMarch =  $dateOfNow->format('Y');
+                $dateOfNow->modify('last year');
+                $YearToUseForApril =  $dateOfNow->format('Y');
+              }
+              else{
+                $YearToUseForApril =  $dateOfNow->format('Y');
+            $dateOfNow->modify('next year');
+            $YearToUseforMarch =  $dateOfNow->format('Y');
+            
+            }
+            
+            
+              $April = new DateTime($YearToUseForApril.'-04-01');
+              $March = new DateTime($YearToUseforMarch.'-03-31');
+              $April =  $April->format('Y-m-d');
+              $March =  $March->format('Y-m-d');
+            
+            ?>
+                     <div class="form-group row" style="margin-bottom: 30px">
+                            <label class="col-sm-2 col-form-label col-form-label sm"> Target End Date </label>
+                            <div class="col-sm-6">
+                          <input type="date" style="height: 100%" id="endTargetDate" value="<?php $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="endTargetDate" onchange="filterMonth();">
+
+                          </div>
+                            </div>     
             <div class="overflow-x">
                 <div  class="overflow-y" style="overflow-y: scroll; overflow-x: hidden; display: block; height: 220px" id="addtask">
                     <div class="form-group row">

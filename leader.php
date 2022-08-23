@@ -2,8 +2,18 @@
   session_start();
   include ("./connection.php");
 
+$date = "2022-08-23";
+  $date_now = date($date); // this format is string comparable
 
   
+$datea = "2022-04-01";
+$date_nowa = date($datea);
+
+  if ($date_now > $date_nowa) {
+      echo 'greater than';
+  }else{
+      echo 'Less than';
+  }
   //sample of printing weeks number of certain dates
 
   // Create a new DateTime object
@@ -2004,8 +2014,10 @@ if(isset($_POST['RemoveCategory'])){
                     <div class="overflow-x">
                       <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
                         <table class="table table-striped " style="width:  100%" id="filtertableMain" class="table datacust-datatable Table ">
-                            <thead  class="thead-dark" style="position: sticky;top: -1px;">
-                                <tr>
+                            <thead  class="thead-primary" style="position: sticky;top: -1px;">
+                               
+                            
+                            <tr id="topLeft" class="table-dark table-bordered text-center" >
                                     <th style="min-width:15px;">No.</th>
                                     <th style="min-width:40px;">Area</th>
                                     <th style="min-width:50px;">Category</th>
@@ -2083,7 +2095,7 @@ if(isset($_POST['RemoveCategory'])){
 
                                 </tr>
                             </thead>
-                            <tbody id="TaskTable">
+                            <tbody class="text-center" id="TaskTable">
                             <?php
                               $color1 = "#f9f9f9;";
                               $color2 = "white";
@@ -2115,9 +2127,9 @@ if(isset($_POST['RemoveCategory'])){
                              
                              <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr class="ewan">
+                             <tr class="ewan" >
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
-                             <td>
+                             <td >
                                
                                <?php echo $sn; ?></td>
                                <td><?php echo $data['taskArea']; ?></td>
@@ -2879,13 +2891,16 @@ function getSelectValue() {
     let input = document.getElementById('filterbox').value
     input=input.toLowerCase();
     let x = document.getElementsByClassName('ewan');
+    sheets=[-1];
       
     for (i = 0; i < x.length; i++) { 
         if (!x[i].innerHTML.toLowerCase().includes(input)) {
             x[i].style.display="none";
         }
         else {
-            x[i].style.display="table-row";                 
+            x[i].style.display="table-row";      
+            sheets.push(i);              
+
         }
     }
 }
@@ -2894,13 +2909,16 @@ function getSelectValueDaily() {
     let input = document.getElementById('filterboxDaily').value
     input=input.toLowerCase();
     let x = document.getElementsByClassName('dailyTable');
+    sheets=[-1];
       
     for (i = 0; i < x.length; i++) { 
         if (!x[i].innerHTML.toLowerCase().includes(input)) {
             x[i].style.display="none";
         }
         else {
-            x[i].style.display="table-row";                 
+            x[i].style.display="table-row";       
+            sheets.push(i);              
+
         }
     }
 }
