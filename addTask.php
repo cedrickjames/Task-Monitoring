@@ -131,6 +131,9 @@ $array11 = explode(",", $src1);
       $numberofAddedTask = $_POST['countInput'];
       $enteredUserName = $_POST['username'];
       $endTargetDate = $_POST['endTargetDate'];
+      $dateAdded = $_POST['StartDate'];
+
+
 
       
       $arrraayyy = $_POST['strnow'];
@@ -179,8 +182,9 @@ $array11 = explode(",", $src1);
           echo '<script>console.log("TEST: '.$taskCategory.'")</script>';
           echo '<script>console.log("TEST: '.$taskType.'")</script>';
           // echo '<script>console.log("arrayyyy: '.$finalarray[1].'")</script>';
-          $dateStarted = date('F j, Y');
-       
+          // $dateStarted = date('F j, Y');
+          $dateStarted = $_POST['StartDate'];
+          
           try {
             if($taskType == "daily"){
               $dateStarted = new DateTime($dateStarted);
@@ -202,7 +206,6 @@ $array11 = explode(",", $src1);
               $dateStarted->modify('last year');
               $dateStarted = $dateStarted->format('F j, Y');
             }
-            $dateAdded= date('Y-m-d');
           $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `Department`, `dateStarted`, `dateAdded`,`targetDate`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1', '$dateStarted','$dateAdded','$endTargetDate');";
                   mysqli_query($con, $sqlinsert);
             $num++;
@@ -231,7 +234,7 @@ $array11 = explode(",", $src1);
             text: 'You have successfully added task/s!',
           //   footer: '<a href="">Why do I have this issue?</a>'
           }).then(function() {
-    window.location = "admin.php";
+    window.location = "leader.php";
 });
            </script><?php 
               // header("location: admin.php");
@@ -375,13 +378,19 @@ $array11 = explode(",", $src1);
               $March =  $March->format('Y-m-d');
             
             ?>
-                             <div class="form-group row" style="margin-bottom: 30px">
-                            <label class="col-sm-2 col-form-label col-form-label sm"> Target End Date </label>
-                            <div class="col-sm-6">
-                          <input type="date" style="height: 100%" id="endTargetDate" value="<?php $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="endTargetDate" onchange="filterMonth();">
+            <div class="form-group row" style="margin-bottom: 30px">
+                            <label class="col-sm-2 col-form-label col-form-label sm"> Start Date </label>
+                            <div class="col-sm-3">
+                          <input type="date" style="height: 100%; width: 100%;" id="endTargetDate" value="<?php $startDate = new DateTime(); $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="StartDate" onchange="filterMonth();">
 
                           </div>
-                            </div>          
+                          <label class="col-sm-2 col-form-label col-form-label sm"> Target End Date </label>
+                            <div class="col-sm-3">
+                          <input type="date" style="height: 100%; width: 100%;" id="endTargetDate" value="<?php $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="endTargetDate" onchange="filterMonth();">
+
+                          </div>
+                            </div>
+                                  
             <div class="overflow-x">
                 <div  class="overflow-y" style="overflow-y: scroll; overflow-x: hidden; display: block; height: 220px" id="addtask">
                     <div class="form-group row">

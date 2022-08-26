@@ -181,7 +181,9 @@
                                         // create an iterateable period of date (P1D equates to 1 day)
                                         $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
                                         // best stored as array, so you can add more than one
-                                        $holidays = array('2012-09-07');
+                                        // $holidays = array('2012-09-07');
+                                      include ("./holidays.php");
+                                        
                                         foreach($periods as $dts) {
                                         $currs = $dts->format('D');
                                         // substract if Saturday or Sunday

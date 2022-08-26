@@ -1,19 +1,19 @@
 <?php
   session_start();
   include ("./connection.php");
-
-$date = "2022-08-23";
-  $date_now = date($date); // this format is string comparable
+  include ("./holidays.php");
+// $date = "2022-08-23";
+//   $date_now = date($date); // this format is string comparable
 
   
-$datea = "2022-04-01";
-$date_nowa = date($datea);
+// $datea = "2022-04-01";
+// $date_nowa = date($datea);
 
-  if ($date_now > $date_nowa) {
-      echo 'greater than';
-  }else{
-      echo 'Less than';
-  }
+//   if ($date_now > $date_nowa) {
+//       echo 'greater than';
+//   }else{
+//       echo 'Less than';
+//   }
   //sample of printing weeks number of certain dates
 
   // Create a new DateTime object
@@ -478,7 +478,7 @@ $date_nowa = date($datea);
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-
+    <!-- <link rel="stylesheet" href="node_modules/bootstrap-table/dist/bootstrap-table.min.css"> -->
   <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
 <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
@@ -489,17 +489,27 @@ $date_nowa = date($datea);
 
 <link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
 
+<!-- <script src="./node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script> -->
 
 <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
 <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
 
 <script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
+<!-- <link href="./node_modules/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+<link href="./node_modules/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css" rel="stylesheet">
 
-
+<script src="./node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="./node_modules/bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js"></script>
+<link href="./node_modules/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.css" rel="stylesheet">
+<script src="./node_modules/bootstrap-table/dist/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script> -->
+<!-- <link rel="stylesheet" href="./node_modules/bootstrap-table/extensions/fixed-columns/bootstrap-table-fixed-columns.css"> -->
+<!-- <script src="./node_modules/bootstrap-table/extensions/fixed-columns/bootstrap-table-fixed-columns.js"></script> -->
 </head>
     <body style="background: linear-gradient(to right, #FFFDE4, #b3dcff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
-    <?php
+  
+
+   <?php
 
   $db= $con;
 $tableName="usertask";
@@ -983,6 +993,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
     }
     if(isset($_POST['UpdateTaskbtn'])){
       $userName3 = $_POST['username'];
+      $postDateStarted = $_POST['dateStarted'];
+      $postTargetDate = $_POST['targetDate'];
+
 
         // $b = 0;
         $selectUserID = "SELECT `userid` FROM `users` WHERE `username` = '$userName3';";
@@ -1004,7 +1017,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       $userTaskType = $_POST['taskType1'];
       
 
-      $sqlupdate = "UPDATE `usertask` SET `userid`='$resultUserId1',`username`='$userName3', `taskName`='$userTaskName',`taskCategory`='$userTaskCategory',`taskArea`='$userTaskArea',`taskType`='$userTaskType' WHERE usertaskID = '$userTASKid'";
+      $sqlupdate = "UPDATE `usertask` SET `userid`='$resultUserId1',`username`='$userName3', `taskName`='$userTaskName',`taskCategory`='$userTaskCategory',`taskArea`='$userTaskArea',`taskType`='$userTaskType', `dateAdded`='$postDateStarted', `targetDate`='$postTargetDate' WHERE usertaskID = '$userTASKid'";
       mysqli_query($con, $sqlupdate);
       ?><script>
       Swal.fire({
@@ -1093,7 +1106,52 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      }
      return $msg;
      }
+     if(isset($_POST['changePassword'])){
+      $oldPass = $_POST['oldPass'];
+      $newPass = $_POST['newPass'];
+      $confirmPass = $_POST['confirmPass'];
 
+    $username =  $_SESSION['username'];
+
+      $selectPassword= "SELECT `userpass` FROM `users` WHERE username = '$username' LIMIT 1";
+      $resultPassword = mysqli_query($con, $selectPassword);
+      
+      while($userRow = mysqli_fetch_assoc($resultPassword)){
+        $userpass = $userRow['userpass'];
+    }
+      if($oldPass != $userpass){
+        ?><script>
+        Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'You have entered a wrong "Old Password!',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+      }
+      else if($newPass != $confirmPass){
+        ?><script>
+        Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'New password does not match. Please try again.',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+      }
+      else{
+        $sqlPassUpdate = "UPDATE `users` SET `userpass`='$newPass',`conpass`='$newPass' WHERE  username = '$username';";
+        mysqli_query($con, $sqlPassUpdate);
+        ?><script>
+        Swal.fire({
+      icon: 'success',
+      title: 'success',
+      text: 'Password change successfully!',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+      }
+    }
 
 
 
@@ -1510,6 +1568,8 @@ if(isset($_POST['RemoveCategory'])){
                       <?php } ?> -->
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
+                    <a class="dropdown-item" id="btn-changePass" href="#" data-toggle='modal'
+                      data-target='#changePassword'>Change Password</a>
                     <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
 
                     
@@ -1521,6 +1581,55 @@ if(isset($_POST['RemoveCategory'])){
             </div>
           </nav>
         </div>
+        <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+        <form action="leader.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
+        <!-- <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none"> -->
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Enter old password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="oldPass" name="oldPass">
+                    </div>
+                    </div>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Enter new password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="newPass" name="newPass">
+             
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Confirm new password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="confirmPass" name="confirmPass">
+             
+            </div>
+          </div>
+          </div>
+
+
+
+  <!-- document.getElementById('modalNumberofDays').value=parseInt(noOfdays) -->
+  <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" id="changePassword" name="changePassword" class="btn btn-info" >Update</button>
+              
+            
+               </div>
+                
+        </form>
+      </div>
+              
+            </div>
+          </div>
         <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -1877,6 +1986,23 @@ if(isset($_POST['RemoveCategory'])){
                               
 
                                 </select>
+                                
+                  </div>
+                </div>
+                 
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-4 col-form-label">Date Started</label>
+                  <div class="col-sm-8">
+            <input <?php if($editTaskVar == "0"){ echo "disabled"; } ?> type="date" id="dateStarted"  name="dateStarted" style="margin-right: 20px;height: 90%; width: 100%; " >
+           
+                  </div>
+                </div>
+                 
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-4 col-form-label">Target End Date</label>
+                  <div class="col-sm-8">
+            <input <?php if($editTaskVar == "0"){ echo "disabled"; } ?> type="date" id="targetDate"  name="targetDate" style="margin-right: 20px; height: 90%; width: 100%;" >
+                 
                   </div>
                 </div>
 
@@ -2012,8 +2138,13 @@ if(isset($_POST['RemoveCategory'])){
                         </div> 
                     </div>
                     <div class="overflow-x">
-                      <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
-                        <table class="table table-striped " style="width:  100%" id="filtertableMain" class="table datacust-datatable Table ">
+    <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
+                   
+
+<!-- 
+<table id="table"></table> -->
+                        
+                      <table class="table table-striped " style="width:  100%" id="filtertableMain" class="table datacust-datatable Table ">
                             <thead  class="thead-primary" style="position: sticky;top: -1px;">
                                
                             
@@ -2063,7 +2194,7 @@ if(isset($_POST['RemoveCategory'])){
                                   $period = new DatePeriod($start, new DateInterval('P1D'), $end);
                                   
                                   // best stored as array, so you can add more than one
-                                  $holidays = array('2022-07-15');
+                                  // $holidays = array('2022-07-15');
                                   $weekNo ="";
                                   $countColumns = 6;
                                   foreach($period as $dt) {
@@ -2116,6 +2247,9 @@ if(isset($_POST['RemoveCategory'])){
                                     $userTaskID = $data['usertaskID'];
                                     $taskArea = $data['taskArea'];
                                     $taskUser = $data['username'];
+                                    $dateStarted = $data['dateAdded'];
+                                    $dateTarget = $data['targetDate'];
+
 
 
 
@@ -2134,7 +2268,7 @@ if(isset($_POST['RemoveCategory'])){
                                <?php echo $sn; ?></td>
                                <td><?php echo $data['taskArea']; ?></td>
                                 <td><?php echo $data['taskCategory']; ?></td>
-                                <td class="taskNameHover" onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdmin'><?php echo $data['taskName']; ?></td>
+                                <td class="taskNameHover" onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>', '<?php echo $dateStarted?>', '<?php echo $dateTarget?>' )" data-toggle='modal' data-target='#modalAdmin'><?php echo $data['taskName']; ?></td>
                                 <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
         $result = mysqli_query($con, $sql1);
         $numrows = mysqli_num_rows($result);
@@ -2703,13 +2837,16 @@ function showDetails(reason, action, location){
 }
 
         var userTaskId = "";
-function clickpassdata(userName,usertaskArea,userTaskID, taskname, taskCategory, taskType){
+function clickpassdata(userName,usertaskArea,userTaskID, taskname, taskCategory, taskType, dateStarted, targetDate){
 document.getElementById("usernameSelectmodal").value = userName;
 document.getElementById("tasknamemodal").value = taskname;
 document.getElementById("taskCategorymodal").value = taskCategory;
 document.getElementById("taskTypemodal").value = taskType;
 document.getElementById("containerOfTaskId").value = userTaskID;
 document.getElementById("taskAreamodal").value = usertaskArea;
+document.getElementById("dateStarted").value = dateStarted;
+document.getElementById("targetDate").value = targetDate;
+
 
 
 
@@ -2737,7 +2874,8 @@ document.getElementById("UpdateTaskbtn").disabled = false;
 document.getElementById("EditTaskBTN").disabled = true;
 document.getElementById("taskAreamodal").disabled = false;
 document.getElementById("usernameSelectmodal").disabled = false;
-
+document.getElementById("dateStarted").disabled = false;
+document.getElementById("targetDate").disabled = false;
 
 
 
@@ -2931,8 +3069,11 @@ const usertask = document.getElementById("tasknamemodal");
 const taskcategory = document.getElementById("taskCategorymodal");
 const tasktype = document.getElementById("taskTypemodal");
 const taskArea = document.getElementById("taskAreamodal");
+const dateStarted = document.getElementById("dateStarted");
+const targetDate = document.getElementById("targetDate");
 
-if(username.value != "" && usertask.value != "" && taskcategory.value != "" && tasktype.value != "" && taskArea.value != "" ){
+
+if(username.value != "" && usertask.value != "" && taskcategory.value != "" && tasktype.value != "" && taskArea.value != "" && dateStarted.value != "" && targetDate.value != "" ){
   document.getElementById("UpdateTaskbtnSubmit").click();
 
 }
@@ -3413,8 +3554,60 @@ function exportData(){
         /* download the data file named "Stock_Price_Report.csv" */
        link.click();
  }
+//sticky columns
+
+//  var $table = $('#filtertableMain')
+
+//  $table.bootstrapTable({
+    
+//     fixedColumns: true,
+//     fixedNumber: 6,
+//     stickyHeader: true,
+
+//   })
 
 
+//end of sticky column
+//   var $tables = $('#table')
+
+// function buildTable($el, cells, rows) {
+//   var i
+//   var j
+//   var row
+//   var columns = []
+//   var data = []
+
+//   for (i = 0; i < cells; i++) {
+//     columns.push({
+//       field: 'field' + i,
+//       title: 'Cell' + i,
+//       sortable: true
+//     })
+//   }
+//   for (i = 0; i < rows; i++) {
+//     row = {}
+//     for (j = 0; j < cells; j++) {
+//       row['field' + j] = 'Row-' + i + '-' + j
+//     }
+//     data.push(row)
+//   }
+
+//   var classes = $('.toolbar input:checked').next().text()
+
+//   $el.bootstrapTable('destroy').bootstrapTable({
+//     columns: columns,
+//     data: data,
+//     stickyHeader: true,
+
+//   })
+// }
+
+// $(function() {
+//   $('.toolbar input').change(function () {
+//     buildTable($tables, 20, 50)
+//   })
+//   buildTable($tables, 20, 50)
+// })
 
         </script>
     </body>

@@ -732,175 +732,269 @@ $html .= '
   <td  style="border: 1px solid black;"class="table-light">';
   
 
-  $ends = new DateTime(date('Y-m-d', strtotime($todayEndSummary)));
-  $starts = new DateTime(date('Y-m-d', strtotime($todaySummary)));
-  // otherwise the  end date is excluded (bug?)
-  $eme = $starts->format('D');
-        if($eme == "Sat"){
-          $starts->modify('-1 day');
+  $TARGETPOINTS =0; 
 
-        }
-        else if( $eme =="Sun"){
-          $starts->modify('-2 day');
-        }
-        // $starts->modify('+1 day');
-  $end = new DateTime();
-  $ends->modify('+1 day');
 
-  $intervals = $ends->diff($starts);
-  $finalDiffs = $intervals->days;
-  // create an iterateable period of date (P1D equates to 1 day)
-  $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
-  // best stored as array, so you can add more than one
-  $holidays = array('2012-09-07');
-  foreach($periods as $dts) {
-  $currs = $dts->format('D');
-  // substract if Saturday or Sunday
-  if ($currs == 'Sat' || $currs == 'Sun') {
-  $finalDiffs--;
-  }
-  // (optional) for the updated question
-  else if (in_array($dts->format('Y-m-d'), $holidays)) {
-  $finalDiffs--;
-  }
-  }
-  // echo $finalDiffs;
-  $countDaily = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `username` = '$username' AND taskType = 'daily';"; 
-  $result = mysqli_query($con, $countDaily);
-   
-
+  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'daily';";
+  $result = mysqli_query($con, $getUserTasks);
+  $noOfResult =  mysqli_num_rows($result);
+  // echo $noOfResult;
   while($userRow = mysqli_fetch_assoc($result)){
-    $noOfTask = $userRow['noOfTask'];
-  }
-
-                           
-  $TargetPoints=$TargetPoints + ($finalDiffs * $noOfTask );
+  $usertaskID = $userRow['usertaskID'];
+  $username = $userRow['username'];
+  $task =  $userRow['taskName'];
+  // echo $task;
+  // echo $usertaskID;
+  /////////////////////////////////////////daily
   
-
-
   $StartDateSelected = new DateTime($todaySummary);
   $startDATE =  $StartDateSelected->format('Y-m-d'); 
+  
+  $DateNowAndToday = new DateTime($todayEndSummary);  
+  $endDATE =  $DateNowAndToday->format('Y-m-d');
+  
+  $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$usertaskID';"; //kunin ang first monday date na pipiliin
+   $results = mysqli_query($con, $selectDateAdded);
+   while($userRow = mysqli_fetch_assoc($results)){
+     $dateAdded = $userRow['dateAdded'];
+     $targetDate = $userRow['targetDate'];
+  
+   }
+   $dateAdded = date($dateAdded);
+   $targetDate = date($targetDate);
+  
+     $START = date($startDATE);
+     $END = date($endDATE);
+       if($START < $dateAdded){
+         $startDATE = $dateAdded;
+       }
+     if($END > $targetDate){
+           $endDATE = $targetDate;
+       }
+  // echo $username . $startDATE .$endDATE. "asdf "; 
+       $todayss="2022-07-01";            
+       $ends = new DateTime(date('Y-m-d', strtotime($endDATE)));
+       $starts = new DateTime(date('Y-m-d', strtotime($startDATE)));
+       // otherwise the  end date is excluded (bug?)
+       $eme = $starts->format('D');
+             if($eme == "Sat"){
+               $starts->modify('-1 day');
+  
+             }
+             else if( $eme =="Sun"){
+               $starts->modify('-2 day');
+             }
+             // $starts->modify('+1 day');
+       $end = new DateTime();
+       $ends->modify('+1 day');
+  
+       $intervals = $ends->diff($starts);
+       $finalDiffs = $intervals->days;
+       // create an iterateable period of date (P1D equates to 1 day)
+       $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+       // best stored as array, so you can add more than one
+       // $holidays = array('2012-09-07');
+     include ("./holidays.php");
+  
+       foreach($periods as $dts) {
+       $currs = $dts->format('D');
+       // substract if Saturday or Sunday
+       if ($currs == 'Sat' || $currs == 'Sun') {
+       $finalDiffs--;
+       }
+       // (optional) for the updated question
+       else if (in_array($dts->format('Y-m-d'), $holidays)) {
+       $finalDiffs--;
+       }
+       }
+       // echo $finalDiffs;
+       // echo " ";
+       $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
+  //  echo $TARGETPOINTS;
+  //  echo  "     "  ;
+  }
+  /////////////////////////////////////////weekly
+  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly';";
+  $resultw = mysqli_query($con, $getUserTasks);
+  $noOfResult =  mysqli_num_rows($resultw);
+  // echo $noOfResult;
+  while($userRow = mysqli_fetch_assoc($resultw)){
+  $usertaskID = $userRow['usertaskID'];
+  $username = $userRow['username'];
+  $task =  $userRow['taskName'];
+  $StartDateSelected = new DateTime($todaySummary);
+  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+  $DateNowAndToday = new DateTime($todayEndSummary);  
+  $endDATE =  $DateNowAndToday->format('Y-m-d');
+  
+  
+            $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$usertaskID';"; //kunin ang first monday date na pipiliin
+            $resultww = mysqli_query($con, $selectDateAdded);
+            while($userRow = mysqli_fetch_assoc($resultww)){
+              $dateAdded = $userRow['dateAdded'];
+              $targetDate = $userRow['targetDate'];
+  
             
- $DateNowAndToday = new DateTime($todayEndSummary);  
- $endDATE =  $DateNowAndToday->format('Y-m-d');
-
-
-$start = new DateTime($todaySummary);
-$end = new DateTime($todayEndSummary);
-// otherwise the  end date is excluded (bug?)
-$end->modify('+1 day');
-// echo date('F j, Y');
-$interval = $end->diff($start);
-
-// total days
-$days = $interval->days;
-// echo $days;
-// create an iterateable period of date (P1D equates to 1 day)
-$period = new DatePeriod($start, new DateInterval('P1D'), $end);
-
-// best stored as array, so you can add more than one
-$holidays = array('2022-07-15');
-$weekNo ="";
-$NumberOfWeeksToDone = 0;
-foreach($period as $dt) {
+  // echo  date('Y-m-d', strtotime($dateAdded)) .' '.date('Y-m-d', strtotime($targetDate)) ."<br>";
+  // echo  date('Y-m-d', strtotime($todayWeekly)) .' '.date('Y-m-d', strtotime($todayEndWeekly)) ."<br>";
+            
+            $dateAdded = date($dateAdded);
+            $targetDate = date($targetDate);
+  
+              $START = date('Y-m-d', strtotime($todaySummary));
+              $END = date('Y-m-d', strtotime($todayEndSummary));
+                if($START < $dateAdded){
+                  $startDATE = $dateAdded;
+                }
+              if($END > $targetDate){
+                    $endDATE = $targetDate;
+                }
+               }
+  
+  $start = new DateTime(date('Y-m-d', strtotime($startDATE)));
+  $end = new DateTime(date('Y-m-d', strtotime($endDATE)));
+  // otherwise the  end date is excluded (bug?)
+  $end->modify('+1 day');
+  // echo date('F j, Y');
+  $interval = $end->diff($start);
+  
+  // total days
+  $days = $interval->days;
+  // echo $days;
+  // create an iterateable period of date (P1D equates to 1 day)
+  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+  
+  // best stored as array, so you can add more than one
+  // $holidays = array('2022-07-15');
+  include ("./holidays.php");
+  
+  $weekNo ="";
+  $NumberOfWeeksToDone = 0;
+  foreach($period as $dt) {
+  $curr = $dt->format('W');
+  $currMonth = $dt->format('F');
+  $currYear = $dt->format('Y');
+  
+  
+  if($curr==$weekNo){
+  echo null;
+  }
+  else{
+  // echo $curr;
+  // echo "<br>";
+  $NumberOfWeeksToDone++;
+  $weekNo = $curr;
+  }
+  }
+  $finalDiffs = $NumberOfWeeksToDone;
+  $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
+  
+  }
+  
+  
+  
+  /////////////////////////monthly
+  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'monthly';";
+  $resultm = mysqli_query($con, $getUserTasks);
+  $noOfResult =  mysqli_num_rows($resultm);
+  // echo $noOfResult;
+  while($userRow = mysqli_fetch_assoc($resultm)){
+  $usertaskID = $userRow['usertaskID'];
+  $username = $userRow['username'];
+  $task =  $userRow['taskName'];
+  $StartDateSelected = new DateTime($todaySummary);
+  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+  $DateNowAndToday = new DateTime($todayEndSummary);  
+  $endDATE =  $DateNowAndToday->format('Y-m-d');
+  
+  
+  $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$usertaskID';"; //kunin ang first monday date na pipiliin
+  $resultmm = mysqli_query($con, $selectDateAdded);
+  while($userRow = mysqli_fetch_assoc($resultmm)){
+   $dateAdded = $userRow['dateAdded'];
+   $targetDate = $userRow['targetDate'];
+  
+  
+  // echo  date('Y-m-d', strtotime($dateAdded)) .' '.date('Y-m-d', strtotime($targetDate)) ."<br>";
+  // echo  date('Y-m-d', strtotime($todayWeekly)) .' '.date('Y-m-d', strtotime($todayEndWeekly)) ."<br>";
+  
+  $dateAdded = date($dateAdded);
+  $targetDate = date($targetDate);
+  
+   $START = date('Y-m-d', strtotime($todayMonthly));
+   $END = date('Y-m-d', strtotime($todayEndMonthly));
+     if($START < $dateAdded){
+       $startDATE = $dateAdded;
+     }
+   if($END > $targetDate){
+         $endDATE = $targetDate;
+     }
+    }
+  
+  
+  $start = new DateTime($startDATE);
+  $end = new DateTime($endDATE);
+  // otherwise the  end date is excluded (bug?)
+  $end->modify('+1 day');
+  // echo date('F j, Y');
+  $interval = $end->diff($start);
+  
+  // total days
+  $days = $interval->days;
+  // echo $days;
+  // create an iterateable period of date (P1D equates to 1 day)
+  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+  
+  // best stored as array, so you can add more than one
+  // $holidays = array('2022-07-15');
+  include ("./holidays.php");
+  
+  $monthNo ="";
+  $NumberOfWeeksToDone = 0;
+  foreach($period as $dt) {
    $curr = $dt->format('W');
    $currMonth = $dt->format('F');
    $currYear = $dt->format('Y');
-
-
-   if($curr==$weekNo){
-    
+  
+  
+   if($currMonth==$monthNo){
+     echo null;
    }
    else{
      // echo $curr;
      // echo "<br>";
      $NumberOfWeeksToDone++;
-     $weekNo = $curr;
+     $monthNo = $currMonth;
    }
- }
-   $finalDiffs = $NumberOfWeeksToDone;
-
-   $countWeekly = "SELECT COUNT(username) as noOfTask  FROM `usertask` WHERE `username` = '$username' AND taskType = 'weekly';"; 
-   $result = mysqli_query($con, $countWeekly);
-
-   while($userRow = mysqli_fetch_assoc($result)){
-    $noOfTask = $userRow['noOfTask'];
   }
- 
-   $noOfWeeklyTask = $result;
-
-   $TargetPoints=$TargetPoints + ($finalDiffs * $noOfTask );
-
-
-
+   $finalDiffs = $NumberOfWeeksToDone;
+   $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
   
-   $StartDateSelected = new DateTime($todayMonthly);
-   $startDATE =  $StartDateSelected->format('Y-m-d'); 
-             
-  $DateNowAndToday = new DateTime($todayEndMonthly);  
-  $endDATE =  $DateNowAndToday->format('Y-m-d');
-
-
-$start = new DateTime($todayMonthly);
-$end = new DateTime($todayEndMonthly);
-// otherwise the  end date is excluded (bug?)
-$end->modify('+1 day');
-// echo date('F j, Y');
-$interval = $end->diff($start);
-
-// total days
-$days = $interval->days;
-// echo $days;
-// create an iterateable period of date (P1D equates to 1 day)
-$period = new DatePeriod($start, new DateInterval('P1D'), $end);
-
-// best stored as array, so you can add more than one
-$holidays = array('2022-07-15');
-$monthNo ="";
-$NumberOfWeeksToDone = 0;
-foreach($period as $dt) {
-    $curr = $dt->format('W');
-    $currMonth = $dt->format('F');
-    $currYear = $dt->format('Y');
   
-
-    if($currMonth==$monthNo){
-       
+  }
+  
+  /////////////////////////////annual
+  
+  $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual';"; 
+  $resultan = mysqli_query($con, $countAnnual);
+  
+  
+  while($userRow = mysqli_fetch_assoc($resultan)){
+  $noOfTask = $userRow['noOfTask'];
+  }
+  $TARGETPOINTS = $TARGETPOINTS+$noOfTask;
+      $html .=''.$TARGETPOINTS.'';
+      // echo $noOfDailyTask + $noOfWeeklyTask + $noOfMonthlyTask ;
+      $html .='</td>';
+      $html.='
+    <td style="border: 1px solid black;" class="table-dark text-center"> ';  
+    if($TotalPointsEarnedForSelectedDate == 0 || $TARGETPOINTS==0){
+      $TotalPercentage=0;
     }
     else{
-      // echo $curr;
-      // echo "<br>";
-      $NumberOfWeeksToDone++;
-      $monthNo = $currMonth;
+    $TotalPercentage = ($TotalPointsEarnedForSelectedDate / $TARGETPOINTS)* 100;
+      
     }
-  }
-    $finalDiffs = $NumberOfWeeksToDone;
-    $countMonthly = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `username` = '$username' AND taskType = 'monthly';"; 
-    $result = mysqli_query($con, $countMonthly);
-
-
-    while($userRow = mysqli_fetch_assoc($result)){
-      $noOfTask = $userRow['noOfTask'];
-    }
-
-    $noOfMonthlyTask = $result;
-    $TargetPoints=$TargetPoints + ($finalDiffs * $noOfTask );
-
-    $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `username` = '$username' AND taskType = 'annual';"; 
-    $result = mysqli_query($con, $countAnnual);
-
-
-    while($userRow = mysqli_fetch_assoc($result)){
-      $noOfTask = $userRow['noOfTask'];
-    }
-    $TargetPoints=$TargetPoints + $noOfTask;
-    $html .=''.$TargetPoints.'';
-    // echo $noOfDailyTask + $noOfWeeklyTask + $noOfMonthlyTask ;
-    $html .='</td>';
-    $html.='
-  <td style="border: 1px solid black;" class="table-dark text-center"> ';  
-  
-  $TotalPercentage = ($TotalPointsEarnedForSelectedDate / $TargetPoints)* 100;
  //  echo round($TotalPercentage).'%';
  $html .=''.round($TotalPercentage).'%'; 
              $html .='

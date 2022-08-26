@@ -9,8 +9,8 @@ session_start();
       
     // 
   }
-  if($_SESSION['userlevel'] == "PIC"){
-    header("location: index.php");
+  if($_SESSION['userlevel'] == "PIC" || $_SESSION['userlevel'] == "Leader"){
+    header("location: signin.php");
 
   }
 //     if(isset($_POST['sbtregister'])){
@@ -85,7 +85,17 @@ session_start();
   
     <body>
     <?php
+    //            $sqlinsertS = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, 'sample','sample','sample', 'Admin', 'sample', '', 'sample', 'Admin')";
+    //            mysqli_query($con, $sqlinsertS);
 
+               
+    //    $selectAdmina= "SELECT * FROM `users` WHERE `username` = 'sample';";
+    //    $resultSelectAdmina = mysqli_query($con, $selectAdmina);
+
+    //    while($userRow = mysqli_fetch_assoc($resultSelectAdmina)){
+    //        $userIDOFAdmin = $userRow['userid'];
+    //    echo $userIDOFAdmin;
+    //    }
   
     if(isset($_POST['sbtregister'])){
         
@@ -95,12 +105,12 @@ session_start();
         $FNAME = $_POST['fname'];      
         $MNAME = $_POST['mname'];      
         $LNAME = $_POST['lname']; 
-        $dept = $_POST['Department']; 
+        // $dept = $_POST['Department']; 
 
              
 
     // $userLevel =  echo("<script>userLevel()</script>");
-    $radio_value=$_POST['radioPosition'];
+    // $radio_value=$_POST['radioPosition'];
         
         $sql1 = "Select * FROM users WHERE username='$username'";
         $result = mysqli_query($con, $sql1);
@@ -110,23 +120,39 @@ session_start();
 // }
         if ($numrows == 0){
             if($password==$conPassword){
-                $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', '$radio_value', '$FNAME', '$MNAME', '$LNAME', '$dept')";
+                $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', 'Admin', '$FNAME', '$MNAME', '$LNAME', 'Admin')";
                 mysqli_query($con, $sqlinsert);
+
+                
+        $selectAdmin= "SELECT * FROM `users` WHERE `username` = '$username';";
+        $resultSelectAdmin = mysqli_query($con, $selectAdmin);
+
+        while($userRow = mysqli_fetch_assoc($resultSelectAdmin)){
+            $userIDOFAdmin = $userRow['userid'];
+        
+                $sqlinsertAdmin = "INSERT INTO `admin`(`adminid`, `userid`, `name`) VALUES (null, '$userIDOFAdmin','$username')";
+                mysqli_query($con, $sqlinsertAdmin);
+        }
                 ?><script>
                 Swal.fire({
               icon: 'success',
               title: 'Registered',
-              text: 'You have successfully registered a user.',
+              text: 'You have successfully registered an admin.',
             //   footer: '<a href="">Why do I have this issue?</a>'
-            }).then(function() {
-    window.location = "signin.php";
-});
+            })
              </script><?php 
                 // header("location: signup.php");
             
             }
             else{
-                echo '<script>alert("Password does not match!")</script>';
+                ?><script>
+                Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Password does not match',
+            //   footer: '<a href="">Why do I have this issue?</a>'
+            })
+             </script><?php 
             }
           
             
@@ -150,7 +176,7 @@ session_start();
           <img src="design_files/images/Task Monitoring (4).png" style="height: 100%">
       </div>
 
-                <form action="signup.php" method = "POST" style="padding-top:0px" autocomplete="off" >
+                <form action="addAdmin.php" method = "POST" style="padding-top:0px" autocomplete="off" >
                     <h3>Register</h3> 
                     <div class="form-group row">
                         <div class="col-sm-6">
@@ -162,34 +188,9 @@ session_start();
                         <div class="col-sm-10">
                             <input type="text"  name="lname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%;  padding: 10px;" placeholder="Last Name">
                         </div>
-                        <div class="col-sm-10">
-                        <select  name="Department" id="Department" class=" form-control form-select form-select-sm" style="padding-left:10px;">
-                                    <option value="" disabled selected>Select Department</option>
-                                    <option value="MIS">MIS</option>
-                                    <option value="FEM">FEM</option>
-                                    
-                                </select>    
-                        </div>
+                   
                     </div>
-                    <div class="col-sm-12"  >
-                        <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 12pt; margin-bottom: 0px;">
-                            <div class="form-check" style="padding-left: 10px">
-                                    <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
-                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="Leader" checked onclick="position();">
-                                            <label class="form-check-label" for="radioLeader">
-                                             Leader
-                                            </label>
-                                     </div>
-                                    <div class="form-check form-check-inline" style="margin-left: 10px">
-                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="PIC" onclick="position();">
-                                            <label class="form-check-label" for="radioPIC">
-                                             Member
-                                            </label>
-                                    </div>
-                                  
-                             </div>
-                        </fieldset>
-                    </div>
+
                 <div class="form-wrapper">
                     <input  name="email" id="email"  placeholder="username" class="form-control" style="padding: 5px"onkeyup="checkinputs()">
                     <i class="zmdi zmdi zmdi-email" style="padding-right: 5px"></i>
@@ -231,24 +232,24 @@ else{
 }
 
 }
-function userLevel()
-{
-  var level=document.getElementsByName('radioPosition');
+// function userLevel()
+// {
+//   var level=document.getElementsByName('radioPosition');
   
-  if(level[0].checked){
-    return user=level[0].value;
+//   if(level[0].checked){
+//     return user=level[0].value;
    
-  }
-  else if(level[1].checked){
-    return user=level[1].value;
+//   }
+//   else if(level[1].checked){
+//     return user=level[1].value;
     
-              }
- else if(level[2].checked){
-    return user=level[2].value;
+//               }
+//  else if(level[2].checked){
+//     return user=level[2].value;
     
-              }
+//               }
 
-}
+// }
 </script>
 
 

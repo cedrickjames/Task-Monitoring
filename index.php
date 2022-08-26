@@ -4,6 +4,60 @@
   include ("./holidays.php");
 
 
+
+   $dateNewTodayforMonday = new DateTime();
+
+                $dateNewTodayFormat  = $dateNewTodayforMonday->format('D'); 
+                if ($dateNewTodayFormat == 'Mon') {
+                  //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                   $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
+                    
+                     }
+                     else if($dateNewTodayFormat == 'Sun'){
+                       $dateNewTodayforMonday->modify('next monday');
+                      //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                       $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
+                 
+                     }
+                     else{
+                      $dateNewTodayforMonday->modify('last monday');
+                      // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                      $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
+                 
+                     }
+                     $start = new DateTime($lastMonday);
+                     $end = new DateTime();
+                     $end->modify('+1 day');
+                     // echo date('F j, Y');
+                     $interval = $end->diff($start);
+                     
+                     // total days
+                     $noOfLateFromLastMonday = $interval->days;
+                     // echo $days;
+                     // create an iterateable period of date (P1D equates to 1 day)
+                     $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+                     foreach($period as $dt) {
+                      $curr = $dt->format('D');
+        
+                      // substract if Saturday or Sunday
+                      if ($curr == 'Sat' || $curr == 'Sun') {
+                        $noOfLateFromLastMonday--;
+                      }
+        
+                      // (optional) for the updated question
+                      elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+                        $noOfLateFromLastMonday--;
+                      }
+                  }
+                  if($noOfLateFromLastMonday >2){
+                      $pointFive=0;
+                  }
+
+                  // echo $pointFive;
+                  // echo "<br>";
+                  // echo $noOfLateFromLastMonday;
+
   $holidays = array('2022-04-14', '2022-04-15', '2022-05-09','2022-08-17','2022-08-29','2022-10-31','2022-11-01','2022-11-30','2022-12-08','2022-12-23','2022-12-26','2022-12-27','2022-12-28','2022-12-29','2022-12-30','2023-01-01','2023-01-02','2023-01-03');
   $yearNow='2023';
   $end = new DateTime('2023-04-03');
@@ -605,6 +659,7 @@ for($x = 0; $x <$arrlength; $x++) {
     // $myReason = $_SESSION['reason'];
 
     $date = new DateTime($today);
+    $dateSubmitted = date('Y-m-d');
 
 
          $timenowForSameId = date("hi");       
@@ -650,9 +705,60 @@ for($x = 0; $x <$arrlength; $x++) {
               }
               else if($x==$validationVariable){
                 $pointFive = 0.5;
-                if($finalDiff>2){
-                  $pointFive = 0;
-                }
+     
+                $dateNewTodayforMondays = new DateTime();
+
+                $dateNewTodayFormats  = $dateNewTodayforMondays->format('D'); 
+                if ($dateNewTodayFormats == 'Mon') {
+                  //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                   $lastMondays = $dateNewTodayforMondays->format('Y-m-d');
+                    
+                     }
+                     else if($dateNewTodayFormats == 'Sun'){
+                       $dateNewTodayforMondays->modify('next monday');
+                      //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                       $lastMondays = $dateNewTodayforMondays->format('Y-m-d');
+                 
+                     }
+                     else{
+                      $dateNewTodayforMondays->modify('last monday');
+                      // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                      $lastMondays = $dateNewTodayforMondays->format('Y-m-d');
+                 
+                     }
+                     $starts = new DateTime($lastMondays);
+                     $ends = new DateTime();
+                     $ends->modify('+1 day');
+                     // echo date('F j, Y');
+                     $intervals = $ends->diff($starts);
+                     
+                     // total days
+                     $noOfLateFromLastMondays = $intervals->days;
+                     // echo $days;
+                     // create an iterateable period of date (P1D equates to 1 day)
+                     $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+
+                     foreach($periods as $dts) {
+                      $currs = $dts->format('D');
+        
+                      // substract if Saturday or Sunday
+                      if ($currs == 'Sat' || $currs == 'Sun') {
+                        $noOfLateFromLastMondays--;
+                      }
+        
+                      // (optional) for the updated question
+                      elseif (in_array($dts->format('Y-m-d'), $holidays)) {
+                        $noOfLateFromLastMondays--;
+                      }
+                  }
+                  if($noOfLateFromLastMondays >2){
+                      $pointFive=0;
+                  }
+                  else{
+                    $pointFive=0.5;
+
+                  }
+
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt',  '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'$pointFive', true);";
                 mysqli_query($con, $sqlinsert);
                 header("location:index.php");
@@ -1737,6 +1843,52 @@ $_SESSION['noOfDaysLate']="";
 
 
     }
+    if(isset($_POST['changePassword'])){
+      $oldPass = $_POST['oldPass'];
+      $newPass = $_POST['newPass'];
+      $confirmPass = $_POST['confirmPass'];
+
+    $username =  $_SESSION['username'];
+
+      $selectPassword= "SELECT `userpass` FROM `users` WHERE username = '$username' LIMIT 1";
+      $resultPassword = mysqli_query($con, $selectPassword);
+      
+      while($userRow = mysqli_fetch_assoc($resultPassword)){
+        $userpass = $userRow['userpass'];
+    }
+      if($oldPass != $userpass){
+        ?><script>
+        Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'You have entered a wrong "Old Password!',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+      }
+      else if($newPass != $confirmPass){
+        ?><script>
+        Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'New password does not match. Please try again.',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+      }
+      else{
+        $sqlPassUpdate = "UPDATE `users` SET `userpass`='$newPass',`conpass`='$newPass' WHERE  username = '$username';";
+        mysqli_query($con, $sqlPassUpdate);
+        ?><script>
+        Swal.fire({
+      icon: 'success',
+      title: 'success',
+      text: 'Password change successfully!',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+      }
+    }
 
     
     // $_SESSION['username'] = $username;
@@ -1825,7 +1977,10 @@ $_SESSION['noOfDaysLate']="";
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                     Option
                   </a>
+                  
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown"  style="right: 0; left: auto;">
+                  <a class="dropdown-item" id="btn-changePass" href="#" data-toggle='modal'
+                      data-target='#changePassword'>Change Password</a>
                    <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
                         <?php
                         if($_SESSION['admin'] == "TRUE"){?>
@@ -1840,11 +1995,62 @@ $_SESSION['noOfDaysLate']="";
                     
                    
                   </div>
+
                 </li>
                 
               </ul>
             </div>
           </nav>
+        </div>
+        <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+        <form action="index.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
+        <!-- <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none"> -->
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Enter old password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="oldPass" name="oldPass">
+                    </div>
+                    </div>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Enter new password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="newPass" name="newPass">
+             
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Confirm new password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="confirmPass" name="confirmPass">
+             
+            </div>
+          </div>
+          </div>
+
+
+
+  <!-- document.getElementById('modalNumberofDays').value=parseInt(noOfdays) -->
+  <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" id="changePassword" name="changePassword" class="btn btn-info" >Update</button>
+              
+            
+               </div>
+                
+        </form>
+      </div>
+              
+            </div>
+          </div>
         </div>
         <div class="alert alert-success" id = "successAlert" style="display: none"role="alert">
  <h3 id="successAlertWord"> </h3>
@@ -2007,7 +2213,7 @@ $_SESSION['noOfDaysLate']="";
                                   $sn=1;
                                   foreach($fetchData as $data){
                             ?>
-                             <tr class="tableMain" style="height:50px">
+                             <tr class="tableMain" style="height:50px; <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>background-color: #5afa84<?php } ?> " >
                                 <td  style="width: 1%;"><?php echo $sn; ?></td>
                                 <td style="width:30%;"><?php echo $data['taskName']??''; ?></td>
                                 <td  style="width: 5%;"><?php echo $data['taskType']??''; ?></td>
@@ -2798,6 +3004,14 @@ $finalDiff = $interval->days;
                                                  
                                                       ?>
                                 <div class="row">
+                                <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>
+                                  <div class="col-3">
+                                  <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                </div>
+                                        <?php }
+                                        else{
+                                          ?>
+                                       
                                   <div class="col-3">
                                     <?php $upFile = 'uploadedFile' . $data['usertaskID']; $varUpload = $data['usertaskID'];  $upBtn = 'uploadsample' . $data['usertaskID'];?>
 
@@ -2920,14 +3134,22 @@ $finalDiff = $interval->days;
                                     
                                     }
                                 ?> 
+                               
+                                    
                                     data-uploadId="<?php echo $data['usertaskID'] ?>" name="uploadedFile" id="<?php echo $upFile; ?>" class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
                                     <input name="idContainer" value="<?php  echo $data['taskName'];?>" style="display: none">
                                   </div>
+                                  <?php } ?>
+                                  
                                   <div class="col-9" style="padding-left: 90px">
                                       <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
                                       <!-- upload -->
                                       
-                                      <input type="submit" id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
+                                      <input type="submit"  <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>
+                                  disabled
+                                        <?php }
+                                     
+                                          ?> id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
                                       <script>
 
                                         // // document.getElementById("uploadsample30").disabled = true;
@@ -2969,6 +3191,15 @@ $finalDiff = $interval->days;
                                       
                                       <!-- Finish -->
                                      <!-- <a onclick="checkIfLate(<?php echo $data['usertaskID'] ?>)" id= "checked<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Check</a> -->
+                                     <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>
+                                      <a  href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" class="btn btn-outline-secondary" style="pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                   <a class="btn btn-outline-secondary" href="#" style=" pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                     
+                                        <?php }
+                                        else{
+                                          ?>
+                                          
+                                      
 
                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" style="display: none" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                         <!-- <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
@@ -3266,7 +3497,8 @@ $finalDiff = $interval->days;
                                               }
                                        ?>
                                      
-
+                                     <?php
+                                        } ?>
                                       
                                     </div>
                                     
@@ -4474,6 +4706,10 @@ var reason = document.getElementById('reason-text').value;
 
 
   }
+
+
+
+
         </script>
     </body>
 </html>

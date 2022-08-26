@@ -125,7 +125,9 @@
                                         // create an iterateable period of date (P1D equates to 1 day)
                                         $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
                                         // best stored as array, so you can add more than one
-                                        $holidays = array('2012-09-07');
+                                        // $holidays = array('2012-09-07');
+                                      include ("./holidays.php");
+
                                         foreach($periods as $dts) {
                                         $currs = $dts->format('D');
                                         // substract if Saturday or Sunday
@@ -195,7 +197,9 @@ $task =  $userRow['taskName'];
                   $period = new DatePeriod($start, new DateInterval('P1D'), $end);
                   
                   // best stored as array, so you can add more than one
-                  $holidays = array('2022-07-15');
+                  // $holidays = array('2022-07-15');
+                  include ("./holidays.php");
+
                   $weekNo ="";
                   $NumberOfWeeksToDone = 0;
                   foreach($period as $dt) {
@@ -274,7 +278,9 @@ $task =  $userRow['taskName'];
                                 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
                                 
                                 // best stored as array, so you can add more than one
-                                $holidays = array('2022-07-15');
+                                // $holidays = array('2022-07-15');
+                                include ("./holidays.php");
+
                                 $monthNo ="";
                                 $NumberOfWeeksToDone = 0;
                                 foreach($period as $dt) {
@@ -1094,7 +1100,9 @@ $TARGETPOINTS =0;
                                         // create an iterateable period of date (P1D equates to 1 day)
                                         $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
                                         // best stored as array, so you can add more than one
-                                        $holidays = array('2012-09-07');
+                                        // $holidays = array('2012-09-07');
+                                      include ("./holidays.php");
+
                                         foreach($periods as $dts) {
                                         $currs = $dts->format('D');
                                         // substract if Saturday or Sunday
@@ -1164,7 +1172,9 @@ $task =  $userRow['taskName'];
                   $period = new DatePeriod($start, new DateInterval('P1D'), $end);
                   
                   // best stored as array, so you can add more than one
-                  $holidays = array('2022-07-15');
+                  // $holidays = array('2022-07-15');
+                  include ("./holidays.php");
+
                   $weekNo ="";
                   $NumberOfWeeksToDone = 0;
                   foreach($period as $dt) {
@@ -1243,7 +1253,9 @@ $task =  $userRow['taskName'];
                                 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
                                 
                                 // best stored as array, so you can add more than one
-                                $holidays = array('2022-07-15');
+                                // $holidays = array('2022-07-15');
+                                include ("./holidays.php");
+
                                 $monthNo ="";
                                 $NumberOfWeeksToDone = 0;
                                 foreach($period as $dt) {
@@ -1288,7 +1300,13 @@ $task =  $userRow['taskName'];
     <?php 
                              // echo $TotalPointsEarned;
                              // echo $finalDiffs;
-                             $TotalPercentage = ($TotalPointsEarnedForSelectedDate / $TARGETPOINTS)* 100;
+                             if($TotalPointsEarnedForSelectedDate ==0 && $TARGETPOINTS ==0 ){
+                              $TotalPercentage =0;
+                             }
+                             else{
+                              $TotalPercentage = ($TotalPointsEarnedForSelectedDate / $TARGETPOINTS)* 100;
+
+                             }
                             //  echo round($TotalPercentage).'%';
                               ?> 
                              

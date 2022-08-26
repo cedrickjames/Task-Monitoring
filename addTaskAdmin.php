@@ -122,7 +122,7 @@ $array11 = explode(",", $src1);
       $numberofAddedTask = $_POST['countInput'];
       $enteredUserName = $_POST['username'];
       $endTargetDate = $_POST['endTargetDate'];
-
+      $dateAdded = $_POST['StartDate'];
       $arrraayyy = $_POST['strnow'];
       echo '<script>console.log("Number of Added Task: '.$numberofAddedTask.'")</script>';
       $num = 1;
@@ -169,7 +169,8 @@ $array11 = explode(",", $src1);
           echo '<script>console.log("TEST: '.$taskCategory.'")</script>';
           echo '<script>console.log("TEST: '.$taskType.'")</script>';
           // echo '<script>console.log("arrayyyy: '.$finalarray[1].'")</script>';
-          $dateStarted = date('F j, Y');
+          $dateStarted = $_POST['StartDate'];
+
           try {
             if($taskType == "daily"){
               $dateStarted = new DateTime($dateStarted);
@@ -302,7 +303,7 @@ $array11 = explode(",", $src1);
         </div>
         <div class="wrapper" style="background: linear-gradient(to right, rgb(22, 34, 42), rgb(58, 96, 115));">
             
-            <div class="inner" style="width: 1000px; height: 500px; max-width: 1000px; border-radius: 60px">
+            <div class="inner" style="width: 1000px; height: 520px; max-width: 1000px; border-radius: 60px">
                
                 
                 <form id="account-settings" action="addTaskAdmin.php" method = "POST" style="width: 1000px; padding: 10px;"  >
@@ -366,8 +367,14 @@ $array11 = explode(",", $src1);
             
             ?>
                      <div class="form-group row" style="margin-bottom: 30px">
+                     <label class="col-sm-2 col-form-label col-form-label sm"> Start Date </label>
+                            <div class="col-sm-3">
+                          <input type="date" style="height: 100%; width: 100%;" id="endTargetDate" value="<?php $startDate = new DateTime(); $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="StartDate" onchange="filterMonth();">
+
+                          </div>
+
                             <label class="col-sm-2 col-form-label col-form-label sm"> Target End Date </label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-3">
                           <input type="date" style="height: 100%" id="endTargetDate" value="<?php $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="endTargetDate" onchange="filterMonth();">
 
                           </div>
@@ -446,9 +453,9 @@ $array11 = explode(",", $src1);
                     
 
                 <div class="form-group container-login100-form-btn" >
-                    <button id="btn-register"  class="btn-signin" type="button" name="btnRegister" value="Register" style="margin: auto; width: 200px; margin-top: 10px" onclick=" checkTextBox('','','','','')">
+                    <button id="btn-register"  class="btn-signin" type="button" name="btnRegister" value="Register" style="margin: auto; width: 200px; margin-top: 0px" onclick=" checkTextBox('','','','','')">
                     Add Task</button>  
-                    <input id="sbt-php-addtask"  class="btn-signin" type="submit" name="btnAddtask" value="Register" style="margin: auto; width: 200px; margin-top: 10px; display: none;">
+                    <input id="sbt-php-addtask"  class="btn-signin" type="submit" name="btnAddtask" value="Register" style="margin: auto; width: 200px; margin-top: -10px; display: none;">
      
                     <!-- <input id="btn-signup" class="btn-signin" name="sbtregister" type="submit" value="Register" disabled style="margin: auto;" > -->
 

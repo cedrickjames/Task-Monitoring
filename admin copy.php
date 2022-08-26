@@ -1,8 +1,457 @@
-
 <?php
   session_start();
   include ("./connection.php");
+  include ("./holidays.php");
+  
+  //sample of printing weeks number of certain dates
+
+  // Create a new DateTime object
+
+  
+  // $arrayWeekNumbers=array("29", "28");
+
+  // $arrlength = count($arrayWeekNumbers);
+
+  // for($x = 0; $x < $arrlength; $x++) {
+   
+  //   $week = 'week '.$arrayWeekNumbers[$x];
+  //   echo $week;
+  //   echo "<br>";
+  // }
+
+  
+
+
+//   $aug = "aug";
+//   $fDateOfTheMonth = new DateTime('last day of '.$aug);
+ 
+//   $fday =  $fDateOfTheMonth->format('Y-m-d');
+//   echo "First day of the month: ";
+//   echo $fday;
+//   $ddate = '2022-08-01';
+//   $date = new DateTime($ddate);
+  
+//   $week = $date->format("W");
+//   echo "Weeknumber: $week";
+//   echo "<br>";
+
+
+
+//   $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '35' LIMIT 1";
+//   $result = mysqli_query($con, $selectUserTask);
+
+//   while($userRow = mysqli_fetch_assoc($result)){
+//     $dateStarted = $userRow['dateStarted'];
+//   }
+
+//   $date = new DateTime($dateStarted);
+//   $datenow = new DateTime($dateStarted);
+
+
+//   $dateStarteds = new DateTime($dateStarted);
+//   $monthOfLastDate =  $dateStarteds->format('F');
+//       $yearOfLastDate =  $dateStarteds->format('Y');
+
+//       $monthofThisMonth = new DateTime(date('Y-m-d'));
+//       $Month_Now = $monthofThisMonth->format('F');
+//       $yearOfThisMonth = new DateTime(date('Y-m-d'));
+//       $Year_Now = $yearOfThisMonth->format('Y');
+
+
+//       $nextMonth = $date->modify('next month');
+//       // $date->format('Y-m-d');
+//       $nextMonthHehe =  $nextMonth->format('F');
+//       $yearOfNextDate =  $date->format('Y');
+
+
+//       if($nextMonthHehe == $Month_Now ){
+
+// $finalDiff = "0";
+//         echo"asdasd";
+//       }
+//       else{
+
+//       }
+
+
+//   $from=date_create(date('Y-m-d'));
+//   $to=date_create("2022-08-27");
+//   $diff=date_diff($to,$from);
+//   // print_r($diff);
+//   echo $diff->format('%R%a');
+  
+//   $n1 = $diff->format('%R%a');
+//   $n2 = 3;
+//   echo "<br>";
+//   echo $n1 + $n2;
+//   if($n1>1){
+//     echo "hello";
+//   }
+  
+//   echo "<br>";
+
+//   $date = new DateTime('May 16, 2022');
+//   // echo "Next monday is: ";
+//   // $date->modify('next monday');
+
+
+//   // echo "Next monday is: ";
+//   $date->modify('+2 months');
+//   // $date->modify('next month');
+
+//   // $date->format('Y-m-d');
+//   $monthOfDate =  $date->format('F');
+//   $monthOfDate =  $date->format('F');
+//   $year =  $date->format('Y');
+
+// $fDateOfTheMonth = new DateTime('first day of '.$monthOfDate. $year);
+// $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+
+// $lDateOfTheMonth = new DateTime('last day of '.$monthOfDate. $year);
+//   $LDateofThisMonth =  $lDateOfTheMonth->format('Y-m-d');
+  
+//        echo $LDateofThisMonth;
+
+
+
+
+//       $DateEnd2 =  $date->format('Y-m-d');
+//       $end2 = new DateTime(date($LDateofThisMonth));
+//       $start2 = new DateTime($FDateofThisMonth);
+//     // otherwise the  end date is excluded (bug?)
+//       $end2->modify('+1 day');
+
+//       $interval2 = $end2->diff($start2);
+
+//       // total days
+//       $finalDiff2 = $interval2->days;
+
+//       // create an iterateable period of date (P1D equates to 1 day)
+//       $period2 = new DatePeriod($start2, new DateInterval('P1D'), $end2);
+
+//       // best stored as array, so you can add more than one
+//       $holidays2 = array('2012-09-07');
+
+//       foreach($period2 as $dt2) {
+//           $curr2 = $dt2->format('D');
+
+//           // substract if Saturday or Sunday
+//           if ($curr2 == 'Sat' || $curr2 == 'Sun') {
+//             $finalDiff2--;
+//           }
+
+//           // (optional) for the updated question
+//           elseif (in_array($dt2->format('Y-m-d'), $holidays2)) {
+//             $finalDiff2--;
+//           }
+//       }
+
+// $finalDiff2 = $finalDiff2+2;
+// echo "<br>";
+
+// echo $finalDiff2;
+// echo "<br>";
+//   $date = new DateTime('June 15, 2022');
+//       // echo "Next monday is: ";
+//       $date->modify('next month');
+//       // $date->format('Y-m-d');
+//       $DateEnd =  $date->format('F');
+//       $year =  $date->format('Y');
+
+// $fDateOfTheMonth = new DateTime('first day of '.$DateEnd. $year);
+// $FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
+//       echo $FDateofThisMonth;
+//       echo "<br>";
+
+// $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '192' LIMIT 1";
+// $result = mysqli_query($con, $selectUserTask);
+
+// while($userRow = mysqli_fetch_assoc($result)){
+//   $todayss = $userRow['dateStarted'];
+// }
+
+// // $from=date_create(date('Y-m-d'));
+// // $to=date_create(date('Y-m-d', strtotime($today)));
+// // $diff=date_diff($to,$from);
+// // // print_r($diff);
+// // $finalDiff =  $diff->format('%R%a');
+// // $finalDiff = $finalDiff-1;
+
+// $ends = new DateTime(date('Y-m-d'));
+// $starts = new DateTime(date('Y-m-d', strtotime('July 23, 2022')));
+
+
+// $eme = $starts->format('D');
+// echo $eme;
+// if($eme == "Sat"){
+//   $starts->modify('-1 day');
+
+// }
+// else if( $eme =="Sun"){
+//   $starts->modify('-2 day');
+// }
+// // echo "Next monday is: ";
+// // $date->format('Y-m-d');
+
+// // otherwise the  end date is excluded (bug?)
+// $ends->modify('+1 day');
+
+// $intervals = $ends->diff($starts);
+
+// // total days
+// $finalDiffs = $intervals->days;
+
+// echo $starts->format('Y-m-d');
+// // create an iterateable period of date (P1D equates to 1 day)
+// $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+
+// // best stored as array, so you can add more than one
+// $holidays = array('2012-09-07');
+
+// foreach($periods as $dts) {
+// $currs = $dts->format('D');
+
+// // substract if Saturday or Sunday
+// if ($currs == 'Sat' || $currs == 'Sun') {
+// $finalDiffs--;
+// }
+
+// // (optional) for the updated question
+// else if (in_array($dts->format('Y-m-d'), $holidays)) {
+// $finalDiffs--;
+// }
+// }
+// echo "<br>";
+
+// echo $finalDiffs;
+
+// $finalDiffs=$finalDiffs-2;
+
+// echo "<br>";
+
+// echo $finalDiffs;
+// echo "<br>";
+
+//   $arrayNumberOfDaysPass=array();
+//   $arrayWeekNumbers=array();
+//   $arrayMonth=array();
+//   $arrayYear=array();
+//   $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '191' LIMIT 1";
+//             $result = mysqli_query($con, $selectUserTask);
+  
+//             while($userRow = mysqli_fetch_assoc($result)){
+//               $dateStarted = $userRow['dateStarted'];
+//             }
+  
+//             $date = new DateTime($dateStarted);
+//             // echo "Next monday is: ";
+//             // $date->format('Y-m-d');
+//             $startDate = $date->format('Y-m-d');
+//             $start = new DateTime($startDate);
+//             $end = new DateTime();
+//             // otherwise the  end date is excluded (bug?)
+//             $start->modify('+1 day');
+//             // echo date('F j, Y');
+//             $interval = $end->diff($start);
+            
+//             // total days
+//             $days = $interval->days;
+//             // echo $days;
+//             // create an iterateable period of date (P1D equates to 1 day)
+//             $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+            
+//             // best stored as array, so you can add more than one
+//             $holidays = array('2022-07-15');
+//             $weekNo ="";
+//             $NumberOfWeeksToDone = 0;
+//             foreach($period as $dt) {
+//                 $curr = $dt->format('W');
+//                 $date = $dt->format('Y-m-d');
+//                 $currMonth = $dt->format('F');
+//                 $currYear = $dt->format('Y');
+//                 echo $date;
+//                 echo "<br>";
+//                 array_push($arrayNumberOfDaysPass,"$date");
+
+       
+//                   // $NumberOfWeeksToDone = $NumberOfWeeksToDone +1;
+//                   array_push($arrayWeekNumbers,"$curr");
+//                   array_push($arrayMonth,"$currMonth");
+//                   array_push($arrayYear,"$currYear");
+
+
+//                   // echo $curr;
+//                   // echo "\n";
+
+                
+//             }
+
+
+// $arrlength = count($arrayNumberOfDaysPass);
+// echo $arrlength;
+// echo "<br>";
+
+
+
+
+
+
+
+
+
+
+//   $car = array("2022-07-22", "2022-07-23", "2022-07-25");
+// $arrlength = count($car);
+
+// for($x = 0; $x < $arrlength; $x++) {
+//   // echo $cars[$x];
+//   // echo "<br>";
+//   $day1 = $car[$x];
+//   $date = new DateTime($day1);
+//   $day = $date->format('D');
+//                   if($day =="Sat" || $day == "Sun"){
+                 
+//                   }
+//                   else{
+//                     echo $day;
+//                   }
+// }
+
+
+// $date = new DateTime('July 08, 2022');
+
+// // Modify the date it contains
+// // echo $date;
+// $date->modify('next monday');
+
+
+// $startDate = $date->format('Y-m-d');
+// // echo date('r');
+// $start = new DateTime($startDate);
+// $end = new DateTime();
+// // otherwise the  end date is excluded (bug?)
+// $end->modify('+1 day');
+// // echo date('F j, Y');
+// $interval = $end->diff($start);
+
+// // total days
+// $days = $interval->days;
+// // echo $days;
+// // create an iterateable period of date (P1D equates to 1 day)
+// $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+// // best stored as array, so you can add more than one
+// $holidays = array('2022-07-15');
+// $weekNo ="";
+// foreach($period as $dt) {
+//     $curr = $dt->format('W');
+//     if($curr==$weekNo){
+//       echo null;
+//     }
+//     else{
+//       echo $curr;
+//       echo "\n";
+//       $weekNo = $curr;
+//     }
+// }
+// // Output
+// echo "Next monday is: ";
+//           $DateEnd =  $date->format('Y-m-d');
+//           echo $date->format('Y-m-d');
+//           $end = new DateTime(date('Y-m-d'));
+//           $start = new DateTime($DateEnd);
+//         // otherwise the  end date is excluded (bug?)
+//           $end->modify('+1 day');
+
+//           $interval = $end->diff($start);
+
+//           // total days
+//           $finalDiff = $interval->days;
+
+//           // create an iterateable period of date (P1D equates to 1 day)
+//           $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+//           // best stored as array, so you can add more than one
+//           $holidays = array('2012-09-07');
+
+//           foreach($period as $dt) {
+//               $curr = $dt->format('D');
+
+//               // substract if Saturday or Sunday
+//               if ($curr == 'Sat' || $curr == 'Sun') {
+//                 $finalDiff--;
+//               }
+
+//               // (optional) for the updated question
+//               elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+//                 $finalDiff--;
+//               }
+//           }
+
+//          echo "<br>";
+//           echo "Number of days past since the next monday of that day: ";
+//           echo $finalDiff;
+
+//           echo "<br>";
+//   $ddate = '2022-07-24';
+//   $date = new DateTime($ddate);
+  
+//   $week = $date->format("W");
+//   echo "Weeknumber: $week";
+//   echo "<br>";
+
+
+
+// $aug = "Jul";
+//   $fDateOfTheMonth = new DateTime('first day of this month');
+ 
+//   $fday =  $fDateOfTheMonth->format('Y-m-d');
+//   echo "First day of the month: ";
+//   echo $fday;
+//   $lDateOfTheMonth = new DateTime('July 13, 2022');
+// $sub = 2;
+//   $lDateOfTheMonth->modify("-$sub day");
+//   $lday =  $lDateOfTheMonth->format('F j, Y');
+//   $realDate = date('Y-m-d', strtotime($lday));
+//   echo "<br>";
+//   echo "subtracted Date from 2: ";
+//   echo $realDate;
+//   echo "<br>";
+
+
+  //code of getting week numbers from this date to this date
+// $start = new DateTime("July 04, 2022");
+// $end = new DateTime();
+// // otherwise the  end date is excluded (bug?)
+// $end->modify('+1 day');
+// // echo date('F j, Y');
+// $interval = $end->diff($start);
+
+// // total days
+// $days = $interval->days;
+// // echo $days;
+// // create an iterateable period of date (P1D equates to 1 day)
+// $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+
+// // best stored as array, so you can add more than one
+// $holidays = array('2022-07-15');
+// $weekNo ="";
+// foreach($period as $dt) {
+//     $curr = $dt->format('W');
+//     if($curr==$weekNo){
+//       echo null;
+//     }
+//     else{
+//       echo $curr;
+//       echo "\n";
+//       $weekNo = $curr;
+//     }
+// }
+
+
+//end of sample of printing weeks number of certain dates
   ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,36 +459,42 @@
     <meta name="viewport" contant="width=device-width, initial-scale=1.0">
 
     <title>Main Page</title>
-    <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
 
- <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="design_files/css/bootstrap.min.css">
     <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-<!-- <link rel="stylesheet" href="./js/bootstrap.min.js"> -->
 
   <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
 <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
+
+<!-- <link rel="stylesheet" href="design_files/css/MainPageStyle.css"> -->
+<link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
+
 <link rel="stylesheet" href="design_files/css/admin.css">
 
 <link rel="stylesheet" href="design_files/css/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
 
+
 <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  -->
 <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>
+
 <script src="./node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
-<!-- <script type="text/javascript" src="./js/node_modules/jquery/dist/jquery.slim.min.js"></script> -->
+
 
 </head>
-    <body style="background: linear-gradient(to right, rgb(247, 248, 248), rgb(172, 187, 120));">
+    <body style="background: linear-gradient(to right, #FFFDE4, #b3dcff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */">
     <?php
 
   $db= $con;
 $tableName="usertask";
 $tableName2="users";
+
+
     if(!isset( $_SESSION['connected'])){
     
     
@@ -47,43 +502,13 @@ $tableName2="users";
         
       // 
     }
-    
+    if($_SESSION['userlevel'] == "PIC"){
+      header("location: index.php");
 
-
-
-    $tableNameRemove="admin"; 
-  $columnsRemove= ['username'];
-  $fetchDataRemove = fetch_dataRemove($db, $tableNameRemove, $columnsRemove );
-
-  function fetch_dataRemove($db, $tableNameRemove, $columnsRemove){
-    if(empty($db)){
-     $msgRemove= "Database connection error";
-    }elseif (empty($columnsRemove) || !is_array($columnsRemove)) {
-     $msgRemove="columns Name must be defined in an indexed array";
-    }elseif(empty($tableNameRemove)){
-      $msgRemove= "Table Name is empty";
-   }else{
-   $columnNameRemove = implode(", ", $columnsRemove);
-   $DepartmentRemove = $_SESSION['userDept'];
-   $queryRemove = "SELECT * FROM `users` WHERE `userlevel` = 'Admin'";
-  //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
-   $resultRemove = $db->query($queryRemove);
-   if($resultRemove== true){ 
-    if ($resultRemove->num_rows > 0) {
-       $row= mysqli_fetch_all($resultRemove, MYSQLI_ASSOC);
-       $msgRemove= $row;
-    } else {
-       $msgRemove= "No Data Found"; 
     }
-   }else{
-     $msgRemove= mysqli_error($db);
-   }
-   }
-   return $msgRemove;
-   }
-
-
-
+    function php_func(){
+      echo " Have a great day";
+  }
 
     $columnss= ['username'];
   $fetchData2 = fetch_data2($db, $tableName2, $columnss);
@@ -115,137 +540,438 @@ $tableName2="users";
    }
    return $msg;
    }
+  // php_func();
+    $editTaskVar = "0";
+
     $dateToPass = "";
+    $dateToPassEnd = "";
+
+    $dateToPassDaily = "";
+    $dateToPassEndDaily = "";
     $dateToPass1 = "";
     $dateToPass2 = "";
 
     $picfocus = "false";
     $taskfocus = "false";
+    $dailyfocus = "false";
     $sectionfocus= "focus";
 
-    $editTaskVar = "0";
-    
+$dateToday = date('Y-m-d');
+$fDateOfTheMonth = new DateTime('first day of '.$dateToday);
+ 
+$FDateofThisMonth =  $fDateOfTheMonth->format('Y-m-d');
 $dateNow = date('Y-m-d');
 
     $month = date("F");
+    $monthEnd = date("F");
+
     $year = date("Y");
-    $today = date("F j, Y"); 
+    $yearEnd = date("Y");
+
+    $today = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEnd = date("F j, Y"); 
+
+    $todaySummary = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndSummary = date("F j, Y"); 
+
+    $todayDaily = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndDaily = date("F j, Y"); 
+    $todayWeekly = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndWeekly = date("F j, Y"); 
+
+    $todayMonthly = $_SESSION['FirstDayOfTheMonth']; 
+    $todayEndMonthly = date("F j, Y"); 
+
+
+
+//for annual
+
+$dateOfNow = new DateTime(date('Y-m-d'));
+$MonthOfNow =  $dateOfNow->format('F');
+$YearToUseForApril = "";
+$YearToUseforMarch = "";
+if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+
+  $YearToUseforMarch =  $dateOfNow->format('Y');
+  $dateOfNow->modify('last year');
+  $YearToUseForApril =  $dateOfNow->format('Y');
+}
+else{
+  $YearToUseForApril =  $dateOfNow->format('Y');
+$dateOfNow->modify('next year');
+$YearToUseforMarch =  $dateOfNow->format('Y');
+
+}
+
+
+$April = new DateTime($YearToUseForApril.'-04-01');
+$March = new DateTime($YearToUseforMarch.'-03-31');
+$April =  $April->format('Y-m-d');
+$March =  $March->format('Y-m-d');
+
+  
+$todayAnnual = date('F j, Y', strtotime($April));
+$todayEndAnnual = date('F j, Y', strtotime($March));
+
+//end for annual
     $date_string = date('Y-m-d');
+    $date_stringEnd = date('Y-m-d');
+
+    $TaskActive = "active";
+    $MembersActive = "";
+
+    $dailyChecked = "checked";
+    $weeklyChecked = "";
+    $monthlyChecked = "";
+    $annualChecked = "";
 
 
-    if(isset($_POST['removeAdminBtn'])){
-$adminUserId = $_POST['usernameAdmin'];
+    if(isset($_POST['submitdate'])){
+   $datePicker = $_POST['datepicker'];
+ $datePickerEnd = $_POST['datepickerEnd'];
 
-$sqlRemoveAdmin = "DELETE FROM `users` WHERE userid = '$adminUserId'";
-mysqli_query($con, $sqlRemoveAdmin);
-$sqlRemoveAdmin2 = "DELETE FROM `admin` WHERE userid = '$adminUserId'";
-mysqli_query($con, $sqlRemoveAdmin2);
-    }
 
-    if(isset($_POST['AddAdmin'])){
-     
-      $username = $_POST['email'];
-      $password = $_POST['password'];
-      $conPassword = $_POST['conpass']; 
-      $FNAME = $_POST['fname'];      
-      $MNAME = $_POST['mname'];      
-      $LNAME = $_POST['lname']; 
-      // $dept = $_POST['Department']; 
+    $month = date('F', strtotime($datePicker));
+    $monthEnd = date('F', strtotime($datePickerEnd));
 
-           
+    $year = date('Y', strtotime($datePicker));
+    $yearEnd = date('Y', strtotime($datePickerEnd));
 
-  // $userLevel =  echo("<script>userLevel()</script>");
-  // $radio_value=$_POST['radioPosition'];
-      
-      $sql1 = "Select * FROM users WHERE username='$username'";
-      $result = mysqli_query($con, $sql1);
-      $numrows = mysqli_num_rows($result);
-// if(mysqli_fetch_assoc($result)){
-//     $_SESSION[]
-// }
-      if ($numrows == 0){
-          if($password==$conPassword){
-              $sqlinsert = "INSERT INTO `users`(`userid`, `username`, `userpass`, `conpass`, `userlevel`, `f_name`, `m_name`, `l_name`, `department`) VALUES (null, '$username','$password','$conPassword', 'Admin', '$FNAME', '$MNAME', '$LNAME', 'Admin')";
-              mysqli_query($con, $sqlinsert);
+    $today = date('F j, Y', strtotime($datePicker));
+    $todayEnd = date('F j, Y', strtotime($datePickerEnd));
 
-              $fnameAdmin="";
-              $adminUserId="";
-              $sqlSelectUserInfo = "Select * FROM users WHERE username = '$username'";
-              $resultUserInfo = mysqli_query($con, $sqlSelectUserInfo);
-              while($userRow = mysqli_fetch_assoc($resultUserInfo)){
-        
-                $fnameAdmin= $userRow['username'];
-                $adminUserId= $userRow['userid'];
-            }
-        
-              $sqlinsert = "INSERT INTO `admin`(`adminid`, `userid`, `name`) VALUES ('','$adminUserId','$fnameAdmin')";
-              mysqli_query($con, $sqlinsert);
-              ?><script>
-             Swal.fire({
-  position: 'top-end',
-  icon: 'success',
-  title: 'Admin Registered',
-  showConfirmButton: false,
-  timer: 1500
-})
-          //   footer: '<a href="">Why do I have this issue?</a>'
-           </script><?php 
+
+    $datePickerget = $datePicker;
+    $datePickergetEnd = $datePickerEnd;
+
+    $date_string= date('Y-m-d', strtotime($datePickerget));
+    $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+
     
+    
+  $dateToPass = date('Y-m-d', strtotime($datePicker));
+  $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+
+  $taskfocus = "true";
+
+     $MembersActive = "";
+                      $TaskActive = "active";
+
+    }
+    if(isset($_POST['exportProgDailySummary'])){
+      $datePickerSummary = $_POST['datepickerProgSummary'];
+    $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+
+    $_SESSION['dateStarted'] = $datePickerSummary;
+    $_SESSION['dateEnded']=$datePickerEndSummary ;
+    $userlevel = $_SESSION['userlevel'];
+    if($userlevel =="Leader"){
+      header("location: SummaryReport.php");
+    }
+    else{
+      header("location: SummaryReportForAdmin.php");
+
+    }
+    }
+    
+    if(isset($_POST['submitdateProgDailySummary'])){
+      $datePickerSummary = $_POST['datepickerProgSummary'];
+    $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+   
+   
+       $monthSummary = date('F', strtotime($datePickerSummary));
+       $monthEndSummary = date('F', strtotime($datePickerEndSummary));
+   
+       $yearSummary = date('Y', strtotime($datePickerSummary));
+       $yearEndSummary = date('Y', strtotime($datePickerEndSummary));
+   
+       $todaySummary = date('F j, Y', strtotime($datePickerSummary));
+       $todayEndSummary = date('F j, Y', strtotime($datePickerEndSummary));
+   
+   
+       $datePickergetSummary = $datePickerSummary;
+       $datePickergetEndSummary = $datePickerEndSummary;
+   
+       $date_stringSummary= date('Y-m-d', strtotime($datePickergetSummary));
+       $date_stringEndSummary= date('Y-m-d', strtotime($datePickergetEndSummary));
+   
+       
+       
+     $dateToPassSummary = date('Y-m-d', strtotime($datePickerSummary));
+     $dateToPassEndSummary = date('Y-m-d', strtotime($datePickerEndSummary));
+   
+     $Summaryfocus = "true";
+   
+      
+     $date = new DateTime($todaySummary);
+      $dateEnd = new DateTime($todayEndSummary);
+  
+      $DateNowAndToday =  $dateEnd->format('Y-m-d');
+      $StartDateSelected = $date->format('Y-m-d');
+  
+  
+      $TaskActive = "";
+      $MembersActive = "";
+      $SummaryActive = "active";
+  
+      
+       }
+
+
+    if(isset($_POST['submitdateProgDaily'])){
+      $datePickerDaily = $_POST['datepickerProgDaily'];
+    $datePickerEndDaily = $_POST['datepickerEndProgDaily'];
+   
+   
+       $monthDaily = date('F', strtotime($datePickerDaily));
+       $monthEndDaily = date('F', strtotime($datePickerEndDaily));
+   
+       $yearDaily = date('Y', strtotime($datePickerDaily));
+       $yearEndDaily = date('Y', strtotime($datePickerEndDaily));
+   
+       $todayDaily = date('F j, Y', strtotime($datePickerDaily));
+       $todayEndDaily = date('F j, Y', strtotime($datePickerEndDaily));
+   
+   
+       $datePickergetDaily = $datePickerDaily;
+       $datePickergetEndDaily = $datePickerEndDaily;
+   
+       $date_stringDaily= date('Y-m-d', strtotime($datePickergetDaily));
+       $date_stringEndDaily= date('Y-m-d', strtotime($datePickergetEndDaily));
+   
+       
+       
+     $dateToPassDaily = date('Y-m-d', strtotime($datePickerDaily));
+     $dateToPassEndDaily = date('Y-m-d', strtotime($datePickerEndDaily));
+   
+     $dailyfocus = "true";
+   
+      
+     $date = new DateTime($todayDaily);
+      $dateEnd = new DateTime($todayEndDaily);
+
+      $DateNowAndToday =  $dateEnd->format('Y-m-d');
+      $StartDateSelected = $date->format('Y-m-d');
+
+
+      $TaskActive = "";
+      $MembersActive = "active";
+
+      $dailyChecked = "checked";
+      $weeklyChecked = "";
+      $monthlyChecked = "";
+      $annualChecked = "";
+
+      
+       }
+
+       if(isset($_POST['submitdateProgWeekly'])){
+        $datePickerWeekly = $_POST['datepickerProgWeekly'];
+      $datePickerEndWeekly = $_POST['datepickerEndProgWeekly'];
+     
+     
+         $monthWeekly = date('F', strtotime($datePickerWeekly));
+         $monthEndWeekly = date('F', strtotime($datePickerEndWeekly));
+     
+         $yearWeekly = date('Y', strtotime($datePickerWeekly));
+         $yearEndWeekly = date('Y', strtotime($datePickerEndWeekly));
+     
+         $todayWeekly = date('F j, Y', strtotime($datePickerWeekly));
+         $todayEndWeekly = date('F j, Y', strtotime($datePickerEndWeekly));
+     
+     
+         $datePickergetWeekly = $datePickerWeekly;
+         $datePickergetEndWeekly = $datePickerEndWeekly;
+     
+         $date_stringWeekly= date('Y-m-d', strtotime($datePickergetWeekly));
+         $date_stringEndWeekly= date('Y-m-d', strtotime($datePickergetEndWeekly));
+     
+         
+         
+       $dateToPassWeekly = date('Y-m-d', strtotime($datePickerWeekly));
+       $dateToPassEndWeekly = date('Y-m-d', strtotime($datePickerEndWeekly));
+     
+       $weeklyfocus = "true";
+     
+        
+       $date = new DateTime($todayWeekly);
+        $dateEnd = new DateTime($todayEndWeekly);
+  
+        $DateNowAndToday =  $dateEnd->format('Y-m-d');
+        $StartDateSelected = $date->format('Y-m-d');
+  
+  
+        $TaskActive = "";
+        $MembersActive = "active";
+
+        $dailyChecked = "";
+        $weeklyChecked = "checked";
+        $monthlyChecked = "";
+
+        $annualChecked = "";
+
+         }
+
+    
+         if(isset($_POST['submitdateProgMonthly'])){
+          $datePickerMonthly = $_POST['datepickerProgMonthly'];
+        $datePickerEndMonthly = $_POST['datepickerEndProgMonthly'];
+       
+       
+           $monthMonthly = date('F', strtotime($datePickerMonthly));
+           $monthEndMonthly = date('F', strtotime($datePickerEndMonthly));
+       
+           $yearMonthly = date('Y', strtotime($datePickerMonthly));
+           $yearEndMonthly = date('Y', strtotime($datePickerEndMonthly));
+       
+           $todayMonthly = date('F j, Y', strtotime($datePickerMonthly));
+           $todayEndMonthly = date('F j, Y', strtotime($datePickerEndMonthly));
+       
+       
+           $datePickergetMonthly = $datePickerMonthly;
+           $datePickergetEndMonthly = $datePickerEndMonthly;
+       
+           $date_stringMonthly= date('Y-m-d', strtotime($datePickergetMonthly));
+           $date_stringEndMonthly= date('Y-m-d', strtotime($datePickergetEndMonthly));
+       
+           
+           
+         $dateToPassMonthly = date('Y-m-d', strtotime($datePickerMonthly));
+         $dateToPassEndMonthly = date('Y-m-d', strtotime($datePickerEndMonthly));
+       
+         $monthlyfocus = "true";
+       
           
+         $date = new DateTime($todayMonthly);
+          $dateEnd = new DateTime($todayEndMonthly);
+    
+          $DateNowAndToday =  $dateEnd->format('Y-m-d');
+          $StartDateSelected = $date->format('Y-m-d');
+    
+    
+          $TaskActive = "";
+          $MembersActive = "active";
+
+          $dailyChecked = "";
+          $weeklyChecked = "";
+          $monthlyChecked = "checked";
+          $annualChecked = "";
+
+           }
+
+           if(isset($_POST['submitdateProgAnnual'])){
+            $datePickerAnnual = $_POST['datepickerProgAnnual'];
+          $datePickerEndAnnual = $_POST['datepickerEndProgAnnual'];
+
+          
+        
+      
+          ////////////////////////////////////////
+          $dateOfNow = new DateTime($datePickerAnnual);
+          $MonthOfNow =  $dateOfNow->format('F');
+          $YearToUseForApril = "";
+          $YearToUseforMarch = "";
+          if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+         
+            $YearToUseforMarch =  $dateOfNow->format('Y');
+            $dateOfNow->modify('last year');
+            $YearToUseForApril =  $dateOfNow->format('Y');
           }
           else{
-            ?><script>
-            Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Password does not match!',
-        //   footer: '<a href="">Why do I have this issue?</a>'
-        })
-         </script><?php 
-          }
-        
-          
+            $YearToUseForApril =  $dateOfNow->format('Y');
+         $dateOfNow->modify('next year');
+         $YearToUseforMarch =  $dateOfNow->format('Y');
+         
+         }
+         $April = new DateTime($YearToUseForApril.'-04-01');
+         $March = new DateTime($YearToUseforMarch.'-03-31');
+         $April =  $April->format('Y-m-d');
+         $March =  $March->format('Y-m-d');
+         //////////////////////////////////////
+         $dateToPassAnnual = date('Y-m-d', strtotime($datePickerAnnual));
+         $dateToPassEndAnnual = date('Y-m-d', strtotime($datePickerEndAnnual));
+       
+         $todayAnnual = date('F j, Y', strtotime($April));
+         $todayEndAnnual = date('F j, Y', strtotime($March));
+           $annualfocus = "true";
+         
+      
+            $TaskActive = "";
+            $MembersActive = "active";
+  
+            $dailyChecked = "";
+            $weeklyChecked = "";
+            $monthlyChecked = "";
+            $annualChecked = "checked";
+  
+             }
+    $month1 = date("F");
+    $year1 = date("Y");
+    $today1 = date("F j, Y"); 
+    $date_string1 = date('Y-m-d');
+    
 
-      }
-      else{
-          ?><script>
-          Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'This user is already exist!',
-      //   footer: '<a href="">Why do I have this issue?</a>'
-      })
-       </script><?php 
-      }
+    if(isset($_POST['submitdate1'])){
+   $datePicker1 = $_POST['datepicker1'];
+
+    $month1 = date('F', strtotime($datePicker1));
+    $year1 = date('Y', strtotime($datePicker1));
+    $today1 = date('F j, Y', strtotime($datePicker1));
+
+    $datePickerget1 = $datePicker1;
+    $date_string1= date('Y-m-d', strtotime($datePickerget1));
+
+
+  $picfocus = "true";
+  $dateToPass1 = date('Y-m-d', strtotime($datePicker1));
+
+
+
+  
 
     }
 
-    if(isset($_POST['UpdateTaskbtn'])){
-
-      $userName3 = $_POST['username'];
-
-      // $b = 0;
-      $selectUserID = "SELECT `userid` FROM `users` WHERE `username` = '$userName3';";
-      $resultUserId = mysqli_query($con, $selectUserID);
-      $resultUserId1;
-      if (mysqli_num_rows($resultUserId) > 0) {
-          // output data of each row
-          while($row = mysqli_fetch_assoc($resultUserId)) {
-           
-            $resultUserId1 = $row["userid"];
-          }
-      // echo '<script>console.log("TEST: '.$resultUserId.'")</script>';
+    if(isset($_POST['UpdateStatusName'])){
+      $radioStatus=$_POST['radioStatus']; 
+      $finishedTaskId = $_POST['finishedTaskID'];
+      if($radioStatus=="4"){
+        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='5', `score`='0.5', `isLate`= true,`isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+        mysqli_query($con, $sqlUpdateStatus);
+      
+      }
+      else{
+        $sqlUpdateStatus = "UPDATE `finishedtask` SET `noOfDaysLate`='0', `score`='1', `isLate`= false, `isCheckedByLeader` = true WHERE `FinishedTaskID`='$finishedTaskId';";
+        mysqli_query($con, $sqlUpdateStatus);
+      
       }
 
+
+    }
+    if(isset($_POST['UpdateTaskbtn'])){
+      $userName3 = $_POST['username'];
+      $postDateStarted = $_POST['dateStarted'];
+      $postTargetDate = $_POST['targetDate'];
+        // $b = 0;
+        $selectUserID = "SELECT `userid` FROM `users` WHERE `username` = '$userName3';";
+        $resultUserId = mysqli_query($con, $selectUserID);
+        $resultUserId1;
+        if (mysqli_num_rows($resultUserId) > 0) {
+            // output data of each row
+            while($row = mysqli_fetch_assoc($resultUserId)) {
+             
+              $resultUserId1 = $row["userid"];
+            }
+        // echo '<script>console.log("TEST: '.$resultUserId.'")</scrip>';
+        }
 
       $userTASKid = $_POST['containerOfTaskId'];
       $userTaskName = $_POST['tasknamemodal'];
+      $userTaskArea = $_POST['taskArea1'];
       $userTaskCategory = $_POST['taskCategory1'];
       $userTaskType = $_POST['taskType1'];
-      $userTaskArea = $_POST['taskArea1'];
+      
 
-
-      $sqlupdate = "UPDATE `usertask` SET `userid`='$resultUserId1',`username`='$userName3', `taskName`='$userTaskName',`taskCategory`='$userTaskCategory',`taskArea`='$userTaskArea',`taskType`='$userTaskType' WHERE usertaskID = '$userTASKid'";
+      $sqlupdate = "UPDATE `usertask` SET `userid`='$resultUserId1',`username`='$userName3', `taskName`='$userTaskName',`taskCategory`='$userTaskCategory',`taskArea`='$userTaskArea',`taskType`='$userTaskType', `dateAdded`='$postDateStarted', `targetDate`='$postTargetDate'  WHERE usertaskID = '$userTASKid'";
       mysqli_query($con, $sqlupdate);
       ?><script>
       Swal.fire({
@@ -272,83 +998,6 @@ mysqli_query($con, $sqlRemoveAdmin2);
    </script><?php 
 
     }
-    if(isset($_POST['submitdate'])){
-   $datePicker = $_POST['datepicker'];
-
-    $month = date('F', strtotime($datePicker));
-    $year = date('Y', strtotime($datePicker));
-    $today = date('F j, Y', strtotime($datePicker));
-
-    $datePickerget = $datePicker;
-    $date_string= date('Y-m-d', strtotime($datePickerget));
-    
-  $dateToPass = date('Y-m-d', strtotime($datePicker));
-  $taskfocus = "true";
-
-    }
-    $month1 = date("F");
-    $year1 = date("Y");
-    $today1 = date("F j, Y"); 
-    $date_string1 = date('Y-m-d');
-    
-
-    if(isset($_POST['submitdate1'])){
-   $datePicker1 = $_POST['datepicker1'];
-    // echo date('F', strtotime($datePicker));
-    // echo date('Y', strtotime($datePicker));
-    $month1 = date('F', strtotime($datePicker1));
-    $year1 = date('Y', strtotime($datePicker1));
-    $today1 = date('F j, Y', strtotime($datePicker1));
-    // echo $month;
-    // echo $year;
-    $datePickerget1 = $datePicker1;
-    $date_string1= date('Y-m-d', strtotime($datePickerget1));
-  // echo("<script>  $('#myTab li:eq(1) a').tab('show');</script>");
-
-  $picfocus = "true";
-  $dateToPass1 = date('Y-m-d', strtotime($datePicker1));
-  // echo("<script>console.log('DATEEEE: ". date() . "');</script>");
-
-
-    //document.getElementID('pic-tab').click();
-  
-  
-    
-    
-
-    //     echo date('Y-m-d', strtotime($datePicker));
-    // echo date('Y', strtotime($datePicker));
-
-    }
-    if(isset($_POST['AddCategory'])){
-     
-      $category1 = $_POST['inputCategory'];
-    
-      if($category1 == ""){
-        ?><script>
-              Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'You have to enter a category.',
-          //   footer: '<a href="">Why do I have this issue?</a>'
-          })
-           </script><?php 
-      }
-      else{
-        $sqlinsert = "INSERT INTO `category`(`categoryId`, `CategoryName`) VALUES ('','$category1')";
-        mysqli_query($con, $sqlinsert);
-        ?><script>
-        Swal.fire({
-      icon: 'success',
-      title: 'Success',
-      text: 'You have successfully add category',
-    //   footer: '<a href="">Why do I have this issue?</a>'
-    })
-     </script><?php 
-      }
-             
-    }
-
 
     $month2 = date("F");
     $year2 = date("Y");
@@ -356,13 +1005,11 @@ mysqli_query($con, $sqlRemoveAdmin2);
     $date_string2 = date('Y-m-d');
     if(isset($_POST['submitdate2'])){
    $datePicker2 = $_POST['datepicker2'];
-    // echo date('F', strtotime($datePicker));
-    // echo date('Y', strtotime($datePicker));
+
     $month2 = date('F', strtotime($datePicker2));
     $year2 = date('Y', strtotime($datePicker2));
     $today2 = date('F j, Y', strtotime($datePicker2));
-    // echo $month;
-    // echo $year;
+
     $datePickerget2 = $datePicker2;
     $date_string2= date('Y-m-d', strtotime($datePickerget2));
     
@@ -370,25 +1017,20 @@ mysqli_query($con, $sqlRemoveAdmin2);
 
   $dateToPass2 = date('Y-m-d', strtotime($datePicker2));
 
-    //     echo date('Y-m-d', strtotime($datePicker));
-    // echo date('Y', strtotime($datePicker));
+ 
 
     }
 
-    // $_SESSION['username'] = $username;
-    // echo "User: " .$_SESSION['username']. "."  ;
-    // echo "<script>console.log('$_SESSION['username']')</script>";
-    echo("<script>console.log('USER: " .$_SESSION['username'] . "');</script>");
-    echo("<script>console.log('USER: " .$_SESSION['userlevel'] . "');</script>");
-    // echo("<script>console.log('as,fjhaekjlh');</script>");
-    // $today = date("F j, Y"); 
-    // $date_string= date("Y-m-d");
- echo("<script>console.log('Week: " .weekOfMonth('2022-04-10') . "');</script>");
+
+    //echo("<script>console.log('USER: " .$_SESSION['username'] . "');</script>");
+    //echo("<script>console.log('USER: " .$_SESSION['userlevel'] . "');</script>");
+
+ //echo("<script>console.log('Week: " .weekOfMonth('2022-04-10') . "');</script>");
  
     $username =  $_SESSION['username'];
-    echo("<script>console.log('USER: " .$username . "');</script>");
+    //echo("<script>console.log('USER: " .$username . "');</script>");
 
-    $columns= ['usertaskID', 'taskName','taskCategory','taskType', 'taskArea'];
+    $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
     $fetchData = fetch_data($db, $tableName, $columns, $username);
 
     function fetch_data($db, $tableName, $columns, $username){
@@ -400,8 +1042,8 @@ mysqli_query($con, $sqlRemoveAdmin2);
         $msg= "Table Name is empty";
      }else{
      $columnName = implode(", ", $columns);
-    //  $Department = $_SESSION['userDept'];
-     $query = "SELECT * FROM `usertask` ORDER BY taskCategory ASC;";
+     $Department = $_SESSION['userDept'];
+     $query = "SELECT * FROM `usertask` ORDER BY Department ASC;";
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
@@ -421,7 +1063,205 @@ mysqli_query($con, $sqlRemoveAdmin2);
 
 
 
- $tableNameCat = 'category';
+
+     $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+     $fetchDataProg = fetchDataProg($db, $tableName, $columns, $username);
+ 
+     function fetchDataProg($db, $tableName, $columns, $username){
+       if(empty($db)){
+        $msg= "Database connection error";
+       }elseif (empty($columns) || !is_array($columns)) {
+        $msg="columns Name must be defined in an indexed array";
+       }elseif(empty($tableName)){
+         $msg= "Table Name is empty";
+      }else{
+      $columnName = implode(", ", $columns);
+      $Department = $_SESSION['userDept'];
+      $query = "SELECT * FROM `usertask` WHERE taskType = 'daily' ORDER BY username ASC;";
+     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+      $result = $db->query($query);
+      if($result== true){ 
+       if ($result->num_rows > 0) {
+          $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+          $msg= $row;
+       } else {
+          $msg= "No Data Found"; 
+       }
+      }else{
+        $msg= mysqli_error($db);
+      }
+      }
+      return $msg;
+      }
+
+      $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+      $fetchDataProgWeeky = fetchDataProgWeeky($db, $tableName, $columns, $username);
+  
+      function fetchDataProgWeeky($db, $tableName, $columns, $username){
+        if(empty($db)){
+         $msg= "Database connection error";
+        }elseif (empty($columns) || !is_array($columns)) {
+         $msg="columns Name must be defined in an indexed array";
+        }elseif(empty($tableName)){
+          $msg= "Table Name is empty";
+       }else{
+       $columnName = implode(", ", $columns);
+       $Department = $_SESSION['userDept'];
+       $query = "SELECT * FROM `usertask` WHERE taskType = 'weekly' ORDER BY username ASC;";
+      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+       $result = $db->query($query);
+       if($result== true){ 
+        if ($result->num_rows > 0) {
+           $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+           $msg= $row;
+        } else {
+           $msg= "No Data Found"; 
+        }
+       }else{
+         $msg= mysqli_error($db);
+       }
+       }
+       return $msg;
+       }
+
+
+           $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+      $fetchDataProgMonthly = fetchDataProgMonthly($db, $tableName, $columns, $username);
+  
+      function fetchDataProgMonthly($db, $tableName, $columns, $username){
+        if(empty($db)){
+         $msg= "Database connection error";
+        }elseif (empty($columns) || !is_array($columns)) {
+         $msg="columns Name must be defined in an indexed array";
+        }elseif(empty($tableName)){
+          $msg= "Table Name is empty";
+       }else{
+       $columnName = implode(", ", $columns);
+       $Department = $_SESSION['userDept'];
+       $query = "SELECT * FROM `usertask` WHERE taskType = 'monthly' ORDER BY username ASC;";
+      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+       $result = $db->query($query);
+       if($result== true){ 
+        if ($result->num_rows > 0) {
+           $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+           $msg= $row;
+        } else {
+           $msg= "No Data Found"; 
+        }
+       }else{
+         $msg= mysqli_error($db);
+       }
+       }
+       return $msg;
+       }
+
+
+       $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+       $fetchDataProgAnnual = fetchDataProgAnnual($db, $tableName, $columns, $username);
+   
+       function fetchDataProgAnnual($db, $tableName, $columns, $username){
+         if(empty($db)){
+          $msg= "Database connection error";
+         }elseif (empty($columns) || !is_array($columns)) {
+          $msg="columns Name must be defined in an indexed array";
+         }elseif(empty($tableName)){
+           $msg= "Table Name is empty";
+        }else{
+        $columnName = implode(", ", $columns);
+        $Department = $_SESSION['userDept'];
+        $query = "SELECT * FROM `usertask` WHERE taskType = 'annual' ORDER BY username ASC;";
+       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+        $result = $db->query($query);
+        if($result== true){ 
+         if ($result->num_rows > 0) {
+            $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+            $msg= $row;
+         } else {
+            $msg= "No Data Found"; 
+         }
+        }else{
+          $msg= mysqli_error($db);
+        }
+        }
+        return $msg;
+        }
+ 
+ 
+ 
+
+       
+       $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+       $fetchDataSummary = fetchDataSummary($db, $tableName, $columns, $username);
+   
+       function fetchDataSummary($db, $tableName, $columns, $username){
+         if(empty($db)){
+          $msg= "Database connection error";
+         }elseif (empty($columns) || !is_array($columns)) {
+          $msg="columns Name must be defined in an indexed array";
+         }elseif(empty($tableName)){
+           $msg= "Table Name is empty";
+        }else{
+        $columnName = implode(", ", $columns);
+        $Department = $_SESSION['userDept'];
+        $query = "SELECT * FROM `users` WHERE userlevel='PIC' ORDER BY username ASC;";
+       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+        $result = $db->query($query);
+        if($result== true){ 
+         if ($result->num_rows > 0) {
+            $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+            $msg= $row;
+         } else {
+            $msg= "No Data Found"; 
+         }
+        }else{
+          $msg= mysqli_error($db);
+        }
+        }
+        return $msg;
+        }
+
+
+        $tableNameAdmin = 'admin';
+        $columnsAdmin= ['adminid', 'userid', 'name'];
+        $fetch_dataAdmin = fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username);
+    
+        function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
+          if(empty($db)){
+           $msg= "Database connection error";
+          }elseif (empty($columnsAdmin) || !is_array($columnsAdmin)) {
+           $msg="columns Name must be defined in an indexed array";
+          }elseif(empty($tableNameAdmin)){
+            $msg= "Table Name is empty";
+         }else{
+        
+   
+         $query = "SELECT * FROM `admin`;";
+        //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+        //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+         $resulta = $db->query($query);
+         if($resulta== true){ 
+          if ($resulta->num_rows > 0) {
+             $row= mysqli_fetch_all($resulta, MYSQLI_ASSOC);
+             $msg= $row;
+          } else {
+             $msg= "No Data Found"; 
+          }
+         }else{
+           $msg= mysqli_error($db);
+         }
+         }
+         return $msg;
+         }
+   
+
+
+     //echo("<script>console.log('USER: " .$username . "');</script>");
+     $tableNameCat = 'category';
      $columnsCat= ['categoryId', 'CategoryName'];
      $fetchDataCat = fetch_dataCat($db, $tableNameCat, $columnsCat, $username);
  
@@ -467,7 +1307,7 @@ mysqli_query($con, $sqlRemoveAdmin2);
       }else{
       $columnName = implode(", ", $columnsUser);
       $Department = $_SESSION['userDept'];
-      $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC';";
+      $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC' ";
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -499,7 +1339,7 @@ mysqli_query($con, $sqlRemoveAdmin2);
       }else{
       $columnName = implode(", ", $columnsUser2);
       $Department = $_SESSION['userDept'];
-      $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC';";
+      $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC'";
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -518,8 +1358,6 @@ mysqli_query($con, $sqlRemoveAdmin2);
       }
       
 
-
- 
 
      function weekOfMonth($qDate) {
     $dt = strtotime($qDate);
@@ -545,8 +1383,169 @@ mysqli_query($con, $sqlRemoveAdmin2);
     return $retWeek;
 }
 
+
+if(isset($_POST['AddCategory'])){
+     
+  $category = $_POST['inputCategory'];
+
+  if($category == ""){
+    ?><script>
+          Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You have to enter a category.',
+      //   footer: '<a href="">Why do I have this issue?</a>'
+      })
+       </script><?php 
+  }
+  else{
+    $sqlinsert = "INSERT INTO `category`(`categoryId`, `CategoryName`) VALUES ('','$category')";
+    mysqli_query($con, $sqlinsert);
+    ?><script>
+    Swal.fire({
+  icon: 'success',
+  title: 'Success',
+  text: 'You have successfully add category',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+         
+}
+
+if(isset($_POST['RemoveAdmin'])){
+     
+  $admin = $_POST['inputAdminRemove'];
+  $adminID = $_POST['inputAdminRemoveId'];
+
+
+  if($admin == ""){
+    ?><script>
+          Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You have to choose an admin.',
+      //   footer: '<a href="">Why do I have this issue?</a>'
+      })
+       </script><?php 
+  }
+  else{
+    $sqlinsert = "DELETE FROM `admin` WHERE adminid = '$adminID';";
+    mysqli_query($con, $sqlinsert);
+    ?><script>
+    Swal.fire({
+  icon: 'success',
+  title: 'Success',
+  text: 'You have successfully remove an admin',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+         
+}
+
+
+if(isset($_POST['RemoveCategory'])){
+     
+  $category = $_POST['inputCategoryRemove'];
+  $categoryId = $_POST['inputCategoryRemoveId'];
+
+
+  if($category == ""){
+    ?><script>
+          Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'You have to choose a category.',
+      //   footer: '<a href="">Why do I have this issue?</a>'
+      })
+       </script><?php 
+  }
+  else{
+    $sqlinsert = "DELETE FROM `category` WHERE categoryId = '$categoryId';";
+    mysqli_query($con, $sqlinsert);
+    ?><script>
+    Swal.fire({
+  icon: 'success',
+  title: 'Success',
+  text: 'You have successfully remove a category',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+         
+}
+if(isset($_POST['changePassword'])){
+  $oldPass = $_POST['oldPass'];
+  $newPass = $_POST['newPass'];
+  $confirmPass = $_POST['confirmPass'];
+
+$username =  $_SESSION['username'];
+
+  $selectPassword= "SELECT `userpass` FROM `users` WHERE username = '$username' LIMIT 1";
+  $resultPassword = mysqli_query($con, $selectPassword);
+  
+  while($userRow = mysqli_fetch_assoc($resultPassword)){
+    $userpass = $userRow['userpass'];
+}
+  if($oldPass != $userpass){
+    ?><script>
+    Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'You have entered a wrong "Old Password!',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+  else if($newPass != $confirmPass){
+    ?><script>
+    Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'New password does not match. Please try again.',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+  else{
+    $sqlPassUpdate = "UPDATE `users` SET `userpass`='$newPass',`conpass`='$newPass' WHERE  username = '$username';";
+    mysqli_query($con, $sqlPassUpdate);
+    ?><script>
+    Swal.fire({
+  icon: 'success',
+  title: 'success',
+  text: 'Password change successfully!',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+ </script><?php 
+  }
+}
 ?>
+
+<!-- <div class="normal-container">
+	<div class="smile-rating-container">
+		<div class="smile-rating-toggle-container">
+			<form class="submit-rating">
+				<input id="meh"  name="satisfaction" type="radio" /> 
+				<input id="fun" name="satisfaction" type="radio" /> 
+				<label for="meh" class="rating-label rating-label-meh">Bad</label>
+				<div class="smile-rating-toggle"></div>
+				
+				<div class="rating-eye rating-eye-left"></div>
+				<div class="rating-eye rating-eye-right"></div>
+				
+				<div class="mouth rating-eye-bad-mouth"></div>
+				
+				<div class="toggle-rating-pill"></div>
+				<label for="fun" class="rating-label rating-label-fun">Fun</label>
+			</form>
+		</div>
+	</div>
+</div> -->
+
       <div>
+      
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="#"> <img src="design_files/images/GloryPhLogo.jpg" alt="..." height="40">&nbsp;Task Monitoring App</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -571,22 +1570,23 @@ mysqli_query($con, $sqlRemoveAdmin2);
                     Option
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
-                    <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="./addTaskAdmin.php">Add Task</a>
+                    <a class="dropdown-item"  href="./signup.php">Register User</a>
+                    <a class="dropdown-item"  href="./addTaskAdmin.php">Add Task</a>
                     <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
                       data-target='#modalAdminCategory'>Add Category</a> 
-
-
+                      <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
+                      data-target='#modalAdminRemoveCategory'>Remove Category</a> 
                     <?php if($_SESSION['admin'] == "TRUE"){?>
 
-                <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalAdmin'>Add Admin</a> 
-                   <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalRemoveAdmin'>Remove Admin</a>  
+                    <a class="dropdown-item" href="./addAdmin.php">Add Admin</a>
+                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalAdminRemoveAdmin'>Remove Admin</a> 
                    
                       <?php } ?>
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
                     <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
+                    <a class="dropdown-item" id="btn-changePass" href="#" data-toggle='modal'
+                      data-target='#changePassword'>Change Password</a>
                     <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
 
                     
@@ -597,6 +1597,91 @@ mysqli_query($con, $sqlRemoveAdmin2);
               </ul>
             </div>
           </nav>
+        </div>
+
+        <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+        <form action="admin.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
+        <!-- <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none"> -->
+        <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Enter old password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="oldPass" name="oldPass">
+                    </div>
+                    </div>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Enter new password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="newPass" name="newPass">
+             
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Confirm new password</label>
+            <div class="col-sm-8">
+            <input type="password" class="form-control" id="confirmPass" name="confirmPass">
+             
+            </div>
+          </div>
+          </div>
+
+
+
+  <!-- document.getElementById('modalNumberofDays').value=parseInt(noOfdays) -->
+  <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" id="changePassword" name="changePassword" class="btn btn-info" >Update</button>
+              
+            
+               </div>
+                
+        </form>
+      </div>
+              
+            </div>
+          </div>
+
+
+        <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Remove Admin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form style="width: 100%; padding: 10px; border: 0;" >
+                  <div class="form-group">
+                    <ul id="adminList">
+                      <!-- <li>CEdrick</li>
+                      <li>CEdrick</li>
+                      <li>CEdrick</li> -->
+  
+                    </ul>
+                  </div>
+                  <div class="form-group">
+                    <label  for="message-text" class="col-form-label">Enter email</label>
+                      <input  type="text"class="form-control"   id="inputRemoveAdmin" >
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick =" RemoveAdmin();" class="btn btn-primary" data-dismiss="modal">Remove</button>
+            
+               </div>
+            </div>
+          </div>
         </div>
         <div class="modal fade" id="modalAdminCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -615,7 +1700,7 @@ mysqli_query($con, $sqlRemoveAdmin2);
                   <div class="form-group">
                    
                     <label  for="message-text" class="col-form-label">Enter category</label>
-                    <input  type="text"class="form-control" name="inputCategory" id="inputCategory"  >
+                    <input  type="text"class="form-control"  name="inputCategory" id="inputCategory" >
                   </div>
                   <div class="overflow-x">
                       <div class="overflow-y" style="overflow-y: scroll; height:480px;"> 
@@ -653,18 +1738,246 @@ mysqli_query($con, $sqlRemoveAdmin2);
                     </div>
                     <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-               <button type="submit" name="AddCategory" class="btn btn-primary" >Add</button>
-            
+                <button type="submit" name="AddCategory" class="btn btn-primary" >Add</button>
             
                </div>
                 </form>
               </div>
-              
+             
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="modalAdminRemoveCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Remove Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               
+                   
+                <form action="admin.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
+                     
+                  <div class="form-group">
+                   
+                    <label  for="message-text" class="col-form-label">Click to select category</label>
+                    <input  type="text"class="form-control"  name="inputCategoryRemove" id="inputCategoryRemove" >
+                    <input  type="text"class="form-control"  name="inputCategoryRemoveId" id="inputCategoryRemoveId" style="display: none">
+
+                  </div>
+                  <div class="overflow-x">
+                      <div class="overflow-y" style="overflow-y: scroll; height:480px;"> 
+                        <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                            <thead  class="thead-dark" >
+                                <tr>
+                                <th style="min-width:15px;">Categories</th>
+                    </tr>
+                    </thead>
+                    <tbody id="CategoryTable">
+                       <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                  if(is_array($fetchDataCat)){      
+                                 
+                                  foreach($fetchDataCat as $data){
+                                   $category =  $data['categoryId'];
+                                    ?>
+                                    <tr>
+                                      <td onclick= "clickpassdataCategory('<?php echo $data['CategoryName'];?>','<?php echo $category ?>')" ><a><?php echo $data['CategoryName']; ?> </a></td>
+                                  </tr>
+ <?php
+                         }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetchData; ?>
+                        </td>
+                         </tr>
+                          <?php
+                          echo "PETMALU";
+    }                     ?>                   
+                            </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" name="RemoveCategory" class="btn btn-danger" >Remove</button>
+            
+               </div>
+                </form>
+              </div>
+             
             </div>
           </div>
         </div>
 
-        <div class="modal fade" id="modalAdminEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+
+        <div class="modal fade" id="modalAdminRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Remove Admin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               
+                   
+                <form action="admin.php" method = "POST" id="adminForm" style="width: 100%; padding: 10px; border: 0;" >
+                     
+                  <div class="form-group">
+                   
+                    <label  for="message-text" class="col-form-label">Click to select admin</label>
+                    <input  type="text"class="form-control"  name="inputAdminRemove" id="inputAdminRemove" >
+                    <input  type="text"class="form-control"  name="inputAdminRemoveId" id="inputAdminRemoveId" style="display: block">
+
+                  </div>
+                  <div class="overflow-x">
+                      <div class="overflow-y" style="overflow-y: scroll; height:480px;"> 
+                        <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
+                            <thead  class="thead-dark" >
+                                <tr>
+                                <th style="min-width:15px;">Categories</th>
+                    </tr>
+                    </thead>
+                    <tbody id="AdminTable">
+                       <?php
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
+                                  if(is_array($fetch_dataAdmin)){      
+                                 
+                                  foreach($fetch_dataAdmin as $data){
+                                   $admin =  $data['name'];
+                                   $adminid =  $data['adminid'];
+
+                                    ?>
+                                    <tr>
+                                      <td onclick= "clickpassdataAdmin('<?php echo $data['name'];?>','<?php echo $adminid ?>')" ><a><?php echo $data['name']; ?> </a></td>
+                                  </tr>
+ <?php
+                         }}else{ ?>
+                            <tr>
+                              <td colspan="8">
+                          <?php echo $fetch_dataAdmin; ?>
+                        </td>
+                         </tr>
+                          <?php
+                          echo "PETMALU";
+    }                     ?>                   
+                            </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" name="RemoveAdmin" class="btn btn-danger" >Remove</button>
+            
+               </div>
+                </form>
+              </div>
+             
+            </div>
+          </div>
+        </div>
+
+
+
+
+                                      <div class="modal fade" id="reasonModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog"style="max-width: 700px; width: 600px" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Details</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                       <form action="admin.php" method = "POST" id="updateStatusForm" style="width: 100%; padding: 10px; border: 0;" >
+
+                                              <div class="modal-body" >
+                                                <input type="text" style="display: none" name="finishedTaskID" id="finishedID">
+                                             
+                                              
+
+                                                <div class="form-group">
+  <div class="normal-container">
+	<div class="smile-rating-container">
+		<div class="smile-rating-toggle-container">
+			<div class="submit-rating">
+				<input id="radioLate"  name="radioStatus" value="4" type="radio" checked/> 
+				<input id="radioOnTime" name="radioStatus" value="0" type="radio" /> 
+				<label for="radioLate" class="rating-label rating-label-meh">Late</label>
+				<div class="smile-rating-toggle"></div>
+				
+				<div class="rating-eye rating-eye-left"></div>
+				<div class="rating-eye rating-eye-right"></div>
+				
+				<div class="mouth rating-eye-bad-mouth"></div>
+				
+				<div class="toggle-rating-pill"></div>
+				<label for="radioOnTime" class="rating-label rating-label-fun">On Time</label>
+			</div>
+		</div>
+	</div>
+</div>
+  </div>
+                                              
+                                                <!-- <div class="col-sm-12"  >
+                        <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 22pt; margin-bottom: 0px;">
+                            <div class="form-check" style="padding-left: 10px">
+                                    <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
+                                        <input class="form-check-input" type="radio" name="radioStatus" id="radioLate" value="4" checked >
+                                            <label class="form-check-label" for="radioLeader">
+                                             Late
+                                            </label>
+                                     </div>
+                                    <div class="form-check form-check-inline" style="margin-left: 10px">
+                                        <input class="form-check-input" type="radio" name="radioStatus" id="radioOnTime" value="0" >
+                                            <label class="form-check-label" for="radioPIC">
+                                             On Time
+                                            </label>
+                                    </div>
+                                  
+                             </div>
+                        </fieldset>
+                    </div> -->
+                                              <!-- <a type="button" id="Attachments" class="btn btn-outline-warning btn-lg btn-block">Change Status</a> -->
+                                              <a type="button" id="Attachments" class="btn btn-outline-info btn-lg btn-block">See attachments</a>
+                                              <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Date and Time Submitted</label>
+                                                    <input class="form-control" name="dateSubmitted" id="dateSubmitted" disabled></input>
+                                                  </div>
+                                              <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Point</label>
+                                                    <input class="form-control" name="pointReceived" id="pointReceived" disabled></input>
+                                                  </div>    
+                                              <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Reason</label>
+                                                    <textarea class="form-control" name="reasonInputUpdate" id="reasonUpdate1" disabled></textarea>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label for="message-text" class="col-form-label">Action</label>
+                                                    <textarea class="form-control" name="actionInputUpdateLate" id="actionUpdate1" disabled></textarea>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                                                
+                                                <button type="submit"  id="UpdateStatus" name="UpdateStatusName"class="btn btn-success">Update Status</button>
+                                              </div>
+                           
+                                              </div>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+
+        <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div  class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -677,7 +1990,7 @@ mysqli_query($con, $sqlRemoveAdmin2);
         <form action="admin.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
         <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none">
         <div class="form-group row">
-            <label for="staticEmail" class="col-sm-4 col-form-label">PIC</label>
+            <label for="staticEmail" class="col-sm-4 col-form-label">Members</label>
             <div class="col-sm-8">
             <select  <?php if($editTaskVar == "0"){ echo "disabled"; } ?> name="username" id="usernameSelectmodal" class=" form-control form-select form-select-sm"
                                  style="padding-left:10px;">
@@ -749,8 +2062,9 @@ mysqli_query($con, $sqlRemoveAdmin2);
                           <?php
     }?>
                                 </select>
+                    </div>
                   </div>
-                </div>
+               
                 <div class="form-group row">
                   <label for="staticEmail" class="col-sm-4 col-form-label">Type</label>
                   <div class="col-sm-8">
@@ -759,19 +2073,33 @@ mysqli_query($con, $sqlRemoveAdmin2);
                                     <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
                                     <option value="monthly">Monthly</option>
+                                    <option value="annual">Annually</option>
                               
 
                                 </select>
                   </div>
                 </div>
-
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-4 col-form-label">Date Started</label>
+                  <div class="col-sm-8">
+            <input <?php if($editTaskVar == "0"){ echo "disabled"; } ?> type="date" id="dateStarted"  name="dateStarted" style="margin-right: 20px;height: 90%; width: 100%; " >
+           
+                  </div>
+                </div>
+                 
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-4 col-form-label">Target End Date</label>
+                  <div class="col-sm-8">
+            <input <?php if($editTaskVar == "0"){ echo "disabled"; } ?> type="date" id="targetDate"  name="targetDate" style="margin-right: 20px; height: 90%; width: 100%;" >
+                 
+                  </div>
+                </div>
   <!-- document.getElementById('modalNumberofDays').value=parseInt(noOfdays) -->
   <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button"  id ="EditTaskBTN" onclick="EditTask()" class="btn btn-success">Edit</button>
                 <button type="submit" id="UpdateTaskbtnSubmit" name="UpdateTaskbtn" style="display: none">Update</button>
                 <button type="button" id="UpdateTaskbtn"  onclick="checkTextBox()" class="btn btn-info" disabled >Update</button>
-
                 <button type="submit" name="DeleteTaskbtn" class="btn btn-danger" >Delete</button>
 
             
@@ -783,213 +2111,72 @@ mysqli_query($con, $sqlRemoveAdmin2);
             </div>
           </div>
         </div>
-        <div class="modal fade" id="modalRemoveAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Remove Admin</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form action="admin.php" method = "POST"  id="removeAdminform" style="width: 100%; padding: 10px; border: 0;" >
-                  <div class="form-group">
-                    <ul id="adminList">
-                      <!-- <li>CEdrick</li>
-                      <li>CEdrick</li>
-                      <li>CEdrick</li> -->
-  
-                    </ul>
-                  </div>
-                  <div class="form-group">
-                    <label  for="message-text" class="col-form-label">Choose admin</label>
-                   
-                      <select name="usernameAdmin" id="usernameSelect" class=" form-control form-select form-select-sm"
-                                 style="padding-left:10px;">
-                                 <option value="" disabled selected>Select User Name</option>
-                                 <!-- <option value="weekly">Weekly</option>
-                                    <option value="monthly">Monthly</option> -->
-                                 <?php
-                                  if(is_array($fetchDataRemove)){      
-                                
-                                  foreach($fetchDataRemove as $data){
-                                  ?>
-                                 <option value="<?php echo $data['userid']??''; ?>"><?php echo $data['f_name']??''; ?></option>
-                                 <?php
-                            }}else{ ?>
-                            
-                              <option colspan="8">
-                          <?php echo $fetchDataRemove; ?>
-                        </option>
-                          
-                          <?php
-    }?>
-                                </select>
-                  </div>
-                
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" name="removeAdminBtn" class="btn btn-primary">Remove</button>
-            
-               </div>
-               </form>
-            </div>
-          </div>
-        </div>
-        <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Admin</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form action="admin.php" method = "POST" id="passwordform" style="width: 100%; padding: 10px; border: 0;" >
-                  <div class="form-group">
-                    <ul id="adminList2">
-                      <!-- <li>CEdrick</li>
-                      <li>CEdrick</li>
-                      <li>CEdrick</li> -->
-  
-                    </ul>
-                  </div>      
-                  <div class="form-group row">
-                        <div class="col-sm-6">
-                            <input type="text" name="fname" class="form-control form-control-sm" id="colFormLabelSm" style="width:100%; padding: 10px;" placeholder="First Name" >
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="text"  name="mname" class="form-control form-control-sm" id="colFormLabelSm2" style="width:100%;  padding: 10px;" placeholder="M.I.">
-                        </div>
-                        <div class="col-sm-10" style="margin-top: 10px;">
-                            <input type="text"  name="lname" class="form-control form-control-sm" id="colFormLabelSm3" style="width:100%;  padding: 10px;" placeholder="Last Name">
-                        </div>
-                        <!-- <div class="col-sm-10"  style="margin-top: 10px;">
-                        <select  name="Department" id="Department" class=" form-control form-select form-select-sm" style="padding-left:10px;">
-                                    <option value="" disabled selected>Select Department</option>
-                                    <option value="MIS">MIS</option>
-                                    <option value="FEM">FEM</option>
-                                    <option value="Accounting">Accounting</option>
-                                    <option value="Japanese">Japanese</option>
-                                    <option value="Parts Inspection">Parts Inspection</option>
-                                    <option value="Parts Production">Parts Production</option>
-                                    <option value="PPIC">PPIC</option>
-                                    <option value="PPIC-Warehouse">PPIC-Warehouse</option>
-                                    <option value="Production 1">Production 1</option>
-                                    <option value="Production 2">Production 2</option>
-                                    <option value="Production Support">Production Support</option>
-                                    <option value="Purchasing">Purchasing</option>
-                                    <option value="Quality Assurance">Quality Assurance</option>
-                                    <option value="Quality Control">Quality Control</option>
-                                    <option value="System Kaizen">System Kaizen</option>
-                                </select>    
-                        </div> -->
-                    </div>
-                    <!-- <div class="col-sm-12"  >
-                        <fieldset class="row mb-3" style="margin-top: 0px;  font-size: 12pt; margin-bottom: 0px;">
-                            <div class="form-check" style="padding-left: 10px">
-                                    <div class="col-sm-3 form-check form-check-inline" style="margin-right: 10px">
-                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="Leader" checked onclick="position();">
-                                            <label class="form-check-label" for="radioLeader">
-                                             Leader
-                                            </label>
-                                     </div>
-                                    <div class="form-check form-check-inline" style="margin-left: 10px">
-                                        <input class="form-check-input" type="radio" name="radioPosition" id="radiosPosition" value="PIC" onclick="position();">
-                                            <label class="form-check-label" for="radioPIC">
-                                             PIC
-                                            </label>
-                                    </div>
-                                  
-                             </div>
-                        </fieldset>
-                    </div> -->
-                <div class="form-wrapper" >
-                    <input  name="email" id="email"  placeholder="username" class="form-control" readonly="readonly" 
-  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
-  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"
-onkeyup="checkinputs()">
-                    
-                </div>  
-                <div class="form-wrapper" style="margin-top: 10px;">
-                    <input name="password" id="password" type="password" placeholder="Password" class="form-control" style="padding: 5px"readonly="readonly" 
-  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
-  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"onkeyup="checkinputs()">
-              
-                </div>   
-                <div class="form-wrapper" style="margin-top: 10px;">
-                    <input name="conpass" id="confirmPassword" type="password" placeholder="Confirm Password" class="form-control" style="padding: 5px" readonly="readonly" 
-  onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly');}"
-  onblur="if (!this.hasAttribute('readonly')) {this.setAttribute('readonly','readonly')};"onkeyup="checkinputs()">
-  
-                </div> 
-                  
-                
-              </div>
-              <div class="modal-footer" style="margin-top: 10px;">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" id="AddAdmin" name="AddAdmin" class="btn btn-info" >Add</button>
-            
-               </div>
-            </div>
-          </div>
-        </div>
-        </form>
+
         <div class="parent" style= "max-height: 100%; height: 100%">
-          <div class="wrapper" style= "max-height: 100%; height: 100%">
+          <div class="wrapper" style= " max-height: 100%; height: 100% ">
          
-          <div class="row" style= "margin-right: 0px; max-height: 100%; height: 100% ">
-          <div class="col">
+          <div class="row" style= "margin-right: 0px; max-height: 100%; height: 100% " >
+          <div class="col-4">
             <h3 style=" margin: 20px">  <i style="font-size: 30px;" class="fas fa-user"></i>  <?php echo $_SESSION['f_name'] ?> <?php echo $_SESSION['l_name'] ?>
-             <span  class="float-right"> <?php echo $_SESSION['userlevel'] ?> </span>  
+             
             </h3>
           </div>
-          <div class="col">
-            <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
+          <div class="col-4">
+            <h3 style=" margin: 20px"> <?php echo $today ?> Week <?php $date = new DateTime($date_string);
+  $week = $date->format("W"); echo "$week"; ?>
+            </h3>
+          </div>
+          <div class="col-4">
+            <h3 style=" margin: 20px; " class="float-right"> <?php echo $_SESSION['userlevel'] ?> (<?php echo $_SESSION['department'] ?>)</h3>
           </div>
 
-<div class="container" style="height: 100%; background-color: none; margin: 0 auto" >
-<div class="d-flex justify-content-start col-sm-6" style="background-color: none; padding-left: 0px; margin-left: 30px; width: 100%; max-width: 100% "> 
+<div class="container"  style="height: 100%; background-color: none;  margin:0 auto; " >
+<div class="d-flex justify-content-start col-sm-6" style="background-color: none;padding-left: 0px; margin-left: 30px; width: 100%; max-width: 100% "> 
 <ul class="nav nav-pills mb-3 d-flex justify-content-start" id="myTab" role="tablist" style="height: fit-content">
   <li class="nav-item">
-    <a class="nav-link active" id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Task</a>
+    <a class="nav-link <?php echo $TaskActive; ?> " id="task-tab" data-toggle="tab" href="#task" role="tab" aria-controls="task" aria-selected="true">Task</a>
   </li>
   <!-- <li class="nav-item">
     <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
-  </li> -->
-  <li class="nav-item">
-    <a class="nav-link" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
+  </li> --> 
+  <li class="nav-item ">
+    <a class="nav-link <?php echo $MembersActive; ?>" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Section's Progress</a>
+    <a class="nav-link <?php echo $SummaryActive; ?>" id="dept-tab" data-toggle="tab" href="#Dept" role="tab" aria-controls="Dept" aria-selected="false">Summary Report</a>
   </li>
 </ul>
-                    </div>
-                    <div class="tab-content" id="myTabContent" style="height: 100%; margin: 30px; margin-top: 0px ">
-<div class="tab-pane fade show active" id="task" style="height: 90%; background-color: none" role="tabpanel" aria-labelledby="task-tab">
-
-<div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
-<div class="ms-1 shadow row" >
+</div>
+<div class="tab-content" id="myTabContent" style="height: 100%;margin: 30px; margin-top: 0px ">
+<div class="tab-pane fade show <?php echo $TaskActive; ?>" id="task" style="height: 90%;  background-color: none" role="tabpanel" aria-labelledby="task-tab">
+  
+          <div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
+        <div class="ms-1 shadow row" >
             <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-1 createSegment"> 
                          <h3>Task</h3> 
                         </div>
-                        <div class="col-sm-4"  style="padding: 0;">
+                        
+                        <div class="col-sm-4" style="padding: 0;">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="admin.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker" name="datepicker" onchange="filterMonth();">
-            <input type="submit" name="submitdate"  value = "Submit">
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
+            
+            <input type="date" id="datepicker" value="<?php $startDate = new DateTime($today);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepicker" style="margin-right: 20px" >
+            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">End</label>
+            
+            <input type="date" id="datepickerEnd" value="<?php $EndDate = new DateTime($todayEnd); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="datepickerEnd" onchange="filterMonth();">
+          <button type="submit" name="submitdate" class="btn btn-info btn-sm" onclick="submitDate();">Submit</button>
+            <button type="button" class="btn btn-outline-success btn-sm" onclick="exportData()"> <i style="font-size: 20px;"class="fas fa-file-csv fa-xs"></i> Export</button>
+                         
+            <!-- <input type="submit" name="submitdate"> -->
             </form>
            
         </div></div>
-        
-                        <div class="col-sm-7 add_flex"  style="padding: 0">
+                        
+                        <div class="col-sm-7 add_flex" style="padding: 0">
                         <div class="col-sm-6" style="padding: 0" >
                         <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
                             <div class="form-check" style="padding: 0px">
@@ -1023,10 +2210,9 @@ onkeyup="checkinputs()">
                              </div>
                         </fieldset>
                     </div>
-                            <div class="form-group searchInput">
-                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();">
+                            <div class="form-group searchInput" >
+                                <select class="custom-select" id="inputGroupSelect01" onchange="getSelectValue();"style="display: none">
                                     <option  disabled selected hidden>Search by</option>
-
                                     <option value="1">Area</option>
                                     <option value="2">Task Name</option>
                                     <option value="4">Type</option>
@@ -1035,35 +2221,98 @@ onkeyup="checkinputs()">
                                     
                                   </select>
                                 <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
+                                <input type="search" class="form-control" id="filterbox" placeholder=" "onkeyup="getSelectValue();" >
                             </div>
                         </div> 
                     </div>
                     <div class="overflow-x">
-                    <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
-                        <table class="table table-striped table-hover" style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
-                            <thead  class="thead-dark" style="position: sticky;top: 0">
+                      <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
+                        <table class="table table-striped " style="width:  100%" id="filtertableMain" class="table datacust-datatable Table ">
+                            <thead  class="thead-dark" style="position: sticky;top: -1px;">
                                 <tr>
-                                    <th style="width:10%;">Category</th>
-                                    <th style="min-width:8%;">Area</th>
-                                    <th style="width:10%;" >Task Name</th>
-                                    <th style="width:8%;"  >In charge</th>
-                                    <th style="width:8%;"  >Type</th>
-                                    <th style="width:9%;" >W1</th>
-                                    <th style="width:9%;" >W2</th>
-                                    <th style="width:9%;" >W3</th>
-                                    <th style="width:9%;" >W4</th>
-                                    <th style="width:9%;" >W5</th>
-                                    <th style="width:9%;" >W6</th>
+                                    <th style="min-width:15px;">No.</th>
+                                    <th style="min-width:15px;">Section</th>
+                                    <th style="min-width:40px;">Area</th>
+                                    <th style="min-width:50px;">Category</th>
+                                    <th style="width:200px;" >Task Name</th>
+                                    <th style="width:100px;"  >In charge</th>
+                                    <th style="width:180px;"  >Type</th>
 
+
+
+                                    <?php 
+                                    $date = new DateTime($today);
+                                    $dateEnd = new DateTime($todayEnd);
+                                    // $dateEnd = new DateTime('2022-08-31');
+                                    $selectedMonth = $date->format("M");
+                                    $yearoftheDay = $date->format("o");
+                                    $yearoftheDaylast = $dateEnd->format("o");
+
+                                    // echo $yearoftheDay;
+                                    $selectedEndMonth = $dateEnd->format("M");
+                                                                       
+                                   $DateTodayNow = $dateEnd->format('Y-m-d');
+                                   $StartDateSelected = $date->format('Y-m-d');
+
+                                    $fDateOfTheMonth = new DateTime($StartDateSelected);
+                                    // echo "First day of the month: ";
+                                    $fday =   $fDateOfTheMonth->format('Y-m-d');
+                                    $lDateOfTheMonth = new DateTime($DateTodayNow);
+                                    // echo "last day of the month: ";
+                                    $lday = $lDateOfTheMonth->format('Y-m-d');
+                                    // echo "<br>";
+                                  $start = new DateTime($fday);
+                                  $end = new DateTime($lday);
+                                  
+                                  // otherwise the  end date is excluded (bug?)
+                                  $end->modify('+1 day');
+                                  // echo date('F j, Y');
+                                  $interval = $end->diff($start);
+                                  
+                                  // total days
+                                  $days = $interval->days;
+                                  // echo $days;
+                                  // create an iterateable period of date (P1D equates to 1 day)
+                                  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                                  
+                                  // best stored as array, so you can add more than one
+                                  $holidays = array('2022-07-15');
+                                  $weekNo ="";
+                                  $countColumns = 6;
+                                  foreach($period as $dt) {
+                                      $curr = $dt->format('W');
+                                      if($curr==$weekNo){
+                                        echo null;
+                                      }
+                                      else{
+                                        $countColumns++;
+                                  
+
+                                        ?><th style='min-width:150px;' >Week <?php echo $curr?></th><?php
+                                        // echo "<th style='width:240px;' >Week $curr</th>";
+                                        // echo $curr;
+                                        // echo "\n";
+                                        $weekNo = $curr;
+                                      }
+                                  }
+                                  
+                                    ?>
+                                    <input id="countColumn" disabled style="display: none;" name="countColumnName" value="<?php echo $countColumns ?>">
+                                    <!-- <th style="width:8%;" >W1</th>
+                                    <th style="width:8%;" >W2</th>
+                                    <th style="width:8%;" >W3</th>
+                                    <th style="width:8%;" >W4</th>
+                                    <th style="width:8%;" >W5</th>
+                                    <th style="width:8%;" >W6</th> -->
                                     
+
                                 </tr>
                             </thead>
                             <tbody id="TaskTable">
                             <?php
-                            $color1 = "#f9f9f9;";
-                            $color2 = "white";
-                            $color = "";
+                              $color1 = "#f9f9f9;";
+                              $color2 = "white";
+                              $color = "";
                                   if(is_array($fetchData)){      
                                     $sn=1;
                                   foreach($fetchData as $data){
@@ -1074,34 +2323,113 @@ onkeyup="checkinputs()">
                                       $color = $color2;
 
                                     }
-
                                     $taskname = $data['taskName'];
                                     $taskCategory = $data['taskCategory'];
                                     $taskType = $data['taskType'];
                                     $userTaskID = $data['usertaskID'];
                                     $taskArea = $data['taskArea'];
                                     $taskUser = $data['username'];
+                                    $Section = $data['Department'];
+                                    $dateStarted = $data['dateAdded'];
+                                    $dateTarget = $data['targetDate'];
 
 
-                      echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
+
+                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                    
+                              //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
                             ?>
-                             <tr onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' )" data-toggle='modal' data-target='#modalAdminEdit'>
                              
-                                <td><?php echo $data['taskCategory']??''; ?></td>
-                                <td><?php echo $data['taskArea']??''; ?></td>
-                                <td><?php echo $data['taskName']??''; ?></td>
+                             <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
+                             <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
+                             <tr class="ewan">
+                             <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
+                             <td>
+                               
+                               <?php echo $sn; ?></td>
+                              <td><?php echo $Section; ?></td>
+                               <td><?php echo $data['taskArea']; ?></td>
+                                <td><?php echo $data['taskCategory']; ?></td>
+                                <td class="taskNameHover" onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>' , '<?php echo $dateStarted?>', '<?php echo $dateTarget?>' )" data-toggle='modal' data-target='#modalAdmin'><?php echo $taskname; ?></td>
                                 <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
         $result = mysqli_query($con, $sql1);
         $numrows = mysqli_num_rows($result);
         while($userRow = mysqli_fetch_assoc($result)){
          $firstname = $userRow['f_name'];
       } echo  $firstname; ?></td>
-                                <td><?php echo $data['taskType']; ?></td>
-                                <td><?php
+                                <td><?php echo $data['taskType']??''; ?></td>
+
+                                <!-- start of new code -->
+                               <?php 
+                                      
+                             
+                                      $date = new DateTime($today);
+                                    //   $date = new DateTime('2022-06-01');
+
+                                      $dateEnd = new DateTime($todayEnd);
+                                    //   $dateEnd = new DateTime('2022-08-31');
+
+
+                                      $selectedMonth = $date->format("M");
+                                      $selectedEndMonth = $dateEnd->format("M");
+                                    //   echo $selectedEndMonth;
+                                    $yearoftheDay = $date->format("o");
+                                    $yearoftheDaylast = $dateEnd->format("o");
+
+                                    $DateNowAndToday =  $dateEnd->format('Y-m-d');
+                                    $StartDateSelected = $date->format('Y-m-d');
+                                    $fDateOfTheMonth = new DateTime($StartDateSelected);
+                                    // echo "First day of the month: ";
+                                    $fday =   $fDateOfTheMonth->format('Y-m-d');
+                                    $lDateOfTheMonth = new DateTime($DateNowAndToday);
+                                    // echo "last day of the month: ";
+                                    
+                                    $lday = $lDateOfTheMonth->format('Y-m-d');
+                                    // echo $lday;
+                                    // echo "<br>";
+                                    // echo $fday;
+                                    // echo " ";
+                                    // echo $lday;
+                                  $start = new DateTime($fday);
+                                  $end = new DateTime($lday);
+                                  // otherwise the  end date is excluded (bug?)
+                                  $end->modify('+1 day');
+                                  // echo date('F j, Y');
+                                  $interval = $end->diff($start);
+                                  
+                                  // total days
+                                  $days = $interval->days;
+                                  // echo $days;
+                                  // create an iterateable period of date (P1D equates to 1 day)
+                                  $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                                  
+                                  // best stored as array, so you can add more than one
+                                  // $holidays = array('2022-07-15');
+                                  $weekNo ="";
+                   
+
+                                  foreach($period as $dt) {
+                                      $curr = $dt->format('W');
+                                      $day = $dt->format('Y-m-d');
+
+                                      $monthOfThisDate=$dt->format('F');
+                                      $yearOfThisDate=$dt->format('o');
+
+                                      if($curr==$weekNo){
+                                        echo null;
+                                      }
+                                      else{
+                                        // echo "<th style='width:8%;' >Week $curr</th>";
+                                      
+                                        // echo $curr;
+                                        // echo " ";
+                                        // echo $day;
                                    $taskID = $data['usertaskID'];
                                    $taskType = $data['taskType'];
                                    if($taskType == "daily"){
+                                    ?>
+                                    <td style='width:240px;'><?php
                                     //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                     //  $month = date("F");
                                     //  $year = date("Y");
@@ -1112,7 +2440,7 @@ onkeyup="checkinputs()">
 
 
 
-                                      $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 1' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
+                                      $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate' AND `week` = 'week $curr' ORDER BY `FinishedTaskID` DESC LIMIT 1 ";
 
                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                          $result1 = mysqli_query($con, $selectUserTask1);
@@ -1127,24 +2455,166 @@ onkeyup="checkinputs()">
                                            $finishedtaskID = $userRow['FinishedTaskID'];
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
+                                         $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                         $pointReceived = $userRow['score'];
+                                         $DateSubmitted = $userRow['DateSubmitted'];
+                                         $dateN =  date('n-d', strtotime($DateSubmitted));
+                                         $timestamp = $userRow['timestamp'];
+
                                         //  echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                         
+                                        $noOfDays = $userRow['noOfDaysLate'];
                                                }
-                                               if ($weekNumber == "week 1" ){
+                                               if ($weekNumber == "week $curr" ){
      
                                                 $weeknumber = $weekNumber;
-                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                if($noOfDays >= 1){
+                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  // echo '<span class="mode mode_late"><a class="dropdown-toggle dropdown_icon" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></a><ul class="dropdown-menu dropdown_more"><li><a href="#"><i class="fas fa-users fa-w-18 fa-fw fa-lg"></i>Profile</a></li></ul></span>';
+                                                  
+                                                  if($isCheckedByLeader){
+                                                    ?>
+                                                    <!-- <span class="mode mode_late_checkedByLeader"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span> -->
+
+                                                    <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                     <?php
+                                                  }
+                                                  else{
+                                                    ?>
+                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                     <?php
+                                                  }
+                                                  
+                                                  
+                                                 
+                                                }
+                                                else if ($noOfDays <= 0){
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  if($isCheckedByLeader){
+                                                    ?>
+                                                    <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <?php
+                                                  }
+                                                  else{
+                                                    ?>
+                                                    <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    <?php
+                                                  }
+                                                  
+                                                }
                                                     // echo("<script>console.log('ok');</script>");
           
                                                    }
                                               //  //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                   }
+                                 ?> </td><?php
+                                            }
+                                   else if($taskType == "annual"){
+                                    ?>
+                                <?php
+ // code for annual
+ $dateOfNow = new DateTime($today);
+ $MonthOfNow =  $dateOfNow->format('F');
+ $YearToUseForApril = "";
+ $YearToUseforMarch = "";
+ if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
+
+   $YearToUseforMarch =  $dateOfNow->format('Y');
+   $dateOfNow->modify('last year');
+   $YearToUseForApril =  $dateOfNow->format('Y');
+ }
+ else{
+   $YearToUseForApril =  $dateOfNow->format('Y');
+$dateOfNow->modify('next year');
+$YearToUseforMarch =  $dateOfNow->format('Y');
+
+}
+$April = new DateTime($YearToUseForApril.'-04-01');
+$March = new DateTime($YearToUseforMarch.'-03-31');
+$April =  $April->format('Y-m-d');
+$March =  $March->format('Y-m-d');
+
+
+     $selectUserTasks = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `realDate` BETWEEN '$April' AND '$March';";
+     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+     $result = mysqli_query($con, $selectUserTasks);
+
+     $numrows = mysqli_num_rows($result);
+     $don = "0";
+     while($userRow = mysqli_fetch_assoc($result)){
+       $noOfDays = $userRow['noOfDaysLate'];
+       $isLate = $userRow['isLate'];
+       $weekNumber = $userRow['week'];
+                                           $fileloc =  $userRow['attachments'];
+                                           $time = $userRow['timestamp'];
+                                           $finishedtaskID = $userRow['FinishedTaskID'];
+                                           $date = $userRow['Date'];
+                                         $dateN =  date('n-d', strtotime($date));
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
+                                         $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                         $pointReceived = $userRow['score'];
+                                         $timestamp = $userRow['timestamp'];
+                                         $DateSubmitted = $userRow['DateSubmitted'];
+
+   }
+   if ($numrows >= 1){
+    if($isLate){
+      if($isCheckedByLeader){
+        ?>
+        <td style='width:240px; background-color:  #ff4800;'>
+    <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+      </td>
+     <?php
+      }
+      else{
+        ?>
+            <td style='width:240px; background-color:  #ff8000;'>
+
+        <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+      </td>
+         <?php
+      }
+    }
+    else{
+      if($isCheckedByLeader){
+
+        ?>
+        <td style='width:240px; background-color: #00b7ff;'>
+
+        <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+          </td>
+          <?php
+
+       }
+       else{
+        ?>
+            <td  colspan="1" style='width:240px; background-color: #09922d'>
+        <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>"  data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+       </td>
+          <?php
+       }
+    }
+    $don = "1";
+  //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+       }
+       else{
+        ?>
+        <td  colspan="1" style='width:240px;'>
+   </td> <?php
+       }
+       ?> <?php
+//end of code for annual
+                                  }
                                    else{
+                                    ?>
+                                    <td style='width:240px;'><?php
                                      //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                     //  $month = date("F");
                                     //  $year = date("Y");
      
-                                         $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
+                                         $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate';";
                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                          $result = mysqli_query($con, $selectUserTask);
                                          $weekNumber = '';
@@ -1156,346 +2626,96 @@ onkeyup="checkinputs()">
                                            $finishedtaskID = $userRow['FinishedTaskID'];
                                            $date = $userRow['Date'];
                                          $dateN =  date('n-d', strtotime($date));
+                                         $noOfDays = $userRow['noOfDaysLate'];
+                                         $reason = $userRow['reason'];
+                                         $action = $userRow['action'];
+                                         $isCheckedByLeader = $userRow['isCheckedByLeader'];
+                                         $pointReceived = $userRow['score'];
+                                         $timestamp = $userRow['timestamp'];
+                                         $DateSubmitted = $userRow['DateSubmitted'];
+
                                          //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
                                        
-                                               }
-                                               if ($weekNumber == "week 1" ){
+                                               
+                                               if ($weekNumber == "week $curr" ){
      
                                                 $weeknumber = $weekNumber;
-                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+
+                                                if($noOfDays >= 2){
+
+                                                  if($isCheckedByLeader){
+                                                    ?>
+                                                <span class="mode mode_late_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a  style = "color: white" href="#" data-late="1" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+
+                                                 <?php
+                                                  }
+                                                  else{
+                                                    ?>
+                                                    <span class="mode mode_late"><a style = "color: white" href="#" data-late="1" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+    
+                                                     <?php
+                                                  }
+                                                  // echo '<span class="mode mode_late"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                  
+                                                }
+                                                else if ($noOfDays <= 1){
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
+                                                 if($isCheckedByLeader){
+
+                                                  ?>
+                                                  <span class="mode mode_on_checkedByLeader" data-toggle="tooltip" data-placement="top" title="checked by leader"><a style = "color: white" href="#" data-late="0" data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    
+                                                    <?php
+
+                                                 }
+                                                 else{
+                                                  ?>
+                                                  <span class="mode mode_on"><a style = "color: white" href="#" data-late="0" data-location="<?php echo $fileloc?>" data-taskid="<?php echo $finishedtaskID?>"  data-datesubmitted="<?php echo $DateSubmitted ." ". $timestamp?>" data-point="<?php echo $pointReceived?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#reasonModalUpdate'><?php echo $dateN ?></a></span>
+                                                    
+                                                    <?php
+                                                 }
+                                                
+                                                }
+                                                  // echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
                                                     // //echo("<script>console.log('ok');</script>");
           
                                                    }
+                                                  }
+                                                  ?> </td><?php
                                                //echo("<script>console.log('testing:".$weekNumber."');</script>");
                                    }                       
                                    
-                                ?></td>
-                                <td><?php
-                                   $taskID = $data['usertaskID'];
-                                   $taskType = $data['taskType'];
-                                   if($taskType == "daily"){
-                                     //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                    //  $month = date("F");
-                                    //  $year = date("Y");
-     
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 2' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-                                         // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                         $result = mysqli_query($con, $selectUserTask);
-                                         $weekNumber = '';
-                                         while($userRow = mysqli_fetch_assoc($result)){
-                                     
-                                           $weekNumber = $userRow['week'];
-                                           $fileloc =  $userRow['attachments'];
-                                           $time = $userRow['timestamp'];
-                                           $finishedtaskID = $userRow['FinishedTaskID'];
-                                           $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
+                                ?>
+                                        <?php
+                                        // echo $curr;
+                                        // echo "\n";
+                                        $weekNo = $curr;
                                         
-                                               }
-                                               if ($weekNumber == "week 2" ){
-     
-                                                $weeknumber = $weekNumber;
-                                                  echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                    // echo("<script>console.log('ok');</script>");
-          
-                                                   }
-                                               //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                   }
-                                   else{
-                                     //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                     //$month = date("F");
-                                     //$year = date("Y");
-     
-                                         $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                         // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                         $result = mysqli_query($con, $selectUserTask);
-                                         $weekNumber = '';
-                                         while($userRow = mysqli_fetch_assoc($result)){
-                                     
-                                           $weekNumber = $userRow['week'];
-                                           $fileloc =  $userRow['attachments'];
-                                           $time = $userRow['timestamp'];
-                                           $finishedtaskID = $userRow['FinishedTaskID'];
-                                           $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                         //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                        
-                                               }
-                                               if ($weekNumber == "week 2" ){
-     
-                                                $weeknumber = $weekNumber;
-                                                   echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                    // echo("<script>console.log('ok');</script>");
-          
-                                                   }
-                                               //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                   }                       
-                                   
-                                   ?></td>
-                              <td><?php
-                                 $taskID = $data['usertaskID'];
-                                 $taskType = $data['taskType'];
-                                 if($taskType == "daily"){
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                   $selectUserTask3 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 3' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result3 = mysqli_query($con, $selectUserTask3);
-                                       $weekNumber3 = '';
-                                       while($userRow = mysqli_fetch_assoc($result3)){
-                                   
-                                         $weekNumber3 = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       if ($weekNumber3 == "week 3" ){
-   
-                                              $weeknumber = $weekNumber3;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                             }
-                                            
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }
-                                 else{
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                       $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result = mysqli_query($con, $selectUserTask);
-                                       $weekNumber = '';
-                                       while($userRow = mysqli_fetch_assoc($result)){
-                                   
-                                         $weekNumber = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       
-                                             }
+                                      }
+                                  }
+                                    ?>
 
-                                             if ($weekNumber == "week 3" ){
-   
-                                              $weeknumber = $weekNumber;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }                       
-                                 
-                              ?></td>
-
-                          <td><?php
-                                 $taskID = $data['usertaskID'];
-                                 $taskType = $data['taskType'];
-                                 if($taskType == "daily"){
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                   $selectUserTask4 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 4' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result4 = mysqli_query($con, $selectUserTask4);
-                                       $weekNumber = '';
-                                       while($userRow = mysqli_fetch_assoc($result4)){
-                                   
-                                         $weekNumber = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       
-                                             }
-                                             if ($weekNumber == "week 4" ){
-   
-                                              $weeknumber = $weekNumber;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }
-                                 else{
-                                   //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                   //$month = date("F");
-                                   //$year = date("Y");
-   
-                                       $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                       // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                       $result = mysqli_query($con, $selectUserTask);
-                                       $weekNumber = '';
-                                       while($userRow = mysqli_fetch_assoc($result)){
-                                   
-                                         $weekNumber = $userRow['week'];
-                                         $fileloc =  $userRow['attachments'];
-                                         $time = $userRow['timestamp'];
-                                         $finishedtaskID = $userRow['FinishedTaskID'];
-                                         $date = $userRow['Date'];
-                                         $dateN =  date('n-d', strtotime($date));
-                                       //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                       
-                                             }
-                                             if ($weekNumber == "week 4" ){
-   
-                                              $weeknumber = $weekNumber;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                             //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                 }                       
-                                 
-                            ?></td>
-
-                          <td><?php
-                                $taskID = $data['usertaskID'];
-                                $taskType = $data['taskType'];
-                                if($taskType == "daily"){
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                  $selectUserTask5 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 5' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result5 = mysqli_query($con, $selectUserTask5);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result5)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-                                        $dateN =  date('n-d', strtotime($date));
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            }
-                                            if ($weekNumber == "week 5" ){
-  
-                                              $weeknumber = $weekNumber;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }
-                                else{
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                      $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result = mysqli_query($con, $selectUserTask);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-
-                                        $dateN =  date('n-d', strtotime($date));
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            }
-                                            if ($weekNumber == "week 5" ){
-  
-                                              $weeknumber = $weekNumber;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }                       
-                                
-                                 ?></td>
-<td><?php
-                                $taskID = $data['usertaskID'];
-                                $taskType = $data['taskType'];
-                                if($taskType == "daily"){
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                  $selectUserTask5 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year' AND `week` = 'week 6' ORDER BY 'FinishedTaskID' DESC LIMIT 1 ";
-
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result5 = mysqli_query($con, $selectUserTask5);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result5)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-                                        $dateN =  date('n-d', strtotime($date));
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            }
-                                            if ($weekNumber == "week 6" ){
-  
-                                              $weeknumber = $weekNumber;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }
-                                else{
-                                  //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                                  //$month = date("F");
-                                  //$year = date("Y");
-  
-                                      $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year';";
-                                      // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                      $result = mysqli_query($con, $selectUserTask);
-                                      $weekNumber = '';
-                                      while($userRow = mysqli_fetch_assoc($result)){
-                                  
-                                        $weekNumber = $userRow['week'];
-                                        $fileloc =  $userRow['attachments'];
-                                        $time = $userRow['timestamp'];
-                                        $finishedtaskID = $userRow['FinishedTaskID'];
-                                        $date = $userRow['Date'];
-
-                                        $dateN =  date('n-d', strtotime($date));
-                                      //echo("<script>console.log('testingFinished: ".$finishedtaskID."');</script>");
-                                     
-                                            }
-                                            if ($weekNumber == "week 6" ){
-  
-                                              $weeknumber = $weekNumber;
-                                                echo '<span class="mode mode_on"><a style = "color: white" href="'.$fileloc.'"> '.$dateN.'</a></span>';
-                                                  // //echo("<script>console.log('ok');</script>");
-        
-                                                 }
-                                            //echo("<script>console.log('testing:".$weekNumber."');</script>");
-                                }                       
-                                
-                                 ?></td>
-                               
+                                    <!-- End of new code -->
                               
+
+                                
                               
+
+                          
+
+                          
+
+
+
+
+
+
+
+
+
+
+
+                                
                              </tr>
                              <?php
                         $sn++; }}else{ ?>
@@ -1505,8 +2725,8 @@ onkeyup="checkinputs()">
                         </td>
                          </tr>
                           <?php
-    }?>
-                              
+                          echo "No data found";
+    }                     ?>                   
                             </tbody>
                         </table>
                       </div>
@@ -1515,557 +2735,103 @@ onkeyup="checkinputs()">
             </div>
         </div>
       </div>
-    </div>
-    <div class="tab-pane fade" id="dashboard"style="height: 90%; background-color: none" role="tabpanel" aria-labelledby="profile-tab"> 
-      <div class="chart_container" style="max-width: 350px">
-                    <canvas id="myChart" ></canvas>
       </div>
-    </div>
-    <div class="tab-pane fade " id="PIC" style="height: 90%; background-color: none"role="tabpanel" aria-labelledby="pic-tab">
-      <div class="container p-30" id="TableListOfMembers";  style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
-      <div class="ms-1 shadow row" >
-      <div class="shadow col-md-12 main-datatable"> 
+
+      <div class="tab-pane fade show <?php echo $MembersActive; ?>" style="height: 90%; padding: 0px; background-color: none; " id="PIC" role="tabpanel" aria-labelledby="pic-tab">
+      <div class="container p-30 " id="TableListOfMembers" style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
+        <div class="ms-1 shadow row">
+           <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
-                        <div class="col-sm-1 createSegment"> 
+                        <div class="col-sm-2 createSegment"> 
                          <h3>Members Progress</h3> 
                         </div>
-                        <div class="col-sm-5">
-                          <div class="form-group row d-flex justify-content-center" >
-                          <form action="admin.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker1" name="datepicker1" onchange="filterMonth();">
-            <input type="submit" name="submitdate1"  value = "Submit">
-            </form>
-           
-        </div></div>
-        <div class="col-sm-6" style="padding: 0" >
+                        
+                        <div class="col-sm-7 add_flex" style="padding: 0">
+                        <div class="col-sm-7" style="padding: 0" >
                         <fieldset class="row mb-3" style="margin-top: 25px;  font-size: 12pt; margin-bottom: 0px;">
                             <div class="form-check" style="padding: 0px">
                                    
-                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
-                                        <input class="form-check-input"  type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
-                                            <label  class="form-check-label" for="checkPIC">
-                                             Monthly
-                                            </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
+                            <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $dailyChecked ?> onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
                                              Daily
                                             </label>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" onclick="FilterProgress();">
+                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
+                                        <input class="form-check-input"  type="radio" name="ProgFilter" id="ProgFilter" <?php echo $weeklyChecked ?> onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
                                              Weekly
                                             </label>
-                                     </div>
-                                     <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" checked onclick="FilterProgress();">
+                                    </div>
+                                   
+                                    <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $monthlyChecked ?> onclick="FilterProgress();">
                                             <label  class="form-check-label" for="checkPIC">
-                                             All
+                                             Monthly
                                             </label>
                                      </div>
-                                     
+                                     <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $annualChecked ?> onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Annually
+                                            </label>
+                                     </div>
                                    
                                   
                              </div>
                         </fieldset>
                     </div>
+                    <div class="form-group searchInput">
+                              
+                                <!-- <label for="email">Search:</label> -->
+                                <input type="search" class="form-control" id="filterboxDaily" placeholder=" " onkeyup="getSelectValueDaily();">
+                            </div>
+                  </div>
+
                     </div>
-                    <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height:580px;"> 
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
-                            <thead  class="thead-dark">
-                                <tr>
-                                    <th style="width:30%;">Members</th>
-                                    <th style="width:70%;" >Progress</th>
-                                   
+                    <?php include "./Code For Members Progress Report/DetailedDailyTaskReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedWeeklyReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedMonthlyReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedAnnuallyReport.php" ?>
 
-                                </tr>
-                            </thead>
-                            <tbody id="tblAll" style="display: null">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                                <tr>
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                  <td>
-                                    
-                                    <div class="progress">
-                                    <?php
-                                         $username = $data['username'];
-                                        
-
-                                        $selectUserTask = "SELECT * FROM usertask WHERE username = '$username' AND `taskType` != 'daily';";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                        $result = mysqli_query($con, $selectUserTask);
-                                        $numOfTask = mysqli_num_rows($result);
-
-                                        $selectUserTaskDaily = "SELECT * FROM usertask WHERE username = '$username' AND `taskType` = 'daily' ;";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                        $resultdaily = mysqli_query($con, $selectUserTaskDaily);
-                                        $numOfTaskdaily = mysqli_num_rows($resultdaily);
-
-
-                                          echo("<script>console.log('number of task: " .$numOfTask . "');</script>");
-                                        
-                                          $weekMonth1 = weekOfMonth($date_string1);
-                                        $selectTaskeme = "SELECT * FROM finishedtask WHERE in_charge = '$username'  AND `month` = '$month1' AND `year` = '$year1' AND `week` = 'week $weekMonth1' AND `sched_Type` != 'daily';";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-
-                                        $result2 = mysqli_query($con, $selectTaskeme);
-                                        $numOfFinished = mysqli_num_rows($result2);
-
-                                        // $today = date("F j, Y");
-                                        $selectTaskdaiy = "SELECT * FROM finishedtask WHERE in_charge = '$username' AND `sched_Type` = 'daily' AND `Date` = ' $today1' ;";
-                                        // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-
-                                        $resultdaily2 = mysqli_query($con, $selectTaskdaiy);
-                                        $numOfFinisheddaily = mysqli_num_rows($resultdaily2);
-
-                                        echo("<script>console.log('number of finished daily: " .$numOfFinisheddaily . "');</script>");
-                                        
-                                        // if($numOfFinisheddaily == 0){
-                                        //   $percent = ($numOfFinished /  $numOfTask)* 100;
-                                        //   echo("<script>console.log('qoutient1234: " .$percent . "');</script>");
-                                        // }
-                                        // else{
-
-                                          $divident1 = $numOfFinished + $numOfFinisheddaily;
-                                          $divident2 = $numOfTask + $numOfTaskdaily;
-                                                  if($divident1 != 0 || $divident2 != 0){
-                                                    $percent = ($divident1 /  $divident2)* 100;
-                                                  }
-                                                    else{
-                                                      $percent = 0;
-                                                    }  
-                                          // $percent = (($numOfFinished + $numOfFinisheddaily) /  ($numOfTask + $numOfTaskdaily))* 100;
-                                          echo("<script>console.log('qoutient242: " .$percent . "');</script>");
-                                        // }
-                                        // $percent = ($numOfFinished /  $numOfTask)* 100;
-                                        // echo("<script>console.log('qoutient: " .$percent . "');</script>");
-
-                                        
-
-                                        ?>
-                                      <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                        style="width:<?php echo round($percent).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                        <?php echo round($percent).'%'; ?> 
-                                       
-                                      </div>
-                                    </div>
-                                  </td>
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
+                    
 
 
 
 
-                            <tbody id="tblMonthly" style="display: none">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                               
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                <td>
-                
-                                        <div class="progress">
-                                        <?php
-                                            $usernameM = $data['username'];
-                                            
-                                            $DepartmentM = $_SESSION['userDept'];
-                                            $selectUserTaskM = "SELECT * FROM usertask WHERE username = '$usernameM'   AND `taskType` = 'monthly';";
-
-                                            $resultM = mysqli_query($con, $selectUserTaskM);
-                                            $numOfTaskM = mysqli_num_rows($resultM);
-
-
-
-
-                                            
-                                              $weekMonth = weekOfMonth($date_string1);
-                                            $selectTaskemeM = "SELECT * FROM finishedtask WHERE in_charge = '$usernameM' AND `month` = '$month1' AND `year` = '$year1' AND `sched_Type` = 'monthly';";
-
-
-                                            $result2M = mysqli_query($con, $selectTaskemeM);
-                                            $numOfFinishedM = mysqli_num_rows($result2M);
-
-
-                                             
-
-                                            
-                                        if($numOfFinishedM !=0 || $numOfTaskM !=0){
-                                          $percentM = ($numOfFinishedM /  $numOfTaskM)* 100;
-                                        }
-                                        else{
-                                          $percentM = 0;
-                                        }
-
-                                            ?>
-                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                            style="width:<?php echo round($percentM).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                            <?php echo round($percentM).'%'; ?> 
-                                          
-                                          </div>
-                                        </div>
-                                        </td>
-                                
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-
-                            
-                           
-                            <tbody id="tblWeekly" style="display: none">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                               
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                <td>
-                
-                                        <div class="progress">
-                                        <?php
-                                            $usernameW = $data['username'];
-                                            
-                                            $DepartmentW = $_SESSION['userDept'];
-                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW' AND `taskType` = 'weekly';";
-
-                                            $resultW = mysqli_query($con, $selectUserTaskW);
-                                            $numOfTaskW = mysqli_num_rows($resultW);
-
-
-
-
-                                            
-                                              $weekMonth = weekOfMonth($date_string1);
-                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonth' AND `sched_Type` = 'weekly';";
-
-
-                                            $result2W = mysqli_query($con, $selectTaskemeW);
-                                            $numOfFinishedW = mysqli_num_rows($result2W);
-
-
-                                             
-
-                                              if($numOfFinishedW !=0 || $numOfTaskW !=0){
-                                                $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
-                                              }
-                                              else{
-                                                $percentW = 0;
-                                              }
-                                            
-
-                                            ?>
-                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                            <?php echo round($percentW).'%'; ?> 
-                                          
-                                          </div>
-                                        </div>
-                                        </td>
-                                
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-                            <tbody id="tblDaily" style="display: none">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-                                    if(is_array($fetchDataUT)){      
-                                      $sn=1;
-                                    foreach($fetchDataUT as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-
-                            ?>
-                               
-                                <tr>
-                                <td><?php echo $data['f_name'] ?> <?php echo $data['l_name'] ?></td>
-                                <td>
-                
-                                        <div class="progress">
-                                        <?php
-                                            $usernameW = $data['username'];
-                                            
-                                            $DepartmentW = $_SESSION['userDept'];
-                                            $selectUserTaskW = "SELECT * FROM usertask WHERE username = '$usernameW'  AND `taskType` = 'daily';";
-
-                                            $resultW = mysqli_query($con, $selectUserTaskW);
-                                            $numOfTaskW = mysqli_num_rows($resultW);
-
-
-
-
-                                            
-                                              $weekMonthD = weekOfMonth($date_string1);
-                                            $selectTaskemeW = "SELECT * FROM finishedtask WHERE in_charge = '$usernameW' AND `month` = '$month1' AND `year` = '$year1'AND `week` = 'week $weekMonthD' AND `sched_Type` = 'daily';";
-
-
-                                            $result2W = mysqli_query($con, $selectTaskemeW);
-                                            $numOfFinishedW = mysqli_num_rows($result2W);
-
-                                        if($numOfFinishedW !=0 || $numOfTaskW !=0){
-                                          $percentW = ($numOfFinishedW /  $numOfTaskW)* 100;
-                                        }
-                                        else{
-                                          $percentW = 0;
-                                        }
-                                            
-
-                                            
-
-                                            ?>
-                                          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                            style="width:<?php echo round($percentW).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                            <?php echo round($percentW).'%'; ?> 
-                                          
-                                          </div>
-                                        </div>
-                                        </td>
-                                
-
-                                  </tr>
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
                 </div>
             </div>
         </div>
       </div>
     </div>
-    <div class="tab-pane fade" id="Dept" role="tabpanel" aria-labelledby="dept-tab">
-      <div class="container p-30" id="TableListOfMembers";  style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
+    <div class="tab-pane fade show <?php echo $SummaryActive; ?>" id="Dept" role="tabpanel" aria-labelledby="dept-tab">
+      <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
       <div class="ms-1 shadow row" >
       <div class="shadow col-md-12 main-datatable"> 
                 <div class="card_body">
                     <div class="row d-flex ">
-                        <div class="col-sm-1 createSegment"> 
-                         <h3>Section's Progress</h3> 
+                        <div class="col-sm-3 createSegment"> 
+                         <h3>Summary Report</h3> 
                         </div>
-                        <div class="col-sm-5">
-                          <div class="form-group row d-flex justify-content-center" >
-                          <form action="admin.php" method = "POST" >
-            <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
-            <input type="date" id="datepicker2" name="datepicker2" onchange="filterMonth();">
-            <input type="submit" name="submitdate2"  value = "Submit">
-            </form>
-           
-        </div></div>
-                        <div class="col-sm-6 add_flex">
-                            <div class="form-group searchInput">
-                                
-                                <!-- <label for="email">Search:</label> -->
-                                <input type="search" class="form-control" id="filterbox" placeholder=" " >
-                            </div>
-                        </div> 
+                        
+                        
+        <div class="form-group searchInput">
+                              
+                              <!-- <label for="email">Search:</label> -->
+                              <input type="search" class="form-control" id="filterboxDaily" placeholder=" " onkeyup="getSelectValueDaily();">
+                          </div>
                     </div>
-                    <div class="overflow-x">
-                      <div class="overflow-y" style="overflow-y: scroll; height: 580px;"> 
-                        <table style="width:100%;" id="filtertable" class="table datacust-datatable Table ">
-                            <thead  class="thead-dark">
-                                <tr>
-                                    <th style="width:30%;">Section</th>
-                                    <th style="width:70%;" >Progress</th>
-                                   
-
-                                </tr>
-                            </thead>
-                            <tbody id="TaskTable1">
-                            <?php
-                              $color1 = "#f9f9f9;";
-                              $color2 = "white";
-                              $color = "";
-
-                              $departmentvar="";
-                                    if(is_array($fetchDataUT2)){      
-                                      $sn=1;
-
-                                    foreach($fetchDataUT2 as $data){
-                                      if($sn % 2 == 0){
-                                        $color = $color1;
-                                      }
-                                      else{
-                                        $color = $color2;
-
-                                      }
-                                      
-
-                             if($data['department'] != $departmentvar){
-                                      ?><tr>
-                                 
-                                      <td><?php echo $data['department'] ?></td>
-                                        <td>
-                                          
-                                          <div class="progress">
-                                          <?php
-                                               $username = $data['username'];
-                                                $dept = $data['department'];
-      
-                                              $selectUserTask = "SELECT * FROM usertask WHERE Department = '$dept' AND `taskType` != 'daily';";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                              $result = mysqli_query($con, $selectUserTask);
-                                              $numOfTask = mysqli_num_rows($result);
-                                              echo("<script>console.log('number of task: " .$numOfTask . "');</script>");
-      
-                                              $selectUserTaskDaily = "SELECT * FROM usertask WHERE Department = '$dept'  AND `taskType` = 'daily' ;";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                              $resultdaily = mysqli_query($con, $selectUserTaskDaily);
-                                              $numOfTaskdaily = mysqli_num_rows($resultdaily);
-      
-      
-                                              
-                                                $weekMonth2= weekOfMonth($date_string2);
-                                              $selectTaskeme = "SELECT * FROM finishedtask WHERE Department = '$dept' AND `month` = '$month2' AND `year` = '$year2' AND `week` = 'week $weekMonth2' AND `sched_Type` != 'daily';";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-      
-                                              $result2 = mysqli_query($con, $selectTaskeme);
-                                              $numOfFinished = mysqli_num_rows($result2);
-                                              echo("<script>console.log('number of finishedsdf: " .$numOfFinished . "');</script>");
-      
-                                              // $today = date("F j, Y");
-                                              $selectTaskdaiy = "SELECT * FROM finishedtask WHERE Department = '$dept' AND `sched_Type` = 'daily' AND `Date` = ' $today2' ;";
-                                              // SELECT week FROM `finishedtask` WHERE `taskID` = '23';0000
-      
-                                              $resultdaily2 = mysqli_query($con, $selectTaskdaiy);
-                                              $numOfFinisheddaily = mysqli_num_rows($resultdaily2);
-      
-                                              echo("<script>console.log('number of finished daily: " .$numOfFinisheddaily . "');</script>");
-                                              
-                                                $percents = (($numOfFinished + $numOfFinisheddaily) /  ($numOfTask + $numOfTaskdaily))* 100;
-                                                echo("<script>console.log('qoutient242: " .$percents . "');</script>");
-                                              
-                                              // $percent = ($numOfFinished /  $numOfTask)* 100;
-                                              // echo("<script>console.log('qoutient: " .$percent . "');</script>");
-                                              
-                                              
-      
-                                              ?>
-                                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                              style="width:<?php echo round($percents).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                              <?php echo round($percents).'%'; ?> 
-                                             
-                                            </div>
-                                          </div>
-                                        </td>
-      
-                                        </tr>
-                                <?php  } $departmentvar = $data['department']; ?>
-                                
-                             <?php
-                           }}else{ ?>
-                            <tr>
-                              <td colspan="8">
-                          <?php echo $fetchDataUT; ?>
-                        </td>
-                            </tr>
-                          <?php
-    }?>
-                            </tbody>
-                        </table>
-                      </div>
-                    </div>
+                    <?php include "./Code For Summary Report/DetailedSummaryReport.php"?>
+                    
                 </div>
             </div>
         </div>
       </div>
     </div>
-  </div>
-
-
-
-
-
-    
-
+   
+      </div>
+    </div>
       </div>
           </div> 
       
@@ -2074,20 +2840,109 @@ onkeyup="checkinputs()">
 </div>
   
       <script>
+        
+
+        // document.getElementById('WeeklyReportArea').style.display='none';
+        // document.getElementById('monthyReportArea').style.display='none';
+
+
+
+
+$('#reasonModalUpdate').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) ;// Button that triggered the modal
+  var reason = button.data('reason');
+  var action = button.data('action');
+  var location = button.data('location');
+  var itoAyID = button.data('taskid');
+  var late = button.data('late');
+  var point = button.data('point');
+  var dateSubmitted = button.data('datesubmitted');
+  var time = button.data('time');
+
+  // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this);
+  // modal.find('.modal-title').text('New message to ' + recipient)
+  // modal.find('.modal-body reasonUpdate1').val(recipient)
+  console.log(button.data('lates'));
+  document.getElementById("finishedID").value = itoAyID;
+  document.getElementById("reasonUpdate1").value = reason;
+  document.getElementById("actionUpdate1").value = action;
+  document.getElementById("pointReceived").value = point;
+  document.getElementById("dateSubmitted").value = dateSubmitted;
+
+  // document.getElementById("UpdateStatus").style.display = 'block';
+
+  if(late == "1"){
+// document.getElementById("UpdateStatus").style.display = 'block';
+document.getElementById("radioLate").checked = true;
+document.getElementById("radioOnTime").checked = false;
+
+  }
+  else{
+// document.getElementById("UpdateStatus").style.display = 'none';
+document.getElementById("radioLate").checked = false;
+document.getElementById("radioOnTime").checked = true;
+
+  }
+  if (location ==''){
+  document.getElementById("Attachments").href='#'; 
+    
+  }
+  else{
+    document.getElementById("Attachments").href=location; 
+
+  }
+
+ 
+})
+// $("#reasonModalUpdate").modal('show');
+
+function showDetails(reason, action, location){
+  document.getElementById("reasonUpdate1").value = reason;
+  document.getElementById("actionUpdate1").value = action;
+  if (location ==''){
+  document.getElementById("Attachments").href='#'; 
+    
+  }
+  else{
+    document.getElementById("Attachments").href=location; 
+
+  }
+  // $("#reasonModalUpdate").modal('show');
+
+}
+
         var userTaskId = "";
-function clickpassdata(userNames,usertaskArea,userTaskId, taskname, taskCategory, taskType){
-document.getElementById("usernameSelectmodal").value = userNames;
+function clickpassdata(userName,usertaskArea,userTaskID, taskname, taskCategory, taskType, dateStarted, targetDate){
+document.getElementById("usernameSelectmodal").value = userName;
 document.getElementById("tasknamemodal").value = taskname;
 document.getElementById("taskCategorymodal").value = taskCategory;
 document.getElementById("taskTypemodal").value = taskType;
 document.getElementById("containerOfTaskId").value = userTaskID;
 document.getElementById("taskAreamodal").value = usertaskArea;
-userTaskId = userTaskId;
+document.getElementById("dateStarted").value = dateStarted;
+document.getElementById("targetDate").value = targetDate;
+
+
+userTaskId = userTaskID;
+}
+
+function clickpassdataCategory(name,id){
+  document.getElementById("inputCategoryRemove").value = name;
+  document.getElementById("inputCategoryRemoveId").value = id;
+
+}
+function clickpassdataAdmin(name,id){
+  document.getElementById("inputAdminRemove").value = name;
+  document.getElementById("inputAdminRemoveId").value = id;
+
 }
 function PassTaskData(){
 
  
-document.getElementById("tasknamemodal").value = false;
+  document.getElementById("tasknamemodal").value = false;
 document.getElementById("taskCategorymodal").value = false;
 document.getElementById("taskTypemodal").value = false;
 
@@ -2100,186 +2955,90 @@ document.getElementById("UpdateTaskbtn").disabled = false;
 document.getElementById("EditTaskBTN").disabled = true;
 document.getElementById("taskAreamodal").disabled = false;
 document.getElementById("usernameSelectmodal").disabled = false;
+document.getElementById("dateStarted").disabled = false;
+document.getElementById("targetDate").disabled = false;
+
+
 
 
 
 
 
 }
-// Swal.fire({
-//   title: 'Error!',
-//   text: 'Do you want to continue',
-//   icon: 'error',
-//   confirmButtonText: 'Cool'
-// })
-function FilterSched(){
-
-var types=document.getElementsByName('checkDone');
-
-if(types[0].checked){
-  let filterValue="monthly";
-          var table = document.getElementById('TaskTable');
-          let tr = table.querySelectorAll('tr');
-          
-          for(let index=0; index < tr.length;index++){
-              let val = tr[index].getElementsByTagName('td')[4];
-              if(val.innerHTML.indexOf(filterValue)> -1){
-                  tr[index].style.display='';
-      
-              }
-              else{
-                  tr[index].style.display='none';
-              }
-          }
-}
-else if (types[1].checked){
-  let filterValue="daily";
-          var table = document.getElementById('TaskTable');
-          let tr = table.querySelectorAll('tr');
-          
-          for(let index=0; index < tr.length;index++){
-              let val = tr[index].getElementsByTagName('td')[4];
-              if(val.innerHTML.indexOf(filterValue)> -1){
-                  tr[index].style.display='';
-      
-              }
-              else{
-                  tr[index].style.display='none';
-              }
-          }
-}
-else if (types[2].checked){
-  let filterValue="weekly";
-          var table = document.getElementById('TaskTable');
-          let tr = table.querySelectorAll('tr');
-          
-          for(let index=0; index < tr.length;index++){
-              let val = tr[index].getElementsByTagName('td')[4];
-              if(val.innerHTML.indexOf(filterValue)> -1){
-                  tr[index].style.display='';
-      
-              }
-              else{
-                  tr[index].style.display='none';
-              }
-          }
-}
-
-else if (types[3].checked){
-  let filterValue="";
-          var table = document.getElementById('TaskTable');
-          let tr = table.querySelectorAll('tr');
-          
-          for(let index=0; index < tr.length;index++){
-              let val = tr[index].getElementsByTagName('td')[4];
-              if(val.innerHTML.indexOf(filterValue)> -1){
-                  tr[index].style.display='';
-      
-              }
-              else{
-                  tr[index].style.display='none';
-              }
-          }
-}
-
-}
-
-
-        var dateNow = <?php echo json_encode("$dateNow"); ?>;
-
-       document.getElementById("datepicker").value = dateNow;
-       document.getElementById("datepicker1").value = dateNow;
-       document.getElementById("datepicker2").value = dateNow;
-
-      // document.querySelector("#datepicker1").valueAsDate = new Date("05-03-2022");
+var dateNow = <?php echo json_encode("$dateNow"); ?>;
+var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
 
 
 
-        var jsonDataPIC = <?php echo json_encode("$picfocus"); ?>;
-        var jsonDataTask = <?php echo json_encode("$taskfocus"); ?>;
-        var jsonDataSection = <?php echo json_encode("$sectionfocus"); ?>;
+// document.getElementById("datepicker").value = FDateofThisMonth;
+// document.getElementById("datepickerEnd").value = dateNow;
 
-        var date = <?php echo json_encode("$dateToPass"); ?>;
-        var date1 = <?php echo json_encode("$dateToPass1"); ?>;
-        var date2 = <?php echo json_encode("$dateToPass2"); ?>;
+// document.getElementById("datepickerProgDaily").value = FDateofThisMonth;
+// document.getElementById("datepickerEndProgDaily").value = dateNow;
 
-console.log(jsonDataPIC);
-        
-    if(jsonDataPIC == "true"){
-      document.getElementById("datepicker1").value = date1;
+// document.getElementById("datepicker1").value = dateNow;
+// document.getElementById("datepicker2").value = dateNow;
 
 
-      $('#myTab li:eq(1) a').tab('show');
+// $('#myTab li:eq(0) a').tab('show');
 
-    }
-    if(jsonDataTask == "true"){
-      document.getElementById("datepicker").value = date;
+// function submitDate(){
+//  var jsonDataPIC = <?php echo json_encode("$picfocus"); ?>;
+//  var jsonDataTask = <?php echo json_encode("$taskfocus"); ?>;
+//  var jsonDailyTask= <?php echo json_encode("$dailyfocus"); ?>;
+
+ 
+//  var jsonDataSection = <?php echo json_encode("$sectionfocus"); ?>;
+
+//  var date = <?php echo json_encode("$dateToPass"); ?>;
+//  var dateEnd = <?php echo json_encode("$dateToPassEnd"); ?>;
+
+ 
+//  var datedaily = <?php echo json_encode("$dateToPassDaily"); ?>;
+//  var dateEnddaily = <?php echo json_encode("$dateToPassEndDaily"); ?>;
+
+//  var date1 = <?php echo json_encode("$dateToPass1"); ?>;
+//  var date2 = <?php echo json_encode("$dateToPass2"); ?>;
+
+// // console.log(jsonDataPIC);
+ 
+// // if(jsonDailyTask == "true"){
+// //   document.getElementById("datepickerProgDaily").value = datedaily;
+// // document.getElementById("datepickerEndProgDaily").value = dateEnddaily;
 
 
-      $('#myTab li:eq(0) a').tab('show');
+// // // $('#myTab li:eq(1) a').tab('show');
+
+// // }
+// if(jsonDataTask == "true"){
+// document.getElementById("datepicker").value = date;
+// document.getElementById("datepickerEnd").value = dateEnd;
+// $('#myTab li:eq(0) a').tab('show');
+// }
+// if(jsonDataSection == "true"){
+// document.getElementById("datepicker2").value = date2;
 
 
-
-    }
-    if(jsonDataSection == "true"){
-      document.getElementById("datepicker2").value = date2;
-
-
-      $('#myTab li:eq(2) a').tab('show');
-
-
-
-    }
-
-
-//  $('#myTab li:eq(1) a').tab('show');
-const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ['lbl1','lbl2','lbl3'],
-        datasets: [
-            {
-                label: 'Points',
-                backgroundColor: ['#28a13c','#aa2b2b','#2980b9'],
-                data: ['50', '20','30']
-            }
-        ]
-    },
-    options: {
-        cutoutPercentage : 80,
-        animation: {
-            animationScale: true
-        }
-    }
-});
+// $('#myTab li:eq(2) a').tab('show');
 
 
 
-
-        let today = new Date().toISOString().substr(0, 10);
-        // document.querySelector("#datepicker").valueAsDate = new Date();
-        // document.querySelector("#datepicker1").valueAsDate = new Date();
-        // document.querySelector("#datepicker2").valueAsDate = new Date();
-
-        console.log(new Date())
+// }
 
 
-        function getSelectValue()
-{
-    var e = document.getElementById("inputGroupSelect01");
+// }
+
+ function FilterSched(){
+
+  var types=document.getElementsByName('checkDone');
   
-    var text=e.options[e.selectedIndex].text;//get the selected option text
-    if(text=='Task Name'){
-
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
+  if(types[0].checked){
+    let filterValue="monthly";
             var table = document.getElementById('TaskTable');
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[2];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -2288,23 +3047,14 @@ const myChart = new Chart(ctx, {
                     tr[index].style.display='none';
                 }
             }
-            
-        }
-        
-        );
-        
-    }
-    
-    else if (text=='Type'){
-
-        let filterInput = document.getElementById('filterbox');
-        filterInput.addEventListener('keyup',function(){
-            let filterValue=document.getElementById('filterbox').value;
+}
+  else if (types[1].checked){
+    let filterValue="daily";
             var table = document.getElementById('TaskTable');
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[4];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -2313,83 +3063,81 @@ const myChart = new Chart(ctx, {
                     tr[index].style.display='none';
                 }
             }
+  }
+  else if (types[2].checked){
+    let filterValue="weekly";
+            var table = document.getElementById('TaskTable');
+            let tr = table.querySelectorAll('tr');
             
-        }
+            for(let index=0; index < tr.length;index++){
+                let val = tr[index].getElementsByTagName('td')[6];
+                if(val.innerHTML.indexOf(filterValue)> -1){
+                    tr[index].style.display='';
         
-        );
-    }
-    else if (text=='Category'){
+                }
+                else{
+                    tr[index].style.display='none';
+                }
+            }
+  }
 
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[0];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
-
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
-    
+  else if (types[3].checked){
+    let filterValue="";
+            var table = document.getElementById('TaskTable');
+            let tr = table.querySelectorAll('tr');
+            
+            for(let index=0; index < tr.length;index++){
+                let val = tr[index].getElementsByTagName('td')[6];
+                if(val.innerHTML.indexOf(filterValue)> -1){
+                    tr[index].style.display='';
+        
+                }
+                else{
+                    tr[index].style.display='none';
+                }
+            }
+  }
+ 
 }
+let today = new Date().toISOString().substr(0, 10);
 
-);
-}
-else if (text=='In charge'){
+// document.querySelector("#datepicker").valueAsDate = new Date();
+var sheets = new Array();
 
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[3];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
 
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
-    
-}
-
-);
-}
-else if (text=='Area'){
-
-let filterInput = document.getElementById('filterbox');
-filterInput.addEventListener('keyup',function(){
-    let filterValue=document.getElementById('filterbox').value;
-    var table = document.getElementById('TaskTable');
-    let tr = table.querySelectorAll('tr');
-    
-    for(let index=0; index < tr.length;index++){
-        let val = tr[index].getElementsByTagName('td')[1];
-        if(val.innerHTML.indexOf(filterValue)> -1){
-            tr[index].style.display='';
-
-        }
-        else{
-            tr[index].style.display='none';
-        }
-    }
-    
-}
-
-);
-}
-
-}
 getSelectValue();
+function getSelectValue() {
+    let input = document.getElementById('filterbox').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('ewan');
+    sheets=[-1];
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="table-row";   
+            sheets.push(i);              
+        }
+    }
+}
+getSelectValueDaily();
+function getSelectValueDaily() {
+    let input = document.getElementById('filterboxDaily').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('dailyTable');
+    sheets=[-1];
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="table-row";      
+            sheets.push(i);              
+        }
+    }
+}
+
 
 function checkTextBox(){
 
@@ -2410,72 +3158,481 @@ else{
 }
 
 
+
+
+
 function FilterProgress(){
 
 var types=document.getElementsByName('ProgFilter');
 
 if(types[0].checked){
+  document.getElementById('DailyReportArea').style.display='block';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('annualReportArea').style.display='none';  
 
-
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdWeekly = document.getElementById("tblWeekly");
-  var tdDaily = document.getElementById("tblDaily");
-  var tdAll= document.getElementById("tblAll");
-
-
-
-  tdMonthly.style.display = null;
-  tdWeekly.style.display = 'none';
-  tdDaily.style.display = 'none';
-  tdAll.style.display = 'none';
-
-
-
-  
 }
 else if (types[1].checked){
-  
-  var tdAll= document.getElementById("tblAll");
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdWeekly = document.getElementById("tblWeekly");
-  var tdDaily = document.getElementById("tblDaily");
+  document.getElementById('DailyReportArea').style.display='none';
+  document.getElementById('WeeklyReportArea').style.display='block';
+  document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('annualReportArea').style.display='none';  
 
-  tdWeekly.style.display = 'none';
-  tdDaily.style.display = null;
-  tdMonthly.style.display = 'none';
-  tdAll.style.display = 'none';
 
 }
 else if (types[2].checked){
-  
-  var tdAll= document.getElementById("tblAll");
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdWeekly = document.getElementById("tblWeekly");
-  var tdDaily = document.getElementById("tblDaily");
+  document.getElementById('DailyReportArea').style.display='none';
 
-  tdDaily.style.display = 'none';
-  tdWeekly.style.display = null;
-  tdMonthly.style.display = 'none';
-  tdAll.style.display = 'none';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='block';  
+  document.getElementById('annualReportArea').style.display='none';  
 
 }
 else if (types[3].checked){
+  document.getElementById('DailyReportArea').style.display='none';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('annualReportArea').style.display='block';  
 
-  var tdAll= document.getElementById("tblAll");
-  var tdMonthly = document.getElementById("tblMonthly");
-  var tdDaily = document.getElementById("tblDaily");
-  var tdWeekly = document.getElementById("tblWeekly");
+}
 
-  tdAll.style.display = null;
-  tdWeekly.style.display = 'none';
-  tdMonthly.style.display = 'none';
-  tdDaily.style.display = 'none';
 
 
 }
 
 
+
+function exportDataAnnual(){
+  
+  var table = document.getElementById("tableOfAnnual");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyAnnual.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
 }
+function exportDataMonthly(){
+  
+  var table = document.getElementById("tableOfMonthly");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyMonthly.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+function exportDataWeekly(){
+  
+  var table = document.getElementById("tableOfWeekly");
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "WeeklyReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+
+function exportDataDaily(){
+  
+  var table = document.getElementById("tableOfDaily");
+  
+  var rows =[];
+
+           column1 = 'No.';
+           column2 = 'In Charge';
+           column3 = 'Task';
+           column4 = 'No. of ontime';
+           column5 = 'No. of Late';
+           column6 = 'Total points earned';
+           column7 = 'Target points';
+           column8 = 'Percentage';
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+           
+  for(var i=0,row; row = table.rows[i];i++){
+        column1 = row.cells[0].innerText;
+           column2 = row.cells[1].innerText;
+           column3 = row.cells[2].innerText;
+           column4 = row.cells[3].innerText;
+           column5 = row.cells[4].innerText;
+           column6 = row.cells[5].innerText;
+           column7 = row.cells[6].innerText;
+           column8 = row.cells[7].innerText;
+
+
+           
+           rows.push(
+               [
+                   column1,
+                   column2,
+                   column3,
+                   column4,
+                   column5,
+                   column6,
+                   column7,
+                   column8,
+
+
+                  
+            
+               ]
+           );
+
+  }
+  csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "DailyReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+}
+
+function exportData(){
+   /* Get the HTML data using Element by Id */
+   var table = document.getElementById("filtertableMain");
+ 
+   /* Declaring array variable */
+   var rows =[];
+   const filterInput1 = document.getElementById('filterbox');
+
+
+   
+
+   
+   var noOfColumns = document.getElementById('countColumn').value;
+ 
+   if (filterInput1.value==""){
+       for(var i=0,row; row = table.rows[i];i++){
+           //rows would be accessed using the "row" variable assigned in the for loop
+           //Get each cell value/column from the row
+        
+          //   column1 = row.cells[0].innerText;
+          //  column2 = row.cells[1].innerText;
+          //  column3 = row.cells[2].innerText;
+          //  column4 = row.cells[3].innerText;
+          //  column5 = row.cells[4].innerText;
+          //  column6 = row.cells[5].innerText;
+          //  column7 = row.cells[6].innerText;
+          //  column8 = row.cells[7].innerText;
+          //  column9 = row.cells[8].innerText;
+          //  column10 = row.cells[9].innerText;
+
+
+
+
+          //  rows.push(
+          //      [
+          //          column1,
+          //          column2,
+          //          column3,
+          //          column4,
+          //          column5,
+          //          column6,
+          //          column7,
+          //          column8,
+          //          column9,
+          //          column10,
+
+                  
+            
+          //      ]
+          //  );
+          var rowsArray =[];
+          for(var j=0; j<noOfColumns; j++){
+            var column = row.cells[j].innerText;
+
+            rowsArray.push([column]);
+          
+          }
+             rows.push(
+               [
+                rowsArray,
+          ])
+          // console.log(i);
+         
+          
+    
+       /* add a new records in the array */
+           
+    
+           }
+   }
+   else{
+     //iterate through rows of table
+   for(var i=0,row; row = table.rows[sheets[i]+1];i++){
+       //rows would be accessed using the "row" variable assigned in the for loop
+       //Get each cell value/column from the row
+       
+       var rowsArray =[];
+          for(var j=0; j<noOfColumns; j++){
+            var column = row.cells[j].innerText;
+
+            rowsArray.push([column]);
+          
+          }
+             rows.push(
+               [
+                rowsArray,
+          ])
+
+
+ 
+       }
+   }
+   console.log(rows);
+       csvContent = "data:text/csv;charset=utf-8,";
+        /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+       rows.forEach(function(rowArray){
+           row = rowArray.join(",");
+           csvContent += row + "\r\n";
+       });
+ 
+       /* create a hidden <a> DOM node and set its download attribute */
+       var encodedUri = encodeURI(csvContent);
+       var link = document.createElement("a");
+       link.setAttribute("href", encodedUri);
+       link.setAttribute("download", "TaskReport.csv");
+       document.body.appendChild(link);
+        /* download the data file named "Stock_Price_Report.csv" */
+       link.click();
+ }
+
+
+
         </script>
     </body>
 </html>

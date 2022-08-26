@@ -209,7 +209,8 @@
                        $period = new DatePeriod($start, new DateInterval('P1D'), $end);
                        
                        // best stored as array, so you can add more than one
-                       $holidays = array('2022-07-15');
+                       include ("./holidays.php");
+
                        $monthNo ="";
                        $NumberOfWeeksToDone = 0;
                        foreach($period as $dt) {
