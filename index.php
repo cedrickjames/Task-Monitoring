@@ -276,7 +276,7 @@ foreach($period as $dt) {
     <link rel="stylesheet" href="bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
        <link rel="stylesheet" href="design_files/css/MainPageStyle.css">
-    <link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="design_files/css/ListOfMembersStyle.css">
 
     <script type="text/javascript" src="./js/jquery.slim.min.js"></script>
     <script type="text/javascript" src="./design_files/css/bootstrap.min.js"></script>

@@ -47,7 +47,7 @@ session_start();
         <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
             
             <!-- STYLE CSS -->
-        <link rel="stylesheet" href="design_files/css/style.css?v=<?php echo time(); ?>">
+        <link rel="stylesheet" href="design_files/css/style.css">
         <!-- <link rel="stylesheet" href="design_files/css/style.css"> -->
 
 

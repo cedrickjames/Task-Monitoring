@@ -105,7 +105,7 @@ session_start();
         <link rel="stylesheet" href="design_files/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
             
             <!-- STYLE CSS -->
-        <link rel="stylesheet" href="design_files/css/style.css?v=<?php echo time(); ?>">
+        <link rel="stylesheet" href="design_files/css/style.css">
         <!-- <link rel="stylesheet" href="design_files/css/style.css"> -->
         <link rel="stylesheet" href="fontawesome-free-5.15.3-web/fontawesome-free-5.15.3-web/css/all.css">
 <link rel="stylesheet" href="./css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
