@@ -142,7 +142,7 @@ $dateNow = date('Y-m-d');
     }
 
 }?>
-       <div class="wrapper" style="background-image:url('design_files/images/registerback.jpg')">
+       <div class="wrapper" style="background-image:url('design_files/images/Task Background.png')">
   <div class="inner">
       <div class="image-holder">
           <img src="design_files/images/Task Monitoring.png">

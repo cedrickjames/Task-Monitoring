@@ -144,7 +144,7 @@ session_start();
         }
     }
 ?>
-       <div class="wrapper" style="background-image:url('design_files/images/loginback.jpg')">
+       <div class="wrapper" style="background-image:url('design_files/images/register background (1).png')">
   <div class="inner">
       <div class="image-holder">
           <img src="design_files/images/Task Monitoring (4).png" style="height: 100%">

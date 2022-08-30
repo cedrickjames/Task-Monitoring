@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "misdevmonitorin2";
+$dbname = "misdevmonitoring";
 // Create connection
 $con = mysqli_connect($servername, $username, $password, $dbname);
 
