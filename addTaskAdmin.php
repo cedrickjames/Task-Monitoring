@@ -240,7 +240,7 @@ $array11 = explode(",", $src1);
             text: 'You have successfully added task/s!',
           //   footer: '<a href="">Why do I have this issue?</a>'
           }).then(function() {
-    window.location = "leader.php";
+    window.location = "admin.php";
 });
            </script><?php 
              

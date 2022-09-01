@@ -721,7 +721,7 @@ $task =  $userRow['taskName'];
                        </td>
                         </tr>
                          <?php
-                         echo "No data found";
+                        //  echo "No data found";
    }                     ?>      
                           </tbody>
 
@@ -1350,7 +1350,7 @@ $sn++; }}else{ ?>
 </td>
 </tr>
 <?php
-echo "No data found";
+// echo "No data found";
 }                     ?>      
 </tbody>
 

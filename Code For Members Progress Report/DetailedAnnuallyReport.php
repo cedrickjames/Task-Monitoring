@@ -151,7 +151,7 @@
                        </td>
                         </tr>
                          <?php
-                         echo "No data found";
+                         echo "";
    }                     ?>       
                        </tbody>
                      </table>
