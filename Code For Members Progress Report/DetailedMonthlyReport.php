@@ -230,7 +230,9 @@
                            }
                          }
                            $finalDiffs = $NumberOfWeeksToDone;
-
+                           if($END < $dateAdded){
+                            $finalDiffs = 0;
+                        }
                            echo $finalDiffs;
 
 
@@ -275,7 +277,13 @@
                             <?php 
                              // echo $TotalPointsEarned;
                              // echo $finalDiffs;
-                             $TotalPercentage = ($TotalPointsEarned / $finalDiffs)* 100; ?> 
+                             if($TotalPointsEarned ==0 ||$finalDiffs ==0 ){
+                              $TotalPercentage = 0;
+                            }
+                            else{
+                              $TotalPercentage = ($TotalPointsEarned / $finalDiffs)* 100;
+                            }
+                            ?> 
                              <div class="progress" style="height: 30px">
                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
                                        style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">

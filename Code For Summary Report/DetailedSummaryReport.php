@@ -141,6 +141,10 @@
                                         }
                                         // echo $finalDiffs;
                                         // echo " ";
+                                        if($END < $dateAdded){
+                                          $finalDiffs = 0;
+                                      }
+                                      // echo
                                         $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
                                   //  echo $TARGETPOINTS;
                                   //  echo  "     "  ;
@@ -218,6 +222,9 @@ $task =  $userRow['taskName'];
                         $weekNo = $curr;
                       }
                     }
+                    if($END < $dateAdded){
+                      $finalDiffs = 0;
+                  }
                       $finalDiffs = $NumberOfWeeksToDone;
                       $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
 
@@ -299,6 +306,9 @@ $task =  $userRow['taskName'];
                                       $monthNo = $currMonth;
                                     }
                                   }
+                                  if($END < $dateAdded){
+                                    $finalDiffs = 0;
+                                }
                                     $finalDiffs = $NumberOfWeeksToDone;
                                     $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
          
@@ -428,7 +438,7 @@ $task =  $userRow['taskName'];
 // echo $TARGETPOINTS;
 
 //                                    //end of code for target points
-                                   echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                  //  echo("<script>console.log('taskname : " . $taskname. "');</script>");
                                    
                              //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
@@ -717,7 +727,7 @@ $task =  $userRow['taskName'];
 
                 
                       </table>
-                <!-- <div><?php echo  $TotalPointsOntimeEarned; ?></div> -->
+                <!-- <div><?php// echo  $TotalPointsOntimeEarned; ?></div> -->
                       <table class="table table-bordered" class="table datacust-datatable Table ">
                         
                       <thead  class="text-center"style="position: sticky; top: -1px; ">
@@ -758,7 +768,7 @@ $task =  $userRow['taskName'];
 
 
                             // $TotalPointsEarned = 0;
-                            echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                            // echo("<script>console.log('taskname : " . $taskname. "');</script>");
                             
                       //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
@@ -1116,6 +1126,9 @@ $TARGETPOINTS =0;
                                         }
                                         // echo $finalDiffs;
                                         // echo " ";
+                                        if($END < $dateAdded){
+                                          $finalDiffs = 0;
+                                      }
                                         $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
                                   //  echo $TARGETPOINTS;
                                   //  echo  "     "  ;
@@ -1193,6 +1206,9 @@ $task =  $userRow['taskName'];
                         $weekNo = $curr;
                       }
                     }
+                    if($END < $dateAdded){
+                      $finalDiffs = 0;
+                  }
                       $finalDiffs = $NumberOfWeeksToDone;
                       $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
 
@@ -1274,6 +1290,9 @@ $task =  $userRow['taskName'];
                                       $monthNo = $currMonth;
                                     }
                                   }
+                                  if($END < $dateAdded){
+                                    $finalDiffs = 0;
+                                }
                                     $finalDiffs = $NumberOfWeeksToDone;
                                     $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
          

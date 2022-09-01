@@ -106,7 +106,7 @@ else{
             $_SESSION['f_name'] = $userRow['f_name'];
             $_SESSION['l_name'] = $userRow['l_name'];
             $_SESSION['department'] = $userRow['department'];
-            $_SESSION['today'] = date('F j, Y');
+            $_SESSION['today'] = date('Y-m-d');
             $_SESSION['month'] =  date('F') ;
             $_SESSION['year'] = date('Y');
             $_SESSION['date_string'] = date('Y-m-d');
@@ -121,6 +121,10 @@ $dateNow = date('Y-m-d');
   $fday =  $fDateOfTheMonth->format('F j, Y');
   $_SESSION['FirstDayOfTheMonth'] = $fday;
 
+  $lDateOfTheMonth = new DateTime('last day of '.$dateNow);
+ 
+  $lday =  $lDateOfTheMonth->format('F j, Y');
+  $_SESSION['LastDayOfTheMonth'] = $lday;
 
         }
         if($numrowsadmin > 0){

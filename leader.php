@@ -610,20 +610,28 @@ $dateNow = date('Y-m-d');
 
     $year = date("Y");
     $yearEnd = date("Y");
-
+    $ThisIsTheDateToday = date("F j, Y");
     $today = $_SESSION['FirstDayOfTheMonth']; 
     $todayEnd = date("F j, Y"); 
 
     $todaySummary = $_SESSION['FirstDayOfTheMonth']; 
-    $todayEndSummary = date("F j, Y"); 
+    // $todayEndSummary = date("F j, Y"); 
+    $todayEndSummary = $_SESSION['LastDayOfTheMonth']; 
+
 
     $todayDaily = $_SESSION['FirstDayOfTheMonth']; 
-    $todayEndDaily = date("F j, Y"); 
+    // $todayEndDaily = date("F j, Y"); 
+    $todayEndDaily = $_SESSION['LastDayOfTheMonth'];  
+
     $todayWeekly = $_SESSION['FirstDayOfTheMonth']; 
-    $todayEndWeekly = date("F j, Y"); 
+    // $todayEndWeekly = date("F j, Y"); 
+    $todayEndWeekly = $_SESSION['LastDayOfTheMonth']; 
+    
 
     $todayMonthly = $_SESSION['FirstDayOfTheMonth']; 
-    $todayEndMonthly = date("F j, Y"); 
+    // $todayEndMonthly = date("F j, Y"); 
+    $todayEndMonthly = $_SESSION['LastDayOfTheMonth']; 
+
     
 
 //for annual
@@ -664,9 +672,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
     $TaskActive = "active";
     $MembersActive = "";
 
-    $dailyChecked = "checked";
+    $dailyChecked = "";
     $weeklyChecked = "";
-    $monthlyChecked = "";
+    $monthlyChecked = "checked";
     $annualChecked = "";
 
 
@@ -1536,7 +1544,7 @@ if(isset($_POST['RemoveCategory'])){
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ml-auto">
+              <ul class="navbar-nav">
               <li class="nav-item">
                   <a class="nav-link" href="daily.php">Daily</a>
                 </li>
@@ -1547,17 +1555,53 @@ if(isset($_POST['RemoveCategory'])){
                   <a class="nav-link" href="#">About</a>
                 </li> -->
                 
+                
+              </ul>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ml-auto">
+            
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link" href="./signup.php">Register User</a>
+                </li> 
+                <li class="nav-item">
+                  <a class="nav-link" href="./addTask.php">Add Task</a>
+                </li>
+                <li class="nav-item dropdown" >
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                    Category
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
+                    
+                    <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
+                      data-target='#modalAdminCategory'>Add Category</a> 
+                      <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
+                      data-target='#modalAdminRemoveCategory'>Remove Category</a> 
+                    <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
+
+                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalAdmin'>Add Admin</a>
+                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                      data-target='#modalRemoveAdmin'>Remove Admin</a> 
+                   
+                      <?php } ?> -->
+                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
+                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
+              
+
+                    
+                   
+                  </div>
+                </li>
                 <li class="nav-item dropdown" >
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                     Option
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
-                    <a class="dropdown-item"  href="./signup.php">Register User</a>
-                    <a class="dropdown-item"  href="./addTask.php">Add Task</a>
-                    <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
-                      data-target='#modalAdminCategory'>Add Category</a> 
-                      <a class="dropdown-item" id="btn-addCategory" href="#" data-toggle='modal'
-                      data-target='#modalAdminRemoveCategory'>Remove Category</a> 
+                   
                     <!-- <?php if($_SESSION['admin'] == "TRUE"){?>
 
                     <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
@@ -2034,7 +2078,7 @@ if(isset($_POST['RemoveCategory'])){
             </h3>
           </div>
           <div class="col-4">
-            <h3 style=" margin: 20px"> <?php echo $today ?> Week <?php $date = new DateTime($date_string);
+          <h3 style=" margin: 20px"> <?php echo $ThisIsTheDateToday ?> Week <?php $date = new DateTime($ThisIsTheDateToday);
   $week = $date->format("W"); echo "$week"; ?>
             </h3>
           </div>
@@ -2074,6 +2118,7 @@ if(isset($_POST['RemoveCategory'])){
                         <div class="col-sm-4" style="padding: 0;">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="leader.php" method = "POST" >
+                            
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
             
             <input type="date" id="datepicker" value="<?php $startDate = new DateTime($today);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepicker" style="margin-right: 20px" >

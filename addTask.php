@@ -6,6 +6,20 @@ session_start();
   if($_SESSION['userlevel'] == "PIC"){
     header("location: index.php");
   }
+   $dateStarted = '2022-08-22';
+
+  $dateStarted = new DateTime($dateStarted);
+  $dateStarted->modify('-1 day');
+  $dateStarted = $dateStarted->format('Y-m-d');
+  // // $dateStarted =date('F j, Y',strtotime('2022-08-22'));
+  // $dateStarted =date('F j, Y',strtotime($dateStarted));
+  // echo $dateStarted;
+
+  // $dateStarted = new DateTime('2022-08-02');
+  // $dateStarted->modify('-1 day');
+  // $dateStarted = $dateStarted->format('Y-m-d');
+  // $dateStarted =date('F j, Y',strtotime($dateStarted));
+  // echo $dateStarted;
 //  $taskType="daily";
 //  $dateStarted = date('F j, Y');
 //   // $dateStarted = date('F j, Y');
@@ -130,9 +144,11 @@ $array11 = explode(",", $src1);
       // const numberOfAddedProducts=document.getElementById("countInput").value;
       $numberofAddedTask = $_POST['countInput'];
       $enteredUserName = $_POST['username'];
-      $endTargetDate = $_POST['endTargetDate'];
-      $dateAdded = $_POST['StartDate'];
+      // $endTargetDate = $_POST['endTargetDate'];
+      // $dateAdded = $_POST['StartDate'];
+      // $dateAdded = date('Y-m-d');
 
+      
 
 
       
@@ -143,6 +159,12 @@ $array11 = explode(",", $src1);
       $taskCategory = htmlspecialchars($_POST["taskCategory".$num]);
       $taskType = htmlspecialchars($_POST["taskType".$num]);
       $taskArea = htmlspecialchars($_POST["taskArea".$num]);
+      $dateStarted = htmlspecialchars($_POST["StartDate".$num]);
+      $dateAdded = htmlspecialchars($_POST["StartDate".$num]);
+      $endTargetDate = htmlspecialchars($_POST["endTargetDate".$num]);
+
+
+
 
   
   
@@ -176,6 +198,12 @@ $array11 = explode(",", $src1);
           $taskCategory = htmlspecialchars($_POST["taskCategory".$array11[$b]]);
           $taskType = htmlspecialchars($_POST["taskType".$array11[$b]]);
           $taskArea = htmlspecialchars($_POST["taskArea".$array11[$b]]);
+          $dateStarted = htmlspecialchars($_POST["StartDate".$array11[$b]]);
+          $dateAdded = htmlspecialchars($_POST["StartDate".$array11[$b]]);
+          $endTargetDate = htmlspecialchars($_POST["endTargetDate".$array11[$b]]);
+
+
+
         
       
           echo '<script>console.log("TEST: '.$taskname.'")</script>';
@@ -183,28 +211,31 @@ $array11 = explode(",", $src1);
           echo '<script>console.log("TEST: '.$taskType.'")</script>';
           // echo '<script>console.log("arrayyyy: '.$finalarray[1].'")</script>';
           // $dateStarted = date('F j, Y');
-          $dateStarted = $_POST['StartDate'];
-          
+          // $dateStarted = $_POST['StartDate'];
+          // $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d');
+          // $dateStarted = new DateTime(); $dateStarted =  $dateStarted->format('Y-m-d'); 
           try {
             if($taskType == "daily"){
               $dateStarted = new DateTime($dateStarted);
               $dateStarted->modify('-1 day');
-              $dateStarted = $dateStarted->format('F j, Y');
+              $dateStarted = $dateStarted->format('Y-m-d');
+            //  $dateStarted = $dateStarted->format('Y-m-d');
+            //   $dateStarted =date('F j, Y',strtotime($dateStarted));
             }
             else if($taskType == "weekly"){
               $dateStarted = new DateTime($dateStarted);
               $dateStarted->modify('monday last week');
-              $dateStarted = $dateStarted->format('F j, Y');
+              $dateStarted = $dateStarted->format('Y-m-d');
             }
             else if($taskType == "monthly"){
               $dateStarted = new DateTime($dateStarted);
               $dateStarted->modify('last month');
-              $dateStarted = $dateStarted->format('F j, Y');
+              $dateStarted = $dateStarted->format('Y-m-d');
             }
             else if($taskType == "annual"){
               $dateStarted = new DateTime($dateStarted);
               $dateStarted->modify('last year');
-              $dateStarted = $dateStarted->format('F j, Y');
+              $dateStarted = $dateStarted->format('Y-m-d');
             }
           $sqlinsert = "INSERT INTO `usertask`(`userid`, `username`, `taskName`, `taskCategory`, `taskArea`, `taskType`, `Department`, `dateStarted`, `dateAdded`,`targetDate`) VALUES ('$resultUserId1','$enteredUserName','$taskname','$taskCategory','$taskArea','$taskType', '$resultUserDept1', '$dateStarted','$dateAdded','$endTargetDate');";
                   mysqli_query($con, $sqlinsert);
@@ -314,10 +345,10 @@ $array11 = explode(",", $src1);
         </div>
         <div class="wrapper" style="background: linear-gradient(to right, rgb(22, 34, 42), rgb(58, 96, 115));">
             
-            <div class="inner" style="width: 1000px; height: 500px; max-width: 1000px; border-radius: 60px">
+            <div class="inner" style="width: 1200px; height: 500px; max-width: 1200px; border-radius: 60px">
                
                 
-                <form id="account-settings" action="addTask.php" method = "POST" style="width: 1000px; padding: 10px;"  >
+                <form id="account-settings" action="addTask.php" method = "POST" style="width: 1200px; padding: 10px;"  >
                     <!-- <h3>Register User</h3> -->
                    
                      <h3 style="text-align: center; margin-bottom: 40px; ">Add task</h3>
@@ -378,10 +409,10 @@ $array11 = explode(",", $src1);
               $March =  $March->format('Y-m-d');
             
             ?>
-            <div class="form-group row" style="margin-bottom: 30px">
+            <!-- <div class="form-group row" style="margin-bottom: 30px">
                             <label class="col-sm-2 col-form-label col-form-label sm"> Start Date </label>
                             <div class="col-sm-3">
-                          <input type="date" style="height: 100%; width: 100%;" id="endTargetDate" value="<?php $startDate = new DateTime(); $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="StartDate" onchange="filterMonth();">
+                          <input type="date" style="height: 100%; width: 100%;" id="startDate" value="<?php $startDate = new DateTime(); $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="StartDate" onchange="filterMonth();">
 
                           </div>
                           <label class="col-sm-2 col-form-label col-form-label sm"> Target End Date </label>
@@ -389,13 +420,29 @@ $array11 = explode(",", $src1);
                           <input type="date" style="height: 100%; width: 100%;" id="endTargetDate" value="<?php $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="endTargetDate" onchange="filterMonth();">
 
                           </div>
-                            </div>
-                                  
+                            </div> -->
+                                  <div class="form-group row" style="padding-bottom: 0; margin-bottom: 0">
+
+                                  <div class="col-sm-1"> </div>
+                                  <div class="col-sm-2"> </div>
+                                  <div class="col-sm-2"> </div>
+                                  <div class="col-sm-2"> </div>
+                                  <div class="col-sm-1"> </div>
+                                  <div class=" form-group row col-sm-3" style="text-align: center">
+                                    <div class="col-sm-6" style="padding:0; margin:0"><h7>Start Date</h7></div>
+                                    <div class="col-sm-6" style="padding:0; margin:0"><h7>Target End Date</h7></div>
+
+
+                                </div>
+                                  <div class="col-sm-1"> </div>
+                                 
+
+                                  </div>
             <div class="overflow-x">
-                <div  class="overflow-y" style="overflow-y: scroll; overflow-x: hidden; display: block; height: 220px" id="addtask">
+                <div  class="overflow-y" style="overflow-y: scroll; overflow-x: hidden; display: block; height: 240px" id="addtask">
                     <div class="form-group row">
                         <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px">Add Task</label>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <input type="text" name="taskName1" class="form-control form-control-sm" id="taskName1" style="width:100%; padding: 10px; height: 38px" placeholder="Task Name" >
                             </div>
                             <div class="col-sm-2">
@@ -410,7 +457,7 @@ $array11 = explode(",", $src1);
 
                                 </select>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <select  name="taskCategory1" id="taskCategory1" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Category</option>
                                     <?php
@@ -429,8 +476,8 @@ $array11 = explode(",", $src1);
                           <?php
     }?>
                                 </select>
-                            </div>
-                            <div class="col-sm-2">
+                            </div> 
+                            <div class="col-sm-1" style="padding: 0">
                                 <select  name="taskArea1" id="taskArea1" class=" form-control form-select form-select-sm" style="padding-left:10px;">
                                     <option value="" disabled selected>Area</option>
                                     <option value="All">All</option>
@@ -447,6 +494,12 @@ $array11 = explode(",", $src1);
                                    
                                 </select>
                             </div>
+                            <div class="col-sm-3" style="text-align: center">
+                          <input type="date" style="height: 60%; width: 47%; margin: 0" id="startDate1" value="<?php $startDate = new DateTime(); $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="StartDate1" onchange="filterMonth();">
+                          <input type="date" style="height: 60%; width: 47%;" id="endTargetDate1" value="<?php $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="endTargetDate1" onchange="filterMonth();">
+
+                          </div>
+                          
                             <div class="col-sm-1">
                                 <!-- <input name="btnplus" type="submit" value="+" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="addNewInputsForAddTask()"  > -->
                                 <button type="button" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="addNewInputForProducts()">+</button>
@@ -498,7 +551,7 @@ var finalArrayLenght = 1;
         newDiv.classList.add("col-sm-12");
         newDiv.style.padding = '0px';
         // var taskInput='<div class="form-group row"><div class="col-lg-4"><input  class="form-control"   id="inputItem'+numForID+'" required ><div class="invalid-feedback"style=" margin-bottom: 20px; margin-left: 30px">Please fill out this field.</div></div><div class="col-lg-4"><input  class="form-control" id="inputDesc'+numForID+'"  ></div><div class="col-lg-3"><input  class="form-control"  id="inputPrice'+numForID+'"  ></div></div>'
-        var taskInput='<div class="form-group row"  id="NewTaskDiv'+numForID+'"style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px"> </label><div class="col-sm-3"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;height: 38px" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option><option value="daily">Daily</option><option value="weekly">Weekly</option> <option value="monthly">Monthly</option><option value="annual">Annual</option> </select></div> <div class="col-sm-3"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <?php if(is_array($fetchDataCat)){ foreach($fetchDataCat as $data){?> <option value="<?php echo $data["CategoryName"] ?>"><?php echo $data["CategoryName"] ?></option> <?php }}else{ ?>  <option colspan="8"> <?php echo $fetchDataCat ?> </option> <?php  }?> </select></div><div class="col-sm-2"><select  name="taskArea'+numForID+'" id="taskArea'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"><option value="" disabled selected>Area</option> <option value="All">All</option><option value="GPI 1">GPI 1</option><option value="GPI 2">GPI 2</option><option value="GPI 3">GPI 3</option><option value="GPI 4">GPI 4</option><option value="GPI 5">GPI 5</option><option value="GPI 6">GPI 6</option><option value="GPI 7">GPI 7</option><option value="GPI 8">GPI 8</option><option value="GPI 9">GPI 9</option></select></div><div class="col-sm-1"><button type="button" class="btn btn-success" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="RemoveInputForProducts('+numForID+')">-</button></div>';
+        var taskInput='<div class="form-group row"  id="NewTaskDiv'+numForID+'"style="margin-top: -30px"> <label for="colFormLabelSm" class="col-sm-1 col-form-label col-form-label-sm" style="font-size: 10pt; padding-right: 0px"> </label><div class="col-sm-2"><input type="text" class="form-control form-control-sm" id="taskName'+numForID+'" style="width:100%; padding: 10px;height: 38px" name="taskName'+numForID+'" placeholder="Task Name" ></div><div class="col-sm-2"><select  name="taskType'+numForID+'" id="taskType'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value=""  disabled selected>Type</option><option value="daily">Daily</option><option value="weekly">Weekly</option> <option value="monthly">Monthly</option><option value="annual">Annual</option> </select></div> <div class="col-sm-2"><select  name="taskCategory'+numForID+'" id="taskCategory'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"> <option value="" disabled selected>Category</option> <?php if(is_array($fetchDataCat)){ foreach($fetchDataCat as $data){?> <option value="<?php echo $data["CategoryName"] ?>"><?php echo $data["CategoryName"] ?></option> <?php }}else{ ?>  <option colspan="8"> <?php echo $fetchDataCat ?> </option> <?php  }?> </select></div><div class="col-sm-1" style="padding: 0"><select  name="taskArea'+numForID+'" id="taskArea'+numForID+'" class=" form-control form-select form-select-sm" style="padding-left:10px;"><option value="" disabled selected>Area</option> <option value="All">All</option><option value="GPI 1">GPI 1</option><option value="GPI 2">GPI 2</option><option value="GPI 3">GPI 3</option><option value="GPI 4">GPI 4</option><option value="GPI 5">GPI 5</option><option value="GPI 6">GPI 6</option><option value="GPI 7">GPI 7</option><option value="GPI 8">GPI 8</option><option value="GPI 9">GPI 9</option></select></div><div class="col-sm-3" style="text-align: center"><input type="date" style="height: 60%; width: 47%;margin: 0" id="startDate'+numForID+'" value="<?php $startDate = new DateTime(); $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="StartDate'+numForID+'" onchange="filterMonth();"> <input type="date" style="height: 60%; width: 47%;" id="endTargetDate'+numForID+'" value="<?php $EndDate = new DateTime($March); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="endTargetDate'+numForID+'" onchange="filterMonth();"></div><div class="col-sm-1"><button type="button" class="btn btn-danger" id="addProdBtn" style="margin-top: 0px; width: 50px; height: 30px; padding: 0px" onclick="RemoveInputForProducts('+numForID+')">-</button></div>';
         newDiv.innerHTML=taskInput;
         DivProdContainer.appendChild(newDiv);
 

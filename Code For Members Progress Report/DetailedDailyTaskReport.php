@@ -28,7 +28,7 @@
                                         style="margin-right: 10px">End</label>
 
                                       <input type="date" id="datepickerEndProgDaily"
-                                        value="<?php $startDate = new DateTime($todayEndDaily);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>"
+                                        value="<?php $endDate = new DateTime($todayEndDaily); $endDATE =  $endDate->format('Y-m-d'); echo $endDATE ?>"
                                         name="datepickerEndProgDaily" onchange="filterMonth();">
                                       <button type="submit" name="submitdateProgDaily"
                                         class="btn btn-info btn-sm">Submit</button>
@@ -110,7 +110,9 @@
                                      $StartDateSelected = new DateTime($todayDaily);
                                        $startDATE =  $StartDateSelected->format('Y-m-d'); 
 
-                                     $DateNowAndToday = new DateTime($todayEndDaily);  
+                                     $DateNowAndToday = new DateTime($todayEndDaily); 
+                                     
+                                      
                                      $endDATE =  $DateNowAndToday->format('Y-m-d');
 
                                       $countDaily = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
@@ -159,6 +161,7 @@
                                       if($END > $targetDate){
                                             $endDATE = $targetDate;
                                         }
+                                      
 // echo $START .$startDATE;
                                         $todayss="2022-07-01";            
                                         $ends = new DateTime(date('Y-m-d', strtotime($endDATE)));
@@ -178,6 +181,7 @@
 
                                         $intervals = $ends->diff($starts);
                                         $finalDiffs = $intervals->days;
+                                        // echo $finalDiffs;
                                         // create an iterateable period of date (P1D equates to 1 day)
                                         $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
                                         // best stored as array, so you can add more than one
@@ -195,6 +199,9 @@
                                         $finalDiffs--;
                                         }
                                         }
+                                        if($END < $dateAdded){
+                                            $finalDiffs = 0;
+                                        }
                                         echo $finalDiffs;
                                     ?>
 
@@ -203,8 +210,13 @@
                               </td>
                               <td>
                                 <?php 
+                              if($finalDiffs == 0 || $TotalPointsEarned == 0){
+$TotalPercentage=0;
+                              }
+                              else{
+                              $TotalPercentage = ($TotalPointsEarned / $finalDiffs)* 100; 
                               
-                              $TotalPercentage = ($TotalPointsEarned / $finalDiffs)* 100; ?>
+                              }?>
                                 <div class="progress" style="height: 30px">
                                   <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
                                     style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25"
@@ -219,7 +231,7 @@
                         $sn++; }}else{ ?>
                             <tr>
                               <td colspan="8">
-                                <?php echo $fetchData; ?>
+                                <?php echo $fetchDataProg; ?>
                               </td>
                             </tr>
                             <?php

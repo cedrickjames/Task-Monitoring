@@ -404,7 +404,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 $dateToPass = "";
 $date_string= date("Y-m-d");
 $_SESSION['message'] = $message;
-$today=date('F j, Y');
+$today=date('Y-m-d');
 $month = date("F");
 $year = date("Y");
 $dateForToday = new DateTime($date_string);
@@ -421,7 +421,7 @@ if(isset($_POST['submitdate'])){
 
    $month = date('F', strtotime($datePicker));
    $year = date('Y', strtotime($datePicker));
-   $today = date('F j, Y', strtotime($datePicker));
+   $today = date('Y-m-d', strtotime($datePicker));
   //  echo  $today;
    $_SESSION['today'] = $today;
 $todaySession = $_SESSION['today'];
@@ -480,7 +480,7 @@ echo "There is an error. Please contact the developer. ";
         }
 // echo $taskType;
         if($taskType == "weekly"){
-          echo "orayt";
+          // echo "orayt";
 
           $mondaylw =  date("Y-m-d", strtotime("monday last week"));
           $sundaylw =  date("Y-m-d", strtotime("sunday last week"));
@@ -527,26 +527,30 @@ echo "There is an error. Please contact the developer. ";
         
          }
          else if($dateNewTodayFormat == 'Sun'){
-           $StartDateSelected->modify('next monday');
+          //  $StartDateSelected->modify('next monday');
+           $dateNewToday->modify('next monday');
+
           //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
            $lastMonday = $dateNewToday->format('Y-m-d');
      
          }
          else{
-          $StartDateSelected->modify('last monday');
+          // $StartDateSelected->modify('last monday');
+          $dateNewToday->modify('last monday');
+
           // $startDATE =  $StartDateSelected->format('Y-m-d'); 
           $lastMonday = $dateNewToday->format('Y-m-d');
      
          }
-         
+         $dateSubmitted = date('Y-m-d');
         $timenowForSameId = date("h-i");       
         $realDateForSameId = $dateSubmitted;     
         $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
-        $dateSubmitted = date('Y-m-d');
+        // $dateSubmitted = date('Y-m-d');
 
     $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
-              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` ,`lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew', '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
+              $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` ,`lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew', '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
               mysqli_query($con, $sqlinsert);
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
@@ -682,13 +686,17 @@ for($x = 0; $x <$arrlength; $x++) {
                   
                    }
                    else if($dateNewTodayFormat == 'Sun'){
-                     $StartDateSelected->modify('next monday');
+                    //  $StartDateSelected->modify('next monday');
+                     $dateNewTodayforMonday->modify('next monday');
+
                     //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
                      $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
                
                    }
                    else{
-                    $StartDateSelected->modify('last monday');
+                    // $StartDateSelected->modify('last monday');
+                    $dateNewTodayforMonday->modify('last monday');
+
                     // $startDATE =  $StartDateSelected->format('Y-m-d'); 
                     $lastMonday = $dateNewTodayforMonday->format('Y-m-d');
                
@@ -1039,7 +1047,7 @@ for($x = 0; $x <$arrlength; $x++) {
               $day1 = $arrayNumberOfDaysPass[$x];
 
               $dateToConvert = new DateTime($day1);
-              $today = $dateToConvert->format('F j, Y');
+              $today = $dateToConvert->format('Y-m-d');
               $realDate = $dateToConvert->format('Y-m-d');
                          
               
@@ -1299,7 +1307,7 @@ for($x = 0; $x <$arrlength; $x++) {
               $day1 = $arrayNumberOfDaysPass[$x];
 
               $dateToConvert = new DateTime($day1);
-              $today = $dateToConvert->format('F j, Y');
+              $today = $dateToConvert->format('Y-m-d');
               $realDate = $dateToConvert->format('Y-m-d');
                   
               
@@ -2261,7 +2269,13 @@ $_SESSION['noOfDaysLate']="";
                                   while($userRow = mysqli_fetch_assoc($result)){
                                     $dateStarted = $userRow['dateStarted'];
                                   }
-                        
+                                  $dateStartedFromDataBase = date($dateStarted);
+                                  $dateForNow = date('Y-m-d');
+                                  if($dateStartedFromDataBase >$dateForNow  ){
+                                    echo '<span id = "doneORnot" class="mode mode_off">Upcoming</span>';
+
+                                  }
+                                  else{
                                   $date = new DateTime($dateStarted);
                                   // echo "Next monday is: ";
                                   $date->modify('next monday');
@@ -2358,6 +2372,7 @@ $_SESSION['noOfDaysLate']="";
                                          }
                                         }
                                     }
+                                  }
                                     else if($taskType == 'monthly'){
                                       $sessionDateNow=$_SESSION['date_string'];
                                       $date = new DateTime($sessionDateNow);
@@ -2386,7 +2401,13 @@ $_SESSION['noOfDaysLate']="";
                                   while($userRow = mysqli_fetch_assoc($result)){
                                     $dateStarted = $userRow['dateStarted'];
                                   }
-                            
+                                  $dateStartedFromDataBase = date($dateStarted);
+                                  $dateForNow = date('Y-m-d');
+                                  if($dateStartedFromDataBase >$dateForNow  ){
+                                    echo '<span id = "doneORnot" class="mode mode_off">Upcoming</span>';
+
+                                  }
+                                  else{
                                   $date = new DateTime($dateStarted);
                                   $datenow = new DateTime($dateStarted);
                             
@@ -2579,7 +2600,7 @@ $_SESSION['noOfDaysLate']="";
                                     //     echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
                                     //       }
                                     //      }
-                                    
+                                    }
                                     }
                                     else if($taskType == 'daily'){
                                       $sessionDateNow=$_SESSION['date_string'];
@@ -2620,7 +2641,13 @@ $_SESSION['noOfDaysLate']="";
                                           while($userRow = mysqli_fetch_assoc($result)){
                                             $today = $userRow['dateStarted'];
                                           }
-    
+                  $dateStartedFromDataBase = date($today);
+                                  $dateForNow = date('Y-m-d');
+                                  if($dateStartedFromDataBase >$dateForNow  ){
+                                    echo '<span id = "doneORnot" class="mode mode_off">Upcoming</span>';
+
+                                  }
+                                  else{
                                           // $from=date_create(date('Y-m-d'));
                                           // $to=date_create(date('Y-m-d', strtotime($today)));
                                           // $diff=date_diff($to,$from);
@@ -2680,6 +2707,7 @@ $finalDiff=$finalDiff-2;
                                               else if($finalDiff ==1){
                                                 echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
                                                   }
+                                                }
                                                   // echo $finalDiff;
                                          }
                                     }
