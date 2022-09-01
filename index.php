@@ -3032,11 +3032,17 @@ $finalDiff = $interval->days;
                                                  
                                                       ?>
                                 <div class="row">
-                                <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>
+                                <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate']; $dateStartedFromDataBase = $data['dateStarted']; if($dateforToday > $dateTarget){ ?>
                                   <div class="col-3">
                                   <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
                                 </div>
                                         <?php }
+                                         else if($dateStartedFromDataBase >$dateforToday  ){
+                                         ?><div class="col-3">
+                                         <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                       </div><?php
+      
+                                        }
                                         else{
                                           ?>
                                        
@@ -3176,6 +3182,10 @@ $finalDiff = $interval->days;
                                       <input type="submit"  <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>
                                   disabled
                                         <?php }
+                                          else if($dateStartedFromDataBase >$dateforToday  ){
+                                            ?>disabled<?php
+         
+                                           }
                                      
                                           ?> id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
                                       <script>
@@ -3224,6 +3234,13 @@ $finalDiff = $interval->days;
                                    <a class="btn btn-outline-secondary" href="#" style=" pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                      
                                         <?php }
+                                         else if($dateStartedFromDataBase >$dateforToday  ){
+                                          ?> <a  href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" class="btn btn-outline-secondary" style="pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                          <a class="btn btn-outline-secondary" href="#" style=" pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            <?php
+       
+                                         }
+                                   
                                         else{
                                           ?>
                                           
