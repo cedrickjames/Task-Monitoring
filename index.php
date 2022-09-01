@@ -2144,7 +2144,13 @@ $_SESSION['noOfDaysLate']="";
           </div>
           <div class="col-4" style="padding-top: 20px; color: white">
           <!-- <h3  class="text-center"> <?php if( $_SESSION['userlevel'] == "PIC") echo 'Member' ?> </h3>   -->
-          <h3 class="text-center"> <?php echo  $_SESSION['today'] ?> Week <?php $date = new DateTime($_SESSION['date_string']);
+          <h3 class="text-center"> <?php
+          $dateOfTodayOrayt = $_SESSION['today'] ;
+            $DateOrayt = new DateTime($dateOfTodayOrayt);
+ 
+            $DateOrayt =  $DateOrayt->format('F j, Y');
+           
+          echo   $DateOrayt  ?> Week <?php $date = new DateTime($_SESSION['date_string']);
   $week = $date->format("W"); echo "$week"; ?></h3>
 
           </div>
