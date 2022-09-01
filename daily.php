@@ -160,7 +160,7 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ml-auto">
+              <ul class="navbar-nav">
               <li class="nav-item active">
                   <a class="nav-link" href="#">Daily</a>
                 </li>
@@ -171,31 +171,40 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                   <a class="nav-link" href="#">About</a>
                 </li> -->
                 
-                <li class="nav-item dropdown" >
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                    Option
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
-                    <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="./addTask.php">Add Task</a>
-                    <?php if($_SESSION['admin'] == "TRUE"){?>
-
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalAdmin'>Add Admin</a>
-                    <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
-                      data-target='#modalRemoveAdmin'>Remove Admin</a>  -->
-                   
-                      <?php } ?>
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
-                    <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
-                    <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
-
-                    
-                   
-                  </div>
-                </li>
+                
                 
               </ul>
+              <ul class="navbar-nav ml-auto">
+            
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li> -->
+            
+            <li class="nav-item dropdown" >
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                Option
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="right: 0; left: auto;">
+                <a class="dropdown-item" id="btn-addAdmin" href="./signup.php">Register User</a>
+                <a class="dropdown-item" id="btn-addAdmin" href="./addTaskAdmin.php">Add Task</a>
+                <?php if($_SESSION['admin'] == "TRUE"){?>
+
+                <!-- <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                  data-target='#modalAdmin'>Add Admin</a>
+                <a class="dropdown-item" id="btn-addAdmin" href="#" data-toggle='modal'
+                  data-target='#modalRemoveAdmin'>Remove Admin</a>  -->
+               
+                  <?php } ?>
+                <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalAdmin'>Add Admin</a> -->
+                <!-- <a class="dropdown-item" id="btn-addAdmin" href="#"data-toggle='modal' data-target='#modalRemoveAdmin'>Remove Admin</a> -->
+                <a class="dropdown-item" id="btn-logout" href="./logout.php">Logout</a>
+
+                
+               
+              </div>
+            </li>
+            
+          </ul>
             </div>
           </nav>
         </div>
@@ -362,9 +371,12 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
             </h3>
           </div>
           <div class="col">
-            <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
+            <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php $date = new DateTime($date_string);
+  $week = $date->format("W"); echo "$week"; ?></h3>
           </div>
-
+          <!-- <h3 style=" margin: 20px"> <?php echo $ThisIsTheDateToday ?> Week <?php $date = new DateTime($ThisIsTheDateToday);
+  $week = $date->format("W"); echo "$week"; ?>
+            </h3> -->
           <div class="container p-30" id="TableListOfMembers"; style="position: relative; height: 100%;  padding-top: 0px; margin:0 auto; max-width: 90%;  background-color: none">
         <div class="ms-1 shadow row">
             <div class="shadow col-md-12 main-datatable"> 

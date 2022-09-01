@@ -160,13 +160,21 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
             </button>
           
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ml-auto">
+              <ul class="navbar-nav ">
               <li class="nav-item active">
                   <a class="nav-link" href="#">Daily</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="admin.php">Home</a>
                 </li>
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+                </li> -->
+               
+                
+              </ul>
+              <ul class="navbar-nav ml-auto">
+            
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#">About</a>
                 </li> -->
@@ -362,7 +370,8 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
             </h3>
           </div>
           <div class="col">
-            <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php echo weekOfMonth($date_string) ?></h3>
+          <h3 style=" margin: 20px" class="float-right"> <?php echo $today ?> Week <?php $date = new DateTime($date_string);
+  $week = $date->format("W"); echo "$week"; ?></h3>
           </div>
 
           <div class="container p-30" id="TableListOfMembers"; style="position: relative; height: 100%;  padding-top: 0px; margin:0 auto; max-width: 90%;  background-color: none">
