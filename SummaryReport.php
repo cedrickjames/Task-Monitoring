@@ -812,6 +812,9 @@ $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `user
      }
      // echo $finalDiffs;
      // echo " ";
+     if($END < $dateAdded){
+      $finalDiffs = 0;
+  }
      $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
 //  echo $TARGETPOINTS;
 //  echo  "     "  ;
@@ -888,6 +891,9 @@ else{
 $NumberOfWeeksToDone++;
 $weekNo = $curr;
 }
+}
+if($END < $dateAdded){
+  $finalDiffs = 0;
 }
 $finalDiffs = $NumberOfWeeksToDone;
 $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
@@ -969,6 +975,9 @@ foreach($period as $dt) {
    $NumberOfWeeksToDone++;
    $monthNo = $currMonth;
  }
+}
+if($END < $dateAdded){
+  $finalDiffs = 0;
 }
  $finalDiffs = $NumberOfWeeksToDone;
  $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;

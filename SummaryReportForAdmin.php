@@ -809,6 +809,9 @@ $html .= '
        }
        // echo $finalDiffs;
        // echo " ";
+       if($END < $dateAdded){
+        $finalDiffs = 0;
+    }
        $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
   //  echo $TARGETPOINTS;
   //  echo  "     "  ;
@@ -886,6 +889,9 @@ $html .= '
   $weekNo = $curr;
   }
   }
+  if($END < $dateAdded){
+    $finalDiffs = 0;
+}
   $finalDiffs = $NumberOfWeeksToDone;
   $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
   
@@ -967,6 +973,9 @@ $html .= '
      $monthNo = $currMonth;
    }
   }
+  if($END < $dateAdded){
+    $finalDiffs = 0;
+}
    $finalDiffs = $NumberOfWeeksToDone;
    $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
   
