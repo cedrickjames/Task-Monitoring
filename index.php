@@ -2277,8 +2277,10 @@ $_SESSION['noOfDaysLate']="";
                         
                                   while($userRow = mysqli_fetch_assoc($result)){
                                     $dateStarted = $userRow['dateStarted'];
+                                    $dateStartedAdded = $userRow['dateAdded'];
+
                                   }
-                                  $dateStartedFromDataBase = date($dateStarted);
+                                  $dateStartedFromDataBase = date($dateStartedAdded);
                                   $dateForNow = date('Y-m-d');
                                   if($dateStartedFromDataBase >$dateForNow  ){
                                     echo '<span id = "doneORnot" class="mode mode_off">Upcoming</span>';
@@ -2409,8 +2411,10 @@ $_SESSION['noOfDaysLate']="";
                             
                                   while($userRow = mysqli_fetch_assoc($result)){
                                     $dateStarted = $userRow['dateStarted'];
+                                    $dateStartedAdded = $userRow['dateAdded'];
+
                                   }
-                                  $dateStartedFromDataBase = date($dateStarted);
+                                  $dateStartedFromDataBase = date($dateStartedAdded);
                                   $dateForNow = date('Y-m-d');
                                   if($dateStartedFromDataBase >$dateForNow  ){
                                     echo '<span id = "doneORnot" class="mode mode_off">Upcoming</span>';
@@ -2649,8 +2653,10 @@ $_SESSION['noOfDaysLate']="";
                                           
                                           while($userRow = mysqli_fetch_assoc($result)){
                                             $today = $userRow['dateStarted'];
+                                    $dateStartedAdded = $userRow['dateAdded'];
+
                                           }
-                  $dateStartedFromDataBase = date($today);
+                  $dateStartedFromDataBase = date($dateStartedAdded);
                                   $dateForNow = date('Y-m-d');
                                   if($dateStartedFromDataBase >$dateForNow  ){
                                     echo '<span id = "doneORnot" class="mode mode_off">Upcoming</span>';
@@ -2768,8 +2774,16 @@ $result = mysqli_query($con, $selectUserTask);
 
 while($userRow = mysqli_fetch_assoc($result)){
   $dateStarted = $userRow['dateStarted'];
-}
+  $dateStartedAdded = $userRow['dateAdded'];
 
+}
+$dateStartedFromDataBase = date($dateStartedAdded);
+$dateForNow = date('Y-m-d');
+if($dateStartedFromDataBase >$dateForNow  ){
+  echo '<span id = "doneORnot" class="mode mode_off">Upcoming</span>';
+
+}
+else{
 $date = new DateTime($dateStarted);
 $dateYear = new DateTime($dateStarted);
 
@@ -2907,7 +2921,7 @@ $finalDiff = $interval->days;
   //     echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
   //       }
   //      }
-  
+}
   }
                                   
 
