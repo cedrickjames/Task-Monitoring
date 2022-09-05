@@ -2195,10 +2195,10 @@ if(isset($_POST['RemoveCategory'])){
                             
                             <tr id="topLeft" class="table-dark table-bordered text-center" >
                                     <th style="min-width:15px;">No.</th>
+                                    <th style="width:200px;"  >In charge</th>
+                                    <th style="width:200px;" >Task Name</th>
                                     <th style="min-width:40px;">Area</th>
                                     <th style="min-width:50px;">Category</th>
-                                    <th style="width:200px;" >Task Name</th>
-                                    <th style="width:100px;"  >In charge</th>
                                     <th style="width:180px;"  >Type</th>
 
 
@@ -2311,15 +2311,18 @@ if(isset($_POST['RemoveCategory'])){
                              <td >
                                
                                <?php echo $sn; ?></td>
-                               <td><?php echo $data['taskArea']; ?></td>
-                                <td><?php echo $data['taskCategory']; ?></td>
-                                <td class="taskNameHover" onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>', '<?php echo $dateStarted?>', '<?php echo $dateTarget?>' )" data-toggle='modal' data-target='#modalAdmin'><?php echo $data['taskName']; ?></td>
-                                <td><?php $fname= $data['username'];    $sql1 = "SELECT f_name FROM `users` WHERE username = '$fname';";
+                               <td><?php $fname= $data['username'];    $sql1 = "SELECT * FROM `users` WHERE username = '$fname';";
         $result = mysqli_query($con, $sql1);
         $numrows = mysqli_num_rows($result);
         while($userRow = mysqli_fetch_assoc($result)){
          $firstname = $userRow['f_name'];
-      } echo  $firstname; ?></td>
+         $lastname = $userRow['l_name'];
+
+      } echo  $firstname.' ';
+      echo  $lastname;  ?></td>
+                              <td class="taskNameHover" onclick= "clickpassdata('<?php echo $taskUser?>','<?php echo $taskArea?>','<?php echo $userTaskID?>', '<?php echo $taskname?>','<?php echo $taskCategory?>', '<?php echo $taskType?>', '<?php echo $dateStarted?>', '<?php echo $dateTarget?>' )" data-toggle='modal' data-target='#modalAdmin'><?php echo $data['taskName']; ?></td>
+                               <td><?php echo $data['taskArea']; ?></td>
+                                <td><?php echo $data['taskCategory']; ?></td>
                                 <td><?php echo $data['taskType']??''; ?></td>
 
                                 <!-- start of new code -->

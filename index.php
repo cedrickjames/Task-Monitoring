@@ -264,8 +264,8 @@ foreach($period as $dt) {
 <html>
     <head>
     <meta charset="UTF-8">
-    <meta name="viewport" contant="width=device-width, initial-scale=1.0">
-
+    <!-- <meta name="viewport" contant="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Main Page</title>
     <link rel="icon" type="image/x-icon" href="design_files/images/Task Monitoring Icon.ico">
 
@@ -478,6 +478,19 @@ echo "There is an error. Please contact the developer. ";
           $department = $userRow['Department'];
           
         }
+
+        $ended = false;
+        $dateforToday = date('Y-m-d');
+        $selectUserTask2 = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+        $result2 = mysqli_query($con, $selectUserTask2);
+
+        while($userRow = mysqli_fetch_assoc($result2)){
+          $dateTarget2 = $userRow['targetDate'];
+        }
+        if($dateforToday > $dateTarget2){ 
+
+          $ended = true;
+        }
 // echo $taskType;
         if($taskType == "weekly"){
           // echo "orayt";
@@ -548,7 +561,7 @@ echo "There is an error. Please contact the developer. ";
         $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
         // $dateSubmitted = date('Y-m-d');
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
               $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` ,`lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew', '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
               mysqli_query($con, $sqlinsert);
@@ -671,7 +684,7 @@ for($x = 0; $x <$arrlength; $x++) {
          $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
 
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlength-2;
@@ -832,6 +845,7 @@ for($x = 0; $x <$arrlength; $x++) {
         // $year = date("Y");
         // $week = 'week '.weekOfMonth($date_string);
         else if($taskType == "daily"){
+
           if($_SESSION['newFileLoc'] ==""){
             $fileloc ="" ;
           }
@@ -1035,7 +1049,7 @@ for($x = 0; $x <$arrlength; $x++) {
     $date = new DateTime($today);
 
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlengthBasis-2;
@@ -1295,7 +1309,7 @@ for($x = 0; $x <$arrlength; $x++) {
 
     $date = new DateTime($today);
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlengthBasis-2;
@@ -1372,7 +1386,7 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
 
   }
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
             
             // $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
@@ -1422,7 +1436,7 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
           $realDateForSameId = $dateSubmitted;     
           $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
 
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
             mysqli_query($con, $updateDateStarted);
             $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
             mysqli_query($con, $sqlinsert);
@@ -1584,7 +1598,7 @@ $dateSubmitted = date('Y-m-d');
         $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
 
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
               mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlength-2;
@@ -1652,6 +1666,7 @@ else if($taskType == "annual"){
       
 
       $today = $_SESSION['today'];
+      $dateSubmitted = date('Y-m-d');
 
       $dateNewToday = new DateTime($today);
         $weekNumberNew = $dateNewToday->format("W");
@@ -1674,9 +1689,9 @@ $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
     $realDateForSameId = $dateSubmitted;     
     $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
 
-$updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+$updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
       mysqli_query($con, $updateDateStarted);
-      $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
+      $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
       mysqli_query($con, $sqlinsert);
       header("location:index.php");
       unset($_SESSION['newFileLoc']);
@@ -1723,7 +1738,7 @@ $timenowForSameId = date("hi");
 $realDateForSameId = $dateSubmitted;     
 $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
 
-$updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today' WHERE `usertaskID` = '$usertaskID';";
+$updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
 mysqli_query($con, $updateDateStarted);
 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
 mysqli_query($con, $sqlinsert);
@@ -1739,11 +1754,26 @@ $dateOfTheDay = new DateTime();
 $dateOfTheDays = $dateOfTheDay->format('m-d');
 $yearNow = $dateOfTheDay->format('Y');
 
-$today=" March 31, ".$yearNow;
-$realDate = date('Y-m-d', strtotime($today));
+
+$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+$result = mysqli_query($con, $selectUserTask);
+
+while($userRow = mysqli_fetch_assoc($result)){
+  $dateTarget = $userRow['targetDate'];
+  $dateAdded = $userRow['dateAdded'];
+
+}
+// $today=" March 31, ".$yearNow;
+$today = $_SESSION['today'];
+
+// $today = date('Y-m-d');
+
+$realDate = date('Y-m-d', strtotime($dateTarget));
 
 $end = new DateTime(date('Y-m-d'));
-$start = new DateTime($yearNow.'-04-01');
+// $start = new DateTime($yearNow.'-04-01');
+$start = new DateTime($dateTarget);
+
 $end->modify('+1 day');
 $interval = $end->diff($start);
 // total days
@@ -2230,7 +2260,14 @@ $_SESSION['noOfDaysLate']="";
                                   $sn=1;
                                   foreach($fetchData as $data){
                             ?>
-                             <tr class="tableMain" style="height:50px; <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>background-color: #5afa84<?php } ?> " >
+                             <tr class="tableMain" style="height:50px; <?php
+                              $dateforToday = date('Y-m-d');
+                               $dateTarget = $data['targetDate']; 
+                                if($dateforToday > $dateTarget){ 
+                                  ?>
+                                  background-color: #5afa84
+                                  <?php
+                                   } ?> " >
                                 <td  style="width: 1%;"><?php echo $sn; ?></td>
                                 <td style="width:30%;"><?php echo $data['taskName']??''; ?></td>
                                 <td  style="width: 5%;"><?php echo $data['taskType']??''; ?></td>
@@ -2242,7 +2279,12 @@ $_SESSION['noOfDaysLate']="";
                               <td style="width: 10%;"> <?php
                                 $taskID = $data['usertaskID'];
                                 $taskType =  $data['taskType'];
-                       
+                                $ended = $data['ended'];
+                                if($ended){
+                                  echo '<span id = "doneORnot" class="mode mode_off">Ended</span>';
+
+                                }
+                       else{
                       // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                       // $month = date("F");
                       // $year = date("Y");
@@ -2278,7 +2320,7 @@ $_SESSION['noOfDaysLate']="";
                                   while($userRow = mysqli_fetch_assoc($result)){
                                     $dateStarted = $userRow['dateStarted'];
                                     $dateStartedAdded = $userRow['dateAdded'];
-
+                                        
                                   }
                                   $dateStartedFromDataBase = date($dateStartedAdded);
                                   $dateForNow = date('Y-m-d');
@@ -2787,19 +2829,29 @@ else{
 $date = new DateTime($dateStarted);
 $dateYear = new DateTime($dateStarted);
 
+$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+$result = mysqli_query($con, $selectUserTask);
 
+while($userRow = mysqli_fetch_assoc($result)){
+  $dateTarget = $userRow['targetDate'];
+}
 
 $dateYear->modify('next year');
 $nextYearSample =  $dateYear->format('Y');
 
-$date = new DateTime($nextYearSample.'-04-01');
+// $date = new DateTime($nextYearSample.'-04-01'); //pinalitan mo ito
+$date = new DateTime($dateStartedAdded);
+
+
 $nextYearApril =  $date->format('Y-m-d');
 
 $dateYear->modify('next year');
 $nextYearSample =  $dateYear->format('Y');
 
-$date = new DateTime($nextYearSample.'-03-31');
-$nextYearMarch=  $date->format('Y-m-d');
+// $date = new DateTime($nextYearSample.'-03-31');
+$date = new DateTime($dateTarget);                        //pinalitan mo ito
+$nextYearMarch=  $date->format('Y-m-d');            
+
 // $end = new DateTime(date('Y-m-d'));
 
 
@@ -2825,9 +2877,16 @@ $dateToday=date('Y-m-d', strtotime($dateToday));
 //echo $paymentDate; // echos today! 
 $april = date('Y-m-d', strtotime($nextYearApril));
 $march = date('Y-m-d', strtotime($nextYearMarch));
-    
-if (($dateToday >= $april) && ($dateToday <= $march)){
-  // echo "is between";
+  
+$april2 = date('Y-m-d', strtotime($nextYearApril));
+$march2 = date('Y-m-d', strtotime($nextYearMarch));
+// if (($dateToday >= $april) && ($dateToday <= $march)){
+//   // echo "is between";
+//   $finalDiff = "0";
+
+// }
+
+if(($dateToday >= $april2) && ($dateToday <= $march2)){
   $finalDiff = "0";
 
 }
@@ -2838,7 +2897,15 @@ else{
 
 // echo $year;
 // echo "<br>";
-$date = new DateTime($year.'-04-01');
+$selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+$result = mysqli_query($con, $selectUserTask);
+
+while($userRow = mysqli_fetch_assoc($result)){
+  $dateTarget = $userRow['targetDate'];
+}
+// $date = new DateTime($year.'-04-01');
+$date = new DateTime($dateTarget);
+
 $nextYearApril =  $date->format('Y-m-d');
 
 $end = new DateTime(date('Y-m-d'));
@@ -2883,7 +2950,9 @@ $finalDiff = $interval->days;
          }
          else{
           if($finalDiff >=2){
+            // echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+            
               }
               else if($finalDiff <= 0){
             echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
@@ -2925,7 +2994,7 @@ $finalDiff = $interval->days;
   }
                                   
 
-                                ?> </td>
+ } ?> </td>
                                  <td style="width: 30%">
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
                                  <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -3055,12 +3124,45 @@ $finalDiff = $interval->days;
                                                  
                                                       ?>
                                 <div class="row">
-                                <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate']; $dateStartedFromDataBase = $data['dateStarted']; if($dateforToday > $dateTarget){ ?>
-                                  <div class="col-3">
+                                <?php
+                                 $dateforToday = date('Y-m-d');
+                                  $dateTarget = $data['targetDate'];
+                                   $dateStartedFromDataBase = $data['dateAdded']; 
+                                   $ended = $data['ended'];
+
+                                //   if ($taskType == 'daily'){
+                                //     $today1 = $_SESSION['today'];
+                                //     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today1';";
+                                //     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                                //     $result = mysqli_query($con, $selectUserTask);
+
+                                //     $numrows = mysqli_num_rows($result);
+
+                                //     if($numrows != 1){
+                                //     if($dateforToday > $dateTarget){ ?>
+                                <!-- //    <div class="col-3">
+                                //   <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                // </div>  -->
+                                 <?php 
+                                //          }
+                                //     }
+                                    
+
+                                //   } 
+                                // if($dateforToday > $dateTarget){ ?>
+                                  <!-- <div class="col-3">
                                   <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
-                                </div>
-                                        <?php }
-                                         else if($dateStartedFromDataBase >$dateforToday  ){
+                                </div> -->
+                                        <?php 
+                                        // }
+                                        $dateForNow = date('Y-m-d');
+                                        if($dateStartedFromDataBase >$dateForNow  ){
+                                          ?><div class="col-3">
+                                          <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                        </div><?php
+
+                                        }
+                                         else if($ended){
                                          ?><div class="col-3">
                                          <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
                                        </div><?php
@@ -3104,6 +3206,25 @@ $finalDiff = $interval->days;
                                       $don = "1";
                                       // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
                                          }
+
+                                                                                
+                                        //  if($dateforToday > $dateTarget){
+                                          
+                                        //   if ($numrows >= 1){
+                                        //     echo 'disabled';
+      
+                                        //     $don = "1";
+                                        //   //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                        //        }
+                                        //        }
+                                        //        else{
+                                        //         if ($numrows >= 1){
+                                        //           echo 'disabled';
+            
+                                        //           $don = "1";
+                                        //         //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                        //              }
+                                        //        }
                                     }
                                     else if($taskType == 'monthly'){
                                       $dateForNow = $_SESSION['date_string'];
@@ -3124,6 +3245,24 @@ $finalDiff = $interval->days;
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
+
+                                        //  if($dateforToday > $dateTarget){
+                                          
+                                        //   if ($numrows >= 1){
+                                        //     echo 'disabled';
+      
+                                        //     $don = "1";
+                                        //   //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                        //        }
+                                        //        }
+                                        //        else{
+                                        //         if ($numrows >= 1){
+                                        //           echo 'disabled';
+            
+                                        //           $don = "1";
+                                        //         //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                        //              }
+                                        //        }
                                     
                                     }
                                     else if($taskType == 'annual'){
@@ -3146,8 +3285,8 @@ $finalDiff = $interval->days;
 
                                     }
 
-                                    $April = new DateTime($YearToUseForApril.'-04-01');
-                                    $March = new DateTime($YearToUseforMarch.'-03-31');
+                                    $April = new DateTime($dateStartedFromDataBase);
+                                    $March = new DateTime($dateTarget);
                                     $April =  $April->format('Y-m-d');
                                     $March =  $March->format('Y-m-d');
 
@@ -3160,13 +3299,31 @@ $finalDiff = $interval->days;
                                     $numrows = mysqli_num_rows($result);
                                     $don = "0";
 
-                                    if ($numrows == 1){
+                                    if ($numrows >= 1){
                                       echo 'disabled';
 
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
                                     
+                                         
+                                        //  if($dateforToday > $dateTarget){
+                                          
+                                        //   if ($numrows >= 1){
+                                        //     echo 'disabled';
+      
+                                        //     $don = "1";
+                                        //   //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                        //        }
+                                        //        }
+                                        //        else{
+                                        //         if ($numrows >= 1){
+                                        //           echo 'disabled';
+            
+                                        //           $don = "1";
+                                        //         //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                        //              }
+                                        //        }
                                     }
                                     else if($taskType == 'daily'){
                                       $dateForNow = $_SESSION['date_string'];
@@ -3188,6 +3345,23 @@ $finalDiff = $interval->days;
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
                                          }
+                                    //      if($dateforToday > $dateTarget){
+                                          
+                                    // if ($numrows == 1){
+                                    //   echo 'disabled';
+
+                                    //   $don = "1";
+                                    // //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                    //      }
+                                    //      }
+                                    //      else{
+                                    //       if ($numrows == 1){
+                                    //         echo 'disabled';
+      
+                                    //         $don = "1";
+                                    //       //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
+                                    //            }
+                                    //      }
                                     
                                     }
                                 ?> 
@@ -3202,14 +3376,19 @@ $finalDiff = $interval->days;
                                       <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
                                       <!-- upload -->
                                       
-                                      <input type="submit"  <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>
-                                  disabled
-                                        <?php }
-                                          else if($dateStartedFromDataBase >$dateforToday  ){
+                                      <input type="submit"  <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate']; $dateStartedFromDataBase = $data['dateAdded']; $ended = $data['ended'];
+                                        //  if($dateforToday > $dateTarget){ ?>
+                                  
+                                        <?php
+                                        //  }
+                                         if($dateStartedFromDataBase >$dateforToday  ){
                                             ?>disabled<?php
          
                                            }
-                                     
+                                           else if($ended){
+                                            ?>disabled<?php
+                                           }
+                                          
                                           ?> id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
                                       <script>
 
@@ -3252,26 +3431,39 @@ $finalDiff = $interval->days;
                                       
                                       <!-- Finish -->
                                      <!-- <a onclick="checkIfLate(<?php echo $data['usertaskID'] ?>)" id= "checked<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Check</a> -->
-                                     <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate'];  if($dateforToday > $dateTarget){ ?>
-                                      <a  href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" class="btn btn-outline-secondary" style="pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
-                                   <a class="btn btn-outline-secondary" href="#" style=" pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                     <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate']; $dateStartedFromDataBase = $data['dateAdded']; 
                                      
-                                        <?php }
-                                         else if($dateStartedFromDataBase >$dateforToday  ){
+                                    //  if($dateforToday > $dateTarget){ ?>
+                                      <!-- <a  href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" class="btn btn-outline-secondary" style="pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                   <a class="btn btn-outline-secondary" href="#" style=" pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                      -->
+                                        <?php 
+                                        
+                                        // }
+                                         if($dateStartedFromDataBase >$dateforToday  ){
                                           ?> <a  href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" class="btn btn-outline-secondary" style="pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                           <a class="btn btn-outline-secondary" href="#" style=" pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                             <?php
        
                                          }
+                                         else if($ended){
+                                          ?> <a  href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" class="btn btn-outline-secondary" style="pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                          <a class="btn btn-outline-secondary" href="#" style=" pointer-events: none; font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
+                                            <?php
+       
+                                         }
+                           
+
                                    
                                         else{
+                                     
                                           ?>
                                           
                                       
 
                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" style="display: none" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                         <!-- <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
-                                      <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finishedsample<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                        <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finishedsample<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                       
                                       <?php
                                        $taskID = $data['usertaskID'];
@@ -4125,6 +4317,10 @@ document.getElementById('daysLate').value='$finalDiff';
     
     while($userRow = mysqli_fetch_assoc($result)){
       $dateStarted = $userRow['dateStarted'];
+      $dateAdded = $userRow['dateAdded'];
+      $targetDate = $userRow['targetDate'];
+
+
     }
     
     $date = new DateTime($dateStarted);
@@ -4132,13 +4328,16 @@ document.getElementById('daysLate').value='$finalDiff';
     $dateYear->modify('next year');
 $nextYearSample =  $dateYear->format('Y');
 
-$date = new DateTime($nextYearSample.'-04-01');
+// $date = new DateTime($nextYearSample.'-04-01');
+$date = new DateTime($dateAdded);
+
 $nextYearApril =  $date->format('Y-m-d');
 
 $dateYear->modify('next year');
 $nextYearSample =  $dateYear->format('Y');
 
-$date = new DateTime($nextYearSample.'-03-31');
+$date = new DateTime($targetDate);
+// $date = new DateTime($nextYearSample.'-03-31');
 $nextYearMarch=  $date->format('Y-m-d');
     
 $yearOfThisMonth = new DateTime(date('Y-m-d'));
@@ -4148,25 +4347,32 @@ $Year_Now = $yearOfThisMonth->format('Y');
 // $nextYearHehe =  $nextYear->format('Y');
 // echo $nextYearHehe;
 
-$dateToday = date('Y-m-d');
+$dateToday = date('Y-m-d'); //ibalik sa Y-m-d
 $dateToday=date('Y-m-d', strtotime($dateToday));
 //echo $paymentDate; // echos today! 
 $april = date('Y-m-d', strtotime($nextYearApril));
 $march = date('Y-m-d', strtotime($nextYearMarch));
-   
-
-if (($dateToday >= $april) && ($dateToday <= $march)){
-  // echo "is between";
+$april2 = date('Y-m-d', strtotime($dateAdded));
+$march2 = date('Y-m-d', strtotime($targetDate));
+if(($dateToday >= $april2) && ($dateToday <= $march2)){
   $finalDiff = "0";
 
 }
+// if (($dateToday >= $april) && ($dateToday <= $march)){
+//   // echo "is between";
+//   $finalDiff = "0";
+
+// }
 else{
   // $date->modify('next year');
   $year =  $date->format('Y');
 
 // echo $year;
 // echo "<br>";
-$date = new DateTime($year.'-04-01');
+// $date = new DateTime($year.'-04-01');
+
+$date = new DateTime($targetDate);
+
 $nextYearApril =  $date->format('Y-m-d');
 
 $end = new DateTime(date('Y-m-d'));
@@ -4174,6 +4380,7 @@ $end = new DateTime(date('Y-m-d'));
 
 $start = new DateTime($nextYearApril);
 
+$start->modify('+1 day');
 
 $end->modify('+1 day');
 
