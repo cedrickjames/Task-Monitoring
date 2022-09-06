@@ -428,8 +428,8 @@ $array11 = explode(",", $src1);
                             </div>
                             <div class="col-sm-1" style="padding: 0">
                                 <select  name="taskArea1" id="taskArea1" class=" form-control form-select form-select-sm" style="padding-left:10px;">
-                                    <option value="" disabled selected>Area</option>
-                                    <option value="All">All</option>
+                                    <option value="" disabled >Area</option>
+                                    <option value="All" selected>All</option>
                                     <option value="GPI 1">GPI 1</option>
                                     <option value="GPI 2">GPI 2</option>
                                     <option value="GPI 3">GPI 3</option>
