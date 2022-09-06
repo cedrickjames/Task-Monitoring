@@ -338,7 +338,7 @@ $timenow = date("h:i a");
 
 echo("<script>console.log('Time Now: " .$timenow. "');</script>");
 
-$PassContainer ="";
+// $PassContainer ="";
 $message = ''; 
 $newFileName = '';
 $varAlert = '';
@@ -349,8 +349,8 @@ $varAlert = '';
 // }
 if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
 {
-  echo "<script> console.log('uploadddddd'); </script>";
-  $IDCONTAINER = $_POST['idContainer'];
+  // echo "<script> console.log('uploadddddd'); </script>";
+  // $IDCONTAINER = $_POST['idContainer'];
   if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK){
     // get details of the uploaded file
     
@@ -381,7 +381,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
       if(move_uploaded_file($fileTmpPath, $dest_path)) 
       {
         $varAlert = "success";
-        $PassContainer = $IDCONTAINER;
+        // $PassContainer = $IDCONTAINER;
         $message ='File is successfully uploaded.';
         $_SESSION['newFileLoc'] = $dest_path;
       }
@@ -450,8 +450,9 @@ $week = 'week '.weekOfMonth($date_string);
 
 
 
-
+ $newFileName = '';
     if(isset($_GET['Finish'])){
+
 $reason = $_SESSION['reason'];
 $action = $_SESSION['action'];
 echo "There is an error. Please contact the developer. ";
@@ -1654,6 +1655,8 @@ else if($taskType == "annual"){
 
   $IntervalDays = $_SESSION['noOfDaysLate'];
   echo "<script> console.log('$meron') </script>";//find2
+  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+      mysqli_query($con, $updateDateStarted);
   if($IntervalDays ==0 ){
     // echo "meron";
     if($_SESSION['newFileLoc'] ==""){
@@ -1738,16 +1741,16 @@ $timenowForSameId = date("hi");
 $realDateForSameId = $dateSubmitted;     
 $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
 
-$updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-mysqli_query($con, $updateDateStarted);
-$sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
-mysqli_query($con, $sqlinsert);
-header("location:index.php");
-unset($_SESSION['newFileLoc']);
-$_SESSION['reason'] = "";
-$_SESSION['action'] = "";
+// $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+// mysqli_query($con, $updateDateStarted);
+// $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
+// mysqli_query($con, $sqlinsert);
+// header("location:index.php");
+// unset($_SESSION['newFileLoc']);
+// $_SESSION['reason'] = "";
+// $_SESSION['action'] = "";
 
-$_SESSION['noOfDaysLate']="";
+// $_SESSION['noOfDaysLate']="";
 
 
 $dateOfTheDay = new DateTime();
@@ -2201,7 +2204,6 @@ $_SESSION['noOfDaysLate']="";
                          <h3>Task</h3> 
                         </div>
 
-
                         <div class="col-sm-4"  style="padding: 0; display: none">
                           <div class="form-group row d-flex justify-content-center" >
                           <form action="index.php" method = "POST" >
@@ -2248,10 +2250,10 @@ $_SESSION['noOfDaysLate']="";
                                 <tr>
                                     <th style="min-width:1%;">No.</th>
                                     <th style="width:30%;" >Task Name</th>
-                                    <th style="min-width:1px;" >Type</th>
-                                    <th style="min-width:4%;" >Category</th>
+                                    <th style="min-width:10%;" >Type</th>
+                                    <th style="min-width:10%;" >Category</th>
                                     <th style="min-width:10%;">Status</th>
-                                    <th style="min-width:30%; text-align: center">Action</th>
+                                    <th style="min-width:20%;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="TaskTable">
@@ -2270,8 +2272,8 @@ $_SESSION['noOfDaysLate']="";
                                    } ?> " >
                                 <td  style="width: 1%;"><?php echo $sn; ?></td>
                                 <td style="width:30%;"><?php echo $data['taskName']??''; ?></td>
-                                <td  style="width: 5%;"><?php echo $data['taskType']??''; ?></td>
-                                <td  style="width: 5%;"><?php echo $data['taskCategory']??''; ?></td>
+                                <td  style="width: 10%;"><?php echo $data['taskType']??''; ?></td>
+                                <td  style="width: 10%;"><?php echo $data['taskCategory']??''; ?></td>
                               <!-- <td>
                                 
                               <span class="mode mode_on">Done</span></td>
@@ -2705,26 +2707,37 @@ $_SESSION['noOfDaysLate']="";
 
                                   }
                                   else{
-                                          // $from=date_create(date('Y-m-d'));
-                                          // $to=date_create(date('Y-m-d', strtotime($today)));
-                                          // $diff=date_diff($to,$from);
-                                          // // print_r($diff);
-                                          // $reason =  $_SESSION['reason'];
-                                          // $finalDiff =  $diff->format('%R%a');
-                                          // $finalDiff = $finalDiff-1;
-                                          
-// $start = date_create(date('Y-m-d'));
-// // echo "<script> console.log('$start') </script>";
-// $end = date_create(date('Y-m-d', strtotime($today)));
+                                         
+          $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
+          $result = mysqli_query($con, $selectUserTask);
+          
+          while($userRow = mysqli_fetch_assoc($result)){
+            $today = $userRow['dateStarted'];
+          }
+          $datesssss = new DateTime($today);
+  
+          $weekssss = $datesssss->format("D");
+          if($weekssss == "Sat"){
+            $datesssss->modify("-1 day");
+  $today =  $datesssss->format('Y-m-d');
+
+          }
+          else if($weekssss == "Sun"){
+            $datesssss->modify("-2 day");
+            $today =  $datesssss->format('Y-m-d');
+
+          }
+          // $from=date_create(date('Y-m-d'));
+          // $to=date_create(date('Y-m-d', strtotime($today)));
+          // $diff=date_diff($to,$from);
+          // // print_r($diff);
+          // $finalDiff =  $diff->format('%R%a');
+          // $finalDiff = $finalDiff-1;
+
+          $end = new DateTime(date('Y-m-d'));
+          $start = new DateTime(date('Y-m-d', strtotime($today)));
 // otherwise the  end date is excluded (bug?)
-
-$end = new DateTime(date('Y-m-d'));
-$start = new DateTime(date('Y-m-d', strtotime($today)));
-$result = $start->format('Y-m-d');
-// echo $result;
-
-
-$end->modify('+1 day');
+// $end->modify('+1 day');
 
 $interval = $end->diff($start);
 
@@ -2735,26 +2748,23 @@ $finalDiff = $interval->days;
 $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
 // best stored as array, so you can add more than one
-//$holidays = array('2022-01-01');
-// $holidays = $holidaysArray;
+//$holidays = array('2012-09-07');
 
 foreach($period as $dt) {
     $curr = $dt->format('D');
- 
+
     // substract if Saturday or Sunday
     if ($curr == 'Sat' || $curr == 'Sun') {
       $finalDiff--;
-     
     }
 
     // (optional) for the updated question
-     if (in_array($dt->format('Y-m-d'), $holidays)) {
+    elseif (in_array($dt->format('Y-m-d'), $holidays)) {
       $finalDiff--;
     }
 }
 
-$finalDiff=$finalDiff-2;
-// echo $finalDiff; // return difference except weekends
+$finalDiff=$finalDiff-1;
                                           if($finalDiff >=2){
                                             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
                                               }
@@ -2995,7 +3005,7 @@ $finalDiff = $interval->days;
                                   
 
  } ?> </td>
-                                 <td style="width: 30%">
+                                 <td style="width: 20%; ">
                                  <form method="POST" action="index.php" enctype="multipart/form-data" >
                                  <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog" role="document">
@@ -3021,6 +3031,14 @@ $finalDiff = $interval->days;
                                                     <label for="message-text" class="col-form-label">Action:</label>
                                                     <textarea class="form-control" name="ActionInputwithLate" id="getAction"></textarea>
                                                   </div>
+                                                  <div class="form-group">
+                                                  <label for="message-text" class="col-form-label">Choose a file:</label>
+                                                  
+                     
+                                       <input type="file" data-uploadId="<?php echo $data['usertaskID'] ?>" name="uploadedFile2" id="uploadedFile2" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                    <input  value="<?php  echo $data['taskName'];?>" style="display: none">
+                                                                  
+                                    </div>
                                                   <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" name="reason" id="submitReasonAndAction" class="btn btn-primary">Save reason</button>
@@ -3041,17 +3059,50 @@ $finalDiff = $interval->days;
                                                 </button>
                                               </div>
                                               <div class="modal-body">
-                                           
-                                           
-                                                  <div class="form-group">
+                                             <div class="form-group">
+                                             
                                                     <label for="message-text" class="col-form-label">Action:</label>
                                                     <textarea class="form-control" name="actionInput" id="actionText"></textarea>
                                                   </div>
+                                                  
+                        <input type="text"name="idContainer" id="containerIdForFile" style="display: none">
+
+                                                  <div class="form-group">
+                                                  <label for="message-text" class="col-form-label">Choose a file:</label>
+                                                  
+                     
+                                       <input type="file" data-uploadId="<?php echo $data['usertaskID'] ?>" name="uploadedFile" id="uploadedFile" class="form-control" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
+                                    <input  value="<?php  echo $data['taskName'];?>" style="display: none">
+                                                                  
+                                    </div>
                                                   <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" id="submitAction" name="action"class="btn btn-primary">Save action</button>
+                                                <button style="display: none" type="submit" id="submitActions" name="testingaction"class="btn btn-primary" onclick="clickUpload()">test action</button>
+                                                <input style="display: none" type="submit" id = "uploadsample" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto; display: block"  />
+                                                <script>
+
+                                        // // document.getElementById("uploadsample30").disabled = true;
+                                    
+                                        var uploadinput = document.getElementById('uploadedFile');
+
+                                        // alert(fileId);
+                                          // document.getElementById(fileInputId).removeAttribute("disabled");
+
+                                        if(uploadinput.value == ''){
+                                          document.getElementById('uploadsample').disabled = true;
+                                        }else{
+                                          document.getElementById('uploadsample').disabled = false;
+                                        }
+
+                                        $('input[type="file"]').change(function() {
+                                          document.getElementById('uploadsample').disabled = false;
+
+                                        });
+
+                                        </script>
                                               </div>
-                           
+                                            
                                               </div>
                                             
                                             </div>
@@ -3124,309 +3175,12 @@ $finalDiff = $interval->days;
                                                  
                                                       ?>
                                 <div class="row">
-                                <?php
-                                 $dateforToday = date('Y-m-d');
-                                  $dateTarget = $data['targetDate'];
-                                   $dateStartedFromDataBase = $data['dateAdded']; 
-                                   $ended = $data['ended'];
-
-                                //   if ($taskType == 'daily'){
-                                //     $today1 = $_SESSION['today'];
-                                //     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today1';";
-                                //     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                //     $result = mysqli_query($con, $selectUserTask);
-
-                                //     $numrows = mysqli_num_rows($result);
-
-                                //     if($numrows != 1){
-                                //     if($dateforToday > $dateTarget){ ?>
-                                <!-- //    <div class="col-3">
-                                //   <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
-                                // </div>  -->
-                                 <?php 
-                                //          }
-                                //     }
-                                    
-
-                                //   } 
-                                // if($dateforToday > $dateTarget){ ?>
-                                  <!-- <div class="col-3">
-                                  <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
-                                </div> -->
-                                        <?php 
-                                        // }
-                                        $dateForNow = date('Y-m-d');
-                                        if($dateStartedFromDataBase >$dateForNow  ){
-                                          ?><div class="col-3">
-                                          <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
-                                        </div><?php
-
-                                        }
-                                         else if($ended){
-                                         ?><div class="col-3">
-                                         <input type="file" disabled  class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
-                                       </div><?php
-      
-                                        }
-                                        else{
-                                          ?>
-                                       
-                                  <div class="col-3">
-                                    <?php $upFile = 'uploadedFile' . $data['usertaskID']; $varUpload = $data['usertaskID'];  $upBtn = 'uploadsample' . $data['usertaskID'];?>
-
-                                      <input type="file" 
-                                    <?php
-                                $taskID = $data['usertaskID'];
-                                $taskType =  $data['taskType'];
-
-                      // echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
-                      // $month = date("F");
-                      $year = date("Y");
-                      $weeknumberrr = weekOfMonth($_SESSION['date_string']);
-                      // echo("<script>console.log('hahahah: " .$weeknumberrr. "');</script>");
-
-                      if ($taskType == 'weekly'){
-                        $dateForNow = $_SESSION['date_string'];
-                        $date = new DateTime($dateForNow);
-                        $week = $date->format("W");
-                        $weekMonth = $week;
-                       $month1 = $_SESSION['month'];
-                       $year1 = $_SESSION['year'];
-
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' AND `week` = 'week $weekMonth';";
-                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                    $result = mysqli_query($con, $selectUserTask);
-
-                                    $numrows = mysqli_num_rows($result);
-
-                                    $don = "0";
-
-                                    if ($numrows == 1){
-                                      echo 'disabled';
-                                      $don = "1";
-                                      // echo '<style type="text/css">#finished22 {pointer-events: none; <style>';
-                                         }
-
-                                                                                
-                                        //  if($dateforToday > $dateTarget){
-                                          
-                                        //   if ($numrows >= 1){
-                                        //     echo 'disabled';
-      
-                                        //     $don = "1";
-                                        //   //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                        //        }
-                                        //        }
-                                        //        else{
-                                        //         if ($numrows >= 1){
-                                        //           echo 'disabled';
-            
-                                        //           $don = "1";
-                                        //         //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                        //              }
-                                        //        }
-                                    }
-                                    else if($taskType == 'monthly'){
-                                      $dateForNow = $_SESSION['date_string'];
-                        $date = new DateTime($dateForNow);
-                        $week = $date->format("W");
-                        $weekMonth = $week;
-                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
-                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                    $result = mysqli_query($con, $selectUserTask);
-
-                                    $numrows = mysqli_num_rows($result);
-                                    $don = "0";
-
-                                    if ($numrows == 1){
-                                      echo 'disabled';
-
-                                      $don = "1";
-                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                         }
-
-                                        //  if($dateforToday > $dateTarget){
-                                          
-                                        //   if ($numrows >= 1){
-                                        //     echo 'disabled';
-      
-                                        //     $don = "1";
-                                        //   //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                        //        }
-                                        //        }
-                                        //        else{
-                                        //         if ($numrows >= 1){
-                                        //           echo 'disabled';
-            
-                                        //           $don = "1";
-                                        //         //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                        //              }
-                                        //        }
-                                    
-                                    }
-                                    else if($taskType == 'annual'){
-                                                                        
-                                    $dateOfNow = new DateTime(date('Y-m-d'));
-                                    $MonthOfNow =  $dateOfNow->format('F');
-                                    $YearToUseForApril = "";
-                                    $YearToUseforMarch = "";
-                                    if($MonthOfNow=="January" || $MonthOfNow=="February" || $MonthOfNow=="March"){
-
-                                      $YearToUseforMarch =  $dateOfNow->format('Y');
-                                      $dateOfNow->modify('last year');
-                                      $YearToUseForApril =  $dateOfNow->format('Y');
-                                    }
-                                    else{
-                                      $YearToUseForApril =  $dateOfNow->format('Y');
-                                  $dateOfNow->modify('next year');
-                                  $YearToUseforMarch =  $dateOfNow->format('Y');
-
-
-                                    }
-
-                                    $April = new DateTime($dateStartedFromDataBase);
-                                    $March = new DateTime($dateTarget);
-                                    $April =  $April->format('Y-m-d');
-                                    $March =  $March->format('Y-m-d');
-
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `realDate` BETWEEN '$April' AND '$March';";
-                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
-                                    // $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
-                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                    $result = mysqli_query($con, $selectUserTask);
-
-                                    $numrows = mysqli_num_rows($result);
-                                    $don = "0";
-
-                                    if ($numrows >= 1){
-                                      echo 'disabled';
-
-                                      $don = "1";
-                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                         }
-                                    
-                                         
-                                        //  if($dateforToday > $dateTarget){
-                                          
-                                        //   if ($numrows >= 1){
-                                        //     echo 'disabled';
-      
-                                        //     $don = "1";
-                                        //   //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                        //        }
-                                        //        }
-                                        //        else{
-                                        //         if ($numrows >= 1){
-                                        //           echo 'disabled';
-            
-                                        //           $don = "1";
-                                        //         //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                        //              }
-                                        //        }
-                                    }
-                                    else if($taskType == 'daily'){
-                                      $dateForNow = $_SESSION['date_string'];
-                        $date = new DateTime($dateForNow);
-                        $week = $date->format("W");
-                        $weekMonth = $week;
-                                      // $weekMonth = weekOfMonth($_SESSION['date_string']);
-                                      $today1 = $_SESSION['today'];
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `Date` = ' $today1';";
-                                    // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
-                                    $result = mysqli_query($con, $selectUserTask);
-
-                                    $numrows = mysqli_num_rows($result);
-                                    $don = "0";
-
-                                    if ($numrows == 1){
-                                      echo 'disabled';
-
-                                      $don = "1";
-                                    //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                         }
-                                    //      if($dateforToday > $dateTarget){
-                                          
-                                    // if ($numrows == 1){
-                                    //   echo 'disabled';
-
-                                    //   $don = "1";
-                                    // //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                    //      }
-                                    //      }
-                                    //      else{
-                                    //       if ($numrows == 1){
-                                    //         echo 'disabled';
-      
-                                    //         $don = "1";
-                                    //       //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
-                                    //            }
-                                    //      }
-                                    
-                                    }
-                                ?> 
-                               
-                                    
-                                    data-uploadId="<?php echo $data['usertaskID'] ?>" name="uploadedFile" id="<?php echo $upFile; ?>" class="form-control pt-1" style="width: 180px; height: 30px; font-size: 10px; padding-top:0px" title=" Select ">
-                                    <input name="idContainer" value="<?php  echo $data['taskName'];?>" style="display: none">
-                                  </div>
-                                  <?php } ?>
+                                
                                   
-                                  <div class="col-9" style="padding-left: 90px">
+                                  <div class="col-9" style="padding-left: 0px">
                                       <!-- <a type="button" class="btn btn-outline-primary" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" onclick="sendNotification();sendNotificationAgri()">  Finish</button> -->
                                       <!-- upload -->
-                                      
-                                      <input type="submit"  <?php $dateforToday = date('Y-m-d'); $dateTarget = $data['targetDate']; $dateStartedFromDataBase = $data['dateAdded']; $ended = $data['ended'];
-                                        //  if($dateforToday > $dateTarget){ ?>
-                                  
-                                        <?php
-                                        //  }
-                                         if($dateStartedFromDataBase >$dateforToday  ){
-                                            ?>disabled<?php
-         
-                                           }
-                                           else if($ended){
-                                            ?>disabled<?php
-                                           }
-                                          
-                                          ?> id = "uploadsample<?php echo $data['usertaskID'] ?>" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;"  />
-                                      <script>
-
-                                        // // document.getElementById("uploadsample30").disabled = true;
-                                        var jsonDataUpload = <?php echo json_encode($varUpload); ?>;
-                                        var uploadinput = document.getElementById(<?php echo json_encode($upFile); ?>);
-                                    
-                                        var fileId = <?php echo json_encode($upBtn); ?>;
-                                        // alert(fileId);
-                                          // document.getElementById(fileInputId).removeAttribute("disabled");
-
-                                        if(uploadinput.value == ''){
-                                          document.getElementById(<?php echo json_encode($upBtn); ?>).disabled = true;
-                                        }else{
-                                          document.getElementById(<?php echo json_encode($upBtn); ?>).disabled = false;
-                                        }
-
-                                        $('input[type="file"]').change(function() {
-                                          var fileInputId = this.id;
-                                          var dataId = $(this).attr("data-uploadId");
-                                          var nId = 'uploadsample'+dataId;
-                                          // alert(nId);
-                                          document.getElementById(nId).disabled = false;
-                                          // var nId = '#'+dataId;finishedsample
-                                          // alert(nId);
-                                          // $(nId).prop('disabled', false);
-                                          // alert(fileInputId);
-                                        });
-
-                                        // // console.log(uploadinput.value)
-                                        // $(<?php //echo json_encode($upFile); ?>).change(function () {
-                                        //   if ($(<?php //echo json_encode($upFile); ?>).val() == '') {
-                                        //     $(<?php //echo json_encode($upBtn); ?>).attr('disabled', true)
-                                        //   } else {
-                                        //     $(<?php //echo json_encode($upBtn); ?>).attr('disabled', false);
-                                        //   }
-                                        // })
-                                        </script>
+                                     
                                   
                                       
                                       <!-- Finish -->
@@ -3463,7 +3217,7 @@ $finalDiff = $interval->days;
 
                                      <a href="index.php?Finish=<?php echo $data['usertaskID'] ?>" style="display: none" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                         <!-- <a href="index.php?Cancel=<?php echo $data['usertaskID'] ?>" id= "finished<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'danger';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:30px; margin:0 auto;" >X</a> -->
-                                        <a href="index.php?FinishSample=<?php echo $data['usertaskID'] ?>" id= "finishedsample<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
+                                        <a href="index.php?FinishSample=<?php echo $data['usertaskID']; $passUserTaskId = $data['usertaskID']; ?>" onclick="passAction('<?php echo $passUserTaskId; ?>')" id= "finishedsample<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'secondary';} else{ echo 'primary';}?>" style="<?php if($don == "1"){ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Finish</a>
                                       
                                       <?php
                                        $taskID = $data['usertaskID'];
@@ -3936,6 +3690,7 @@ if ($taskType == 'weekly'){
          $taskID = $_SESSION['TaskID'];
          echo "<script>  
         $('#actionModal').modal('show');
+
            //document.getElementById('finished$taskID').click();   DITO AKO NATAPOS   
                    </script>";
 
@@ -4518,6 +4273,10 @@ $finalDiff=$finalDiff-1;
          echo "<script>  
          console.log('$taskID');
          $('#actionModal').modal('show');
+         document.getElementById('containerIdForFile').value='$taskID';
+
+
+
           //  document.getElementById('finished$taskID').click();     DITO AKO NATAPOS 
                      </script>";
                   }
@@ -4530,6 +4289,63 @@ $finalDiff=$finalDiff-1;
     
                                                    
     if(isset($_POST['reason'])){
+
+         
+//upload code **************************************
+if (isset($_FILES['uploadedFile2']) && $_FILES['uploadedFile2']['error'] === UPLOAD_ERR_OK){
+  // get details of the uploaded file
+  
+  $fileTmpPath = $_FILES['uploadedFile2']['tmp_name'];
+  $fileName = $_FILES['uploadedFile2']['name'];
+  $fileSize = $_FILES['uploadedFile2']['size'];
+  $fileType = $_FILES['uploadedFile2']['type'];
+  $fileNameCmps = explode(".", $fileName);
+  $fileExtension = strtolower(end($fileNameCmps));
+
+  // sanitize file-name
+
+$newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+  echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
+ 
+  // check if file has one of the following extensions
+  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+
+  if (in_array($fileExtension, $allowedfileExtensions))
+  {
+    // directory in which the uploaded file will be moved
+    $uploadFileDir = './uploaded_files/';
+    $dest_path = $uploadFileDir . $newFileName;
+    echo("<script>console.log('FILE LOCATION: " .$dest_path . "');</script>");
+   
+    $_SESSION['newFileLoc'] = $dest_path;
+    
+    if(move_uploaded_file($fileTmpPath, $dest_path)) 
+    {
+      $varAlert = "success";
+      // $PassContainer = $IDCONTAINER;
+      $message ='File is successfully uploaded.';
+      $_SESSION['newFileLoc'] = $dest_path;
+    }
+    else
+    {
+      $message = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';
+    }
+  }
+  else
+  {
+    $message = 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions);
+  }
+}
+else
+{
+  $message = 'There is some error in the file upload. Please check the following error.<br>';
+  $message .= 'Error:' . $_FILES['uploadedFile2']['error'];
+}
+//end of upload code **************************************
+
+
+
+
       $_SESSION['reason'] = $_POST['reasonInput'];
       $_SESSION['action'] = $_POST['ActionInputwithLate'];
 
@@ -4555,12 +4371,73 @@ $finalDiff=$finalDiff-1;
     }
 
     if(isset($_POST['action'])){
+
+
+      
+//upload code **************************************
+if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK){
+  // get details of the uploaded file
+  
+  $fileTmpPath = $_FILES['uploadedFile']['tmp_name'];
+  $fileName = $_FILES['uploadedFile']['name'];
+  $fileSize = $_FILES['uploadedFile']['size'];
+  $fileType = $_FILES['uploadedFile']['type'];
+  $fileNameCmps = explode(".", $fileName);
+  $fileExtension = strtolower(end($fileNameCmps));
+
+  // sanitize file-name
+
+$newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+  echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
+ 
+  // check if file has one of the following extensions
+  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+
+  if (in_array($fileExtension, $allowedfileExtensions))
+  {
+    // directory in which the uploaded file will be moved
+    $uploadFileDir = './uploaded_files/';
+    $dest_path = $uploadFileDir . $newFileName;
+    echo("<script>console.log('FILE LOCATION: " .$dest_path . "');</script>");
+   
+    $_SESSION['newFileLoc'] = $dest_path;
+    
+    if(move_uploaded_file($fileTmpPath, $dest_path)) 
+    {
+      $varAlert = "success";
+      // $PassContainer = $IDCONTAINER;
+      $message ='File is successfully uploaded.';
+      $_SESSION['newFileLoc'] = $dest_path;
+    }
+    else
+    {
+      $message = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';
+    }
+  }
+  else
+  {
+    $message = 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions);
+  }
+}
+else
+{
+  $message = 'There is some error in the file upload. Please check the following error.<br>';
+  $message .= 'Error:' . $_FILES['uploadedFile']['error'];
+}
+//end of upload code **************************************
+
+
+
+
+
       $_SESSION['action'] = $_POST['actionInput'];
       if($_SESSION['action'] != ""){
         $taskID = $_SESSION['TaskID'];
         echo $taskID;
           echo "<script> // document.getElementById('finishedsample$taskID').style.display='none';
-          document.getElementById('finished$taskID').click();      
+          document.getElementById('uploadsample').click();      
+          document.getElementById('finished$taskID').click();   
+
 
           </script>";
       }
@@ -4576,6 +4453,62 @@ $finalDiff=$finalDiff-1;
       }
     }
 
+    if(isset($_POST['testingaction'])){
+             
+//upload code **************************************
+if (isset($_FILES['uploadedFile']) && $_FILES['uploadedFile']['error'] === UPLOAD_ERR_OK){
+  // get details of the uploaded file
+  
+  $fileTmpPath = $_FILES['uploadedFile']['tmp_name'];
+  $fileName = $_FILES['uploadedFile']['name'];
+  $fileSize = $_FILES['uploadedFile']['size'];
+  $fileType = $_FILES['uploadedFile']['type'];
+  $fileNameCmps = explode(".", $fileName);
+  $fileExtension = strtolower(end($fileNameCmps));
+
+  // sanitize file-name
+
+$newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+  echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
+ 
+  // check if file has one of the following extensions
+  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+
+  if (in_array($fileExtension, $allowedfileExtensions))
+  {
+    // directory in which the uploaded file will be moved
+    $uploadFileDir = './uploaded_files/';
+    $dest_path = $uploadFileDir . $newFileName;
+    echo("<script>console.log('FILE LOCATION: " .$dest_path . "');</script>");
+   
+    $_SESSION['newFileLoc'] = $dest_path;
+    
+    if(move_uploaded_file($fileTmpPath, $dest_path)) 
+    {
+      $varAlert = "success";
+      // $PassContainer = $IDCONTAINER;
+      $message ='File is successfully uploaded.';
+      $_SESSION['newFileLoc'] = $dest_path;
+    }
+    else
+    {
+      $message = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';
+    }
+  }
+  else
+  {
+    $message = 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions);
+  }
+}
+else
+{
+  $message = 'There is some error in the file upload. Please check the following error.<br>';
+  $message .= 'Error:' . $_FILES['uploadedFile']['error'];
+}
+//end of upload code **************************************
+
+
+    }
     if(isset($_POST['reasonUpdate'])){
       $_SESSION['reason'] = $_POST['reasonInputUpdate'];
       $_SESSION['action'] = $_POST['actionInputUpdateLate'];
@@ -4759,19 +4692,19 @@ $('#reasonModalUpdate').on('show.bs.modal', function (event) {
 
 var jsonData = <?php echo json_encode("$varAlert"); ?>;
 console.log(jsonData);
-var jsonDataID = <?php echo json_encode("$PassContainer"); ?>;
+// var jsonDataID = <?php// echo json_encode("$PassContainer"); ?>;
 
-if(jsonData == "success"){
-  // document.getElementById("successAlertWord").value=jsonDataID;
-successAlertWord.innerText = "Attachment for "+jsonDataID+" uploaded succesfully.";
-
-
-  document.getElementById("successAlert").style.display="block";
-  // var emerut = document.getElementById("successAlert").value;
+// if(jsonData == "success"){
+//   // document.getElementById("successAlertWord").value=jsonDataID;
+// successAlertWord.innerText = "Attachment for "+jsonDataID+" uploaded succesfully.";
 
 
+//   document.getElementById("successAlert").style.display="block";
+//   // var emerut = document.getElementById("successAlert").value;
 
-}
+
+
+// }
 
 getSelectValueDaily();
 function getSelectValueDaily() {
@@ -4982,8 +4915,9 @@ var reason = document.getElementById('reason-text').value;
 
   }
 
-
-
+function clickUpload(){
+  document.getElementById('uploadsample').click();
+}
 
         </script>
     </body>
