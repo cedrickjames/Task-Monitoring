@@ -367,7 +367,7 @@ if (isset($_POST['uploadBtn']) && $_POST['uploadBtn'] == 'Upload')
     echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
    
     // check if file has one of the following extensions
-    $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+    $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf','xlsx', 'csv', 'docx');
  
     if (in_array($fileExtension, $allowedfileExtensions))
     {
@@ -2004,7 +2004,34 @@ $_SESSION['noOfDaysLate']="";
              data-target="#navbarSupportedContent">
               <span class="navbar-toggler-icon"></span>
             </button>
-          
+            <?php
+
+              if($_SESSION['userlevel'] == "Leader"){
+               ?>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link" href="leader.php">Leader Side</a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">My Task</a>
+                </li>
+             
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+                </li> -->
+                
+                
+              </ul>
+            </div>
+               <?php
+
+              }
+
+             ?>
+             
+           
+       
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto">
               <li class="nav-item">
@@ -4308,7 +4335,7 @@ $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
   echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
  
   // check if file has one of the following extensions
-  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf','xlsx', 'csv', 'docx');
 
   if (in_array($fileExtension, $allowedfileExtensions))
   {
@@ -4391,7 +4418,7 @@ $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
   echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
  
   // check if file has one of the following extensions
-  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf','xlsx', 'csv', 'docx');
 
   if (in_array($fileExtension, $allowedfileExtensions))
   {
@@ -4472,7 +4499,7 @@ $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
   echo("<script>console.log('FILE NAME: " .$GLOBALS["newFileName"]. "');</script>");
  
   // check if file has one of the following extensions
-  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf');
+  $allowedfileExtensions = array('jpg', 'gif', 'png', 'zip', 'txt', 'xls', 'doc', 'pdf','xlsx', 'csv', 'docx');
 
   if (in_array($fileExtension, $allowedfileExtensions))
   {

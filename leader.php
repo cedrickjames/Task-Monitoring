@@ -1097,7 +1097,10 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      }else{
      $columnName = implode(", ", $columns);
      $Department = $_SESSION['userDept'];
-     $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
+    //  $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
+     $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'PIC' AND usertask.Department = '$Department';";
+
+    
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
@@ -1547,6 +1550,9 @@ if(isset($_POST['RemoveCategory'])){
               <ul class="navbar-nav">
               <li class="nav-item">
                   <a class="nav-link" href="daily.php">Daily</a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="index.php">My Task</a>
                 </li>
                 <li class="nav-item active">
                   <a class="nav-link" href="#">Home</a>

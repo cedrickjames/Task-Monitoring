@@ -298,8 +298,8 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
 	<div class="smile-rating-container">
 		<div class="smile-rating-toggle-container">
 			<div class="submit-rating">
-				<input id="radioLate"  name="radioStatus" value="4" type="radio" checked/> 
-				<input id="radioOnTime" name="radioStatus" value="0" type="radio" /> 
+				<input id="radioLate"  name="radioStatus" value="4" type="radio" disabled checked/> 
+				<input id="radioOnTime" name="radioStatus" value="0" type="radio" disabled /> 
 				<label for="radioLate" class="rating-label rating-label-meh">Late</label>
 				<div class="smile-rating-toggle"></div>
 				
@@ -355,7 +355,7 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                                                   </div>
                                                   <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                                                
-                                                <button type="submit"  id="UpdateStatus" name="UpdateStatusName"class="btn btn-success">Update Status</button>
+                                                <!-- <button type="submit"  id="UpdateStatus" name="UpdateStatusName"class="btn btn-success">Update Status</button> -->
                                               </div>
                            
                                               </div>

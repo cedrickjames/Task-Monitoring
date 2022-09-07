@@ -59,7 +59,7 @@ session_start();
    }else{
    $columnName = implode(", ", $columns);
    $Department = $_SESSION['userDept'];
-   $query = "SELECT * FROM `users` WHERE  `userlevel` = 'PIC'";
+   $query = "SELECT * FROM `users` WHERE  `userlevel` = 'PIC' || `userlevel` ='Leader'";
   //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
    $result = $db->query($query);
    if($result== true){ 
