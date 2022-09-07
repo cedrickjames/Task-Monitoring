@@ -2,6 +2,7 @@
   session_start();
   include ("./connection.php");
   include ("./holidays.php");
+ 
 // $date = "2022-08-23";
 //   $date_now = date($date); // this format is string comparable
 
@@ -711,6 +712,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
     }
     if(isset($_POST['exportProgDailySummary'])){
+        
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
 
@@ -721,7 +723,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       header("location: SummaryReport.php");
     }
     else{
-      header("location: SummaryReportForAdmin.php");
+      header("location: SummaryReportForLeadersTask.php");
 
     }
     }
@@ -1095,8 +1097,8 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         $msg= "Table Name is empty";
      }else{
      $columnName = implode(", ", $columns);
-     $Department = $_SESSION['userDept'];
-     $query = "SELECT * FROM `usertask`   ORDER BY Department ASC;";
+    //  $Department = $_SESSION['userDept'];
+     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' ORDER BY usertask.Department ASC;";
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
@@ -1175,7 +1177,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       }else{
       $columnName = implode(", ", $columns);
       // $Department = $_SESSION['userDept'];
-      $query = "SELECT * FROM `usertask` WHERE taskType = 'daily' ORDER BY username ASC;";
+    //   $query = "SELECT * FROM `usertask` WHERE taskType = 'daily' ORDER BY username ASC;";
+     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'daily' ORDER BY usertask.username ASC;";
+
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -1206,7 +1210,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
        }else{
        $columnName = implode(", ", $columns);
       //  $Department = $_SESSION['userDept'];
-       $query = "SELECT * FROM `usertask` WHERE taskType = 'weekly' ORDER BY username ASC;";
+    //    $query = "SELECT * FROM `usertask` WHERE taskType = 'weekly' ORDER BY username ASC;";
+     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'weekly' ORDER BY usertask.username ASC;";
+
       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
        $result = $db->query($query);
@@ -1238,7 +1244,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
        }else{
        $columnName = implode(", ", $columns);
       //  $Department = $_SESSION['userDept'];
-       $query = "SELECT * FROM `usertask` WHERE  taskType = 'monthly' ORDER BY username ASC;";
+    //    $query = "SELECT * FROM `usertask` WHERE  taskType = 'monthly' ORDER BY username ASC;";
+     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'monthly' ORDER BY usertask.username ASC;";
+
       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
        $result = $db->query($query);
@@ -1272,7 +1280,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         }else{
         $columnName = implode(", ", $columns);
         // $Department = $_SESSION['userDept'];
-        $query = "SELECT * FROM `usertask` WHERE  taskType = 'annual' ORDER BY username ASC;";
+        // $query = "SELECT * FROM `usertask` WHERE  taskType = 'annual' ORDER BY username ASC;";
+     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'annual' ORDER BY usertask.username ASC;";
+
        //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
        //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
         $result = $db->query($query);
@@ -1306,7 +1316,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         }else{
         $columnName = implode(", ", $columns);
         // $Department = $_SESSION['userDept'];
-        $query = "SELECT * FROM `users` WHERE userlevel='PIC' ORDER BY username ASC;";
+        $query = "SELECT * FROM `users` WHERE userlevel='Leader' ORDER BY username ASC;";
+        
+
        //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
        //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
         $result = $db->query($query);
@@ -1611,13 +1623,13 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav">
               <li class="nav-item">
-                  <a class="nav-link" href="dailyAdmin.php">Daily</a>
+                  <a class="nav-link" href="leadersdailyAdmin.php">Leader's Daily</a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="admin.php">Member's Task</a>
                 </li>
                 <li class="nav-item active">
-                  <a class="nav-link" href="#">Member's Task</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="leaderstask.php">Leader's Task</a>
+                  <a class="nav-link" href="#">Leader's Task</a>
                 </li>
             
                 <!-- <li class="nav-item">
@@ -1725,7 +1737,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
               <div class="modal-body">
                
                    
-                <form action="admin.php" method = "POST" id="adminForm" style="width: 100%; padding: 10px; border: 0;" >
+                <form action="leaderstask.php" method = "POST" id="adminForm" style="width: 100%; padding: 10px; border: 0;" >
                      
                   <div class="form-group">
                    
@@ -1792,7 +1804,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                 </button>
               </div>
               <div class="modal-body">
-        <form action="admin.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
+        <form action="leaderstask.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
         <!-- <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none"> -->
         <div class="form-group row">
             <label for="staticEmail" class="col-sm-4 col-form-label">Enter old password</label>
@@ -1876,7 +1888,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
               <div class="modal-body">
                
                    
-                <form action="admin.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
+                <form action="leaderstask.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
                      
                   <div class="form-group">
                    
@@ -1907,7 +1919,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                          }}else{ ?>
                             <tr>
                               <td colspan="8">
-                          <?php echo $fetchData; ?>
+                          <?php echo $fetchDataCat; ?>
                         </td>
                          </tr>
                           <?php
@@ -1941,7 +1953,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
               <div class="modal-body">
                
                    
-                <form action="admin.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
+                <form action="leaderstask.php" method = "POST" id="categoryForm" style="width: 100%; padding: 10px; border: 0;" >
                      
                   <div class="form-group">
                    
@@ -1975,7 +1987,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                          }}else{ ?>
                             <tr>
                               <td colspan="8">
-                          <?php echo $fetchData; ?>
+                          <?php echo $fetchDataCat; ?>
                         </td>
                          </tr>
                           <?php
@@ -2008,7 +2020,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                                   <span aria-hidden="true">&times;</span>
                                                 </button>
                                               </div>
-                                       <form action="admin.php" method = "POST" id="updateStatusForm" style="width: 100%; padding: 10px; border: 0;" >
+                                       <form action="leaderstask.php" method = "POST" id="updateStatusForm" style="width: 100%; padding: 10px; border: 0;" >
 
                                               <div class="modal-body" >
                                                 <input type="text" style="display: none" name="finishedTaskID" id="finishedID">
@@ -2096,7 +2108,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                 </button>
               </div>
               <div class="modal-body">
-        <form action="admin.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
+        <form action="leaderstask.php" method = "POST" style="width: 100%; padding: 0; border: 0;">
         <input type="text" id="containerOfTaskId" name="containerOfTaskId" style="display: none">
         <div class="form-group row">
             <label for="staticEmail" class="col-sm-4 col-form-label">Members</label>
@@ -2274,7 +2286,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                         
                         <div class="col-sm-4" style="padding: 0;">
                           <div class="form-group row d-flex justify-content-center" >
-                          <form action="admin.php" method = "POST" >
+                          <form action="leaderstask.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 10px">Start</label>
             
             <input type="date" id="datepicker" value="<?php $startDate = new DateTime($today);  $startDATE =  $startDate->format('Y-m-d'); echo $startDATE ?>" name="datepicker" style="margin-right: 20px" >
@@ -2957,9 +2969,8 @@ $March =  $March->format('Y-m-d');
                               <input type="search" class="form-control" id="filterboxDaily" placeholder=" " onkeyup="getSelectValueDaily();">
                           </div>
                     </div>
-                    
                     <?php
-                    $_SESSION['userlevel'] = "admin";
+                      $_SESSION['userlevel'] = "admin2";
                     include "./Code For Summary Report/DetailedSummaryReport.php"?>
                     
                 </div>

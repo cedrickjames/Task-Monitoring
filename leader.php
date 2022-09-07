@@ -2163,6 +2163,12 @@ if(isset($_POST['RemoveCategory'])){
                                             </label>
                                      </div>
                                      <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="checkDone" id="checkDone" onclick="FilterSched();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Annual
+                                            </label>
+                                     </div>
+                                     <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="checkDone" id="checkDone" checked onclick="FilterSched();">
                                             <label class="form-check-label" for="checkPIC">
                                              All
@@ -3055,6 +3061,22 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
   }
 
   else if (types[3].checked){
+    let filterValue="annual";
+            var table = document.getElementById('TaskTable');
+            let tr = table.querySelectorAll('tr');
+            
+            for(let index=0; index < tr.length;index++){
+                let val = tr[index].getElementsByTagName('td')[5];
+                if(val.innerHTML.indexOf(filterValue)> -1){
+                    tr[index].style.display='';
+        
+                }
+                else{
+                    tr[index].style.display='none';
+                }
+            }
+  }
+  else if (types[4].checked){
     let filterValue="";
             var table = document.getElementById('TaskTable');
             let tr = table.querySelectorAll('tr');
