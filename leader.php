@@ -1514,6 +1514,21 @@ if(isset($_POST['RemoveCategory'])){
 }
 
 
+
+if (isset($_POST['submitSelected'])){
+  foreach ($_POST['id'] as $id):
+
+    $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
+    $srow=mysqli_fetch_array($sq);
+  echo $srow['taskName']. "<br>";
+  
+  $postTargetDate =  $_POST['dateForEnd'];
+  $sqlupdate = "UPDATE `usertask` SET  `targetDate`='$postTargetDate' WHERE usertaskID = '$id'";
+  mysqli_query($con, $sqlupdate);
+
+  endforeach;
+}
+
 ?>
 
 <!-- <div class="normal-container">
@@ -2194,6 +2209,12 @@ if(isset($_POST['RemoveCategory'])){
                             </div>
                         </div> 
                     </div>
+                    <form action="leader.php" method = "POST">
+                    <!-- <input type="submit" name="submitSelected" value="End Task"> -->
+                    <input type="date" id="dateForEnd" value="<?php $EndDate = new DateTime($todayEnd); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="dateForEnd" >
+          
+                    <button type="submit" id = "submitSelected" name="submitSelected" class="btn btn-outline-success btn-sm" style="margin-bottom: 2px">  End Task</button>
+
                     <div class="overflow-x">
     <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
                    
@@ -2206,6 +2227,7 @@ if(isset($_POST['RemoveCategory'])){
                                
                             
                             <tr id="topLeft" class="table-dark table-bordered text-center" >
+                                    <th style="min-width:15px;"></th>
                                     <th style="min-width:15px;">No.</th>
                                     <th style="width:200px;"  >In charge</th>
                                     <th style="width:200px;" >Task Name</th>
@@ -2320,6 +2342,7 @@ if(isset($_POST['RemoveCategory'])){
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
                              <tr class="ewan" >
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
+                             <td><input type="checkbox" value="<?php echo $data['usertaskID']; ?>" name="id[]" onclick=ShowEndTaskButton()></td>
                              <td >
                                
                                <?php echo $sn; ?></td>
@@ -2710,6 +2733,9 @@ $March =  $March->format('Y-m-d');
                         </table>
                       </div>
                     </div>
+                    <!--  -->
+                    
+                </form>
                 </div>
             </div>
         </div>
@@ -3685,6 +3711,25 @@ function exportData(){
 //   buildTable($tables, 20, 50)
 // })
 
+var haveSelected = 0;
+function ShowEndTaskButton(){
+  haveSelected++;
+  if(haveSelected >=1){
+document.getElementById("dateForEnd").style.display="inline";
+document.getElementById("submitSelected").style.display="inline";
+
+}
+}
+
+if(haveSelected >=1){
+document.getElementById("dateForEnd").style.display="block";
+document.getElementById("submitSelected").style.display="block";
+
+}
+else{
+  document.getElementById("dateForEnd").style.display="none";
+document.getElementById("submitSelected").style.display="none";
+}
         </script>
     </body>
 </html>

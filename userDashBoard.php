@@ -1570,6 +1570,9 @@ if(isset($_POST['RemoveCategory'])){
             </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="ended.php">Ended Task</a>
+                </li>
               <li class="nav-item active">
                   <a class="nav-link" href="#">Dash Board</a>
                 </li>

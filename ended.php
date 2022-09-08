@@ -488,7 +488,7 @@ echo "There is an error. Please contact the developer. ";
         while($userRow = mysqli_fetch_assoc($result2)){
           $dateTarget2 = $userRow['targetDate'];
         }
-        if($dateforToday >= $dateTarget2){ 
+        if($dateforToday > $dateTarget2){ 
 
           $ended = true;
         }
@@ -1956,7 +1956,7 @@ $_SESSION['noOfDaysLate']="";
         $msg= "Table Name is empty";
      }else{
      $columnName = implode(", ", $columns);
-     $query = "SELECT * FROM `usertask`  WHERE `username` = '$username' AND `ended` = false; ";
+     $query = "SELECT * FROM `usertask`  WHERE `username` = '$username' AND `ended` = true; ";
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
      if($result== true){ 
@@ -2033,16 +2033,16 @@ $_SESSION['noOfDaysLate']="";
            
        
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
- 
+
               <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                  <a class="nav-link" href="ended.php">Ended Task</a>
+              <li class="nav-item active">
+                  <a class="nav-link" href="#">Ended Tasks</a>
                 </li>
               <li class="nav-item">
                   <a class="nav-link" href="userDashBoard.php">Dash Board</a>
                 </li>
-                <li class="nav-item active">
-                  <a class="nav-link" href="#">Home</a>
+                <li class="nav-item">
+                  <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <!-- <li class="nav-item">
                   <a class="nav-link" href="#">About</a>
@@ -2296,11 +2296,10 @@ $_SESSION['noOfDaysLate']="";
                              <tr class="tableMain" style="height:50px; <?php
                               $dateforToday = date('Y-m-d');
                                $dateTarget = $data['targetDate']; 
-                                if($dateforToday >= $dateTarget){ 
                                   ?>
-                                  background-color: #5afa84
+                                 
                                   <?php
-                                   } ?> " >
+                                    ?> " >
                                 <td  style="width: 1%;"><?php echo $sn; ?></td>
                                 <td style="width:30%;"><?php echo $data['taskName']??''; ?></td>
                                 <td  style="width: 10%;"><?php echo $data['taskType']??''; ?></td>
