@@ -2036,6 +2036,9 @@ $_SESSION['noOfDaysLate']="";
  
               <ul class="navbar-nav ml-auto">
               <li class="nav-item">
+                  <a class="nav-link" href="addTaskOfMyOwn.php">Add Task</a>
+                </li>
+              <li class="nav-item">
                   <a class="nav-link" href="ended.php">Ended Task</a>
                 </li>
               <li class="nav-item">

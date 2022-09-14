@@ -1528,6 +1528,19 @@ if (isset($_POST['submitSelected'])){
 
   endforeach;
 }
+if (isset($_POST['deleteSelected'])){
+  foreach ($_POST['id'] as $id):
+
+    $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
+    $srow=mysqli_fetch_array($sq);
+  echo $srow['taskName']. "<br>";
+  
+  $postTargetDate =  $_POST['dateForEnd'];
+  $sqlupdate = "DELETE FROM `usertask` WHERE usertaskID = '$id'";
+  mysqli_query($con, $sqlupdate);
+
+  endforeach;
+}
 
 ?>
 
@@ -2214,6 +2227,8 @@ if (isset($_POST['submitSelected'])){
                     <input type="date" id="dateForEnd" value="<?php $EndDate = new DateTime($todayEnd); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="dateForEnd" >
           
                     <button type="submit" id = "submitSelected" name="submitSelected" class="btn btn-outline-success btn-sm" style="margin-bottom: 2px">  End Task</button>
+                    <button type="submit" id = "deleteSelected" name="deleteSelected" class="btn btn-outline-danger btn-sm" style="margin-bottom: 2px">  Delete</button>
+
 
                     <div class="overflow-x">
     <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
@@ -3717,6 +3732,8 @@ function ShowEndTaskButton(){
   if(haveSelected >=1){
 document.getElementById("dateForEnd").style.display="inline";
 document.getElementById("submitSelected").style.display="inline";
+document.getElementById("deleteSelected").style.display="inline";
+
 
 }
 }
@@ -3724,11 +3741,15 @@ document.getElementById("submitSelected").style.display="inline";
 if(haveSelected >=1){
 document.getElementById("dateForEnd").style.display="block";
 document.getElementById("submitSelected").style.display="block";
+document.getElementById("deleteSelected").style.display="block";
+
 
 }
 else{
   document.getElementById("dateForEnd").style.display="none";
 document.getElementById("submitSelected").style.display="none";
+document.getElementById("deleteSelected").style.display="none";
+
 }
         </script>
     </body>
