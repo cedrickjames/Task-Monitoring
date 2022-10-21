@@ -597,7 +597,7 @@ $task =  $userRow['taskName'];
                                    //  echo "week".$startDATE;
                                    //  echo "week".$endDATE;
 
-                                     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `firstDateOfTheMonth` BETWEEN '$startDATE' AND '$endDATE';";
+                                     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                      $result = mysqli_query($con, $countMonthly);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -633,7 +633,7 @@ $task =  $userRow['taskName'];
                                    //  echo "week".$startDATE;
                                    //  echo "week".$endDATE;
 
-                                     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `firstDateOfTheMonth` BETWEEN '$startDATE' AND '$endDATE';";
+                                     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                      $result = mysqli_query($con, $countMonthly);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -859,7 +859,7 @@ $task =  $userRow['taskName'];
                  //  echo "week".$startDATE;
                  //  echo "week".$endDATE;
 
-                   $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `firstDateOfTheMonth` BETWEEN '$startDATE' AND '$endDATE';";
+                   $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                    $result = mysqli_query($con, $countMonthly);
                    while($userRow = mysqli_fetch_assoc($result)){
                    $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -992,7 +992,7 @@ $task =  $userRow['taskName'];
               //  echo "week".$startDATE;
               //  echo "week".$endDATE;
 
-                $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `firstDateOfTheMonth` BETWEEN '$startDATE' AND '$endDATE';";
+                $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                 $result = mysqli_query($con, $countMonthly);
                 while($userRow = mysqli_fetch_assoc($result)){
                 $totalNumberOfScore1 = $userRow['TotalNumberOf1'];

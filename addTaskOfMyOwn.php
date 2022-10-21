@@ -226,24 +226,24 @@ $array11User = explode(",", $src1User);
                   // $dateStarted = new DateTime(); $dateStarted =  $dateStarted->format('Y-m-d'); 
                   try {
                     if($taskType == "daily"){
-                      $dateStarted = new DateTime($dateStarted);
+                      $dateStarted = new DateTime($dateAdded);
                       $dateStarted->modify('-1 day');
                       $dateStarted = $dateStarted->format('Y-m-d');
                     //  $dateStarted = $dateStarted->format('Y-m-d');
                     //   $dateStarted =date('F j, Y',strtotime($dateStarted));
                     }
                     else if($taskType == "weekly"){
-                      $dateStarted = new DateTime($dateStarted);
+                      $dateStarted = new DateTime($dateAdded);
                       $dateStarted->modify('monday last week');
                       $dateStarted = $dateStarted->format('Y-m-d');
                     }
                     else if($taskType == "monthly"){
-                      $dateStarted = new DateTime($dateStarted);
+                      $dateStarted = new DateTime($dateAdded);
                       $dateStarted->modify('last month');
                       $dateStarted = $dateStarted->format('Y-m-d');
                     }
                     else if($taskType == "annual"){
-                      $dateStarted = new DateTime($dateStarted);
+                      $dateStarted = new DateTime($dateAdded);
                       $dateStarted->modify('last year');
                       $dateStarted = $dateStarted->format('Y-m-d');
                     }
