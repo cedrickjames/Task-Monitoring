@@ -1,5 +1,36 @@
 <?php
+ //Set the session timeout for 2 seconds
+
+$timeout = 3600;
+
+//Set the maxlifetime of the session
+
+ini_set( "session.gc_maxlifetime", $timeout );
+
+//Set the cookie lifetime of the session
+
+ini_set( "session.cookie_lifetime", $timeout );
+
   session_start();
+  
+$s_name = session_name();
+
+$url1=$_SERVER['REQUEST_URI'];
+    header("Refresh: 3700; URL=$url1");
+//Check the session exists or not
+
+if(isset( $_COOKIE[ $s_name ] )) {
+
+
+    setcookie( $s_name, $_COOKIE[ $s_name ], time() + $timeout, '/' );
+
+    // echo "Session is created for $s_name.<br/>";
+
+}
+
+else
+
+    echo "Session is expired.<br/>";
   include ("./connection.php");
   include ("./holidays.php");
 // $date = "2022-08-23";
@@ -567,7 +598,7 @@ while($row = mysqli_fetch_assoc($result)){
    }else{
    $columnName = implode(", ", $columnss);
   //  $Department = $_SESSION['userDept'];
-   $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC'";
+   $query = "SELECT * FROM `users` WHERE  `userlevel` = 'PIC' || `userlevel` ='Leader'";
   //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
    $result = $db->query($query);
    if($result== true){ 
@@ -1575,7 +1606,34 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
          
 }
 
+if (isset($_POST['submitSelected'])){
+  foreach ($_POST['id'] as $id):
 
+    $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
+    $srow=mysqli_fetch_array($sq);
+  // echo $srow['taskName']. "<br>";
+  
+  $postTargetDate =  $_POST['dateForEnd'];
+  $sqlupdate = "UPDATE `usertask` SET  `targetDate`='$postTargetDate' WHERE usertaskID = '$id'";
+  mysqli_query($con, $sqlupdate);
+
+  endforeach;
+}
+if (isset($_POST['deleteSelected'])){
+  foreach ($_POST['id'] as $id):
+
+    $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
+    $srow=mysqli_fetch_array($sq);
+  // echo $srow['taskName']. "<br>";
+  
+  $postTargetDate =  $_POST['dateForEnd'];
+  $sqlupdate = "DELETE FROM `usertask` WHERE usertaskID = '$id'";
+  mysqli_query($con, $sqlupdate);
+
+  $sqldeleteFromFinished = "DELETE FROM `finishedtask` WHERE taskID = '$id'";
+  mysqli_query($con, $sqldeleteFromFinished);
+  endforeach;
+}
 ?>
 
 <!-- <div class="normal-container">
@@ -2111,7 +2169,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                 
                                   foreach($fetchData2 as $data){
                                   ?>
-                                 <option value="<?php echo $data['username']??''; ?>"><?php echo $data['username']??''; ?></option>
+                                 <option value="<?php echo $data['username']??''; ?>"><?php echo $data['f_name']??''; ?></option>
                                  <?php
                             }}else{ ?>
                             
@@ -2318,6 +2376,12 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                              Annual
                                             </label>
                                     </div>
+                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
+                                        <input class="form-check-input"  type="radio" name="checkDone" id="checkDone" onclick="FilterSched();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Others
+                                            </label>
+                                    </div>
                                      <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="checkDone" id="checkDone" checked onclick="FilterSched();">
                                             <label class="form-check-label" for="checkPIC">
@@ -2344,6 +2408,12 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                             </div>
                         </div> 
                     </div>
+                    <form action="admin.php" method = "POST">
+                    <input type="date" id="dateForEnd" value="<?php $EndDate = new DateTime($todayEnd); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="dateForEnd" >
+          
+          <button type="submit" id = "submitSelected" name="submitSelected" class="btn btn-outline-success btn-sm" style="margin-bottom: 2px">  End Task</button>
+          <button type="submit" id = "deleteSelected" name="deleteSelected" class="btn btn-outline-danger btn-sm" style="margin-bottom: 2px">  Delete</button>
+
                     <div class="overflow-x">
     <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
                    
@@ -2356,6 +2426,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                
                             
                             <tr id="topLeft" class="table-dark table-bordered text-center" >
+                            <th style="min-width:15px;"></th>
                                     <th style="min-width:15px;">No.</th>
                                     <th style="width:200px;"  >In charge</th>
                                     <th style="min-width:15px;">Section</th>
@@ -2472,6 +2543,8 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
                              <tr class="ewan" >
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
+                             <td><input type="checkbox" value="<?php echo $data['usertaskID']; ?>" name="id[]" onclick=ShowEndTaskButton()></td>
+                             
                              <td >
                                
                                <?php echo $sn; ?></td>
@@ -2865,6 +2938,7 @@ $March =  $March->format('Y-m-d');
                         </table>
                       </div>
                     </div>
+  </form>
                 </div>
             </div>
         </div>
@@ -3175,7 +3249,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3191,7 +3265,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3207,7 +3281,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3224,7 +3298,23 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
+                if(val.innerHTML.indexOf(filterValue)> -1){
+                    tr[index].style.display='';
+        
+                }
+                else{
+                    tr[index].style.display='none';
+                }
+            }
+  }
+  else if (types[4].checked){
+    let filterValue="others";
+            var table = document.getElementById('TaskTable');
+            let tr = table.querySelectorAll('tr');
+            
+            for(let index=0; index < tr.length;index++){
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3235,13 +3325,13 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             }
   }
 
-  else if (types[4].checked){
+  else if (types[5].checked){
     let filterValue="";
             var table = document.getElementById('TaskTable');
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3846,6 +3936,32 @@ function exportData(){
 function clickpassdataAdmin(name,id){
   document.getElementById("inputAdminRemove").value = name;
   document.getElementById("inputAdminRemoveId").value = id;
+
+}
+
+var haveSelected = 0;
+function ShowEndTaskButton(){
+  haveSelected++;
+  if(haveSelected >=1){
+document.getElementById("dateForEnd").style.display="inline";
+document.getElementById("submitSelected").style.display="inline";
+document.getElementById("deleteSelected").style.display="inline";
+
+
+}
+}
+
+if(haveSelected >=1){
+document.getElementById("dateForEnd").style.display="block";
+document.getElementById("submitSelected").style.display="block";
+document.getElementById("deleteSelected").style.display="block";
+
+
+}
+else{
+  document.getElementById("dateForEnd").style.display="none";
+document.getElementById("submitSelected").style.display="none";
+document.getElementById("deleteSelected").style.display="none";
 
 }
         </script>

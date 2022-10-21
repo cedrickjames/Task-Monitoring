@@ -389,7 +389,7 @@ background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, F
                         </div>
                         <div class="col-sm-4" style="padding: 0;">
                           <div class="form-group row d-flex justify-content-center" >
-                          <form action="daily.php" method = "POST" >
+                          <form action="userDaily.php" method = "POST" >
             <label for="colFormLabelLg" class="col-form-label-lg" style="margin-right: 20px">Date</label>
             <input type="date" id="datepicker" name="datepicker" onchange="filterMonth();">
             <input type="submit" name="submitdate">

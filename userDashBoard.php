@@ -2043,7 +2043,7 @@ if(isset($_POST['RemoveCategory'])){
                 <button type="button"  id ="EditTaskBTN" onclick="EditTask()" class="btn btn-success">Edit</button>
                 <button type="submit" id="UpdateTaskbtnSubmit" name="UpdateTaskbtn" style="display: none">Update</button>
                 <button type="button" id="UpdateTaskbtn"  onclick="checkTextBox()" class="btn btn-info" disabled >Update</button>
-                <button type="submit" name="DeleteTaskbtn" class="btn btn-danger" >Delete</button>
+                <!-- <button type="submit" name="DeleteTaskbtn" class="btn btn-danger" >Delete</button> -->
 
             
                </div>

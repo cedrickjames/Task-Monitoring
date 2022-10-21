@@ -1,5 +1,36 @@
 <?php
+//Set the session timeout for 2 seconds
+
+$timeout = 3600;
+
+//Set the maxlifetime of the session
+
+ini_set( "session.gc_maxlifetime", $timeout );
+
+//Set the cookie lifetime of the session
+
+ini_set( "session.cookie_lifetime", $timeout );
+
   session_start();
+  
+$s_name = session_name();
+
+$url1=$_SERVER['REQUEST_URI'];
+    header("Refresh: 3700; URL=$url1");
+//Check the session exists or not
+
+if(isset( $_COOKIE[ $s_name ] )) {
+
+
+    setcookie( $s_name, $_COOKIE[ $s_name ], time() + $timeout, '/' );
+
+    // echo "Session is created for $s_name.<br/>";
+
+}
+
+else
+
+    echo "Session is expired.<br/>";
   include ("./connection.php");
   include ("./holidays.php");
 // $date = "2022-08-23";
@@ -622,7 +653,7 @@ $dateNow = date('Y-m-d');
     $todayDaily = $_SESSION['FirstDayOfTheMonth']; 
     // $todayEndDaily = date("F j, Y"); 
     $todayEndDaily = $_SESSION['LastDayOfTheMonth'];  
-
+    $todayOthers = $_SESSION['FirstDayOfTheMonth']; 
     $todayWeekly = $_SESSION['FirstDayOfTheMonth']; 
     // $todayEndWeekly = date("F j, Y"); 
     $todayEndWeekly = $_SESSION['LastDayOfTheMonth']; 
@@ -631,7 +662,7 @@ $dateNow = date('Y-m-d');
     $todayMonthly = $_SESSION['FirstDayOfTheMonth']; 
     // $todayEndMonthly = date("F j, Y"); 
     $todayEndMonthly = $_SESSION['LastDayOfTheMonth']; 
-
+    $todayEndOthers = $_SESSION['LastDayOfTheMonth'];  
     
 
 //for annual
@@ -676,6 +707,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
     $weeklyChecked = "";
     $monthlyChecked = "checked";
     $annualChecked = "";
+    $othersChecked = "";
 
 
 
@@ -769,7 +801,53 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
   
       
        }
-
+       if(isset($_POST['submitdateProgOthers'])){
+        $datePickerOthers = $_POST['datepickerProgOthers'];
+      $datePickerEndOthers = $_POST['datepickerEndProgOthers'];
+     
+     
+         $monthOthers = date('F', strtotime($datePickerOthers));
+         $monthEndOthers = date('F', strtotime($datePickerEndOthers));
+     
+         $yearOthers = date('Y', strtotime($datePickerOthers));
+         $yearEndOthers = date('Y', strtotime($datePickerEndOthers));
+     
+         $todayOthers = date('F j, Y', strtotime($datePickerOthers));
+         $todayEndOthers = date('F j, Y', strtotime($datePickerEndOthers));
+     
+     
+         $datePickergetOthers = $datePickerOthers;
+         $datePickergetEndOthers = $datePickerEndOthers;
+     
+         $date_stringOthers= date('Y-m-d', strtotime($datePickergetOthers));
+         $date_stringEndOthers= date('Y-m-d', strtotime($datePickergetEndOthers));
+     
+         
+         
+       $dateToPassOthers = date('Y-m-d', strtotime($datePickerOthers));
+       $dateToPassEndOthers = date('Y-m-d', strtotime($datePickerEndOthers));
+     
+       $Othersfocus = "true";
+     
+        
+       $date = new DateTime($todayOthers);
+        $dateEnd = new DateTime($todayEndOthers);
+  
+        $DateNowAndToday =  $dateEnd->format('Y-m-d');
+        $StartDateSelected = $date->format('Y-m-d');
+  
+  
+        $TaskActive = "";
+        $MembersActive = "active";
+        $EndedActive = "";
+        $dailyChecked = "";
+        $weeklyChecked = "";
+        $monthlyChecked = "";
+        $annualChecked = "";
+        $othersChecked = "checked";
+  
+        
+         }
 
     if(isset($_POST['submitdateProgDaily'])){
       $datePickerDaily = $_POST['datepickerProgDaily'];
@@ -861,6 +939,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         $weeklyChecked = "checked";
         $monthlyChecked = "";
         $annualChecked = "";
+        $othersChecked = "";
 
 
          }
@@ -909,6 +988,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
           $weeklyChecked = "";
           $monthlyChecked = "checked";
           $annualChecked = "";
+          $othersChecked = "";
 
            }
            if(isset($_POST['submitdateProgAnnual'])){
@@ -955,6 +1035,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
             $weeklyChecked = "";
             $monthlyChecked = "";
             $annualChecked = "checked";
+            $othersChecked = "";
   
              }
     $month1 = date("F");
@@ -1098,7 +1179,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      $columnName = implode(", ", $columns);
      $Department = $_SESSION['userDept'];
     //  $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
-     $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'PIC' AND usertask.Department = '$Department';";
+     $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'PIC' AND usertask.Department = '$Department' AND usertask.ended = '0';";
 
     
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
@@ -1117,6 +1198,39 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      }
      return $msg;
      }
+
+     $fetchDataForEnded = fetch_data_for_ended($db, $tableName, $columns, $username);
+
+     function fetch_data_for_ended($db, $tableName, $columns, $username){
+       if(empty($db)){
+        $msg= "Database connection error";
+       }elseif (empty($columns) || !is_array($columns)) {
+        $msg="columns Name must be defined in an indexed array";
+       }elseif(empty($tableName)){
+         $msg= "Table Name is empty";
+      }else{
+      $columnName = implode(", ", $columns);
+      $Department = $_SESSION['userDept'];
+     //  $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
+      $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'PIC' AND usertask.Department = '$Department' AND usertask.ended = true;";
+ 
+     
+     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+      $result = $db->query($query);
+      if($result== true){ 
+       if ($result->num_rows > 0) {
+          $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+          $msg= $row;
+       } else {
+          $msg= "No Data Found"; 
+       }
+      }else{
+        $msg= mysqli_error($db);
+      }
+      }
+      return $msg;
+      }
      if(isset($_POST['changePassword'])){
       $oldPass = $_POST['oldPass'];
       $newPass = $_POST['newPass'];
@@ -1165,6 +1279,37 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
     }
 
 
+
+    $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+    $fetchDataProgOthers = fetchDataProgOthers($db, $tableName, $columns, $username);
+
+    function fetchDataProgOthers($db, $tableName, $columns, $username){
+      if(empty($db)){
+       $msg= "Database connection error";
+      }elseif (empty($columns) || !is_array($columns)) {
+       $msg="columns Name must be defined in an indexed array";
+      }elseif(empty($tableName)){
+        $msg= "Table Name is empty";
+     }else{
+     $columnName = implode(", ", $columns);
+     $Department = $_SESSION['userDept'];
+     $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department' AND taskType = 'others' ORDER BY username ASC;";
+    //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+    //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+     $result = $db->query($query);
+     if($result== true){ 
+      if ($result->num_rows > 0) {
+         $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+         $msg= $row;
+      } else {
+         $msg= "No Data Found"; 
+      }
+     }else{
+       $msg= mysqli_error($db);
+     }
+     }
+     return $msg;
+     }
 
      $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
      $fetchDataProg = fetchDataProg($db, $tableName, $columns, $username);
@@ -1520,12 +1665,27 @@ if (isset($_POST['submitSelected'])){
 
     $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
     $srow=mysqli_fetch_array($sq);
-  echo $srow['taskName']. "<br>";
+  // echo $srow['taskName']. "<br>";
   
   $postTargetDate =  $_POST['dateForEnd'];
   $sqlupdate = "UPDATE `usertask` SET  `targetDate`='$postTargetDate' WHERE usertaskID = '$id'";
   mysqli_query($con, $sqlupdate);
 
+  endforeach;
+}
+if (isset($_POST['deleteSelected'])){
+  foreach ($_POST['id'] as $id):
+
+    $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
+    $srow=mysqli_fetch_array($sq);
+  // echo $srow['taskName']. "<br>";
+  
+  $postTargetDate =  $_POST['dateForEnd'];
+  $sqlupdate = "DELETE FROM `usertask` WHERE usertaskID = '$id'";
+  mysqli_query($con, $sqlupdate);
+
+  $sqldeleteFromFinished = "DELETE FROM `finishedtask` WHERE taskID = '$id'";
+  mysqli_query($con, $sqldeleteFromFinished);
   endforeach;
 }
 
@@ -2117,6 +2277,9 @@ if (isset($_POST['submitSelected'])){
     <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
   </li> --> 
   <li class="nav-item ">
+    <a class="nav-link <?php echo $EndedActive; ?>" id="ended-tab" data-toggle="tab" href="#ENDED" role="tab" aria-controls="ENDED" aria-selected="false">Ended Task</a>
+  </li>
+  <li class="nav-item ">
     <a class="nav-link <?php echo $MembersActive; ?>" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
@@ -2125,6 +2288,7 @@ if (isset($_POST['submitSelected'])){
 </ul>
 </div>
 <div class="tab-content" id="myTabContent" style="height: 100%;margin: 30px; margin-top: 0px ">
+<?php include "endedTableForLeader.php"; ?>
 <div class="tab-pane fade show <?php echo $TaskActive; ?>" id="task" style="height: 90%;  background-color: none" role="tabpanel" aria-labelledby="task-tab">
   
           <div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
@@ -2214,6 +2378,8 @@ if (isset($_POST['submitSelected'])){
                     <input type="date" id="dateForEnd" value="<?php $EndDate = new DateTime($todayEnd); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="dateForEnd" >
           
                     <button type="submit" id = "submitSelected" name="submitSelected" class="btn btn-outline-success btn-sm" style="margin-bottom: 2px">  End Task</button>
+                    <button type="submit" id = "deleteSelected" name="deleteSelected" class="btn btn-outline-danger btn-sm" style="margin-bottom: 2px">  Delete</button>
+
 
                     <div class="overflow-x">
     <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
@@ -2428,7 +2594,7 @@ if (isset($_POST['submitSelected'])){
                                         // echo $day;
                                    $taskID = $data['usertaskID'];
                                    $taskType = $data['taskType'];
-                                   if($taskType == "daily"){
+                                   if($taskType == "daily"  || $taskType == "others"){
                                     ?>
                                     <td style='width:240px;'><?php
                                     //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
@@ -2782,6 +2948,12 @@ $March =  $March->format('Y-m-d');
                                              Annually
                                             </label>
                                      </div>
+                                     <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $othersChecked ?> onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Others
+                                            </label>
+                                     </div>
                                    
                                   
                              </div>
@@ -2799,6 +2971,7 @@ $March =  $March->format('Y-m-d');
                     <?php include "./Code For Members Progress Report/DetailedWeeklyReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedMonthlyReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedAnnuallyReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedOthersReport.php" ?>
 
 
                     
@@ -3043,7 +3216,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3059,7 +3232,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3075,7 +3248,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3092,7 +3265,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3108,7 +3281,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[5];
+                let val = tr[index].getElementsByTagName('td')[6];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3198,6 +3371,7 @@ if(types[0].checked){
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='none';  
   document.getElementById('annualReportArea').style.display='none';  
+  document.getElementById('OthersReportArea').style.display='none';
 
 
 }
@@ -3206,6 +3380,7 @@ else if (types[1].checked){
   document.getElementById('WeeklyReportArea').style.display='block';
   document.getElementById('monthyReportArea').style.display='none'; 
   document.getElementById('annualReportArea').style.display='none';  
+  document.getElementById('OthersReportArea').style.display='none';
 
 
 
@@ -3216,6 +3391,7 @@ else if (types[2].checked){
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='block';  
   document.getElementById('annualReportArea').style.display='none';  
+  document.getElementById('OthersReportArea').style.display='none';
 
 
 }
@@ -3224,9 +3400,17 @@ else if (types[3].checked){
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='none';  
   document.getElementById('annualReportArea').style.display='block';  
+  document.getElementById('OthersReportArea').style.display='none';
 
 }
+else if (types[4].checked){
+  document.getElementById('DailyReportArea').style.display='none';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('annualReportArea').style.display='none';  
+  document.getElementById('OthersReportArea').style.display='block';
 
+}
 
 }
 
@@ -3717,6 +3901,8 @@ function ShowEndTaskButton(){
   if(haveSelected >=1){
 document.getElementById("dateForEnd").style.display="inline";
 document.getElementById("submitSelected").style.display="inline";
+document.getElementById("deleteSelected").style.display="inline";
+
 
 }
 }
@@ -3724,11 +3910,15 @@ document.getElementById("submitSelected").style.display="inline";
 if(haveSelected >=1){
 document.getElementById("dateForEnd").style.display="block";
 document.getElementById("submitSelected").style.display="block";
+document.getElementById("deleteSelected").style.display="block";
+
 
 }
 else{
   document.getElementById("dateForEnd").style.display="none";
 document.getElementById("submitSelected").style.display="none";
+document.getElementById("deleteSelected").style.display="none";
+
 }
         </script>
     </body>
