@@ -620,8 +620,12 @@ $dateNow = date('Y-m-d');
 
 
     $todayDaily = $_SESSION['FirstDayOfTheMonth']; 
+    $todayOthers = $_SESSION['FirstDayOfTheMonth']; 
+
     // $todayEndDaily = date("F j, Y"); 
     $todayEndDaily = $_SESSION['LastDayOfTheMonth'];  
+    $todayEndOthers = $_SESSION['LastDayOfTheMonth'];  
+
 
     $todayWeekly = $_SESSION['FirstDayOfTheMonth']; 
     // $todayEndWeekly = date("F j, Y"); 
@@ -671,8 +675,10 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
     $TaskActive = "active";
     $MembersActive = "";
-
+    $EndedActive = "";
     $dailyChecked = "";
+    $othersChecked = "";
+
     $weeklyChecked = "";
     $monthlyChecked = "checked";
     $annualChecked = "";
@@ -706,11 +712,43 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
   $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
 
   $taskfocus = "true";
-
+  $EndedActive = "";
      $MembersActive = "";
                       $TaskActive = "active";
 
     }
+    if(isset($_POST['submitdateEnded'])){
+      $datePicker = $_POST['datepickerEnded'];
+    $datePickerEnd = $_POST['datepickerEndEnded'];
+   
+   
+       $month = date('F', strtotime($datePicker));
+       $monthEnd = date('F', strtotime($datePickerEnd));
+   
+       $year = date('Y', strtotime($datePicker));
+       $yearEnd = date('Y', strtotime($datePickerEnd));
+   
+       $today = date('F j, Y', strtotime($datePicker));
+       $todayEnd = date('F j, Y', strtotime($datePickerEnd));
+   
+   
+       $datePickerget = $datePicker;
+       $datePickergetEnd = $datePickerEnd;
+   
+       $date_string= date('Y-m-d', strtotime($datePickerget));
+       $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+   
+       
+       
+     $dateToPass = date('Y-m-d', strtotime($datePicker));
+     $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+   
+     $taskfocus = "true";
+     $EndedActive = "active";
+        $MembersActive = "";
+                         $TaskActive = "";
+   
+       }
     if(isset($_POST['exportProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
@@ -762,15 +800,62 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       $DateNowAndToday =  $dateEnd->format('Y-m-d');
       $StartDateSelected = $date->format('Y-m-d');
   
-  
+      $MembersActive="";
       $TaskActive = "";
       $MembersActive = "";
       $SummaryActive = "active";
   
       
        }
+//Update for october 7 2022
 
-
+       if(isset($_POST['submitdateProgOthers'])){
+        $datePickerOthers = $_POST['datepickerProgOthers'];
+      $datePickerEndOthers = $_POST['datepickerEndProgOthers'];
+     
+     
+         $monthOthers = date('F', strtotime($datePickerOthers));
+         $monthEndOthers = date('F', strtotime($datePickerEndOthers));
+     
+         $yearOthers = date('Y', strtotime($datePickerOthers));
+         $yearEndOthers = date('Y', strtotime($datePickerEndOthers));
+     
+         $todayOthers = date('F j, Y', strtotime($datePickerOthers));
+         $todayEndOthers = date('F j, Y', strtotime($datePickerEndOthers));
+     
+     
+         $datePickergetOthers = $datePickerOthers;
+         $datePickergetEndOthers = $datePickerEndOthers;
+     
+         $date_stringOthers= date('Y-m-d', strtotime($datePickergetOthers));
+         $date_stringEndOthers= date('Y-m-d', strtotime($datePickergetEndOthers));
+     
+         
+         
+       $dateToPassOthers = date('Y-m-d', strtotime($datePickerOthers));
+       $dateToPassEndOthers = date('Y-m-d', strtotime($datePickerEndOthers));
+     
+       $Othersfocus = "true";
+     
+        
+       $date = new DateTime($todayOthers);
+        $dateEnd = new DateTime($todayEndOthers);
+  
+        $DateNowAndToday =  $dateEnd->format('Y-m-d');
+        $StartDateSelected = $date->format('Y-m-d');
+  
+  
+        $TaskActive = "";
+        $MembersActive = "active";
+        $EndedActive = "";
+        $dailyChecked = "";
+        $weeklyChecked = "";
+        $monthlyChecked = "";
+        $annualChecked = "";
+        $othersChecked = "checked";
+  
+        
+         }
     if(isset($_POST['submitdateProgDaily'])){
       $datePickerDaily = $_POST['datepickerProgDaily'];
     $datePickerEndDaily = $_POST['datepickerEndProgDaily'];
@@ -809,11 +894,12 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
       $TaskActive = "";
       $MembersActive = "active";
-
+      $EndedActive = "";
       $dailyChecked = "checked";
       $weeklyChecked = "";
       $monthlyChecked = "";
       $annualChecked = "";
+      $othersChecked = "";
 
       
        }
@@ -856,11 +942,12 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
   
         $TaskActive = "";
         $MembersActive = "active";
-
+        $EndedActive = "";
         $dailyChecked = "";
         $weeklyChecked = "checked";
         $monthlyChecked = "";
         $annualChecked = "";
+        $othersChecked = "";
 
 
          }
@@ -904,11 +991,12 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
     
           $TaskActive = "";
           $MembersActive = "active";
-
+          $EndedActive = "";
           $dailyChecked = "";
           $weeklyChecked = "";
           $monthlyChecked = "checked";
           $annualChecked = "";
+          $othersChecked = "";
 
            }
            if(isset($_POST['submitdateProgAnnual'])){
@@ -950,11 +1038,12 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       
             $TaskActive = "";
             $MembersActive = "active";
-  
+            $EndedActive = "";
             $dailyChecked = "";
             $weeklyChecked = "";
             $monthlyChecked = "";
             $annualChecked = "checked";
+            $othersChecked = "";
   
              }
     $month1 = date("F");
@@ -1098,7 +1187,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      $columnName = implode(", ", $columns);
      $Department = $_SESSION['userDept'];
     //  $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
-     $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'PIC' AND usertask.Department = '$Department';";
+     $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'PIC' AND usertask.Department = '$Department' AND usertask.ended = '0';";
 
     
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
@@ -1117,6 +1206,38 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      }
      return $msg;
      }
+     $fetchDataForEnded = fetch_data_for_ended($db, $tableName, $columns, $username);
+
+     function fetch_data_for_ended($db, $tableName, $columns, $username){
+       if(empty($db)){
+        $msg= "Database connection error";
+       }elseif (empty($columns) || !is_array($columns)) {
+        $msg="columns Name must be defined in an indexed array";
+       }elseif(empty($tableName)){
+         $msg= "Table Name is empty";
+      }else{
+      $columnName = implode(", ", $columns);
+      $Department = $_SESSION['userDept'];
+     //  $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department'  ORDER BY taskCategory ASC;";
+      $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'PIC' AND usertask.Department = '$Department' AND usertask.ended = true;";
+ 
+     
+     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+      $result = $db->query($query);
+      if($result== true){ 
+       if ($result->num_rows > 0) {
+          $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+          $msg= $row;
+       } else {
+          $msg= "No Data Found"; 
+       }
+      }else{
+        $msg= mysqli_error($db);
+      }
+      }
+      return $msg;
+      }
      if(isset($_POST['changePassword'])){
       $oldPass = $_POST['oldPass'];
       $newPass = $_POST['newPass'];
@@ -1165,6 +1286,37 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
     }
 
 
+
+    $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+    $fetchDataProgOthers = fetchDataProgOthers($db, $tableName, $columns, $username);
+
+    function fetchDataProgOthers($db, $tableName, $columns, $username){
+      if(empty($db)){
+       $msg= "Database connection error";
+      }elseif (empty($columns) || !is_array($columns)) {
+       $msg="columns Name must be defined in an indexed array";
+      }elseif(empty($tableName)){
+        $msg= "Table Name is empty";
+     }else{
+     $columnName = implode(", ", $columns);
+     $Department = $_SESSION['userDept'];
+     $query = "SELECT * FROM `usertask` WHERE `Department` = '$Department' AND taskType = 'others' ORDER BY username ASC;";
+    //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+    //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+     $result = $db->query($query);
+     if($result== true){ 
+      if ($result->num_rows > 0) {
+         $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+         $msg= $row;
+      } else {
+         $msg= "No Data Found"; 
+      }
+     }else{
+       $msg= mysqli_error($db);
+     }
+     }
+     return $msg;
+     }
 
      $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
      $fetchDataProg = fetchDataProg($db, $tableName, $columns, $username);
@@ -2130,6 +2282,9 @@ if (isset($_POST['deleteSelected'])){
     <a class="nav-link" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false">Dashboard</a>
   </li> --> 
   <li class="nav-item ">
+    <a class="nav-link <?php echo $EndedActive; ?>" id="ended-tab" data-toggle="tab" href="#ENDED" role="tab" aria-controls="ENDED" aria-selected="false">Ended Task</a>
+  </li>
+  <li class="nav-item ">
     <a class="nav-link <?php echo $MembersActive; ?>" id="pic-tab" data-toggle="tab" href="#PIC" role="tab" aria-controls="PIC" aria-selected="false">Members Progress</a>
   </li>
   <li class="nav-item">
@@ -2138,6 +2293,7 @@ if (isset($_POST['deleteSelected'])){
 </ul>
 </div>
 <div class="tab-content" id="myTabContent" style="height: 100%;margin: 30px; margin-top: 0px ">
+<?php include "endedTableForLeader.php"; ?>
 <div class="tab-pane fade show <?php echo $TaskActive; ?>" id="task" style="height: 90%;  background-color: none" role="tabpanel" aria-labelledby="task-tab">
   
           <div class="container p-30 " id="TableListOfMembers";  style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
@@ -2347,7 +2503,7 @@ if (isset($_POST['deleteSelected'])){
 
 
 
-                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                    // echo("<script>console.log('taskname : " . $taskname. "');</script>");
                                     
                               //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
@@ -2443,7 +2599,7 @@ if (isset($_POST['deleteSelected'])){
                                         // echo $day;
                                    $taskID = $data['usertaskID'];
                                    $taskType = $data['taskType'];
-                                   if($taskType == "daily"){
+                                   if($taskType == "daily" || $taskType == "others"){ // update for october 07 2022
                                     ?>
                                     <td style='width:240px;'><?php
                                     //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
@@ -2713,25 +2869,6 @@ $March =  $March->format('Y-m-d');
                                     ?>
 
                                     <!-- End of new code -->
-                              
-
-                                
-                              
-
-                          
-
-                          
-
-
-
-
-
-
-
-
-
-
-
                                 
                              </tr>
                              <?php
@@ -2797,6 +2934,12 @@ $March =  $March->format('Y-m-d');
                                              Annually
                                             </label>
                                      </div>
+                                     <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ProgFilter" id="ProgFilter" <?php echo $othersChecked ?> onclick="FilterProgress();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Others
+                                            </label>
+                                     </div>
                                    
                                   
                              </div>
@@ -2814,6 +2957,8 @@ $March =  $March->format('Y-m-d');
                     <?php include "./Code For Members Progress Report/DetailedWeeklyReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedMonthlyReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedAnnuallyReport.php" ?>
+                    <?php include "./Code For Members Progress Report/DetailedOthersReport.php" ?>
+
 
 
                     
@@ -2826,6 +2971,7 @@ $March =  $March->format('Y-m-d');
         </div>
       </div>
     </div>
+    
     <div class="tab-pane fade show <?php echo $SummaryActive; ?>" id="Dept" role="tabpanel" aria-labelledby="dept-tab">
       <div class="container p-30" id="TableListOfMembers"; style="position: relative;  height: fit-content;padding-top: 0; max-width: 100%">
       <div class="ms-1 shadow row" >
@@ -3135,12 +3281,116 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
   }
  
 }
+function FilterSchedEnded(){
+
+var types=document.getElementsByName('checkDoneEnded');
+
+if(types[0].checked){
+  let filterValue="monthly";
+          var table = document.getElementById('TaskTableEnded');
+          let tr = table.querySelectorAll('tr');
+          
+          for(let index=0; index < tr.length;index++){
+              let val = tr[index].getElementsByTagName('td')[5];
+              if(val.innerHTML.indexOf(filterValue)> -1){
+                  tr[index].style.display='';
+      
+              }
+              else{
+                  tr[index].style.display='none';
+              }
+          }
+}
+else if (types[1].checked){
+  let filterValue="daily";
+          var table = document.getElementById('TaskTableEnded');
+          let tr = table.querySelectorAll('tr');
+          
+          for(let index=0; index < tr.length;index++){
+              let val = tr[index].getElementsByTagName('td')[5];
+              if(val.innerHTML.indexOf(filterValue)> -1){
+                  tr[index].style.display='';
+      
+              }
+              else{
+                  tr[index].style.display='none';
+              }
+          }
+}
+else if (types[2].checked){
+  let filterValue="weekly";
+          var table = document.getElementById('TaskTableEnded');
+          let tr = table.querySelectorAll('tr');
+          
+          for(let index=0; index < tr.length;index++){
+              let val = tr[index].getElementsByTagName('td')[5];
+              if(val.innerHTML.indexOf(filterValue)> -1){
+                  tr[index].style.display='';
+      
+              }
+              else{
+                  tr[index].style.display='none';
+              }
+          }
+}
+
+else if (types[3].checked){
+  let filterValue="annual";
+          var table = document.getElementById('TaskTableEnded');
+          let tr = table.querySelectorAll('tr');
+          
+          for(let index=0; index < tr.length;index++){
+              let val = tr[index].getElementsByTagName('td')[5];
+              if(val.innerHTML.indexOf(filterValue)> -1){
+                  tr[index].style.display='';
+      
+              }
+              else{
+                  tr[index].style.display='none';
+              }
+          }
+}
+else if (types[4].checked){
+  let filterValue="";
+          var table = document.getElementById('TaskTableEnded');
+          let tr = table.querySelectorAll('tr');
+          
+          for(let index=0; index < tr.length;index++){
+              let val = tr[index].getElementsByTagName('td')[5];
+              if(val.innerHTML.indexOf(filterValue)> -1){
+                  tr[index].style.display='';
+      
+              }
+              else{
+                  tr[index].style.display='none';
+              }
+          }
+}
+
+}
 let today = new Date().toISOString().substr(0, 10);
 
 // document.querySelector("#datepicker").valueAsDate = new Date();
 var sheets = new Array();
 
+getSelectValueEnded();
+function getSelectValueEnded() {
+    let input = document.getElementById('filterboxEnded').value
+    input=input.toLowerCase();
+    let x = document.getElementsByClassName('ewan2');
+    sheets=[-1];
+      
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="table-row";      
+            sheets.push(i);              
 
+        }
+    }
+}
 getSelectValue();
 function getSelectValue() {
     let input = document.getElementById('filterbox').value
@@ -3213,6 +3463,7 @@ if(types[0].checked){
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='none';  
   document.getElementById('annualReportArea').style.display='none';  
+  document.getElementById('OthersReportArea').style.display='none';
 
 
 }
@@ -3221,12 +3472,14 @@ else if (types[1].checked){
   document.getElementById('WeeklyReportArea').style.display='block';
   document.getElementById('monthyReportArea').style.display='none'; 
   document.getElementById('annualReportArea').style.display='none';  
+  document.getElementById('OthersReportArea').style.display='none';
 
 
 
 }
 else if (types[2].checked){
   document.getElementById('DailyReportArea').style.display='none';
+  document.getElementById('OthersReportArea').style.display='none';
 
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='block';  
@@ -3239,10 +3492,18 @@ else if (types[3].checked){
   document.getElementById('WeeklyReportArea').style.display='none';
   document.getElementById('monthyReportArea').style.display='none';  
   document.getElementById('annualReportArea').style.display='block';  
+  document.getElementById('OthersReportArea').style.display='none';
 
 }
 
+else if (types[4].checked){
+  document.getElementById('DailyReportArea').style.display='none';
+  document.getElementById('WeeklyReportArea').style.display='none';
+  document.getElementById('monthyReportArea').style.display='none';  
+  document.getElementById('annualReportArea').style.display='none';  
+  document.getElementById('OthersReportArea').style.display='block';
 
+}
 }
 
 function exportDataAnnual(){
