@@ -15,6 +15,10 @@
                           <input type="date" id="datepickerEndProgSummary" value="<?php $endDate = new DateTime($todayEndSummary);  $endDate =  $endDate->format('Y-m-d'); echo $endDate ?>" name="datepickerEndProgSummary" onchange="filterMonth();">
                           <button type="submit" name="submitdateProgDailySummary" class="btn btn-info btn-sm">Submit</button>
                           <button type="submit" name="exportProgDailySummary"class="btn btn-outline-danger btn-sm" > <i style="font-size: 20px;"class="fas fa-file-pdf fa-xs"></i> Export</button>
+                          <label class="container">Include Ended Tasks
+                          <input type="checkbox" name="include">
+                          <span class="checkmark"></span>
+                           </label>
                                       
                           <!-- <input type="submit" name="submitdate"> -->
                           </form>
@@ -65,9 +69,14 @@
                                    $TotalPointsEarned = 0;
 
                                    $TARGETPOINTS =0; 
+                                   if($include=="1"){
+                                    $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'daily';";
+                                  }
+                                  else{
+                                    $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'daily' AND `ended` = false;";
+                                  }
 
-
-                                   $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'daily';";
+                                  
                                    $result = mysqli_query($con, $getUserTasks);
                                   $noOfResult =  mysqli_num_rows($result);
                                   // echo $noOfResult;
@@ -150,7 +159,13 @@
                                   //  echo  "     "  ;
                                 }
 /////////////////////////////////////////weekly
-$getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly';";
+if($include=="1"){
+  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly';";
+
+}
+else{
+  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly' AND `ended` = false;";
+}
 $resultw = mysqli_query($con, $getUserTasks);
 $noOfResult =  mysqli_num_rows($resultw);
 // echo $noOfResult;
@@ -233,7 +248,13 @@ $task =  $userRow['taskName'];
 
 
                   /////////////////////////monthly
-                  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'monthly';";
+                  if($include=="1"){
+                    $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'monthly';";
+                  }
+                  else{
+                    $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'monthly' AND `ended` = false;";
+                  }
+             
 $resultm = mysqli_query($con, $getUserTasks);
 $noOfResult =  mysqli_num_rows($resultm);
 // echo $noOfResult;
@@ -316,8 +337,13 @@ $task =  $userRow['taskName'];
                   }
 
                   /////////////////////////////annual
+                  if($include=="1"){
+                    $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual';"; 
 
-                  $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual';"; 
+                  }
+                  else{
+                    $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual' AND `ended` = false;";
+                  }
       $resultan = mysqli_query($con, $countAnnual);
 
 
@@ -453,14 +479,22 @@ $task =  $userRow['taskName'];
 
                                      $DateNowAndToday = new DateTime($todayEndSummary);  
                                      $endDATE =  $DateNowAndToday->format('Y-m-d');
-
-                                      $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                                     if($include=="1"){
+                                      $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE' ;";
+                                      
+                                    }
+                                    else{
+                                      $countSummary = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'daily' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+                
+                                    }
+                                      // $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                       $result = mysqli_query($con, $countSummary);
                                       while($userRow = mysqli_fetch_assoc($result)){
                                       $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                       }
                                       echo $totalNumberOfScore1;
                                       $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                      //echo " ". $TotalPointsEarned;
                                   ?>    
                           </td>
 
@@ -471,103 +505,157 @@ $task =  $userRow['taskName'];
 
                                      $DateNowAndToday = new DateTime($todayEndSummary);  
                                      $endDATE =  $DateNowAndToday->format('Y-m-d');
-
+                                     if($include=="1"){
                                       $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                                     
+                                    }
+                                    else{
+                                      $countSummary = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'daily' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+                    
+                                    }
+                                      // $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                       $result = mysqli_query($con, $countSummary);
                                       while($userRow = mysqli_fetch_assoc($result)){
                                       $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                       }
                                       echo $totalNumberOfScore1;
                                       $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                      //echo " ". $TotalPointsEarned;
+
+
                                   ?>    
                           </td>
 
                           <td class="table-light" name="noOfOntimeWeekly">
                                   <?php
-                                       $StartDateSelected = new DateTime($todaySummary);
+                                    //    $StartDateSelected = new DateTime($todaySummary);
+                                    //    $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                    //    $startDAY=  $StartDateSelected->format('D'); 
+                                     
+                                     
+                                    //    if ($startDAY == 'Mon') {
+                                    //   //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                    //    $startDATE = $StartDateSelected->format('W');
+                                        
+                                    //      }
+                                    //      else if($startDAY == 'Sun'){
+                                    //        $StartDateSelected->modify('next monday');
+                                    //       //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                    //        $startDATE = $StartDateSelected->format('W');
+                                     
+                                    //      }
+                                    //      else{
+                                    //       $StartDateSelected->modify('last monday');
+                                    //       // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                    //       $startDATE = $StartDateSelected->format('W');
+                                     
+                                    //      }
+                                      
+                                
+                                    // // (optional) for the updated question
+                                    
+                                    //  $DateNowAndToday = new DateTime($todayEndSummary);  
+                                    // //  $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                    //  $endDATE = $DateNowAndToday->format('W');
+                                    // //  echo "week".$startDATE;
+                                    // //  echo "week".$endDATE;
+
+                                     $StartDateSelected = new DateTime($todaySummary);
                                        $startDATE =  $StartDateSelected->format('Y-m-d'); 
                                        $startDAY=  $StartDateSelected->format('D'); 
                                      
                                      
                                        if ($startDAY == 'Mon') {
                                       //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                       $startDATE = $StartDateSelected->format('W');
+                                       $startDATE = $StartDateSelected->format('Y-m-d');
                                         
                                          }
                                          else if($startDAY == 'Sun'){
                                            $StartDateSelected->modify('next monday');
                                           //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                           $startDATE = $StartDateSelected->format('W');
+                                           $startDATE = $StartDateSelected->format('Y-m-d');
                                      
                                          }
                                          else{
                                           $StartDateSelected->modify('last monday');
                                           // $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                          $startDATE = $StartDateSelected->format('W');
+                                          $startDATE = $StartDateSelected->format('Y-m-d');
                                      
                                          }
                                       
                                 
                                     // (optional) for the updated question
                                     
-                                     $DateNowAndToday = new DateTime($todayEndSummary);  
-                                    //  $endDATE =  $DateNowAndToday->format('Y-m-d');
-                                     $endDATE = $DateNowAndToday->format('W');
-                                    //  echo "week".$startDATE;
-                                    //  echo "week".$endDATE;
-
-                                      $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `weekNumber` BETWEEN '$startDATE' AND '$endDATE';";
+                                     $DateNowAndToday = new DateTime($todayEndWeekly);  
+                                     $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                     if($include=="1"){
+                                      $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
+                  
+                                    }
+                                    else{
+                                      $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND  finishedtask.lastMonday BETWEEN '$startDATE' AND '$endDATE' ;";
+                  
+                                    }
+                                      // $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
                                       $result = mysqli_query($con, $countWeekly);
                                       while($userRow = mysqli_fetch_assoc($result)){
                                       $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                       }
                                       echo $totalNumberOfScore1;
                                       $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                      //echo " ". $TotalPointsEarned;
 
                                   ?>
                              </td>
 
                              <td class="table-light" name="noOfLateWeekly">
                                   <?php
-                                       $StartDateSelected = new DateTime($todaySummary);
-                                       $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                       $startDAY=  $StartDateSelected->format('D'); 
-                                     
-                                     
-                                       if ($startDAY == 'Mon') {
-                                      //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                       $startDATE = $StartDateSelected->format('W');
+                                         $StartDateSelected = new DateTime($todaySummary);
+                                         $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                         $startDAY=  $StartDateSelected->format('D'); 
+                                       
+                                       
+                                         if ($startDAY == 'Mon') {
+                                        //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                         $startDATE = $StartDateSelected->format('Y-m-d');
+                                          
+                                           }
+                                           else if($startDAY == 'Sun'){
+                                             $StartDateSelected->modify('next monday');
+                                            //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                             $startDATE = $StartDateSelected->format('Y-m-d');
+                                       
+                                           }
+                                           else{
+                                            $StartDateSelected->modify('last monday');
+                                            // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                            $startDATE = $StartDateSelected->format('Y-m-d');
+                                       
+                                           }
                                         
-                                         }
-                                         else if($startDAY == 'Sun'){
-                                           $StartDateSelected->modify('next monday');
-                                          //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                           $startDATE = $StartDateSelected->format('W');
-                                     
-                                         }
-                                         else{
-                                          $StartDateSelected->modify('last monday');
-                                          // $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                                          $startDATE = $StartDateSelected->format('W');
-                                     
-                                         }
+                                  
+                                      // (optional) for the updated question
                                       
-                                
-                                    // (optional) for the updated question
-                                    
-                                     $DateNowAndToday = new DateTime($todayEndSummary);  
-                                    //  $endDATE =  $DateNowAndToday->format('Y-m-d');
-                                     $endDATE = $DateNowAndToday->format('W');
-                                    //  echo "week".$startDATE;
-                                    //  echo "week".$endDATE;
+                                       $DateNowAndToday = new DateTime($todayEndWeekly);  
+                                       $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                       if($include=="1"){
+                                        $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
+                 
+                                      }
+                                      else{
+                                        $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'daily' AND usertask.ended = false AND  finishedtask.lastMonday BETWEEN '$startDATE' AND '$endDATE' ;";
 
-                                      $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'weekly' AND  `weekNumber` BETWEEN '$startDATE' AND '$endDATE';";
+                                      }
+
+                                      // $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
                                       $result = mysqli_query($con, $countWeekly);
                                       while($userRow = mysqli_fetch_assoc($result)){
                                       $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                       }
                                       echo $totalNumberOfScore1;
                                       $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                      //echo " ". $TotalPointsEarned;
+
                                   ?>
                              </td>
 
@@ -578,10 +666,12 @@ $task =  $userRow['taskName'];
                                       $startDATE =  $StartDateSelected->format('Y-m-d'); 
                                      
                                       $startDateMonth = $StartDateSelected->format('F');
+                                      $startDateMonthsamp = $StartDateSelected->format('Y-m-d');
+
                                     
 
                                       
-                                           $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
+                                      $fDateOfTheMonth = new DateTime('first day of '.$startDateMonthsamp);
                                          
                                            $startDATE =  $fDateOfTheMonth->format('Y-m-d');
                                           
@@ -597,13 +687,22 @@ $task =  $userRow['taskName'];
                                    //  echo "week".$startDATE;
                                    //  echo "week".$endDATE;
 
-                                     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                                   if($include=="1"){
+                                    $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                              
+                                                }
+                                                else{
+                                                  $countMonthly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'monthly' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+                                                  
+                                                }
+                                    //  $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                      $result = mysqli_query($con, $countMonthly);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                      }
                                      echo $totalNumberOfScore1;
                                      $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                     //echo " ". $TotalPointsEarned;
 
                                  ?>
                             </td>
@@ -632,14 +731,23 @@ $task =  $userRow['taskName'];
                                     $endDATE = $DateNowAndToday->format('Y-m-d');
                                    //  echo "week".$startDATE;
                                    //  echo "week".$endDATE;
-
-                                     $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                                   if($include=="1"){
+                                    $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                                   
+                                  }
+                                  else{
+                                    $countMonthly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'monthly' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+                    
+                                  }
+                                    //  $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                      $result = mysqli_query($con, $countMonthly);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                      }
                                      echo $totalNumberOfScore1;
                                      $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                     //echo " ". $TotalPointsEarned;
+
                                  ?>
                             </td>
                             <td class="table-light" name="noOfAnnual">
@@ -664,14 +772,23 @@ $task =  $userRow['taskName'];
                                  $March = new DateTime($YearToUseforMarch.'-03-31');
                                  $April =  $April->format('Y-m-d');
                                  $March =  $March->format('Y-m-d');
-                                 
-                                     $countAnnual = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';";
+                                 if($include=="1"){
+                                  $countAnnual = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';";
+
+                                 }
+                                 else{
+                                 $countAnnual = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'annual' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+                                   
+                                 }
+                                    //  $countAnnual = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';";
                                      $result = mysqli_query($con, $countAnnual);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                      }
                                      echo $totalNumberOfScore1;
                                      $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                    //  echo " ". $TotalPointsEarned;
+
 
                                  ?>
                             </td>
@@ -701,8 +818,15 @@ $task =  $userRow['taskName'];
                                      
                                     $April = new DateTime($todayAnnual);  $April =  $April->format('Y-m-d');
                                     $March = new DateTime($todayEndAnnual);  $March =  $March->format('Y-m-d');
-
-                                    $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
+                                    if($include=="1"){
+                                      $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
+                                    
+                                    }
+                                    else{
+                                      $countAnnual = "SELECT  COUNT(finishedtask.score) as TotalNumberOfp5 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'annual' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+                      
+                                    }
+                                    // $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
                                      $result = mysqli_query($con, $countAnnual);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                        $totalNumberOfScore1 = $userRow['TotalNumberOfp5'];
@@ -710,6 +834,8 @@ $task =  $userRow['taskName'];
                                     echo $totalNumberOfScore1;
                                     // $totalNumberOfScore1 = $totalNumberOfScore1 * 0.5;
                                     $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                    //echo " ". $TotalPointsEarned;
+
                                     ?>
                             </td>
                                  </tr>
@@ -783,8 +909,16 @@ $task =  $userRow['taskName'];
 
                     $DateNowAndToday = new DateTime($todayEndSummary);  
                     $endDATE =  $DateNowAndToday->format('Y-m-d');
+                    if($include=="1"){
+                      $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE' ;";
+                      
+                    }
+                    else{
+                      $countSummary = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'daily' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
 
-                     $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                    }
+                    //  $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '1' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE' ;";
+                     
                      $result = mysqli_query($con, $countSummary);
                      while($userRow = mysqli_fetch_assoc($result)){
                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -795,38 +929,44 @@ $task =  $userRow['taskName'];
                       
                       
                      $StartDateSelected = new DateTime($todaySummary);
-                     $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                     $startDAY=  $StartDateSelected->format('D'); 
-                   
-                   
-                     if ($startDAY == 'Mon') {
-                    //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                     $startDATE = $StartDateSelected->format('W');
-                      
-                       }
-                       else if($startDAY == 'Sun'){
-                         $StartDateSelected->modify('next monday');
-                        //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                         $startDATE = $StartDateSelected->format('W');
-                   
-                       }
-                       else{
-                        $StartDateSelected->modify('last monday');
-                        // $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                        $startDATE = $StartDateSelected->format('W');
-                   
-                       }
-                    
-              
-                  // (optional) for the updated question
-                  
-                   $DateNowAndToday = new DateTime($todayEndSummary);  
-                  //  $endDATE =  $DateNowAndToday->format('Y-m-d');
-                   $endDATE = $DateNowAndToday->format('W');
+                                       $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                       $startDAY=  $StartDateSelected->format('D'); 
+                                     
+                                     
+                                       if ($startDAY == 'Mon') {
+                                      //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                       $startDATE = $StartDateSelected->format('Y-m-d');
+                                        
+                                         }
+                                         else if($startDAY == 'Sun'){
+                                           $StartDateSelected->modify('next monday');
+                                          //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                           $startDATE = $StartDateSelected->format('Y-m-d');
+                                     
+                                         }
+                                         else{
+                                          $StartDateSelected->modify('last monday');
+                                          // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                          $startDATE = $StartDateSelected->format('Y-m-d');
+                                     
+                                         }
+                                      
+                                
+                                    // (optional) for the updated question
+                                    
+                                     $DateNowAndToday = new DateTime($todayEndWeekly);  
+                                     $endDATE =  $DateNowAndToday->format('Y-m-d');
                   //  echo "week".$startDATE;
                   //  echo "week".$endDATE;
+                  if($include=="1"){
+                    $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
 
-                    $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `weekNumber` BETWEEN '$startDATE' AND '$endDATE';";
+                  }
+                  else{
+                    $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND  finishedtask.lastMonday BETWEEN '$startDATE' AND '$endDATE' ;";
+
+                  }
+
                     $result = mysqli_query($con, $countWeekly);
                     while($userRow = mysqli_fetch_assoc($result)){
                     $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -837,29 +977,38 @@ $task =  $userRow['taskName'];
 
 
                     $StartDateSelected = new DateTime($todaySummary);
-                    $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                   
-                    $startDateMonth = $StartDateSelected->format('F');
-                  
+                                      $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                     
+                                      $startDateMonth = $StartDateSelected->format('F');
+                                      $startDateMonthsamp = $StartDateSelected->format('Y-m-d');
 
+                                    
+
+                                      
+                                      $fDateOfTheMonth = new DateTime('first day of '.$startDateMonthsamp);
+                                         
+                                           $startDATE =  $fDateOfTheMonth->format('Y-m-d');
+                                          
+                                    
+
+                                     
+                               
+                                   // (optional) for the updated question
+                                   
+                                    $DateNowAndToday = new DateTime($todayEndSummary);  
+                                   //  $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                    $endDATE = $DateNowAndToday->format('Y-m-d');
+                                   //  echo "week".$startDATE;
+                                   //  echo "week".$endDATE;
+     if($include=="1"){
+      $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+
+                  }
+                  else{
+                    $countMonthly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'monthly' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
                     
-                         $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
-                       
-                         $startDATE =  $fDateOfTheMonth->format('Y-m-d');
-                        
-                  
+                  }
 
-                   
-             
-                 // (optional) for the updated question
-                 
-                  $DateNowAndToday = new DateTime($todayEndSummary);  
-                 //  $endDATE =  $DateNowAndToday->format('Y-m-d');
-                  $endDATE = $DateNowAndToday->format('Y-m-d');
-                 //  echo "week".$startDATE;
-                 //  echo "week".$endDATE;
-
-                   $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                    $result = mysqli_query($con, $countMonthly);
                    while($userRow = mysqli_fetch_assoc($result)){
                    $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -893,8 +1042,15 @@ $task =  $userRow['taskName'];
                                  $March = new DateTime($YearToUseforMarch.'-03-31');
                                  $April =  $April->format('Y-m-d');
                                  $March =  $March->format('Y-m-d');
+                                 if($include=="1"){
+                                  $countAnnual = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';";
+
+                                 }
+                                 else{
+                                 $countAnnual = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'annual' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+                                   
+                                 }
                                  
-                                     $countAnnual = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';";
                                      $result = mysqli_query($con, $countAnnual);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -916,7 +1072,17 @@ $task =  $userRow['taskName'];
                  $DateNowAndToday = new DateTime($todayEndSummary);  
                  $endDATE =  $DateNowAndToday->format('Y-m-d');
 
+                 if($include=="1"){
                   $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+                 
+                }
+                else{
+                  $countSummary = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'daily' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+
+                }
+
+
+                  // $countSummary = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'daily' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                   $result = mysqli_query($con, $countSummary);
                   while($userRow = mysqli_fetch_assoc($result)){
                   $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -926,40 +1092,44 @@ $task =  $userRow['taskName'];
                   $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
                   $TotalPointsLateEarned = $TotalPointsLateEarned + $totalNumberOfScore1;
                    
-                   
                   $StartDateSelected = new DateTime($todaySummary);
-                  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                  $startDAY=  $StartDateSelected->format('D'); 
-                
-                
-                  if ($startDAY == 'Mon') {
-                 //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                  $startDATE = $StartDateSelected->format('W');
-                   
-                    }
-                    else if($startDAY == 'Sun'){
-                      $StartDateSelected->modify('next monday');
-                     //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                      $startDATE = $StartDateSelected->format('W');
-                
-                    }
-                    else{
-                     $StartDateSelected->modify('last monday');
-                     // $startDATE =  $StartDateSelected->format('Y-m-d'); 
-                     $startDATE = $StartDateSelected->format('W');
-                
-                    }
+                                         $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                         $startDAY=  $StartDateSelected->format('D'); 
+                                       
+                                       
+                                         if ($startDAY == 'Mon') {
+                                        //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                         $startDATE = $StartDateSelected->format('Y-m-d');
+                                          
+                                           }
+                                           else if($startDAY == 'Sun'){
+                                             $StartDateSelected->modify('next monday');
+                                            //  $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                             $startDATE = $StartDateSelected->format('Y-m-d');
+                                       
+                                           }
+                                           else{
+                                            $StartDateSelected->modify('last monday');
+                                            // $startDATE =  $StartDateSelected->format('Y-m-d'); 
+                                            $startDATE = $StartDateSelected->format('Y-m-d');
+                                       
+                                           }
+                                        
+                                  
+                                      // (optional) for the updated question
+                                      
+                                       $DateNowAndToday = new DateTime($todayEndWeekly);  
+                                       $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                       if($include=="1"){
+                                        $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
                  
-           
-               // (optional) for the updated question
-               
-                $DateNowAndToday = new DateTime($todayEndSummary);  
-               //  $endDATE =  $DateNowAndToday->format('Y-m-d');
-                $endDATE = $DateNowAndToday->format('W');
-               //  echo "week".$startDATE;
-               //  echo "week".$endDATE;
+                                      }
+                                      else{
+                                        $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'daily' AND usertask.ended = false AND  finishedtask.lastMonday BETWEEN '$startDATE' AND '$endDATE' ;";
 
-                 $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'weekly' AND  `weekNumber` BETWEEN '$startDATE' AND '$endDATE';";
+                                      }
+                                      
+                //  $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
                  $result = mysqli_query($con, $countWeekly);
                  while($userRow = mysqli_fetch_assoc($result)){
                  $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -969,14 +1139,17 @@ $task =  $userRow['taskName'];
                  $TotalPointsLateEarned = $TotalPointsLateEarned + $totalNumberOfScore1;
 
 
+               
                  $StartDateSelected = new DateTime($todaySummary);
                  $startDATE =  $StartDateSelected->format('Y-m-d'); 
                 
                  $startDateMonth = $StartDateSelected->format('F');
+                 $startDateMonthsamp = $StartDateSelected->format('Y-m-d');
+
                
 
                  
-                      $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
+                 $fDateOfTheMonth = new DateTime('first day of '.$startDateMonthsamp);
                     
                       $startDATE =  $fDateOfTheMonth->format('Y-m-d');
                      
@@ -991,8 +1164,15 @@ $task =  $userRow['taskName'];
                $endDATE = $DateNowAndToday->format('Y-m-d');
               //  echo "week".$startDATE;
               //  echo "week".$endDATE;
-
+              if($include=="1"){
                 $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '0.5' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
+               
+              }
+              else{
+                $countMonthly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'monthly' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+
+              }
+             
                 $result = mysqli_query($con, $countMonthly);
                 while($userRow = mysqli_fetch_assoc($result)){
                 $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
@@ -1026,7 +1206,18 @@ $task =  $userRow['taskName'];
               $April = new DateTime($todayAnnual);  $April =  $April->format('Y-m-d');
               $March = new DateTime($todayEndAnnual);  $March =  $March->format('Y-m-d');
 
-              $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
+              if($include=="1"){
+                $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
+              
+              }
+              else{
+                $countAnnual = "SELECT  COUNT(finishedtask.score) as TotalNumberOfp5 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '0.5' AND finishedtask.sched_Type = 'annual' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
+
+              }
+
+
+             
+              // $countAnnual = "SELECT COUNT(score) as TotalNumberOfp5 FROM `finishedtask` WHERE `in_charge` = '$username' AND  `score` = '0.5' AND `sched_Type` = 'annual' AND   `realDate` BETWEEN '$April' AND '$March';"; 
                $result = mysqli_query($con, $countAnnual);
                while($userRow = mysqli_fetch_assoc($result)){
                  $totalNumberOfScore1 = $userRow['TotalNumberOfp5'];
@@ -1049,10 +1240,17 @@ $task =  $userRow['taskName'];
 
     <td class="table-light"> <?php
 
-$TARGETPOINTS =0; 
+                    $TARGETPOINTS =0; 
 
+                    if($include=="1"){
+                      $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'daily' ";
+                                  
+                    }
+                    else{
+                      $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'daily' AND `ended` = false; ";
+                                  
+                    }
 
-                                   $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'daily';";
                                    $result = mysqli_query($con, $getUserTasks);
                                   $noOfResult =  mysqli_num_rows($result);
                                   // echo $noOfResult;
@@ -1130,11 +1328,20 @@ $TARGETPOINTS =0;
                                           $finalDiffs = 0;
                                       }
                                         $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
-                                  //  echo $TARGETPOINTS;
-                                  //  echo  "     "  ;
+                                  //  echo $TARGETPOINTS. " ";
+                                  //  echo  $startDATE ;
                                 }
+                                
 /////////////////////////////////////////weekly
-$getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly';";
+if($include=="1"){
+  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly' ";
+              
+}
+else{
+  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly' AND `ended` = false;";
+
+              
+}
 $resultw = mysqli_query($con, $getUserTasks);
 $noOfResult =  mysqli_num_rows($resultw);
 // echo $noOfResult;
@@ -1194,9 +1401,15 @@ $task =  $userRow['taskName'];
                       $curr = $dt->format('W');
                       $currMonth = $dt->format('F');
                       $currYear = $dt->format('Y');
-    
-    
-                      if($curr==$weekNo){
+                      $currs = $dt->format('D');
+
+                      if ($currs == 'Sat' || $currs == 'Sun') {
+                        $finalDiffs--;
+                        }
+                  else if (in_array($dt->format('Y-m-d'), $holidays)) {
+                                        $finalDiffs--;
+                                        }
+                      else if($curr==$weekNo){
                         echo null;
                       }
                       else{
@@ -1211,13 +1424,23 @@ $task =  $userRow['taskName'];
                   }
                       $finalDiffs = $NumberOfWeeksToDone;
                       $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
-
+                      // echo $NumberOfWeeksToDone;
                   }
 
-
+                  
 
                   /////////////////////////monthly
-                  $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'monthly';";
+                  if($include=="1"){
+                    $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'monthly' ";
+
+                                
+                  }
+                  else{
+                    $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'monthly' AND `ended` = false;";
+
+                  
+                                
+                  }
 $resultm = mysqli_query($con, $getUserTasks);
 $noOfResult =  mysqli_num_rows($resultm);
 // echo $noOfResult;
@@ -1296,12 +1519,21 @@ $task =  $userRow['taskName'];
                                     $finalDiffs = $NumberOfWeeksToDone;
                                     $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
          
-
+                                
                   }
 
                   /////////////////////////////annual
+                  if($include=="1"){
+                    $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual'"; 
 
-                  $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual';"; 
+                                
+                  }
+                  else{
+                    $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual' AND `ended` = false;"; 
+
+                                
+                  }
+                  // $countAnnual = "SELECT COUNT(username) as noOfTask FROM `usertask` WHERE `userid` = '$UserID' AND taskType = 'annual' AND `ended` = false;"; 
       $resultan = mysqli_query($con, $countAnnual);
 
 
@@ -1331,8 +1563,8 @@ $task =  $userRow['taskName'];
                              
                              <div class="progress" style="height: 30px">
                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                       style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                       <?php echo round($TotalPercentage).'%'; ?> 
+                                       style="width:<?php echo round($TotalPercentage, 2).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                       <?php echo round($TotalPercentage, 2).'%'; ?> 
                                       
                                      </div>
                                      </div>

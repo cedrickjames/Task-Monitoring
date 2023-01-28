@@ -741,9 +741,15 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
                       $TaskActive = "active";
 
     }
+    $include="0";
+    $_SESSION['include']=0;
     if(isset($_POST['exportProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+    if(isset($_POST['include'])) {
+      $_SESSION['include']=1;
+
+ }
 
     $_SESSION['dateStarted'] = $datePickerSummary;
     $_SESSION['dateEnded']=$datePickerEndSummary ;
@@ -756,11 +762,13 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
     }
     }
-    
     if(isset($_POST['submitdateProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
-    $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
-   
+      $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+      //  $include = ;
+       if(isset($_POST['include'])) {
+         $include="1";
+    }
    
        $monthSummary = date('F', strtotime($datePickerSummary));
        $monthEndSummary = date('F', strtotime($datePickerEndSummary));
@@ -1127,7 +1135,9 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      }else{
      $columnName = implode(", ", $columns);
      $Department = $_SESSION['userDept'];
-     $query = "SELECT * FROM `usertask`   ORDER BY Department ASC;";
+    //  $query = "SELECT * FROM `usertask`   ORDER BY Department ASC;";
+     $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username AND usertask.ended = '0';";
+
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
@@ -2541,7 +2551,19 @@ if (isset($_POST['deleteSelected'])){
                              
                              <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr class="ewan" >
+                             <tr class="ewan" <?php
+                               $selectstatus = "SELECT * FROM `usertask` WHERE `usertaskID` = '$userTaskID'";
+
+                               // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                               $status = mysqli_query($con, $selectstatus);
+                            
+                               while($userRow = mysqli_fetch_assoc($status)){
+                                  $unaccomplished = $userRow['unaccomplished'];
+                                  if($unaccomplished){
+                                    echo "style='background-color: red'";
+                                  }
+                               }
+                             ?> >
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
                              <td><input type="checkbox" value="<?php echo $data['usertaskID']; ?>" name="id[]" onclick=ShowEndTaskButton()></td>
                              
@@ -2636,7 +2658,7 @@ if (isset($_POST['deleteSelected'])){
                                    if($taskType == "daily"){
                                     ?>
                                     <td style='width:240px;'><?php
-                                    //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                    //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</scrip>");
                                     //  $month = date("F");
                                     //  $year = date("Y");
 

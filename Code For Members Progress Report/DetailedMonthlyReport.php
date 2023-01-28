@@ -101,10 +101,12 @@
                                       $startDATE =  $StartDateSelected->format('Y-m-d'); 
                                      
                                       $startDateMonth = $StartDateSelected->format('F');
+                                      $startDateMonthsamp = $StartDateSelected->format('Y-m-d');
+
                                     
 
                                       
-                                           $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
+                                           $fDateOfTheMonth = new DateTime('first day of '.$startDateMonthsamp);
                                          
                                            $startDATE =  $fDateOfTheMonth->format('Y-m-d');
                                           
@@ -117,15 +119,16 @@
                                     $DateNowAndToday = new DateTime($todayEndMonthly);  
                                    //  $endDATE =  $DateNowAndToday->format('Y-m-d');
                                     $endDATE = $DateNowAndToday->format('Y-m-d');
-                                   //  echo "week".$startDATE;
-                                   //  echo "week".$endDATE;
-
+                                    // echo "week".$startDATE;
+                                    // echo "week".$endDATE;
+                                    // echo $userTaskID;
                                      $countMonthly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `taskID` = '$userTaskID' AND `score` = '1' AND `sched_Type` = 'monthly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                      $result = mysqli_query($con, $countMonthly);
                                      while($userRow = mysqli_fetch_assoc($result)){
                                      $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                      }
-                                     echo $totalNumberOfScore1;
+                                     echo $totalNumberOfScore1; 
+                                    //  echo $startDATE . " ". $endDATE;
                                      $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
                                  ?>
                             </td>
@@ -286,8 +289,8 @@
                             ?> 
                              <div class="progress" style="height: 30px">
                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                       style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                       <?php echo round($TotalPercentage).'%'; ?> 
+                                       style="width:<?php echo round($TotalPercentage,2).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                       <?php echo round($TotalPercentage,2).'%'; ?> 
                                       
                                      </div>
                                      </div></td>

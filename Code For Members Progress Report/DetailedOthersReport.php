@@ -140,88 +140,89 @@
 
                               </td>
                               <td name="totalEarnedPoints"> <?php echo $TotalPointsEarned; ?></td>
-                              <td name="targetPoints">
+                              <td name="targetPoints">1
                                 <?php 
 
-                                    $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$userTaskID';"; //kunin ang first monday date na pipiliin
-                                    $result = mysqli_query($con, $selectDateAdded);
-                                    while($userRow = mysqli_fetch_assoc($result)){
-                                      $dateAdded = $userRow['dateAdded'];
-                                      $targetDate = $userRow['targetDate'];
+//                                     $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$userTaskID';"; //kunin ang first monday date na pipiliin
+//                                     $result = mysqli_query($con, $selectDateAdded);
+//                                     while($userRow = mysqli_fetch_assoc($result)){
+//                                       $dateAdded = $userRow['dateAdded'];
+//                                       $targetDate = $userRow['targetDate'];
 
-                                    }
-                                    $dateAdded = date($dateAdded);
-                                    $targetDate = date($targetDate);
+//                                     }
+//                                     $dateAdded = date($dateAdded);
+//                                     $targetDate = date($targetDate);
 
-                                      $START = date($startDATE);
-                                      $END = date($endDATE);
-                                        if($START < $dateAdded){
-                                          $startDATE = $dateAdded;
-                                        }
-                                      if($END > $targetDate){
-                                            $endDATE = $targetDate;
-                                        }
+//                                       $START = date($startDATE);
+//                                       $END = date($endDATE);
+//                                         if($START < $dateAdded){
+//                                           $startDATE = $dateAdded;
+//                                         }
+//                                       if($END > $targetDate){
+//                                             $endDATE = $targetDate;
+//                                         }
                                       
-// echo $START .$startDATE;
-                                        $todayss="2022-07-01";            
-                                        $ends = new DateTime(date('Y-m-d', strtotime($endDATE)));
-                                        $starts = new DateTime(date('Y-m-d', strtotime($startDATE)));
-                                        // otherwise the  end date is excluded (bug?)
-                                        $eme = $starts->format('D');
-                                              if($eme == "Sat"){
-                                                $starts->modify('-1 day');
+// // echo $START .$startDATE;
+//                                         $todayss="2022-07-01";            
+//                                         $ends = new DateTime(date('Y-m-d', strtotime($endDATE)));
+//                                         $starts = new DateTime(date('Y-m-d', strtotime($startDATE)));
+//                                         // otherwise the  end date is excluded (bug?)
+//                                         $eme = $starts->format('D');
+//                                               if($eme == "Sat"){
+//                                                 $starts->modify('-1 day');
 
-                                              }
-                                              else if( $eme =="Sun"){
-                                                $starts->modify('-2 day');
-                                              }
-                                              // $starts->modify('+1 day');
-                                        $end = new DateTime();
-                                        $ends->modify('+1 day');
+//                                               }
+//                                               else if( $eme =="Sun"){
+//                                                 $starts->modify('-2 day');
+//                                               }
+//                                               // $starts->modify('+1 day');
+//                                         $end = new DateTime();
+//                                         $ends->modify('+1 day');
 
-                                        $intervals = $ends->diff($starts);
-                                        $finalDiffs = $intervals->days;
-                                        // echo $finalDiffs;
-                                        // create an iterateable period of date (P1D equates to 1 day)
-                                        $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
-                                        // best stored as array, so you can add more than one
-                                        // $holidays = array('2012-09-07');
-                                      include ("./holidays.php");
+//                                         $intervals = $ends->diff($starts);
+//                                         $finalDiffs = $intervals->days;
+//                                         // echo $finalDiffs;
+//                                         // create an iterateable period of date (P1D equates to 1 day)
+//                                         $periods = new DatePeriod($starts, new DateInterval('P1D'), $ends);
+//                                         // best stored as array, so you can add more than one
+//                                         // $holidays = array('2012-09-07');
+//                                       include ("./holidays.php");
                                         
-                                        foreach($periods as $dts) {
-                                        $currs = $dts->format('D');
-                                        // substract if Saturday or Sunday
-                                        if ($currs == 'Sat' || $currs == 'Sun') {
-                                        $finalDiffs--;
-                                        }
-                                        // (optional) for the updated question
-                                        else if (in_array($dts->format('Y-m-d'), $holidays)) {
-                                        $finalDiffs--;
-                                        }
-                                        }
-                                        if($END < $dateAdded){
-                                            $finalDiffs = 0;
-                                        }
-                                        echo $finalDiffs;
-                                    ?>
+//                                         foreach($periods as $dts) {
+//                                         $currs = $dts->format('D');
+//                                         // substract if Saturday or Sunday
+//                                         if ($currs == 'Sat' || $currs == 'Sun') {
+//                                         $finalDiffs--;
+//                                         }
+//                                         // (optional) for the updated question
+//                                         else if (in_array($dts->format('Y-m-d'), $holidays)) {
+//                                         $finalDiffs--;
+//                                         }
+//                                         }
+//                                         if($END < $dateAdded){
+//                                             $finalDiffs = 0;
+//                                         }
+//                                         echo $finalDiffs;
+//                                     ?>
 
 
 
                               </td>
                               <td>
                                 <?php 
-                              if($finalDiffs == 0 || $TotalPointsEarned == 0){
-$TotalPercentage=0;
-                              }
-                              else{
-                              $TotalPercentage = ($TotalPointsEarned / $finalDiffs)* 100; 
+//                               if($finalDiffs == 0 || $TotalPointsEarned == 0){
+// $TotalPercentage=0;
+//                               }
+//                               else{
+                              $TotalPercentage = ($TotalPointsEarned / 1)* 100; 
                               
-                              }?>
+                              // }
+                              ?>
                                 <div class="progress" style="height: 30px">
                                   <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                    style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25"
+                                    style="width:<?php echo round($TotalPercentage,2).'%'; ?>  " aria-valuenow="25"
                                     aria-valuemin="0" aria-valuemax="100">
-                                    <?php echo round($TotalPercentage).'%'; ?>
+                                    <?php echo round($TotalPercentage,2).'%'; ?>
 
                                   </div>
                                 </div>

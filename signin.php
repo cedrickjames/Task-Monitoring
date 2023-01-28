@@ -8,6 +8,8 @@ session_start();
 
     // 
   }
+  date_default_timezone_set("Asia/Singapore");
+//   echo date('Y-m-d');
 ?>
 
 
@@ -114,6 +116,7 @@ else{
             $_SESSION['action']="";
             $_SESSION['TaskID'] = "";
             $_SESSION['newFileLoc']="";
+            $_SESSION['Announcement']="false";
 
 $dateNow = date('Y-m-d');
   $fDateOfTheMonth = new DateTime('first day of '.$dateNow);

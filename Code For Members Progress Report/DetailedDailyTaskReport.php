@@ -219,9 +219,9 @@ $TotalPercentage=0;
                               }?>
                                 <div class="progress" style="height: 30px">
                                   <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                    style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25"
+                                    style="width:<?php echo round($TotalPercentage, 2).'%'; ?>  " aria-valuenow="25"
                                     aria-valuemin="0" aria-valuemax="100">
-                                    <?php echo round($TotalPercentage).'%'; ?>
+                                    <?php echo round($TotalPercentage, 2).'%'; ?>
 
                                   </div>
                                 </div>

@@ -727,11 +727,11 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
     }
     }
-    
+    $includeexclude="";
     if(isset($_POST['submitdateProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
-   
+    $includeexclude = $_POST['includeexclude'];
    
        $monthSummary = date('F', strtotime($datePickerSummary));
        $monthEndSummary = date('F', strtotime($datePickerEndSummary));

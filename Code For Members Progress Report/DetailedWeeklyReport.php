@@ -233,9 +233,16 @@
                             $curr = $dt->format('W');
                             $currMonth = $dt->format('F');
                             $currYear = $dt->format('Y');
-          
-          
-                            if($curr==$weekNo){
+                            $currs = $dt->format('D');
+                          
+                            if ($currs == 'Sat' || $currs == 'Sun') {
+                              $finalDiffs--;
+                              }
+                        else if (in_array($dt->format('Y-m-d'), $holidays)) {
+                                              $finalDiffs--;
+                                              }
+
+                            else if($curr==$weekNo){
                               echo null;
                             }
                             else{
@@ -245,6 +252,7 @@
                               $weekNo = $curr;
                             }
                           }
+                          // echo $NumberOfWeeksToDone;
                             $finalDiffs = $NumberOfWeeksToDone;
                             if($END < $dateAdded){
                               $finalDiffs = 0;
@@ -302,8 +310,8 @@
                                ?> 
                               <div class="progress" style="height: 30px">
                              <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                                        style="width:<?php echo round($TotalPercentage).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                        <?php echo round($TotalPercentage).'%'; ?> 
+                                        style="width:<?php echo round($TotalPercentage, 2).'%'; ?>  " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                        <?php echo round($TotalPercentage, 2).'%'; ?> 
                                        
                                       </div>
                                       </div></td>

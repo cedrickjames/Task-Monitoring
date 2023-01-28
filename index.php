@@ -1,8 +1,11 @@
 <?php
 //Set the session timeout for 2 seconds
 
+
 $timeout = 3600;
 
+// $timess = new DateTime();
+// echo $timess;
 //Set the maxlifetime of the session
 
 ini_set( "session.gc_maxlifetime", $timeout );
@@ -323,7 +326,38 @@ background: linear-gradient(to right, #71B280, #134E5E); /* W3C, IE 10+/ Edge, F
 
 <?php
 
+// echo $_SESSION['date_string'];
+
   date_default_timezone_set("Asia/Singapore");
+  $heheh = new DateTime();
+  $heheh = $heheh->format("Y-m-d");
+// echo $heheh;
+  $AnongArawNgayun = new DateTime();
+  $angArawNgayun = $AnongArawNgayun->format("D");
+  if($angArawNgayun == "Sat" && $_SESSION['Announcement']=="false"){
+    $_SESSION['Announcement']="true";
+    ?><script>
+      Swal.fire({
+  imageUrl: './design_files/images/Announcement.png',
+  imageHeight: 300,
+  imageAlt: 'A tall image'
+})
+
+  // Swal.fire({
+  //   title: '',
+  //   width: 1000,
+  //   padding: '3em',
+  //   color: '#716add',
+  //   background: '#fff url(./design_files/images/Announcement.png)',
+  //   backdrop: `
+  //     rgba(0,0,123,0.4)
+  //     left top
+  //     no-repeat
+  //   `
+  // })
+  </script><?php 
+  
+  }
   $db= $con;
 
   $query = "SELECT * FROM `holidays`;";
@@ -537,7 +571,7 @@ echo "There is an error. Please contact the developer. ";
           $meron = mysqli_num_rows($result);
           $IntervalDays = $_SESSION['noOfDaysLate'];
           echo "<script> console.log('$meron') </script>";//find2
-          if($IntervalDays <=1 ){
+          if($IntervalDays <1 ){
             // echo "meron";
             if($_SESSION['newFileLoc'] ==""){
               $fileloc ="" ;
@@ -592,12 +626,26 @@ echo "There is an error. Please contact the developer. ";
         $timenowForSameId = date("h-i");       
         $realDateForSameId = $dateSubmitted;     
         $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
+        $sameID = str_replace(' ', '', $sameID);   
         // $dateSubmitted = date('Y-m-d');
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
+
               $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` ,`lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew', '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
-              mysqli_query($con, $sqlinsert);
+             $insert1= mysqli_query($con, $sqlinsert);
+             if($insert1){
+              $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+              mysqli_query($con, $updateDateStarted);
+             }
+             else{
+              ?><script>
+              Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+          //   footer: '<a href="">Why do I have this issue?</a>'
+          })
+           </script><?php 
+             }
               header("location:index.php");
               unset($_SESSION['newFileLoc']);
               $_SESSION['reason'] = "";
@@ -606,7 +654,7 @@ echo "There is an error. Please contact the developer. ";
               $_SESSION['noOfDaysLate']="";
     
           }
-          else if($IntervalDays >1) {//find3
+          else if($IntervalDays >=1) {//find3
           
             if($_SESSION['newFileLoc'] ==""){
               $fileloc ="" ;
@@ -715,10 +763,10 @@ for($x = 0; $x <$arrlength; $x++) {
          $timenowForSameId = date("hi");       
          $realDateForSameId = $dateSubmitted;
          $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
+         $sameID = str_replace(' ', '', $sameID);   
 
-
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
+    // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+    //           mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlength-2;
               $validationVar2 = $arrlength-1;
@@ -749,7 +797,21 @@ for($x = 0; $x <$arrlength; $x++) {
                    }
               if($x<$validationVariable){
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber` , `lastMonday`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt', '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
-                mysqli_query($con, $sqlinsert);
+               $insert2= mysqli_query($con, $sqlinsert);
+               if($insert2){
+                $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                mysqli_query($con, $updateDateStarted);
+               }
+               else{
+                ?><script>
+                Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+            //   footer: '<a href="">Why do I have this issue?</a>'
+            })
+             </script><?php 
+               }
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 // echo $_SESSION
@@ -812,9 +874,43 @@ for($x = 0; $x <$arrlength; $x++) {
                     $pointFive=0.5;
 
                   }
-
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt',  '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'$pointFive', true);";
-                mysqli_query($con, $sqlinsert);
+                    if($IntervalDays==1){
+                      $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt',  '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', false);";
+                      $insert3 = mysqli_query($con, $sqlinsert);
+                      if($insert3){
+                        $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                        mysqli_query($con, $updateDateStarted);
+                       }
+                       else{
+                        ?><script>
+                        Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+                    //   footer: '<a href="">Why do I have this issue?</a>'
+                    })
+                     </script><?php 
+                       }
+                    }
+                    else if($IntervalDays>1){
+                      $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberOrayt',  '$lastMonday', '$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'$pointFive', true);";
+                      $insert3 = mysqli_query($con, $sqlinsert);
+                      if($insert3){
+                        $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                        mysqli_query($con, $updateDateStarted);
+                       }
+                       else{
+                        ?><script>
+                        Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+                    //   footer: '<a href="">Why do I have this issue?</a>'
+                    })
+                     </script><?php 
+                       }
+                    }
+    
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -822,8 +918,33 @@ for($x = 0; $x <$arrlength; $x++) {
                 $_SESSION['action'] = "";
               }
               else if($x==$validationVar2){
-                $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew',  '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
-                mysqli_query($con, $sqlinsert);
+                // $ithislate = true;
+          $forweeklylate = $_SESSION['noOfDaysLateforWeekly'];
+           
+                if($forweeklylate == 1){
+                  $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew',  '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1',false);";
+                  $insert4 = mysqli_query($con, $sqlinsert);
+                }
+                else{
+                  $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `weekNumber`, `lastMonday`,`attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week', '$weekNumberNew',  '$lastMonday','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1',true);";
+                  $insert4 = mysqli_query($con, $sqlinsert);
+                }
+
+               
+                if($insert4){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                 }
+                 else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -923,11 +1044,25 @@ for($x = 0; $x <$arrlength; $x++) {
               $timenowForSameId = date("hi");       
               $realDateForSameId = $dateSubmitted;     
               $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
-          
-          $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
-                mysqli_query($con, $updateDateStarted);
+              $sameID = str_replace(' ', '', $sameID);   
+          // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+          //       mysqli_query($con, $updateDateStarted);
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
-                mysqli_query($con, $sqlinsert);
+                $insert5 = mysqli_query($con, $sqlinsert);
+                if($insert5){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                 }
+                 else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -972,7 +1107,7 @@ for($x = 0; $x <$arrlength; $x++) {
           $timenowForSameId = date("hi");       
           $realDateForSameId = $dateSubmitted;     
           $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
-          
+          $sameID = str_replace(' ', '', $sameID);   
           // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
           // mysqli_query($con, $updateDateStarted);
           // $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
@@ -1031,7 +1166,21 @@ for($x = 0; $x <$arrlength; $x++) {
             
           if($finalDiff <=2){
           $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`,  `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '0.5', true);";
-          mysqli_query($con, $sqlinsert);
+          $insert6 = mysqli_query($con, $sqlinsert);
+          if($insert6){
+                      $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+          mysqli_query($con, $updateDateStarted);
+          }
+          else{
+            ?><script>
+            Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+        //   footer: '<a href="">Why do I have this issue?</a>'
+        })
+         </script><?php 
+           }
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
           $_SESSION['reason'] = "";
@@ -1041,7 +1190,21 @@ for($x = 0; $x <$arrlength; $x++) {
           }
           else{
           $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`,  `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '0', true);";
-          mysqli_query($con, $sqlinsert);
+          $insert7 = mysqli_query($con, $sqlinsert);
+          if($insert7){
+            $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+          mysqli_query($con, $updateDateStarted);
+          }
+          else{
+            ?><script>
+            Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+          //   footer: '<a href="">Why do I have this issue?</a>'
+          })
+          </script><?php 
+          }
           header("location:index.php");
           unset($_SESSION['newFileLoc']);
           $_SESSION['reason'] = "";
@@ -1266,8 +1429,8 @@ for($x = 0; $x <$arrlength; $x++) {
     $date = new DateTime($today);
 
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
+    // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+    //           mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlengthBasis-2;
               $validationVar2 = $arrlengthBasis-1;
@@ -1281,12 +1444,12 @@ for($x = 0; $x <$arrlength; $x++) {
               $today = $dateToConvert->format('Y-m-d');
               $realDate = $dateToConvert->format('Y-m-d');
                          
-              
+              $dateSubmitted = date('Y-m-d');
               $timenowForSameId = date("hi");       
               $realDateForSameId =$dateSubmitted;     
               $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
-                   
-              $dateSubmitted = date('Y-m-d');
+              $sameID = str_replace(' ', '', $sameID);   
+              
 
               if($x<$validationVariable){
               echo " <script>console.log('ITO ANG VALUE NG Xx. $x') </script>";
@@ -1294,7 +1457,21 @@ for($x = 0; $x <$arrlength; $x++) {
 
 
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0', $isLate);";
-                mysqli_query($con, $sqlinsert);
+                $insert8 = mysqli_query($con, $sqlinsert);
+                if($insert8){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 // echo $_SESSION
@@ -1309,7 +1486,21 @@ echo " <script>console.log('2. $finalDiff') </script>";
 echo " <script>console.log('ITO ANG VALUE NG y. $x') </script>";
 
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0.5', $isLate);";
-                mysqli_query($con, $sqlinsert);
+                $insert9 = mysqli_query($con, $sqlinsert);
+                if($insert9){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -1325,7 +1516,21 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
 
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', $isLate);";
-                mysqli_query($con, $sqlinsert);
+                $insert10 = mysqli_query($con, $sqlinsert);
+                if($insert10){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -1526,8 +1731,8 @@ for($x = 0; $x <$arrlength; $x++) {
 
     $date = new DateTime($today);
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
+    // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+    //           mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlengthBasis-2;
               $validationVar2 = $arrlengthBasis-1;
@@ -1545,6 +1750,7 @@ for($x = 0; $x <$arrlength; $x++) {
               $timenowForSameId = date("hi");       
               $realDateForSameId = $dateSubmitted;     
               $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
+              $sameID = str_replace(' ', '', $sameID);   
 
 
               if($x<$validationVariable){
@@ -1553,7 +1759,21 @@ echo " <script>console.log('ITO ANG VALUE NG valid. $validationVariable') </scri
 
 
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
-                mysqli_query($con, $sqlinsert);
+                $insert11 = mysqli_query($con, $sqlinsert);
+                if($insert11){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 // echo $_SESSION
@@ -1568,7 +1788,21 @@ echo " <script>console.log('2. $finalDiff') </script>";
 echo " <script>console.log('ITO ANG VALUE NG y. $x') </script>";
 
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'0.5', true);";
-                mysqli_query($con, $sqlinsert);
+                $insert12= mysqli_query($con, $sqlinsert);
+                if($insert12){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -1584,7 +1818,21 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
 
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`,`taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiffs', '$reason','$action', '$realDate' ,'1', false);";
-                mysqli_query($con, $sqlinsert);
+                $insert13 = mysqli_query($con, $sqlinsert);
+                if($insert13){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 // header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -1603,8 +1851,8 @@ echo " <script>console.log('ITO ANG VALUE NG z. $x') </script>";
 
 
   }
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
+  // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+  //           mysqli_query($con, $updateDateStarted);
             
             // $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `taskID`, `Date`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`) VALUES ('','$usertaskID',' $today', '$timenow','$taskName','$incharge','$taskType','$month','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
             // mysqli_query($con, $sqlinsert);
@@ -1658,11 +1906,26 @@ try{
           $timenowForSameId = date("hi");       
           $realDateForSameId = $dateSubmitted;     
           $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
+          $sameID = str_replace(' ', '', $sameID);   
 
-  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-            mysqli_query($con, $updateDateStarted);
+  // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+  //           mysqli_query($con, $updateDateStarted);
             $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
-            mysqli_query($con, $sqlinsert);
+            $insert14 = mysqli_query($con, $sqlinsert);
+            if($insert14){
+              $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+              mysqli_query($con, $updateDateStarted);
+            }
+            else{
+              ?><script>
+              Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+          //   footer: '<a href="">Why do I have this issue?</a>'
+          })
+           </script><?php 
+             }
             header("location:index.php");
             unset($_SESSION['newFileLoc']);
             $_SESSION['reason'] = "";
@@ -1819,10 +2082,11 @@ $dateSubmitted = date('Y-m-d');
         $timenowForSameId = date("hi");       
         $realDateForSameId = $dateSubmitted;     
         $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $reason;
+        $sameID = str_replace(' ', '', $sameID);   
 
 
-    $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
-              mysqli_query($con, $updateDateStarted);
+    // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+    //           mysqli_query($con, $updateDateStarted);
 
               $validationVariable = $arrlength-2;
               $validationVar2 = $arrlength-1;
@@ -1832,7 +2096,21 @@ $dateSubmitted = date('Y-m-d');
 
               if($x<$validationVariable){
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'0', true);";
-                mysqli_query($con, $sqlinsert);
+                $insert15 = mysqli_query($con, $sqlinsert);
+                if($insert15){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 // echo $_SESSION
@@ -1845,8 +2123,22 @@ $dateSubmitted = date('Y-m-d');
                 if($finalDiff>2){
                   $pointFive = 0;
                 }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'$pointFive', true);";
-                mysqli_query($con, $sqlinsert);
+                $insert16 = mysqli_query($con, $sqlinsert);
+                if($insert16){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -1856,7 +2148,21 @@ $dateSubmitted = date('Y-m-d');
               else if($x==$validationVar2){
                 $week = 'week '.$weekNumberNew;
                 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`,`sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`,`firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`, `action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstdayorayt','$week','$fileloc', '$year', '$department', '$finalDiff', '$reason','$action', '$realDate' ,'1', true);";
-                mysqli_query($con, $sqlinsert);
+                $insert17 = mysqli_query($con, $sqlinsert);
+                if($insert17){
+                  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+                  mysqli_query($con, $updateDateStarted);
+                }
+                else{
+                  ?><script>
+                  Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+              //   footer: '<a href="">Why do I have this issue?</a>'
+              })
+               </script><?php 
+                 }
                 header("location:index.php");
                 unset($_SESSION['newFileLoc']);
                 $_SESSION['reason'] = "";
@@ -1919,11 +2225,26 @@ $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
     $timenowForSameId = date("hi");       
     $realDateForSameId = $dateSubmitted;     
     $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
+    $sameID = str_replace(' ', '', $sameID);   
 
-$updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
-      mysqli_query($con, $updateDateStarted);
+// $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+//       mysqli_query($con, $updateDateStarted);
       $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1', false);";
-      mysqli_query($con, $sqlinsert);
+      $insert18 = mysqli_query($con, $sqlinsert);
+      if($insert18){
+        $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+      mysqli_query($con, $updateDateStarted);
+      }
+      else{
+        ?><script>
+        Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+    //   footer: '<a href="">Why do I have this issue?</a>'
+    })
+     </script><?php 
+       }
       header("location:index.php");
       unset($_SESSION['newFileLoc']);
       $_SESSION['reason'] = "";
@@ -1968,6 +2289,7 @@ $firstDateOfTheMonth =  $fDateOfTheMonth->format('Y-m-d');
 $timenowForSameId = date("hi");       
 $realDateForSameId = $dateSubmitted;     
 $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
+$sameID = str_replace(' ', '', $sameID);   
 
 // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
 // mysqli_query($con, $updateDateStarted);
@@ -2027,7 +2349,21 @@ foreach($period as $dt) {
   
 if($finalDiff <=2){
 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`,  `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '0.5', true);";
-mysqli_query($con, $sqlinsert);
+$insert19 = mysqli_query($con, $sqlinsert);
+if($insert19){
+  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+mysqli_query($con, $updateDateStarted);
+}
+else{
+  ?><script>
+  Swal.fire({
+icon: 'error',
+title: 'Oops...',
+text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+</script><?php 
+ }
 header("location:index.php");
 unset($_SESSION['newFileLoc']);
 $_SESSION['reason'] = "";
@@ -2037,7 +2373,21 @@ $_SESSION['noOfDaysLate']="";
 }
 else{
 $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`, `DateSubmitted`,  `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`, `isLate`) VALUES ('','$sameID','$usertaskID',' $today', '$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '0', true);";
-mysqli_query($con, $sqlinsert);
+$insert20 = mysqli_query($con, $sqlinsert);
+if($insert20){
+  $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='1' WHERE `usertaskID` = '$usertaskID';";
+mysqli_query($con, $updateDateStarted);
+}
+else{
+  ?><script>
+  Swal.fire({
+icon: 'error',
+title: 'Oops...',
+text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+//   footer: '<a href="">Why do I have this issue?</a>'
+})
+</script><?php 
+ }
 header("location:index.php");
 unset($_SESSION['newFileLoc']);
 $_SESSION['reason'] = "";
@@ -2659,9 +3009,13 @@ catch (Exception $e){
                                   if ($numrows >= 1){
                                     if($isLate){
                                       echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                      $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                      mysqli_query($con, $updatestatus);
                                     }
                                     else{
                                       echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                      $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                      mysqli_query($con, $updatestatus);
                                     }
                                     $don = "1";
                                   //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
@@ -2669,12 +3023,19 @@ catch (Exception $e){
                                        else{
                                   if($finalDiff >=2){
                                             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+                                            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='1' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
+
                                               }
                                               else if($finalDiff <= 1){
                                             echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
                                               }
                                               else if($finalDiff ==2){
                                                 echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                                $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                                mysqli_query($con, $updatestatus);
                                                   }
                                   //end of new code for weekly
                                     // if ($numrows >= 1){
@@ -2698,9 +3059,13 @@ catch (Exception $e){
                                           $meron = mysqli_num_rows($result);
                                           if($meron >=1){
                                             echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
                                           }
                                           else{
                                             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+                                            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='1' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
                                           }
                                          }
                                         }
@@ -2888,9 +3253,13 @@ catch (Exception $e){
                                       if ($numrows >= 1){
                                         if($isLate){
                                           echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                          $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                          mysqli_query($con, $updatestatus);
                                         }
                                         else{
                                           echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                          $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                          mysqli_query($con, $updatestatus);
                                         }
                                         $don = "1";
                                       //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
@@ -2898,12 +3267,18 @@ catch (Exception $e){
                                            else{
                                             if($finalDiff >=2){
                                               echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+                                              $updatestatus = "UPDATE `usertask` SET `unaccomplished`='1' WHERE `usertaskID` = '$taskID';";
+                                              mysqli_query($con, $updatestatus);
                                                 }
                                                 else if($finalDiff <= 0){
                                               echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                              $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
                                                 }
                                                 else if($finalDiff ==1){
                                                   echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                                  $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                                  mysqli_query($con, $updatestatus);
                                                     }
                                            }
                             
@@ -2959,12 +3334,18 @@ catch (Exception $e){
                                     if ($numrows >= 1){
                                       if($isLate){
                                         echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+                                        $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                        mysqli_query($con, $updatestatus);
                                       }
                                       else if(!$isLate){
                                         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                        $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                        mysqli_query($con, $updatestatus);
                                       }
                                       else if(!$isLate){
                                         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+                                        $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                        mysqli_query($con, $updatestatus);
                                       }
                                       $don = "1";
                                     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
@@ -3045,12 +3426,18 @@ foreach($period as $dt) {
 $finalDiff=$finalDiff-1;
                                           if($finalDiff >=2){
                                             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+                                            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='1' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
                                               }
                                               else if($finalDiff <= 0){
                                             echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
                                               }
                                               else if($finalDiff ==1){
                                                 echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                                                $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                                mysqli_query($con, $updatestatus);
                                                   }
                                                 }
                                                   // echo $finalDiff;
@@ -3229,9 +3616,13 @@ $finalDiff = $interval->days;
     if ($numrows >= 1){
       if($isLate){
         echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+        $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+        mysqli_query($con, $updatestatus);
       }
       else{
         echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+        $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+        mysqli_query($con, $updatestatus);
       }
       $don = "1";
     //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
@@ -3240,13 +3631,19 @@ $finalDiff = $interval->days;
           if($finalDiff >=2){
             // echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
             echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='1' WHERE `usertaskID` = '$taskID';";
+            mysqli_query($con, $updatestatus);
             
               }
               else if($finalDiff <= 0){
             echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+            $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
               }
               else if($finalDiff ==1){
                 echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                mysqli_query($con, $updatestatus);
                   }
          }
 
@@ -3444,9 +3841,13 @@ $finalDiff = $interval->days;
       if ($numrows >= 1){
         if($isLate){
           echo '<span id = "doneORnot" class="mode mode_late">LATE</span>';
+          $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+          mysqli_query($con, $updatestatus);
         }
         else{
           echo '<span id = "doneORnot" class="mode mode_on">DONE</span>';
+          $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+          mysqli_query($con, $updatestatus);
         }
         $don = "1";
       //  echo '<style type="text/css">#finished22 {pointer-events: none;}<style>';
@@ -3455,13 +3856,19 @@ $finalDiff = $interval->days;
             if($finalDiff >=2){
               // echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
               echo '<span id = "doneORnot" class="mode mode_near">Unaccomplished</span>';
+              $updatestatus = "UPDATE `usertask` SET `unaccomplished`='1' WHERE `usertaskID` = '$taskID';";
+              mysqli_query($con, $updatestatus);
               
                 }
                 else if($finalDiff <= 0){
               echo '<span id = "doneORnot" class="mode mode_done">Pending</span>';
+              $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                                            mysqli_query($con, $updatestatus);
                 }
                 else if($finalDiff ==1){
                   echo '<span class="⚠"></span><span id = "doneORnot" class="mode mode_done">Pending</span>';
+                  $updatestatus = "UPDATE `usertask` SET `unaccomplished`='0' WHERE `usertaskID` = '$taskID';";
+                  mysqli_query($con, $updatestatus);
                     }
            }
   
@@ -3573,7 +3980,7 @@ $finalDiff = $interval->days;
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" id="submitAction" name="action"class="btn btn-primary">Save action</button>
                                                 <button style="display: none" type="submit" id="submitActions" name="testingaction"class="btn btn-primary" onclick="clickUpload()">test action</button>
-                                                <input style="display: none" type="submit" id = "uploadsample" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto; display: block"  />
+                                                <input style="display: none" ty pe="submit" id = "uploadsample" name="uploadBtn" value="Upload"class="btn btn-outline-success" style="font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto; display: block"  />
                                                 <script>
 
                                         // // document.getElementById("uploadsample30").disabled = true;
@@ -3797,14 +4204,16 @@ $finalDiff = $interval->days;
 
 
                                         else if ($taskType == 'monthly'){
-                                                                      
-                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$year'";
+                                          $DATEOFTHISTIME = new DateTime();
+                                          $YEAROFTHISTIME =  $DATEOFTHISTIME->format('Y');         
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month' AND `year` = '$YEAROFTHISTIME'";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
 
                                     $numrows = mysqli_num_rows($result);
 
                                     // $don = "0";
+                                    
                                     while($userRow = mysqli_fetch_assoc($result)){
                                       $fTaskId = $userRow['sameID'];
                                       $noOfDays = $userRow['noOfDaysLate'];
@@ -3843,6 +4252,7 @@ $finalDiff = $interval->days;
                                   else{
                                     //  echo $noOfDays;
                                     ?>
+                                    
                                    <a href="index.php?UpdateAction=<?php echo $fTaskId ?>" style="display: none" id= "updatesAction<?php echo $fTaskId ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
                                         <!-- <a href="index.php?UpdateModalAction=<?php echo $fTaskId ?>"  id= "updateAction<?php echo $data['usertaskID'] ?>"class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a> -->
                                         <a class="btn btn-outline-<?php if($don == "1"){ echo 'info';} else{ echo 'secondary';}?>" href="#" data-fid="<?php echo $fTaskId ?>" data-reason="<?php echo $reason?>" data-action="<?php echo $action?>"  data-toggle='modal' data-target='#actionModalUpdate'       style="<?php if($don == "1"){ ?> pointer-events: auto; <?php } else{ ?> pointer-events: none; <?php } ?>font-size: 15px; padding: 3px; height: 25px;width:60px; margin:0 auto;" >Update</a>
@@ -4243,10 +4653,12 @@ if ($taskType == 'weekly'){
           $result = mysqli_query($con, $meronBaSiyaLastWeek);
           $meron = mysqli_num_rows($result);
           $finalDiff = $finalDiff - 5;
-          if($finalDiff >1){
+          if($finalDiff >=1){
              // August 10, 2022 changes
            
             $_SESSION['noOfDaysLate']=$finalDiff;
+            $_SESSION['noOfDaysLateforWeekly']=$finalDiff;
+            $try = $_SESSION['noOfDaysLateforWeekly'];
             $_SESSION['TaskID'] = $_GET['FinishSample'];
             echo "<script> 
             // document.getElementById('daysLateDiv').style.display = 'none';
@@ -4255,8 +4667,9 @@ if ($taskType == 'weekly'){
   document.getElementById('daysLate').value=$finalDiff;
   </script>";
           }
-          else if($finalDiff <=1){
+          else if($finalDiff <1){
      $_SESSION['noOfDaysLate']='0';
+     $_SESSION['noOfDaysLateforWeekly']='0';
          $_SESSION['TaskID'] = $_GET['FinishSample'];
          $taskID = $_SESSION['TaskID'];
          echo "<script>  
@@ -5082,8 +5495,8 @@ else
 
 
 
-      $_SESSION['reason'] = $_POST['reasonInput'];
-      $_SESSION['action'] = $_POST['ActionInputwithLate'];
+      $_SESSION['reason'] =addslashes($_POST['reasonInput']);
+      $_SESSION['action'] =addslashes($_POST['ActionInputwithLate']);
 
       
       if($_SESSION['reason'] != "" || $_SESSION['action']!=""){
@@ -5166,7 +5579,7 @@ else
 
 
 
-      $_SESSION['action'] = $_POST['actionInput'];
+      $_SESSION['action'] =addslashes($_POST['actionInput']);
       if($_SESSION['action'] != ""){
         $taskID = $_SESSION['TaskID'];
         echo $taskID;

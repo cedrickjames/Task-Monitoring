@@ -758,11 +758,11 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
     }
     }
-    
+    $includeexclude="0";
     if(isset($_POST['submitdateProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
-   
+    // $includeexclude = $_POST['includeexclude'];
    
        $monthSummary = date('F', strtotime($datePickerSummary));
        $monthEndSummary = date('F', strtotime($datePickerEndSummary));
@@ -2506,7 +2506,19 @@ if (isset($_POST['deleteSelected'])){
                              
                              <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr class="ewan" >
+                             <tr class="ewan" <?php
+                               $selectstatus = "SELECT * FROM `usertask` WHERE `usertaskID` = '$userTaskID'";
+
+                               // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                               $status = mysqli_query($con, $selectstatus);
+                            
+                               while($userRow = mysqli_fetch_assoc($status)){
+                                  $unaccomplished = $userRow['unaccomplished'];
+                                  if($unaccomplished){
+                                    echo "style='background-color: red'";
+                                  }
+                               }
+                             ?> >
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
                              <td><input type="checkbox" value="<?php echo $data['usertaskID']; ?>" name="id[]" onclick=ShowEndTaskButton()></td>
                              <td >
@@ -2606,8 +2618,10 @@ if (isset($_POST['deleteSelected'])){
                                       // $year =date('Y', strtotime($datePicker));
 
 
+                                      // $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate' AND `week` = 'week $curr' ORDER BY `FinishedTaskID` DESC LIMIT 1 ";//old query
+                                      $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID'  AND `year` = '$yearOfThisDate' AND `week` = 'week $curr' ORDER BY `FinishedTaskID` DESC LIMIT 1";
 
-                                      $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate' AND `week` = 'week $curr' ORDER BY `FinishedTaskID` DESC LIMIT 1 ";
+                                      // $selectUserTask1 = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND  `year` = '$yearOfThisDate' AND `week` = 'week $curr' ORDER BY `FinishedTaskID` DESC LIMIT 1 ";//old
 
                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                          $result1 = mysqli_query($con, $selectUserTask1);
@@ -2781,8 +2795,9 @@ $March =  $March->format('Y-m-d');
                                      //echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
                                     //  $month = date("F");
                                     //  $year = date("Y");
+                                    $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID'  AND `year` = '$yearOfThisDate' AND `week` = 'week $curr' ORDER BY `FinishedTaskID` DESC LIMIT 1";
      
-                                         $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate';";
+                                        //  $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$monthOfThisDate' AND `year` = '$yearOfThisDate';"; //old
                                          // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                          $result = mysqli_query($con, $selectUserTask);
                                          $weekNumber = '';
