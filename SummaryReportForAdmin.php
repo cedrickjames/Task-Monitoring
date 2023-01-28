@@ -802,6 +802,7 @@ $html .= '
 
 
                     $html .='
+                    <div class="page_break" style="page-break-before: always;"></div>
                     <table style=" margin-top: 20px; width: 100%; text-align: center; border-collapse: collapse;">
                         
                     <thead  class="text-center">
