@@ -1873,7 +1873,7 @@ try{
 
         $IntervalDays = $_SESSION['noOfDaysLate'];
         echo "<script> console.log('$meron') </script>";//find2
-        if($IntervalDays ==0 ){
+        if($IntervalDays ==0){
           // echo "meron";
           if($_SESSION['newFileLoc'] ==""){
             $fileloc ="" ;
@@ -1935,7 +1935,72 @@ try{
   
           
         }
-        else if($IntervalDays >0) {//find3
+        else if($IntervalDays ==1){
+          if($_SESSION['newFileLoc'] ==""){
+            $fileloc ="" ;
+          }
+          else{
+            $fileloc = $_SESSION['newFileLoc'];
+          }
+            //echo "merom";
+            
+  
+            $today = $_SESSION['today'];
+
+            $dateNewToday = new DateTime($today);
+              $weekNumberNew = $dateNewToday->format("W");
+              $week = 'week '.$weekNumberNew;
+            // $week = 'week '.weekOfMonth(date('Y-m-d', strtotime($today)));
+            $from=date_create(date('Y-m-d'));
+            $to=date_create(date('Y-m-d', strtotime($today)));
+            $diff=date_diff($to,$from);
+            // print_r($diff);
+            // $finalDiff =  $diff->format('%R%a');
+            $finalDiff = "0";
+            $realDate = date('Y-m-d', strtotime($today));
+            $dateSubmitted = date('Y-m-d');
+  $myReason = $_SESSION['reason'];
+  $startDateMonth = $dateNewToday->format('F');
+  $fDateOfTheMonth = new DateTime('first day of '.$startDateMonth);
+                                         
+          $firstDateOfTheMonth =  $fDateOfTheMonth->format('Y-m-d');
+          $timenowForSameId = date("hi");       
+          $realDateForSameId = $dateSubmitted;     
+          $sameID=$usertaskID . $timenowForSameId . $realDateForSameId . $action . $myReason;
+          $sameID = str_replace(' ', '', $sameID);   
+
+  // $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$today', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+  //           mysqli_query($con, $updateDateStarted);
+            $sqlinsert = "INSERT INTO `finishedtask`(`FinishedTaskID`, `sameID`, `taskID`, `Date`,`DateSubmitted`, `timestamp`,`task_Name`, `in_charge`, `sched_Type`, `month`, `firstDateOfTheMonth`, `week`, `attachments`, `year`, `Department`,`noOfDaysLate`, `reason`,`action`, `realDate`, `score`) VALUES ('','$sameID','$usertaskID',' $today','$dateSubmitted', '$timenow','$taskName','$incharge','$taskType','$month','$firstDateOfTheMonth','$week','$fileloc', '$year', '$department', '$finalDiff', '$myReason', '$action', '$realDate', '1');";
+            $insert54 = mysqli_query($con, $sqlinsert);
+            if($insert54){
+              $changedate = new DateTime($today);
+              $sampledatefor =  $changedate->modify('-1 day');
+              $sampledatefortoday = $sampledatefor->format('Y-m-d');
+              // echo $sampledatefortoday;
+              $updateDateStarted = "UPDATE `usertask` SET `dateStarted`='$sampledatefortoday', `ended`='$ended' WHERE `usertaskID` = '$usertaskID';";
+              mysqli_query($con, $updateDateStarted);
+            }
+            else{
+              ?><script>
+              Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong in finishing your task. Please contact Mr. Orozo.',
+          //   footer: '<a href="">Why do I have this issue?</a>'
+          })
+           </script><?php 
+             }
+            header("location:index.php");
+            unset($_SESSION['newFileLoc']);
+            $_SESSION['reason'] = "";
+            $_SESSION['action'] = "";
+
+            $_SESSION['noOfDaysLate']="";
+  
+        }
+
+        else if($IntervalDays >1) {//find3
         
           if($_SESSION['newFileLoc'] ==""){
             $fileloc ="" ;
@@ -3078,7 +3143,7 @@ catch (Exception $e){
                                       // $weekMonth = weekOfMonth($_SESSION['date_string']);
                                     $month1 = $_SESSION['month'];
                                     $year1 = $_SESSION['year'];
-                                      
+                                      // echo $year1;
                                     $selectUserTask = "SELECT * FROM finishedtask WHERE taskID = '$taskID' AND `month` = '$month1' AND `year` = '$year1' ;";
                                     // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
                                     $result = mysqli_query($con, $selectUserTask);
@@ -3088,9 +3153,9 @@ catch (Exception $e){
                                     while($userRow = mysqli_fetch_assoc($result)){
                                       $noOfDays = $userRow['noOfDaysLate'];
                                       $isLate = $userRow['isLate'];
-                                    
-                          
+                                  
                                   }
+                                  // echo $noOfDays;
                                   //new monthly code
 
                                   $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
@@ -3101,6 +3166,15 @@ catch (Exception $e){
                                     $dateStartedAdded = $userRow['dateAdded'];
 
                                   }
+                                  $datetovalidate = new DateTime($dateStarted);
+                                  $datetovalidate1 =  $datetovalidate->format('m-d');
+                                  $datetovalidateYear =  $datetovalidate->format('Y');
+                            
+                            
+                                  if($datetovalidate1 == '01-29' ||$datetovalidate1 == '01-30'||$datetovalidate1 == '01-31'){
+                                   $dateStarted = $datetovalidateYear.'-01-28';
+                                  }
+
                                   $dateStartedFromDataBase = date($dateStartedAdded);
                                   $dateForNow = date('Y-m-d');
                                   if($dateStartedFromDataBase >$dateForNow  ){
@@ -3219,14 +3293,15 @@ catch (Exception $e){
                             
                                   $eememe =  $end->format('Y-m-d');
                                     $DateEnd =  $start->format('Y-m-d');
+                                    // echo $DateEnd;
                                 // otherwise the  end date is excluded (bug?)
                                   $end->modify('+1 day');
-                                 
+                                  // echo $eememe;
                                   $interval = $end->diff($start);
-                            
+                                  
                                   // total days
                                   $finalDiff = $interval->days;
-                            
+                            // echo $finalDiff;
                                   // create an iterateable period of date (P1D equates to 1 day)
                                   $period = new DatePeriod($start, new DateInterval('P1D'), $end);
                             
@@ -4683,8 +4758,6 @@ if ($taskType == 'weekly'){
          
     }
     else if($taskType == 'monthly'){
-
-
  
       $selectUserTask = "SELECT * FROM `usertask` WHERE usertaskID = '$taskID' LIMIT 1";
       $result = mysqli_query($con, $selectUserTask);
@@ -4692,9 +4765,17 @@ if ($taskType == 'weekly'){
       while($userRow = mysqli_fetch_assoc($result)){
         $dateStarted = $userRow['dateStarted'];
       }
+      $datetovalidate = new DateTime($dateStarted);
+      $datetovalidate1 =  $datetovalidate->format('m-d');
+      $datetovalidateYear =  $datetovalidate->format('Y');
 
+
+      if($datetovalidate1 == '01-29' ||$datetovalidate1 == '01-30'||$datetovalidate1 == '01-31'){
+       $dateStarted = $datetovalidateYear.'-01-28';
+      }
       $date = new DateTime($dateStarted);
       $datenow = new DateTime($dateStarted);
+   
 
 
       $dateStarteds = new DateTime($dateStarted);
@@ -4708,6 +4789,7 @@ if ($taskType == 'weekly'){
     
 
           $nextMonth = $date->modify('next month');
+          
           // $date->format('Y-m-d');
           $nextMonthHehe =  $nextMonth->format('F');
           $yearOfNextDate =  $date->format('Y');
