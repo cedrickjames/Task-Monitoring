@@ -960,7 +960,7 @@ if(isset($_POST['AddCategory'])){
 
 
 
-                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                    // echo("<script>console.log('taskname : " . $taskname. "');</script>");
                                     
                               //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 

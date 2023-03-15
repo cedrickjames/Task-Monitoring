@@ -2335,7 +2335,7 @@ $username =  $_SESSION['username'];
 
 
 
-                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                    // echo("<script>console.log('taskname : " . $taskname. "');</script>");
                                     
                               //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 

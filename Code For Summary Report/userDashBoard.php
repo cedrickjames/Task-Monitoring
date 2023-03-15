@@ -2272,7 +2272,7 @@ if(isset($_POST['RemoveCategory'])){
 
 
 
-                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                    // echo("<script>console.log('taskname : " . $taskname. "');</script>");
                                     
                               //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 

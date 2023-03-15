@@ -76,7 +76,7 @@
 
 
                                    $TotalPointsEarned = 0;
-                                   echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                  //  echo("<script>console.log('taskname : " . $taskname. "');</script>");
                                    
                              //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 

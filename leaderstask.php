@@ -2702,7 +2702,7 @@ if (isset($_POST['deleteSelected'])){
 
 
 
-                                    echo("<script>console.log('taskname : " . $taskname. "');</script>");
+                                    // echo("<script>console.log('taskname : " . $taskname. "');</script>");
                                     
                               //  echo("<script>console.log('USER: " .$data['usertaskID'] . "');</script>");
 
