@@ -1,8 +1,38 @@
 <?php
+ //Set the session timeout for 2 seconds
+
+$timeout = 3600;
+
+//Set the maxlifetime of the session
+
+ini_set( "session.gc_maxlifetime", $timeout );
+
+//Set the cookie lifetime of the session
+
+ini_set( "session.cookie_lifetime", $timeout );
+
   session_start();
+  
+$s_name = session_name();
+
+$url1=$_SERVER['REQUEST_URI'];
+    header("Refresh: 3700; URL=$url1");
+//Check the session exists or not
+
+if(isset( $_COOKIE[ $s_name ] )) {
+
+
+    setcookie( $s_name, $_COOKIE[ $s_name ], time() + $timeout, '/' );
+
+    // echo "Session is created for $s_name.<br/>";
+
+}
+
+else
+
+    echo "Session is expired.<br/>";
   include ("./connection.php");
   include ("./holidays.php");
- 
 // $date = "2022-08-23";
 //   $date_now = date($date); // this format is string comparable
 
@@ -568,7 +598,7 @@ while($row = mysqli_fetch_assoc($result)){
    }else{
    $columnName = implode(", ", $columnss);
   //  $Department = $_SESSION['userDept'];
-   $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC'";
+   $query = "SELECT * FROM `users` WHERE  `userlevel` = 'Leader'";
   //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
    $result = $db->query($query);
    if($result== true){ 
@@ -710,11 +740,171 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
      $MembersActive = "";
                       $TaskActive = "active";
 
-    }
+    }    if(isset($_POST['submitdate'])){
+      $datePicker = $_POST['datepicker'];
+    $datePickerEnd = $_POST['datepickerEnd'];
+   
+   
+       $month = date('F', strtotime($datePicker));
+       $monthEnd = date('F', strtotime($datePickerEnd));
+   
+       $year = date('Y', strtotime($datePicker));
+       $yearEnd = date('Y', strtotime($datePickerEnd));
+   
+       $today = date('F j, Y', strtotime($datePicker));
+       $todayEnd = date('F j, Y', strtotime($datePickerEnd));
+   
+   
+       $datePickerget = $datePicker;
+       $datePickergetEnd = $datePickerEnd;
+   
+       $date_string= date('Y-m-d', strtotime($datePickerget));
+       $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+   
+       
+       
+     $dateToPass = date('Y-m-d', strtotime($datePicker));
+     $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+   
+     $taskfocus = "true";
+   
+        $MembersActive = "";
+                         $TaskActive = "active";
+   
+       }    if(isset($_POST['submitdate'])){
+        $datePicker = $_POST['datepicker'];
+      $datePickerEnd = $_POST['datepickerEnd'];
+     
+     
+         $month = date('F', strtotime($datePicker));
+         $monthEnd = date('F', strtotime($datePickerEnd));
+     
+         $year = date('Y', strtotime($datePicker));
+         $yearEnd = date('Y', strtotime($datePickerEnd));
+     
+         $today = date('F j, Y', strtotime($datePicker));
+         $todayEnd = date('F j, Y', strtotime($datePickerEnd));
+     
+     
+         $datePickerget = $datePicker;
+         $datePickergetEnd = $datePickerEnd;
+     
+         $date_string= date('Y-m-d', strtotime($datePickerget));
+         $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+     
+         
+         
+       $dateToPass = date('Y-m-d', strtotime($datePicker));
+       $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+     
+       $taskfocus = "true";
+     
+          $MembersActive = "";
+                           $TaskActive = "active";
+     
+         }    if(isset($_POST['submitdate'])){
+          $datePicker = $_POST['datepicker'];
+        $datePickerEnd = $_POST['datepickerEnd'];
+       
+       
+           $month = date('F', strtotime($datePicker));
+           $monthEnd = date('F', strtotime($datePickerEnd));
+       
+           $year = date('Y', strtotime($datePicker));
+           $yearEnd = date('Y', strtotime($datePickerEnd));
+       
+           $today = date('F j, Y', strtotime($datePicker));
+           $todayEnd = date('F j, Y', strtotime($datePickerEnd));
+       
+       
+           $datePickerget = $datePicker;
+           $datePickergetEnd = $datePickerEnd;
+       
+           $date_string= date('Y-m-d', strtotime($datePickerget));
+           $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+       
+           
+           
+         $dateToPass = date('Y-m-d', strtotime($datePicker));
+         $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+       
+         $taskfocus = "true";
+       
+            $MembersActive = "";
+                             $TaskActive = "active";
+       
+           }    if(isset($_POST['submitdate'])){
+            $datePicker = $_POST['datepicker'];
+          $datePickerEnd = $_POST['datepickerEnd'];
+         
+         
+             $month = date('F', strtotime($datePicker));
+             $monthEnd = date('F', strtotime($datePickerEnd));
+         
+             $year = date('Y', strtotime($datePicker));
+             $yearEnd = date('Y', strtotime($datePickerEnd));
+         
+             $today = date('F j, Y', strtotime($datePicker));
+             $todayEnd = date('F j, Y', strtotime($datePickerEnd));
+         
+         
+             $datePickerget = $datePicker;
+             $datePickergetEnd = $datePickerEnd;
+         
+             $date_string= date('Y-m-d', strtotime($datePickerget));
+             $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+         
+             
+             
+           $dateToPass = date('Y-m-d', strtotime($datePicker));
+           $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+         
+           $taskfocus = "true";
+         
+              $MembersActive = "";
+                               $TaskActive = "active";
+         
+             }    if(isset($_POST['submitdate'])){
+              $datePicker = $_POST['datepicker'];
+            $datePickerEnd = $_POST['datepickerEnd'];
+           
+           
+               $month = date('F', strtotime($datePicker));
+               $monthEnd = date('F', strtotime($datePickerEnd));
+           
+               $year = date('Y', strtotime($datePicker));
+               $yearEnd = date('Y', strtotime($datePickerEnd));
+           
+               $today = date('F j, Y', strtotime($datePicker));
+               $todayEnd = date('F j, Y', strtotime($datePickerEnd));
+           
+           
+               $datePickerget = $datePicker;
+               $datePickergetEnd = $datePickerEnd;
+           
+               $date_string= date('Y-m-d', strtotime($datePickerget));
+               $date_stringEnd= date('Y-m-d', strtotime($datePickergetEnd));
+           
+               
+               
+             $dateToPass = date('Y-m-d', strtotime($datePicker));
+             $dateToPassEnd = date('Y-m-d', strtotime($datePickerEnd));
+           
+             $taskfocus = "true";
+           
+                $MembersActive = "";
+                                 $TaskActive = "active";
+           
+               }
+    $include="0";
+    $_SESSION['include']=0;
     if(isset($_POST['exportProgDailySummary'])){
-        
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+    if(isset($_POST['include'])) {
+      $_SESSION['include']=1;
+
+ }
 
     $_SESSION['dateStarted'] = $datePickerSummary;
     $_SESSION['dateEnded']=$datePickerEndSummary ;
@@ -727,11 +917,13 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
 
     }
     }
-    $includeexclude="";
     if(isset($_POST['submitdateProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
-    $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
-    $includeexclude = $_POST['includeexclude'];
+      $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+      //  $include = ;
+       if(isset($_POST['include'])) {
+         $include="1";
+    }
    
        $monthSummary = date('F', strtotime($datePickerSummary));
        $monthEndSummary = date('F', strtotime($datePickerEndSummary));
@@ -1097,8 +1289,10 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         $msg= "Table Name is empty";
      }else{
      $columnName = implode(", ", $columns);
-    //  $Department = $_SESSION['userDept'];
-     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' ORDER BY usertask.Department ASC;";
+     $Department = $_SESSION['userDept'];
+    //  $query = "SELECT * FROM `usertask`   ORDER BY Department ASC;";
+     $query = " SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username AND usertask.ended = '0' WHERE users.userlevel='Leader';";
+
     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
      $result = $db->query($query);
@@ -1177,9 +1371,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       }else{
       $columnName = implode(", ", $columns);
       // $Department = $_SESSION['userDept'];
-    //   $query = "SELECT * FROM `usertask` WHERE taskType = 'daily' ORDER BY username ASC;";
-     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'daily' ORDER BY usertask.username ASC;";
-
+      $query = "SELECT * FROM `usertask` WHERE taskType = 'daily' ORDER BY username ASC;";
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -1210,9 +1402,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
        }else{
        $columnName = implode(", ", $columns);
       //  $Department = $_SESSION['userDept'];
-    //    $query = "SELECT * FROM `usertask` WHERE taskType = 'weekly' ORDER BY username ASC;";
-     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'weekly' ORDER BY usertask.username ASC;";
-
+       $query = "SELECT * FROM `usertask` WHERE taskType = 'weekly' ORDER BY username ASC;";
       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
        $result = $db->query($query);
@@ -1244,9 +1434,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
        }else{
        $columnName = implode(", ", $columns);
       //  $Department = $_SESSION['userDept'];
-    //    $query = "SELECT * FROM `usertask` WHERE  taskType = 'monthly' ORDER BY username ASC;";
-     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'monthly' ORDER BY usertask.username ASC;";
-
+       $query = "SELECT * FROM `usertask` WHERE  taskType = 'monthly' ORDER BY username ASC;";
       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
        $result = $db->query($query);
@@ -1280,9 +1468,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         }else{
         $columnName = implode(", ", $columns);
         // $Department = $_SESSION['userDept'];
-        // $query = "SELECT * FROM `usertask` WHERE  taskType = 'annual' ORDER BY username ASC;";
-     $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'annual' ORDER BY usertask.username ASC;";
-
+        $query = "SELECT * FROM `usertask` WHERE  taskType = 'annual' ORDER BY username ASC;";
        //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
        //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
         $result = $db->query($query);
@@ -1317,8 +1503,6 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         $columnName = implode(", ", $columns);
         // $Department = $_SESSION['userDept'];
         $query = "SELECT * FROM `users` WHERE userlevel='Leader' ORDER BY username ASC;";
-        
-
        //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
        //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
         $result = $db->query($query);
@@ -1385,7 +1569,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       }else{
       $columnName = implode(", ", $columnsUser);
       $Department = $_SESSION['userDept'];
-      $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC' AND department = '$Department';";
+      $query = "SELECT * FROM `users` WHERE `userlevel` = 'Leader';";
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -1417,7 +1601,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       }else{
       $columnName = implode(", ", $columnsUser2);
       $Department = $_SESSION['userDept'];
-      $query = "SELECT * FROM `users` WHERE `userlevel` = 'PIC'  AND department = '$Department';";
+      $query = "SELECT * FROM `users` WHERE `userlevel` = 'Leader';";
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -1587,7 +1771,34 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
          
 }
 
+if (isset($_POST['submitSelected'])){
+  foreach ($_POST['id'] as $id):
 
+    $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
+    $srow=mysqli_fetch_array($sq);
+  // echo $srow['taskName']. "<br>";
+  
+  $postTargetDate =  $_POST['dateForEnd'];
+  $sqlupdate = "UPDATE `usertask` SET  `targetDate`='$postTargetDate' WHERE usertaskID = '$id'";
+  mysqli_query($con, $sqlupdate);
+
+  endforeach;
+}
+if (isset($_POST['deleteSelected'])){
+  foreach ($_POST['id'] as $id):
+
+    $sq=mysqli_query($con,"select * from `usertask` where usertaskID='$id'");
+    $srow=mysqli_fetch_array($sq);
+  // echo $srow['taskName']. "<br>";
+  
+  $postTargetDate =  $_POST['dateForEnd'];
+  $sqlupdate = "DELETE FROM `usertask` WHERE usertaskID = '$id'";
+  mysqli_query($con, $sqlupdate);
+
+  $sqldeleteFromFinished = "DELETE FROM `finishedtask` WHERE taskID = '$id'";
+  mysqli_query($con, $sqldeleteFromFinished);
+  endforeach;
+}
 ?>
 
 <!-- <div class="normal-container">
@@ -1623,13 +1834,13 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav">
               <li class="nav-item">
-                  <a class="nav-link" href="leadersdailyAdmin.php">Leader's Daily</a>
+                  <a class="nav-link" href="dailyAdmin.php">Daily</a>
                 </li>
                 <li class="nav-item ">
-                  <a class="nav-link" href="admin.php">Member's Task</a>
+                  <a class="nav-link" href="#">Member's Task</a>
                 </li>
                 <li class="nav-item active">
-                  <a class="nav-link" href="#">Leader's Task</a>
+                  <a class="nav-link" href="leaderstask.php">Leader's Task</a>
                 </li>
             
                 <!-- <li class="nav-item">
@@ -1919,7 +2130,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                          }}else{ ?>
                             <tr>
                               <td colspan="8">
-                          <?php echo $fetchDataCat; ?>
+                          <?php echo $fetchData; ?>
                         </td>
                          </tr>
                           <?php
@@ -1987,7 +2198,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                          }}else{ ?>
                             <tr>
                               <td colspan="8">
-                          <?php echo $fetchDataCat; ?>
+                          <?php echo $fetchData; ?>
                         </td>
                          </tr>
                           <?php
@@ -2123,7 +2334,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                 
                                   foreach($fetchData2 as $data){
                                   ?>
-                                 <option value="<?php echo $data['username']??''; ?>"><?php echo $data['username']??''; ?></option>
+                                 <option value="<?php echo $data['username']??''; ?>"><?php echo $data['f_name']??''; ?></option>
                                  <?php
                             }}else{ ?>
                             
@@ -2330,6 +2541,12 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                              Annual
                                             </label>
                                     </div>
+                                    <div class="form-check form-check-inline" style="margin-left: 10px; ">
+                                        <input class="form-check-input"  type="radio" name="checkDone" id="checkDone" onclick="FilterSched();">
+                                            <label  class="form-check-label" for="checkPIC">
+                                             Others
+                                            </label>
+                                    </div>
                                      <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="radio" name="checkDone" id="checkDone" checked onclick="FilterSched();">
                                             <label class="form-check-label" for="checkPIC">
@@ -2356,6 +2573,12 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                             </div>
                         </div> 
                     </div>
+                    <form action="leaderstask.php" method = "POST">
+                    <input type="date" id="dateForEnd" value="<?php $EndDate = new DateTime($todayEnd); $endDATE =  $EndDate->format('Y-m-d'); echo $endDATE ?>" name="dateForEnd" >
+          
+          <button type="submit" id = "submitSelected" name="submitSelected" class="btn btn-outline-success btn-sm" style="margin-bottom: 2px">  End Task</button>
+          <button type="submit" id = "deleteSelected" name="deleteSelected" class="btn btn-outline-danger btn-sm" style="margin-bottom: 2px">  Delete</button>
+
                     <div class="overflow-x">
     <div class="overflow-y overflow-x" style="overflow-y: scroll;overflow-x: scroll; height:580px;"> 
                    
@@ -2368,6 +2591,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                
                             
                             <tr id="topLeft" class="table-dark table-bordered text-center" >
+                            <th style="min-width:15px;"></th>
                                     <th style="min-width:15px;">No.</th>
                                     <th style="width:200px;"  >In charge</th>
                                     <th style="min-width:15px;">Section</th>
@@ -2482,8 +2706,22 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                              
                              <!-- onclick= "PassTaskData('<?php //echo $data['usertaskID']; ?>')" -->
                              <!-- <tr  data-toggle='modal' data-target='#modalAdmin'> -->
-                             <tr class="ewan" >
+                             <tr class="ewan" <?php
+                               $selectstatus = "SELECT * FROM `usertask` WHERE `usertaskID` = '$userTaskID'";
+
+                               // SELECT week FROM `finishedtask` WHERE `taskID` = '23';
+                               $status = mysqli_query($con, $selectstatus);
+                            
+                               while($userRow = mysqli_fetch_assoc($status)){
+                                  $unaccomplished = $userRow['unaccomplished'];
+                                  if($unaccomplished){
+                                    echo "style='background-color: red'";
+                                  }
+                               }
+                             ?> >
                              <!-- <input id="btn-passdata" class="btn-signin" name="sbtlogin" type="submit" value="Login" style="margin: auto;" disabled> -->
+                             <td><input type="checkbox" value="<?php echo $data['usertaskID']; ?>" name="id[]" onclick=ShowEndTaskButton()></td>
+                             
                              <td >
                                
                                <?php echo $sn; ?></td>
@@ -2575,7 +2813,7 @@ function fetch_dataAdmin($db, $tableNameAdmin, $columnsAdmin, $username){
                                    if($taskType == "daily"){
                                     ?>
                                     <td style='width:240px;'><?php
-                                    //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</script>");
+                                    //  echo("<script>console.log('emmeeeememem: " . $taskID. "');</scrip>");
                                     //  $month = date("F");
                                     //  $year = date("Y");
 
@@ -2877,6 +3115,7 @@ $March =  $March->format('Y-m-d');
                         </table>
                       </div>
                     </div>
+  </form>
                 </div>
             </div>
         </div>
@@ -2969,8 +3208,9 @@ $March =  $March->format('Y-m-d');
                               <input type="search" class="form-control" id="filterboxDaily" placeholder=" " onkeyup="getSelectValueDaily();">
                           </div>
                     </div>
+                    
                     <?php
-                      $_SESSION['userlevel'] = "admin2";
+                  $_SESSION['userlevel'] = "admin2";
                     include "./Code For Summary Report/DetailedSummaryReport.php"?>
                     
                 </div>
@@ -3186,7 +3426,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3202,7 +3442,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3218,7 +3458,7 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3235,7 +3475,23 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
+                if(val.innerHTML.indexOf(filterValue)> -1){
+                    tr[index].style.display='';
+        
+                }
+                else{
+                    tr[index].style.display='none';
+                }
+            }
+  }
+  else if (types[4].checked){
+    let filterValue="others";
+            var table = document.getElementById('TaskTable');
+            let tr = table.querySelectorAll('tr');
+            
+            for(let index=0; index < tr.length;index++){
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3246,13 +3502,13 @@ var FDateofThisMonth = <?php echo json_encode("$FDateofThisMonth"); ?>;
             }
   }
 
-  else if (types[4].checked){
+  else if (types[5].checked){
     let filterValue="";
             var table = document.getElementById('TaskTable');
             let tr = table.querySelectorAll('tr');
             
             for(let index=0; index < tr.length;index++){
-                let val = tr[index].getElementsByTagName('td')[6];
+                let val = tr[index].getElementsByTagName('td')[7];
                 if(val.innerHTML.indexOf(filterValue)> -1){
                     tr[index].style.display='';
         
@@ -3857,6 +4113,32 @@ function exportData(){
 function clickpassdataAdmin(name,id){
   document.getElementById("inputAdminRemove").value = name;
   document.getElementById("inputAdminRemoveId").value = id;
+
+}
+
+var haveSelected = 0;
+function ShowEndTaskButton(){
+  haveSelected++;
+  if(haveSelected >=1){
+document.getElementById("dateForEnd").style.display="inline";
+document.getElementById("submitSelected").style.display="inline";
+document.getElementById("deleteSelected").style.display="inline";
+
+
+}
+}
+
+if(haveSelected >=1){
+document.getElementById("dateForEnd").style.display="block";
+document.getElementById("submitSelected").style.display="block";
+document.getElementById("deleteSelected").style.display="block";
+
+
+}
+else{
+  document.getElementById("dateForEnd").style.display="none";
+document.getElementById("submitSelected").style.display="none";
+document.getElementById("deleteSelected").style.display="none";
 
 }
         </script>
