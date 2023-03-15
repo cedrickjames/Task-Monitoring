@@ -1008,7 +1008,6 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       $monthlyChecked = "";
       $annualChecked = "";
 
-      
        }
 
        if(isset($_POST['submitdateProgWeekly'])){
@@ -1356,12 +1355,43 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       }
     }
 
+    $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+    $fetchDataProg = fetchDataProg($db, $tableName, $columns, $username);
 
+    function fetchDataProg($db, $tableName, $columns, $username){
+      if(empty($db)){
+       $msg= "Database connection error";
+      }elseif (empty($columns) || !is_array($columns)) {
+       $msg="columns Name must be defined in an indexed array";
+      }elseif(empty($tableName)){
+        $msg= "Table Name is empty";
+     }else{
+     $columnName = implode(", ", $columns);
+     // $Department = $_SESSION['userDept'];
+   //   $query = "SELECT * FROM `usertask` WHERE taskType = 'daily' ORDER BY username ASC;";
+    $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'daily' ORDER BY usertask.username ASC;";
+
+    //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+    //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+     $result = $db->query($query);
+     if($result== true){ 
+      if ($result->num_rows > 0) {
+         $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+         $msg= $row;
+      } else {
+         $msg= "No Data Found"; 
+      }
+     }else{
+       $msg= mysqli_error($db);
+     }
+     }
+     return $msg;
+     }
 
      $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
-     $fetchDataProg = fetchDataProg($db, $tableName, $columns, $username);
+     $fetchDataProgWeeky = fetchDataProgWeeky($db, $tableName, $columns, $username);
  
-     function fetchDataProg($db, $tableName, $columns, $username){
+     function fetchDataProgWeeky($db, $tableName, $columns, $username){
        if(empty($db)){
         $msg= "Database connection error";
        }elseif (empty($columns) || !is_array($columns)) {
@@ -1370,8 +1400,10 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
          $msg= "Table Name is empty";
       }else{
       $columnName = implode(", ", $columns);
-      // $Department = $_SESSION['userDept'];
-      $query = "SELECT * FROM `usertask` WHERE taskType = 'daily' ORDER BY username ASC;";
+     //  $Department = $_SESSION['userDept'];
+   //    $query = "SELECT * FROM `usertask` WHERE taskType = 'weekly' ORDER BY username ASC;";
+    $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'weekly' ORDER BY usertask.username ASC;";
+
      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
       $result = $db->query($query);
@@ -1389,10 +1421,47 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       return $msg;
       }
 
+
+          $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
+     $fetchDataProgMonthly = fetchDataProgMonthly($db, $tableName, $columns, $username);
+ 
+     function fetchDataProgMonthly($db, $tableName, $columns, $username){
+       if(empty($db)){
+        $msg= "Database connection error";
+       }elseif (empty($columns) || !is_array($columns)) {
+        $msg="columns Name must be defined in an indexed array";
+       }elseif(empty($tableName)){
+         $msg= "Table Name is empty";
+      }else{
+      $columnName = implode(", ", $columns);
+     //  $Department = $_SESSION['userDept'];
+   //    $query = "SELECT * FROM `usertask` WHERE  taskType = 'monthly' ORDER BY username ASC;";
+    $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'monthly' ORDER BY usertask.username ASC;";
+
+     //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
+     //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
+      $result = $db->query($query);
+      if($result== true){ 
+       if ($result->num_rows > 0) {
+          $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
+          $msg= $row;
+       } else {
+          $msg= "No Data Found"; 
+       }
+      }else{
+        $msg= mysqli_error($db);
+      }
+      }
+      return $msg;
+      }
+
+
+
+
       $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
-      $fetchDataProgWeeky = fetchDataProgWeeky($db, $tableName, $columns, $username);
+      $fetchDataProgAnnual = fetchDataProgAnnual($db, $tableName, $columns, $username);
   
-      function fetchDataProgWeeky($db, $tableName, $columns, $username){
+      function fetchDataProgAnnual($db, $tableName, $columns, $username){
         if(empty($db)){
          $msg= "Database connection error";
         }elseif (empty($columns) || !is_array($columns)) {
@@ -1401,8 +1470,10 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
           $msg= "Table Name is empty";
        }else{
        $columnName = implode(", ", $columns);
-      //  $Department = $_SESSION['userDept'];
-       $query = "SELECT * FROM `usertask` WHERE taskType = 'weekly' ORDER BY username ASC;";
+       // $Department = $_SESSION['userDept'];
+       // $query = "SELECT * FROM `usertask` WHERE  taskType = 'annual' ORDER BY username ASC;";
+    $query = "SELECT * FROM usertask INNER JOIN users ON usertask.username = users.username WHERE users.userlevel = 'Leader' AND usertask.taskType = 'annual' ORDER BY usertask.username ASC;";
+
       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
        $result = $db->query($query);
@@ -1421,73 +1492,6 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
        }
 
 
-           $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
-      $fetchDataProgMonthly = fetchDataProgMonthly($db, $tableName, $columns, $username);
-  
-      function fetchDataProgMonthly($db, $tableName, $columns, $username){
-        if(empty($db)){
-         $msg= "Database connection error";
-        }elseif (empty($columns) || !is_array($columns)) {
-         $msg="columns Name must be defined in an indexed array";
-        }elseif(empty($tableName)){
-          $msg= "Table Name is empty";
-       }else{
-       $columnName = implode(", ", $columns);
-      //  $Department = $_SESSION['userDept'];
-       $query = "SELECT * FROM `usertask` WHERE  taskType = 'monthly' ORDER BY username ASC;";
-      //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
-      //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
-       $result = $db->query($query);
-       if($result== true){ 
-        if ($result->num_rows > 0) {
-           $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
-           $msg= $row;
-        } else {
-           $msg= "No Data Found"; 
-        }
-       }else{
-         $msg= mysqli_error($db);
-       }
-       }
-       return $msg;
-       }
-
-
-
-
-       $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
-       $fetchDataProgAnnual = fetchDataProgAnnual($db, $tableName, $columns, $username);
-   
-       function fetchDataProgAnnual($db, $tableName, $columns, $username){
-         if(empty($db)){
-          $msg= "Database connection error";
-         }elseif (empty($columns) || !is_array($columns)) {
-          $msg="columns Name must be defined in an indexed array";
-         }elseif(empty($tableName)){
-           $msg= "Table Name is empty";
-        }else{
-        $columnName = implode(", ", $columns);
-        // $Department = $_SESSION['userDept'];
-        $query = "SELECT * FROM `usertask` WHERE  taskType = 'annual' ORDER BY username ASC;";
-       //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
-       //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
-        $result = $db->query($query);
-        if($result== true){ 
-         if ($result->num_rows > 0) {
-            $row= mysqli_fetch_all($result, MYSQLI_ASSOC);
-            $msg= $row;
-         } else {
-            $msg= "No Data Found"; 
-         }
-        }else{
-          $msg= mysqli_error($db);
-        }
-        }
-        return $msg;
-        }
- 
- 
- 
        
        $columns= ['usertaskID', 'taskName','taskCategory','taskType','taskArea'];
        $fetchDataSummary = fetchDataSummary($db, $tableName, $columns, $username);
@@ -3175,7 +3179,12 @@ $March =  $March->format('Y-m-d');
                   </div>
 
                     </div>
-                    <?php include "./Code For Members Progress Report/DetailedDailyTaskReport.php" ?>
+                    <?php
+                  $_SESSION['userlevel'] = "admin2";
+            ?>
+                    
+        
+                    <?php  include "./Code For Members Progress Report/DetailedDailyTaskReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedWeeklyReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedMonthlyReport.php" ?>
                     <?php include "./Code For Members Progress Report/DetailedAnnuallyReport.php" ?>
