@@ -269,7 +269,7 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
     $_SESSION['dateStarted'] = $datePickerSummary;
     $_SESSION['dateEnded']=$datePickerEndSummary ;
     $userlevel = $_SESSION['userlevel'];
-    if($userlevel =="Leader"){
+    if($userlevel =="Leader" ||  $userlevel =="PIC"){
       header("location: SummaryReport.php");
     }
     else{
@@ -869,8 +869,8 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
         $columnName = implode(", ", $columns);
         // $Department = $_SESSION['userDept'];
         $username =  $_SESSION['username'];
-
-        $query = "SELECT * FROM `users` WHERE  `username` = '$username' AND userlevel='PIC' ORDER BY username ASC;";
+          
+        $query = "SELECT * FROM `users` WHERE  `username` = '$username' ORDER BY username ASC;";
        //  SELECT * FROM `usertask` ORDER BY taskCategory ASC;
        //  SELECT * FROM `usertask` WHERE `username` = 'cjorozo';
         $result = $db->query($query);
@@ -2319,7 +2319,16 @@ $March =  $March->format('Y-m-d');
                 <div class="card_body">
                     <div class="row d-flex ">
                         <div class="col-sm-3 createSegment"> 
-                         <h3>Summary Report</h3> 
+                         <h3>Summary Report from <?php
+                          $todayMonthly = date('F j, Y', strtotime($todaySummary));
+                          echo $todayMonthly;
+                           $todayEndMonthly = date('F j, Y', strtotime($todayEndSummary)); ?> to 
+                           <?php
+                          $todayEndMonthly = date('F j, Y', strtotime($todayEndSummary));
+                          echo $todayEndMonthly;
+                           ?>
+                           
+                           </h3> 
                         </div>
                         
                         
@@ -2329,7 +2338,10 @@ $March =  $March->format('Y-m-d');
                               <input type="search" class="form-control" id="filterboxDaily" placeholder=" " onkeyup="getSelectValueDaily();">
                           </div>
                     </div>
-                    <?php include "./Code For Summary Report/DetailedSummaryReport.php"?>
+                    <?php 
+                    // $_SESSION['userlevel'] = $_SESSION['userlevel'];
+                    // echo  $_SESSION['userlevel'];
+                    include "./Code For Summary Report/DetailedSummaryReport.php"?>
                     
                 </div>
             </div>

@@ -743,10 +743,15 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
                       $TaskActive = "active";
 
     }
+    $include="0";
+    $_SESSION['include']=0;
     if(isset($_POST['exportProgDailySummary'])){
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
+    if(isset($_POST['include'])) {
+      $_SESSION['include']=1;
 
+ }
     $_SESSION['dateStarted'] = $datePickerSummary;
     $_SESSION['dateEnded']=$datePickerEndSummary ;
     $userlevel = $_SESSION['userlevel'];
@@ -763,7 +768,10 @@ $todayEndAnnual = date('F j, Y', strtotime($March));
       $datePickerSummary = $_POST['datepickerProgSummary'];
     $datePickerEndSummary = $_POST['datepickerEndProgSummary'];
     // $includeexclude = $_POST['includeexclude'];
-   
+    if(isset($_POST['include'])) {
+      $include="1";
+ }
+
        $monthSummary = date('F', strtotime($datePickerSummary));
        $monthEndSummary = date('F', strtotime($datePickerEndSummary));
    
