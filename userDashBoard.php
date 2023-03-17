@@ -2339,7 +2339,7 @@ $March =  $March->format('Y-m-d');
                           </div>
                     </div>
                     <?php 
-                    // $_SESSION['userlevel'] = $_SESSION['userlevel'];
+                    $_SESSION['userlevel'] = 'PIC';
                     // echo  $_SESSION['userlevel'];
                     include "./Code For Summary Report/DetailedSummaryReport.php"?>
                     
