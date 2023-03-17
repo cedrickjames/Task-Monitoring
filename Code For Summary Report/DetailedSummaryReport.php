@@ -561,28 +561,30 @@
                                         $startDAY=  $StartDateSelected->format('D');
 
 
-                                        if ($startDAY == 'Mon') {
-                                            //  $startDATE =  $StartDateSelected->format('Y-m-d');
-                                            $startDATE = $StartDateSelected->format('Y-m-d');
-                                        } elseif ($startDAY == 'Sun') {
-                                            $StartDateSelected->modify('next monday');
-                                            //  $startDATE =  $StartDateSelected->format('Y-m-d');
-                                            $startDATE = $StartDateSelected->format('Y-m-d');
-                                        } else {
-                                            $StartDateSelected->modify('last monday');
-                                            // $startDATE =  $StartDateSelected->format('Y-m-d');
-                                            $startDATE = $StartDateSelected->format('Y-m-d');
-                                        }
+                                        // if ($startDAY == 'Mon') {
+                                        //     //  $startDATE =  $StartDateSelected->format('Y-m-d');
+                                        //     $startDATE = $StartDateSelected->format('Y-m-d');
+                                        // } elseif ($startDAY == 'Sun') {
+                                        //     $StartDateSelected->modify('next monday');
+                                        //     //  $startDATE =  $StartDateSelected->format('Y-m-d');
+                                        //     $startDATE = $StartDateSelected->format('Y-m-d');
+                                        // } else {
+                                        //     $StartDateSelected->modify('last monday');
+                                        //     // $startDATE =  $StartDateSelected->format('Y-m-d');
+                                        //     $startDATE = $StartDateSelected->format('Y-m-d');
+                                        // }
 
 
                                         // (optional) for the updated question
 
-                                        $DateNowAndToday = new DateTime($todayEndWeekly);
+                                        $DateNowAndToday = new DateTime($todayEndSummary);
                                         $endDATE =  $DateNowAndToday->format('Y-m-d');
                                         if ($include == "1") {
-                                            $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
+                                            $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                         } else {
-                                            $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND  finishedtask.lastMonday BETWEEN '$startDATE' AND '$endDATE' ;";
+                                            $countWeekly = "SELECT COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = 'GP-22-722' AND finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND finishedtask.realDate BETWEEN '2023-01-01' AND '2023-02-28' ;";
+
+                                            $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
                                         }
                                         // $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
                                         $result = mysqli_query($con, $countWeekly);
@@ -938,42 +940,58 @@
 
                                                                $StartDateSelected = new DateTime($todaySummary);
                                                                $startDATE =  $StartDateSelected->format('Y-m-d');
-                                                               $startDAY=  $StartDateSelected->format('D');
 
-
-                                                               if ($startDAY == 'Mon') {
-                                                                   //  $startDATE =  $StartDateSelected->format('Y-m-d');
-                                                                   $startDATE = $StartDateSelected->format('Y-m-d');
-                                                               } elseif ($startDAY == 'Sun') {
-                                                                   $StartDateSelected->modify('next monday');
-                                                                   //  $startDATE =  $StartDateSelected->format('Y-m-d');
-                                                                   $startDATE = $StartDateSelected->format('Y-m-d');
-                                                               } else {
-                                                                   $StartDateSelected->modify('last monday');
-                                                                   // $startDATE =  $StartDateSelected->format('Y-m-d');
-                                                                   $startDATE = $StartDateSelected->format('Y-m-d');
-                                                               }
-
-
-                                                               // (optional) for the updated question
-
-                                                               $DateNowAndToday = new DateTime($todayEndWeekly);
+                                                               $DateNowAndToday = new DateTime($todayEndSummary);
                                                                $endDATE =  $DateNowAndToday->format('Y-m-d');
-                                                               //  echo "week".$startDATE;
-                                                               //  echo "week".$endDATE;
-                                                               if ($include=="1") {
-                                                                   $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
+                                                               if ($include == "1") {
+                                                                   $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `realDate` BETWEEN '$startDATE' AND '$endDATE';";
                                                                } else {
-                                                                   $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND  finishedtask.lastMonday BETWEEN '$startDATE' AND '$endDATE' ;";
+                                                                   $countWeekly = "SELECT COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = 'GP-22-722' AND finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND finishedtask.realDate BETWEEN '2023-01-01' AND '2023-02-28' ;";
+                       
+                                                                   $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND  finishedtask.realDate BETWEEN '$startDATE' AND '$endDATE' ;";
                                                                }
-
+                                                               // $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
                                                                $result = mysqli_query($con, $countWeekly);
                                                                while ($userRow = mysqli_fetch_assoc($result)) {
                                                                    $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
                                                                }
-                                                               // echo $totalNumberOfScore1;
-                                                               $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                                            //    echo $totalNumberOfScore1;
+                                                            //    $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
                                                                $TotalPointsOntimeEarned = $TotalPointsOntimeEarned + $totalNumberOfScore1;
+
+                                                            //    if ($startDAY == 'Mon') {
+                                                            //        //  $startDATE =  $StartDateSelected->format('Y-m-d');
+                                                            //        $startDATE = $StartDateSelected->format('Y-m-d');
+                                                            //    } elseif ($startDAY == 'Sun') {
+                                                            //        $StartDateSelected->modify('next monday');
+                                                            //        //  $startDATE =  $StartDateSelected->format('Y-m-d');
+                                                            //        $startDATE = $StartDateSelected->format('Y-m-d');
+                                                            //    } else {
+                                                            //        $StartDateSelected->modify('last monday');
+                                                            //        // $startDATE =  $StartDateSelected->format('Y-m-d');
+                                                            //        $startDATE = $StartDateSelected->format('Y-m-d');
+                                                            //    }
+
+                                                                    
+                                                            //    // (optional) for the updated question
+
+                                                            //    $DateNowAndToday = new DateTime($todayEndWeekly);
+                                                            //    $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                                            //    //  echo "week".$startDATE;
+                                                            //    //  echo "week".$endDATE;
+                                                            //    if ($include=="1") {
+                                                            //        $countWeekly = "SELECT COUNT(score) as TotalNumberOf1 FROM `finishedtask` WHERE `in_charge` = '$username' AND `score` = '1' AND `sched_Type` = 'weekly' AND  `lastMonday` BETWEEN '$startDATE' AND '$endDATE';";
+                                                            //    } else {
+                                                            //        $countWeekly = "SELECT  COUNT(finishedtask.score) as TotalNumberOf1 FROM finishedtask INNER JOIN usertask ON finishedtask.taskID=usertask.usertaskID WHERE finishedtask.in_charge = '$username' AND  finishedtask.score = '1' AND finishedtask.sched_Type = 'weekly' AND usertask.ended = false AND  finishedtask.lastMonday BETWEEN '$startDATE' AND '$endDATE' ;";
+                                                            //    }
+
+                                                            //    $result = mysqli_query($con, $countWeekly);
+                                                            //    while ($userRow = mysqli_fetch_assoc($result)) {
+                                                            //        $totalNumberOfScore1 = $userRow['TotalNumberOf1'];
+                                                            //    }
+                                                            //    // echo $totalNumberOfScore1;
+                                                            //    $TotalPointsEarned = $TotalPointsEarned + $totalNumberOfScore1;
+                                                            //    $TotalPointsOntimeEarned = $TotalPointsOntimeEarned + $totalNumberOfScore1;
 
 
                                                                $StartDateSelected = new DateTime($todaySummary);
@@ -1295,99 +1313,122 @@
                                                                        $finalDiffs = 0;
                                                                    }
                                                                    $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
-                                                                   //  echo $TARGETPOINTS. " ";
-                                                                   //  echo  $startDATE ;
+                                                                    // echo $finalDiffs. " ";
+                                                                   //  echo  $startDATE ;   
                                                                }
 
                                                                /////////////////////////////////////////weekly
+                                                               $StartDateSelected = new DateTime($todaySummary);
+                                                               $startDATE =  $StartDateSelected->format('Y-m-d');
+
+                                                               $DateNowAndToday = new DateTime($todayEndSummary);
+                                                               $endDATE =  $DateNowAndToday->format('Y-m-d');
                                                                if ($include=="1") {
-                                                                   $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly' ";
-                                                               } else {
-                                                                   $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly' AND `ended` = false;";
-                                                               }
-                                                               $resultw = mysqli_query($con, $getUserTasks);
-                                                               $noOfResult =  mysqli_num_rows($resultw);
-                                                               // echo $noOfResult;
-                                                               while ($userRow = mysqli_fetch_assoc($resultw)) {
-                                                                   $usertaskID = $userRow['usertaskID'];
-                                                                   $username = $userRow['username'];
-                                                                   $task =  $userRow['taskName'];
-                                                                   $StartDateSelected = new DateTime($todaySummary);
-                                                                   $startDATE =  $StartDateSelected->format('Y-m-d');
-                                                                   $DateNowAndToday = new DateTime($todayEndSummary);
-                                                                   $endDATE =  $DateNowAndToday->format('Y-m-d');
+                                                                $selectTarget = "SELECT COUNT(FinishedTaskID) as 'target' FROM `finishedtask` WHERE  in_charge = '$username' and sched_type = 'weekly' AND `realDate` BETWEEN '$startDATE' and '$endDATE';";
+                                                                $resultTarget = mysqli_query($con, $selectTarget);
+                                                                while($userRow = mysqli_fetch_assoc($resultTarget)){
+                                                                 $target = $userRow['target'];
+                                                                }
+                                                            } else {
+                                                                $selectTarget = "SELECT COUNT(FinishedTaskID) as 'target' FROM `finishedtask` WHERE in_charge = '$username' and  sched_type = 'weekly' AND `realDate` BETWEEN '$startDATE' and '$endDATE'";
+                                                                $resultTarget = mysqli_query($con, $selectTarget);
+                                                                while($userRow = mysqli_fetch_assoc($resultTarget)){
+                                                                 $target = $userRow['target'];
+                                                                }
+                                                            }
+                                                                  $finalDiffs = $target;
+                                                                  $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
+                                                                //   echo $finalDiffs;
+
+                                                                //   echo $username . ' ' .$startDATE.' '. $endDATE;
+                                                            //    if ($include=="1") {
+                                                            //        $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly' ";
+                                                            //    } else {
+                                                            //        $getUserTasks = "SELECT * FROM `usertask` WHERE `userid` = '$UserID' AND `taskType` = 'weekly' AND `ended` = false;";
+                                                            //    }
+                                                            //    $resultw = mysqli_query($con, $getUserTasks);
+                                                            //    $noOfResult =  mysqli_num_rows($resultw);
+                                                            //    // echo $noOfResult;
+                                                            //    while ($userRow = mysqli_fetch_assoc($resultw)) {
+                                                            //        $usertaskID = $userRow['usertaskID'];
+                                                            //        $username = $userRow['username'];
+                                                            //        $task =  $userRow['taskName'];
+                                                            //        $StartDateSelected = new DateTime($todaySummary);
+                                                            //        $startDATE =  $StartDateSelected->format('Y-m-d');
+                                                            //        $DateNowAndToday = new DateTime($todayEndSummary);
+                                                            //        $endDATE =  $DateNowAndToday->format('Y-m-d');
 
 
-                                                                   $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$usertaskID';"; //kunin ang first monday date na pipiliin
-                                                                   $resultww = mysqli_query($con, $selectDateAdded);
-                                                                   while ($userRow = mysqli_fetch_assoc($resultww)) {
-                                                                       $dateAdded = $userRow['dateAdded'];
-                                                                       $targetDate = $userRow['targetDate'];
+                                                            //        $selectDateAdded = "SELECT `dateAdded`, `targetDate` FROM `usertask` WHERE `usertaskID` = '$usertaskID';"; //kunin ang first monday date na pipiliin
+                                                            //        $resultww = mysqli_query($con, $selectDateAdded);
+                                                            //        while ($userRow = mysqli_fetch_assoc($resultww)) {
+                                                            //            $dateAdded = $userRow['dateAdded'];
+                                                            //            $targetDate = $userRow['targetDate'];
 
 
-                                                                       // echo  date('Y-m-d', strtotime($dateAdded)) .' '.date('Y-m-d', strtotime($targetDate)) ."<br>";
-                                                                       // echo  date('Y-m-d', strtotime($todayWeekly)) .' '.date('Y-m-d', strtotime($todayEndWeekly)) ."<br>";
+                                                            //            // echo  date('Y-m-d', strtotime($dateAdded)) .' '.date('Y-m-d', strtotime($targetDate)) ."<br>";
+                                                            //            // echo  date('Y-m-d', strtotime($todayWeekly)) .' '.date('Y-m-d', strtotime($todayEndWeekly)) ."<br>";
 
-                                                                       $dateAdded = date($dateAdded);
-                                                                       $targetDate = date($targetDate);
+                                                            //            $dateAdded = date($dateAdded);
+                                                            //            $targetDate = date($targetDate);
 
-                                                                       $START = date('Y-m-d', strtotime($todayWeekly));
-                                                                       $END = date('Y-m-d', strtotime($todayEndWeekly));
-                                                                       if ($START < $dateAdded) {
-                                                                           $startDATE = $dateAdded;
-                                                                       }
-                                                                       if ($END > $targetDate) {
-                                                                           $endDATE = $targetDate;
-                                                                       }
-                                                                   }
+                                                            //            $START = date('Y-m-d', strtotime($todayWeekly));
+                                                            //            $END = date('Y-m-d', strtotime($todayEndWeekly));
+                                                            //            if ($START < $dateAdded) {
+                                                            //                $startDATE = $dateAdded;
+                                                            //            }
+                                                            //            if ($END > $targetDate) {
+                                                            //                $endDATE = $targetDate;
+                                                            //            }
+                                                            //        }
 
-                                                                   $start = new DateTime(date('Y-m-d', strtotime($startDATE)));
-                                                                   $end = new DateTime(date('Y-m-d', strtotime($endDATE)));
-                                                                   // otherwise the  end date is excluded (bug?)
-                                                                   $end->modify('+1 day');
-                                                                   // echo date('F j, Y');
-                                                                   $interval = $end->diff($start);
+                                                            //        $start = new DateTime(date('Y-m-d', strtotime($startDATE)));
+                                                            //        $end = new DateTime(date('Y-m-d', strtotime($endDATE)));
+                                                            //        // otherwise the  end date is excluded (bug?)
+                                                            //        $end->modify('+1 day');
+                                                            //        // echo date('F j, Y');
+                                                            //        $interval = $end->diff($start);
 
-                                                                   // total days
-                                                                   $days = $interval->days;
-                                                                   // echo $days;
-                                                                   // create an iterateable period of date (P1D equates to 1 day)
-                                                                   $period = new DatePeriod($start, new DateInterval('P1D'), $end);
+                                                            //        // total days
+                                                            //        $days = $interval->days;
+                                                            //        // echo $days;
+                                                            //        // create an iterateable period of date (P1D equates to 1 day)
+                                                            //        $period = new DatePeriod($start, new DateInterval('P1D'), $end);
 
-                                                                   // best stored as array, so you can add more than one
-                                                                   // $holidays = array('2022-07-15');
-                                                                   include("./holidays.php");
+                                                            //        // best stored as array, so you can add more than one
+                                                            //        // $holidays = array('2022-07-15');
+                                                            //        include("./holidays.php");
 
-                                                                   $weekNo ="";
-                                                                   $NumberOfWeeksToDone = 0;
-                                                                   foreach ($period as $dt) {
-                                                                       $curr = $dt->format('W');
-                                                                       $currMonth = $dt->format('F');
-                                                                       $currYear = $dt->format('Y');
-                                                                       $currs = $dt->format('D');
+                                                            //        $weekNo ="";
+                                                            //        $NumberOfWeeksToDone = 0;
+                                                            //        foreach ($period as $dt) {
+                                                            //            $curr = $dt->format('W');
+                                                            //            $currMonth = $dt->format('F');
+                                                            //            $currYear = $dt->format('Y');
+                                                            //            $currs = $dt->format('D');
 
-                                                                       if ($currs == 'Sat' || $currs == 'Sun') {
-                                                                           $finalDiffs--;
-                                                                       } elseif (in_array($dt->format('Y-m-d'), $holidays)) {
-                                                                           $finalDiffs--;
-                                                                       } elseif ($curr==$weekNo) {
-                                                                           echo null;
-                                                                       } else {
-                                                                           // echo $curr;
-                                                                           // echo "<br>";
-                                                                           $NumberOfWeeksToDone++;
-                                                                           $weekNo = $curr;
-                                                                       }
-                                                                   }
-                                                                   if ($END < $dateAdded) {
-                                                                       $finalDiffs = 0;
-                                                                   }
-                                                                   $finalDiffs = $NumberOfWeeksToDone;
-                                                                   $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
-                                                                   // echo $NumberOfWeeksToDone;
-                                                               }
+                                                            //            if ($currs == 'Sat' || $currs == 'Sun') {
+                                                            //                $finalDiffs--;
+                                                            //            } elseif (in_array($dt->format('Y-m-d'), $holidays)) {
+                                                            //                $finalDiffs--;
+                                                            //            } elseif ($curr==$weekNo) {
+                                                            //                echo null;
+                                                            //            } else {
+                                                            //                // echo $curr;
+                                                            //                // echo "<br>";
+                                                            //                $NumberOfWeeksToDone++;
+                                                            //                $weekNo = $curr;
+                                                            //            }
+                                                            //        }
+                                                            //        if ($END < $dateAdded) {
+                                                            //            $finalDiffs = 0;
+                                                            //        }
+                                                            //        $finalDiffs = $NumberOfWeeksToDone;
+                                                            //        $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
+                                                            //     //    echo $finalDiffs.' ' ;
+                                                            //    }
 
-
+                                                                
 
                                                                /////////////////////////monthly
                                                                if ($include=="1") {
@@ -1471,6 +1512,7 @@
                                                                    }
                                                                    $finalDiffs = $NumberOfWeeksToDone;
                                                                    $TARGETPOINTS = $TARGETPOINTS+$finalDiffs;
+                                                                //    echo $finalDiffs.' ';
                                                                }
 
                                                                /////////////////////////////annual
